@@ -1,0 +1,607 @@
+*** Settings ***
+Force Tags        bsp_ticket
+Resource          ../other_services.txt
+
+*** Test Cases ***
+[NB OS] Verify That BSP Ticket Computes The Correct Fees
+    [Tags]    US458    horton    us1456    us1620
+    Create PNR Using Cash As FOP    SG    air_segment=True
+    Click Panel    Other Svcs
+    Select Product And Vendor    BSP Ticket And MPD    BANK SETTLEMENT PLAN
+    Click Tab In Other Services Panel    Ticket Info
+    Verify Form Of Payment Details Are Correct    Cash
+    Set Published Fare Value    800.00
+    Set Selling Fare Fee    500.05
+    Set Tax 1    10.55
+    Set Tax 2    10.55
+    Set Commission Value    50.55
+    Set Discount Value    275.55
+    Set Tranx/Service Fee Value    500.55
+    Compute Consolidator And LCC Fees For Other Services    SG    2
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    #Scenario 2 With Commission Percentage
+    Compute Consolidator And LCC Fees For Other Services    SG    2    is_commission_percent=true
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    #Scenario 3 With Discount Percentage
+    Set Discount Value    50
+    Compute Consolidator And LCC Fees For Other Services    SG    2    is_discount_percent=true
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    #Scenario 4 CWT Merchant Absorb
+    Tick Merchant Fee CWT Absorb
+    Compute Consolidator And LCC Fees For Other Services    SG    2
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    #Scenario 5 FOP Is Cash or Invoice
+    Compute Consolidator And LCC Fees For Other Services    SG    2
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    #Apply Formula Is Not Ticked
+    Untick CWT Absorb Checkbox For Merchant Fee
+    Tick Apply Formula Checkbox    Untick
+    Compute Consolidator And LCC Fees For Other Services    SG    2
+    Verify Nett Cost In EO Value Is Correct
+    Verify Merchant Fee Value Is Correct    0.00
+    Verify Total Selling Price Value Is Correct
+    Set Selling Fare Fee    1250.58
+    Set Tax 1    25.85
+    Set Tax 2    30.63
+    Set Commission Value    500.55
+    Set Discount Value    500.68
+    Compute Consolidator And LCC Fees For Other Services    SG    2
+    Verify Nett Cost In EO Value Is Correct
+    Verify Merchant Fee Value Is Correct    0.00
+    Verify Total Selling Price Value Is Correct
+    Populate Ticket Info Fees    SG    1000    10    TX    20    XT
+    Tick Select All Segments    Tick
+    Populate Airline Code And Ticket Number    111    1234567890
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    QF
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    B - PASSENGER REQUESTED SPECIFIC AIRLINE
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    BSP Ticket And MPD
+    Click Finish PNR
+    Verify PNR Is Successfully Created    False    1 Exchange Order(s) Transaction Successfully Saved!
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+    Verify EO Status For Third Party Vendor    Completed    1
+    [Teardown]
+
+[AB OS] Verify That AA Segment Booking Fee Computes The Correct Fees
+    [Tags]    US458    horton    us1462    us1620
+    Retrieve PNR And Populate Amend Workflow    SG    fop_dropdown_value=Cash
+    Click Panel    Other Svcs
+    Select Product And Vendor    AA SEGMENT BOOKING FEE    BANK SETTLEMENT PLAN
+    Set Published Fare Value    800.00
+    Set Selling Fare Fee    500.05
+    Set Tax 1    10.55
+    Set Tax 2    10.55
+    Set Commission Value    50.55
+    Set Discount Value    275.55
+    Set Tranx/Service Fee Value    500.55
+    Compute Consolidator And LCC Fees For Other Services    SG    2
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    #Scenario 2 With Commission Percentage
+    Compute Consolidator And LCC Fees For Other Services    SG    2    is_commission_percent=true
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    #Scenario 3 With Discount Percentage
+    Set Discount Value    50
+    Compute Consolidator And LCC Fees For Other Services    SG    2    is_discount_percent=true
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    #Scenario 4 CWT Merchant Absorb
+    Tick Merchant Fee CWT Absorb
+    Compute Consolidator And LCC Fees For Other Services    SG    2
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    #Scenario 5 FOP Is Cash or Invoice
+    Verify Form Of Payment Details Are Correct    Cash
+    Compute Consolidator And LCC Fees For Other Services    SG    2
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    #Apply Formula Is Not Ticked
+    Untick CWT Absorb Checkbox For Merchant Fee
+    Tick Apply Formula Checkbox    Untick
+    Compute Consolidator And LCC Fees For Other Services    SG    2
+    Verify Nett Cost In EO Value Is Correct
+    Verify Merchant Fee Value Is Correct    0.00
+    Verify Total Selling Price Value Is Correct
+    Set Selling Fare Fee    1250.58
+    Set Tax 1    25.85
+    Set Tax 2    30.63
+    Set Commission Value    500.55
+    Set Discount Value    500.68
+    Compute Consolidator And LCC Fees For Other Services    SG    2
+    Verify Nett Cost In EO Value Is Correct
+    Verify Merchant Fee Value Is Correct    0.00
+    Verify Total Selling Price Value Is Correct
+    Populate Ticket Info Fees    SG    1000    10    TX    20    XT
+    Tick Select All Segments    Tick
+    Populate Airline Code And Ticket Number    111    1234567890
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    QF
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    B - PASSENGER REQUESTED SPECIFIC AIRLINE
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Click Add Button In EO Panel    Ticket Info
+    Click Finish PNR    Amend Booking For Verify That AA Segment Booking Fee Computes The Correct Fees
+    Execute Simultaneous Change Handling    Amend Booking For Verify That AA Segment Booking Fee Computes The Correct Fees
+    Verify PNR Is Successfully Created    False    2 Exchange Order(s) Transaction Successfully Saved!
+    Click Panel    Other Svcs
+    Verify EO Status For Third Party Vendor    Completed    1
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB OS] Verify That BSP Ticket, Transaction Fee, Merchant Fee And Discount Remarks Are Written For Published Fare
+    [Tags]    US458    horton    us1167    us1456    us1620    us1338
+    ...    us1816    team_chiu    de486
+    Create PNR Using Credit Card As FOP    SG    air_segment=True    fop_dropdown_value=BTA DC/DC**********2207/D0823/CVV***
+    Click Panel    Other Svcs
+    Select Product And Vendor    BSP Ticket And MPD    BANK SETTLEMENT PLAN
+    Click Tab In Other Services Panel    Ticket Info
+    Select Bill Fare    Published Fare
+    Get Bill Fare
+    Populate Other Services Ticket Cost For BSP Ticket    500.00    800.00    25.25    AA    32.00    BB
+    ...    30.00    50.00    20.00
+    Verify Form Of Payment Details Are Correct    BTA DC/DC**********2207/D0823/CVV***    Credit Card (CX)
+    Set Issue In Exchange For    1234567890
+    Populate Airline Code And Ticket Number    111    6505554448
+    Set Conjunction Number    333
+    Get Ticket Info Fee Values    SG    BSP Ticket And MPD
+    Get Other Services Form Of Payment Details    BSP Ticket And MPD
+    Get Selected Air Segment From Air Segment Grid    BSP Ticket And MPD
+    Get Merchant Fee In Other Services    BSP Ticket And MPD
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    QF
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    B - PASSENGER REQUESTED SPECIFIC AIRLINE
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    BSP Ticket And MPD
+    Click Finish PNR
+    Click Panel    Other Svcs
+    #Get EO details and verify the same
+    Get Exchange Order Number
+    Get Exchange Order Number Using Product    BSP Ticket And MPD
+    Verify PNR Is Successfully Created    False    Exchange Order(s) Transaction Successfully Saved!
+    Retrieve PNR Details from Amadeus    command=RTY
+    Verify BSP Ticket Accounting Remarks Are Written    BSP Ticket And MPD    BANK SETTLEMENT PLAN    SG
+    Verify BSP Ticket Transaction Fee Accounting Remarks Are Written
+    Verify BSP Ticket Air Commission Returned Accounting Remarks Are Written
+    Verify BA And TA Remarks    ${uid}
+    Verify Merchant Fee Remarks Are Written    SG
+    [Teardown]
+
+[AB][CEO] Verify That Accounting Lines For BSP Ticket Product Is Not Written When Cancelled
+    [Tags]    us1570    team_chiu
+    Retrieve PNR And Populate Amend Workflow    fop_dropdown_value=Invoice
+    Click Panel    Other Svcs
+    Cancel EO    ${eo_number_BSP Ticket And MPD}    Ticket Info    SG
+    Click Finish PNR    Amend Verify That Accounting Lines For BSP Ticket Product Is Not Written When Cancelled
+    Execute Simultaneous Change Handling    Amend Verify That Accounting Lines For BSP Ticket Product Is Not Written When Cancelled
+    Verify PNR Is Successfully Created    False    1 Exchange Order(s) Successfully Cancelled!    #Need to change Message
+    Retrieve PNR Details From Amadeus
+    Click Panel    Other Svcs
+    Verify Exchange Order Record Details Are Correct    SG    BSP Ticket And MPD    BANK SETTLEMENT PLAN    BT    ${EMPTY}    Cancelled
+    ...    is_new_eo=False
+    Verify BSP Ticket Accounting Remarks Are Written Not Written
+    Verify BSP Ticket Transaction Fee Accounting Remarks Are Not Written    identifier=BSP Ticket And MPD
+    Verify BSP Ticket Discount Accounting Remarks Are Not Written    identifier=BSP Ticket And MPD
+
+[AB OS] Verify That BSP Ticket, Transaction Fee, Merchant Fee And Discount Remarks Are Written For Marked Up Nett Fare
+    [Tags]    US458    horton    us1167    us1462    us1620    us1338
+    ...    us1816    team_chiu    DE486
+    Retrieve PNR And Populate Amend Workflow    SG    fop_dropdown_value=BTA DC/DC**********2207/D0823/CVV***
+    Click Panel    Other Svcs
+    Select Product And Vendor    AA SEGMENT BOOKING FEE    BANK SETTLEMENT PLAN
+    Click Tab In Other Services Panel    Ticket Info
+    Select Bill Fare    Marked Up Nett Fare
+    Populate Other Services Ticket Cost For BSP Ticket    300.00    1000.00    ${EMPTY}    AA    ${EMPTY}    BB
+    ...    35.50    55.00    20.00
+    Verify Form Of Payment Details Are Correct    BTA DC/DC**********2207/D0823/CVV***    Credit Card (CX)
+    Set Issue In Exchange For    1234567899
+    Populate Airline Code And Ticket Number    111    6505554448
+    Set Conjunction Number    333
+    Get Ticket Info Fee Values    SG
+    Get Other Services Form Of Payment Details
+    Get Selected Air Segment From Air Segment Grid
+    Get Merchant Fee In Other Services
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    4432
+    Set MI Final Destination    MNL
+    Set MI Low Fare Carrier    PR
+    Select MI Type Of Ticket    ET
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    B - PASSENGER REQUESTED SPECIFIC AIRLINE
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    Click Add Button In EO Panel    Ticket Info
+    Click Finish PNR    Amend Booking For Verify That BSP Ticket, Transaction Fee And Discount Remarks Are Written For Marked Up Nett Fare
+    Execute Simultaneous Change Handling    Amend Booking For Verify That BSP Ticket, Transaction Fee And Discount Remarks Are Written For Marked Up Nett Fare
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+    Verify PNR Is Successfully Created    False    Exchange Order(s) Transaction Successfully Saved!
+    Retrieve PNR Details from Amadeus    command=RTY
+    Verify BSP Ticket Accounting Remarks Are Written    AA SEGMENT BOOKING FEE    BANK SETTLEMENT PLAN    SG
+    Verify BSP Ticket Transaction Fee Accounting Remarks Are Written    #vendor_code_number=032001
+    Verify BSP Ticket Air Commission Returned Accounting Remarks Are Written
+    Verify Merchant Fee Remarks Are Written    SG
+
+[AB OS] Verify That BSP Ticket, Transaction Fee And Discount Remarks Are Written For Cash Or Invoice
+    [Tags]    US458    horton    us1167    us1462    us1620    us1816
+    ...    team_chiu
+    Retrieve PNR And Populate Amend Workflow    SG    fop_dropdown_value=Cash
+    Click Panel    Client Info
+    Select Form Of Payment    Cash
+    Click Panel    Other Svcs
+    Select Product And Vendor    BSP Ticket And MPD    BANK SETTLEMENT PLAN
+    Click Tab In Other Services Panel    Ticket Info
+    Select Bill Fare    Published Fare
+    Get Bill Fare
+    Populate Other Services Ticket Cost For BSP Ticket    500.00    800.00    25.25    AA    ${EMPTY}    BB
+    ...    30.00    50.00    20.00
+    Verify Form Of Payment Details Are Correct    Cash
+    Set Issue In Exchange For    1235567890
+    Populate Airline Code And Ticket Number    111    0000000000
+    Set Conjunction Number    333
+    Get Ticket Info Fee Values    SG
+    Get Other Services Form Of Payment Details
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    QF
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    B - PASSENGER REQUESTED SPECIFIC AIRLINE
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    Click Add Button In EO Panel    Ticket Info
+    Click Finish PNR    Amend Booking For Verify That BSP Ticket, Transaction Fee And Discount Remarks Are Written For Cash Or Invoice
+    Execute Simultaneous Change Handling    Amend Booking For Verify That BSP Ticket, Transaction Fee And Discount Remarks Are Written For Cash Or Invoice
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+    Verify PNR Is Successfully Created    False    Exchange Order(s) Transaction Successfully Saved!
+    Retrieve PNR Details from Amadeus    command=RTY
+    Verify BSP Ticket Accounting Remarks Are Written    BSP Ticket And MPD    BANK SETTLEMENT PLAN    SG
+    Verify BSP Ticket Transaction Fee Accounting Remarks Are Written
+    Verify BSP Ticket Air Commission Returned Accounting Remarks Are Written
+
+[AB AOS] Verify That Fields Are Pre-populated And Remarks Are Written For Cash Or Invoice
+    [Tags]    US458    horton    US1291    us1167    us1462    us1816
+    ...    team_chiu    us1620
+    Retrieve PNR And Populate Amend Workflow    SG    fop_dropdown_value=Cash
+    Click Panel    Other Svcs
+    Click Amend EO    ${eo_number}
+    Click Tab In Other Services Panel    Ticket Info
+    Verify Published Fare Fee Is Correct    500.00
+    Verify Selling Fare Fee Is Correct    800.00
+    Verify Tax 1 Value and Code Are Correct    25.25    AA
+    Verify Tax 2 Value and Code Are Correct    0.00    BB
+    Verify Nett Cost In EO Value Is Correct    450.00
+    Verify Commission Fee Value Is Correct    50.00
+    Verify Discount Fee Value Is Correct    20.00
+    Verify Merchant Fee Value Is Correct    0.00
+    Verify Total Selling Price Value Is Correct    805.25
+    Verify CWT Absorb Checkbox For Merchant Fee Status Is Correct    False
+    Verify Tranx/Service Fee Value Is Correct    30.00
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Verify Issue In Exchange For Is Correct    1235567890
+    Verify Airline Code And Ticket Number Is Correct    111    0000000000
+    Verify Conjunction Number Is Correct    333
+    Verify Exchange Order Number    ${eo_number}
+    Verify Form Of Payment Details Are Correct    Cash
+    #Population
+    Select Bill Fare    Marked Up Nett Fare
+    Get Bill Fare
+    Populate Other Services Ticket Cost For BSP Ticket    6800.30    340.50    ${EMPTY}    BB    33.99    CC
+    ...    33.04    66.04    55.50
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    DC    378282246310005    12    2026
+    Set Issue In Exchange For    4444333322
+    Populate Airline Code And Ticket Number    123    0000000000
+    Set Conjunction Number    333
+    Get Ticket Info Fee Values    SG
+    Get Other Services Form Of Payment Details
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Set MI Low Fare    325.99    # 340.50 - Old value
+    Get MI Fields Values
+    Click Add Button In EO Panel    Ticket Info
+    Click Finish PNR    Amend Booking For Verify That Fields Are Pre-populated And Remarks Are Written For Cash Or Invoice
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Fields Are Pre-populated And Remarks Are Written For Cash Or Invoice
+    Verify Exchange Order Number Is Retained    ${eo_number}
+    Verify PNR Is Successfully Created    False    Exchange Order(s) Transaction Successfully Saved!
+    Click Panel    Other Svcs
+    Get Exchange Order Number Using Product    BSP Ticket And MPD
+    Retrieve PNR Details from Amadeus    command=RTY
+    Verify BSP Ticket Accounting Remarks Are Written Not Written
+    Verify BSP Ticket Accounting Remarks Are Written    BSP Ticket And MPD    BANK SETTLEMENT PLAN    SG
+    Verify BSP Ticket Transaction Fee Accounting Remarks Are Written
+    Verify BSP Ticket Air Commission Returned Accounting Remarks Are Written
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB OS] Verify That Transaction Fee And Discount Remarks Are Not Written
+    [Tags]    US458    horton    us1167    us1456    us1620    us1816
+    ...    team_chiu    de486
+    Create PNR Using Credit Card As FOP    air_segment=True    fop_dropdown_value=BTA DC/DC**********2207/D0823/CVV***
+    Click Panel    Other Svcs
+    Select Product And Vendor    AA SEGMENT BOOKING FEE    BANK SETTLEMENT PLAN
+    Click Tab In Other Services Panel    Ticket Info
+    Select Bill Fare    Marked Up Nett Fare
+    Populate Other Services Ticket Cost For BSP Ticket    500.00    800.00    0.00    AA    0.00    BB
+    ...    0.00    0.00    0.00
+    Set Issue In Exchange For    ${EMPTY}
+    Verify Ticket Number Field Is Mandatory
+    Populate Airline Code And Ticket Number    111    0000000000
+    Set Conjunction Number    333
+    Get Ticket Info Fee Values
+    Get Other Services Form Of Payment Details
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    QF
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    B - PASSENGER REQUESTED SPECIFIC AIRLINE
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    AA SEGMENT BOOKING FEE
+    Click Finish PNR
+    Verify PNR Is Successfully Created    False    1 Exchange Order(s) Transaction Successfully Saved!
+    Click Panel    Other Svcs
+    Verify EO Status For Third Party Vendor    Completed    1
+    Get Exchange Order Number
+    Retrieve PNR Details from Amadeus    command=RTY
+    Verify BSP Ticket Accounting Remarks Are Written    AA SEGMENT BOOKING FEE    BANK SETTLEMENT PLAN    SG
+    Verify BSP Ticket Transaction Fee Accounting Remarks Are Not Written
+    Verify BSP Ticket Air Commission Returned Accounting Remarks Are Not Written
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Amend Booking For Verify That AA Segment Booking Fee Computes The Correct Fees
+    Retrieve PNR And Populate Amend Workflow    SG    fop_dropdown_value=Cash
+    Click Panel    Other Svcs
+    Select Product And Vendor    AA SEGMENT BOOKING FEE    BANK SETTLEMENT PLAN
+    Set Published Fare Value    800.00
+    Set Selling Fare Fee    500.05
+    Set Tax 1    10.55
+    Set Tax 2    10.55
+    Set Commission Value    50.55
+    Set Discount Value    275.55
+    Set Tranx/Service Fee Value    500.55
+    Compute Consolidator And LCC Fees For Other Services    SG    2
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    #Scenario 2 With Commission Percentage
+    Compute Consolidator And LCC Fees For Other Services    SG    2    is_commission_percent=true
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    #Scenario 3 With Discount Percentage
+    Set Discount Value    50
+    Compute Consolidator And LCC Fees For Other Services    SG    2    is_discount_percent=true
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    #Scenario 4 CWT Merchant Absorb
+    Tick Merchant Fee CWT Absorb
+    Compute Consolidator And LCC Fees For Other Services    SG    2
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    #Scenario 5 FOP Is Cash or Invoice
+    Verify Form Of Payment Details Are Correct    Cash
+    Compute Consolidator And LCC Fees For Other Services    SG    2
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    #Apply Formula Is Not Ticked
+    Untick CWT Absorb Checkbox For Merchant Fee
+    Tick Apply Formula Checkbox    Untick
+    Compute Consolidator And LCC Fees For Other Services    SG    2
+    Verify Nett Cost In EO Value Is Correct
+    Verify Merchant Fee Value Is Correct    0.00
+    Verify Total Selling Price Value Is Correct
+    Set Selling Fare Fee    1250.58
+    Set Tax 1    25.85
+    Set Tax 2    30.63
+    Set Commission Value    500.55
+    Set Discount Value    500.68
+    Compute Consolidator And LCC Fees For Other Services    SG    2
+    Verify Nett Cost In EO Value Is Correct
+    Verify Merchant Fee Value Is Correct    0.00
+    Verify Total Selling Price Value Is Correct
+    Populate Ticket Info Fees    SG    1000    10    TX    20    XT
+    Tick Select All Segments    Tick
+    Populate Airline Code And Ticket Number    111    1234567890
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    QF
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    B - PASSENGER REQUESTED SPECIFIC AIRLINE
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Click Add Button In EO Panel    Ticket Info
+    Click Finish PNR    Amend Booking For Verify That AA Segment Booking Fee Computes The Correct Fees
+
+Amend Booking For Verify That BSP Ticket, Transaction Fee And Discount Remarks Are Written For Marked Up Nett Fare
+    Create PNR Using Credit Card As FOP    SG    fop_dropdown_value=BTA DC/DC**********2207/D0823/CVV***
+    Click Panel    Other Svcs
+    Select Product And Vendor    AA SEGMENT BOOKING FEE    BANK SETTLEMENT PLAN
+    Click Tab In Other Services Panel    Ticket Info
+    Select Bill Fare    Marked Up Nett Fare
+    Populate Other Services Ticket Cost For BSP Ticket    500.00    800.00    ${EMPTY}    AA    ${EMPTY}    BB
+    ...    35.50    50.00    20.00
+    Verify Form Of Payment Details Are Correct    BTA DC/DC**********2207/D0823/CVV***    Credit Card (CX)
+    Set Issue In Exchange For    1234567899
+    Populate Airline Code And Ticket Number    111    6505554448
+    Set Conjunction Number    333
+    Get Ticket Info Fee Values    SG
+    Get Other Services Form Of Payment Details
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    4432
+    Set MI Final Destination    MNL
+    Set MI Low Fare Carrier    PR
+    Select MI Type Of Ticket    ET
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    B - PASSENGER REQUESTED SPECIFIC AIRLINE
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    Click Add Button In EO Panel    Ticket Info
+    Click Finish PNR    Amend Booking For Verify That BSP Ticket, Transaction Fee And Discount Remarks Are Written For Marked Up Nett Fare
+
+Amend Booking For Verify That BSP Ticket, Transaction Fee And Discount Remarks Are Written For Cash Or Invoice
+    Retrieve PNR And Populate Amend Workflow    SG    fop_dropdown_value=Cash
+    Click Panel    Client Info
+    Select Form Of Payment    Cash
+    Click Panel    Other Svcs
+    Select Product And Vendor    BSP Ticket And MPD    BANK SETTLEMENT PLAN
+    Click Tab In Other Services Panel    Ticket Info
+    Select Bill Fare    Published Fare
+    Get Bill Fare
+    Populate Other Services Ticket Cost For BSP Ticket    500.00    800.00    25.25    AA    ${EMPTY}    BB
+    ...    30.00    50.00    20.00
+    Verify Form Of Payment Details Are Correct    Cash
+    Set Issue In Exchange For    1235567890
+    Populate Airline Code And Ticket Number    111    0000000000
+    Set Conjunction Number    333
+    Get Ticket Info Fee Values    SG
+    Get Other Services Form Of Payment Details
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    QF
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    B - PASSENGER REQUESTED SPECIFIC AIRLINE
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    Click Add Button In EO Panel    Ticket Info
+    Click Finish PNR    Amend Booking For Verify That BSP Ticket, Transaction Fee And Discount Remarks Are Written For Cash Or Invoice
+
+Amend Booking For Verify That Fields Are Pre-populated And Remarks Are Written For Cash Or Invoice
+    Retrieve PNR And Populate Amend Workflow    SG    fop_dropdown_value=Cash
+    Click Panel    Other Svcs
+    Click Amend EO    ${eo_number}
+    Click Tab In Other Services Panel    Ticket Info
+    Verify Published Fare Fee Is Correct    500.00
+    Verify Selling Fare Fee Is Correct    800.00
+    Verify Tax 1 Value and Code Are Correct    25.25    AA
+    Verify Tax 2 Value and Code Are Correct    0.00    BB
+    Verify Nett Cost In EO Value Is Correct    450.00
+    Verify Commission Fee Value Is Correct    50.00
+    Verify Discount Fee Value Is Correct    20.00
+    Verify Merchant Fee Value Is Correct    0.00
+    Verify Total Selling Price Value Is Correct    805.25
+    Verify CWT Absorb Checkbox For Merchant Fee Status Is Correct    False
+    Verify Tranx/Service Fee Value Is Correct    30.00
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Verify Issue In Exchange For Is Correct    1235567890
+    Verify Airline Code And Ticket Number Is Correct    111    0000000000
+    Verify Conjunction Number Is Correct    333
+    Verify Exchange Order Number    ${eo_number}
+    Verify Form Of Payment Details Are Correct    Cash
+    #Population
+    Select Bill Fare    Marked Up Nett Fare
+    Get Bill Fare
+    Populate Other Services Ticket Cost For BSP Ticket    6800.30    340.50    ${EMPTY}    BB    33.99    CC
+    ...    33.04    66.04    55.50
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    DC    378282246310005    12    2026
+    Set Issue In Exchange For    4444333322
+    Populate Airline Code And Ticket Number    123    0000000000
+    Set Conjunction Number    333
+    Get Ticket Info Fee Values    SG
+    Get Other Services Form Of Payment Details
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Set MI Low Fare    325.99
+    Get MI Fields Values
+    Click Add Button In EO Panel    Ticket Info
+    Click Finish PNR    Amend Booking For Verify That Fields Are Pre-populated And Remarks Are Written For Cash Or Invoice
+
+Amend Verify That Accounting Lines For BSP Ticket Product Is Not Written When Cancelled
+    Retrieve PNR And Populate Amend Workflow    fop_dropdown_value=Invoice
+    Click Panel    Other Svcs
+    Cancel EO    ${eo_number_BSP Ticket And MPD}    Ticket Info    SG
+    Click Finish PNR    Amend Verify That Accounting Lines For BSP Ticket Product Is Not Written When Cancelled

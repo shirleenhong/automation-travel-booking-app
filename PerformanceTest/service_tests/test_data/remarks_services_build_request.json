@@ -1,0 +1,40 @@
+{
+  "hierarchy": {
+    "global": null,
+    "globalRegion": "APAC",
+    "country": "IN",
+    "team": "93",
+    "clientTopUnit": "14:2B60",
+    "clientSubUnit": "A:86BB0",
+    "clientAccount": "519"
+  },
+  "gdsCode": "1A",
+  "reporting": {
+    "cdrs": [
+      {
+        "key": "string",
+        "value": "string"
+      }
+    ]
+  },
+  "itinerary": {
+    "followUpDate": "string",
+    "language": "string",
+    "headerText": "string",
+    "ticketText": "string",
+    "onHoldReasons": [
+      "string"
+    ],
+    "currency": "string",
+    "totalCostAmount": "string",
+    "emdAmount": "string",
+    "additionalPayment": "string",
+    "ticketingDate": "string",
+    "ticketingType": "string",
+    "hasPolicy": true,
+    "hasYellowFever": true,
+    "yellowFeverCountries": [
+      "string"
+    ]
+  }
+}

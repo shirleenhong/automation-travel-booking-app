@@ -1,0 +1,163 @@
+*** Settings ***
+Force Tags        amadeus
+Resource          ../business_rules_verification.txt
+
+*** Test Cases ***
+[NB] Verify That CDR Field Is Hidden Based on FOP Pop Up Rule
+    [Tags]    us6639    uk
+    Open Power Express And Retrieve Profile    ${version}    TEST    U003WXR    en-GB    AutomationUK    UK AUTO AMADEUS
+    Select GDS    Amadeus
+    Set Client And Traveler    UK Amadeus 1 - SyEx ¦ US6639 Business Rules    Hong    Shirleen
+    Click New Booking With FOP Pop Up
+    Verify Window Exists    CDR Driving Account/FOP
+    Set FOP Value In Pop Up    CDR Driving Account/FOP    1111
+    Click Panel    Cust Refs
+    Verify CDR Is Not Visible    EMPLY.ID
+    Click Update PNR
+    Book Flight X Months From Now    LHRCDG/AAF    SS1Y1    FXP    6
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Cust Refs
+    Click Finish PNR
+    [Teardown]
+
+[AB] Verify That CDR Field Is Hidden When Rule is Triggered
+    [Tags]    us6639    uk
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Click Panel    Cust Refs
+    Verify CDR Value Is Correct    TRVLCOST    1111
+    Verify CDR Is Not Visible    EMPLY.ID
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB] Verify That CDR Field Is Disabled Based on FOP Pop Up Rule
+    [Tags]    us6639    uk
+    Open Power Express And Retrieve Profile    ${version}    TEST    U003WXR    en-GB    AutomationUK    UK AUTO AMADEUS
+    Select GDS    Amadeus
+    Set Client And Traveler    UK Amadeus 1 - SyEx ¦ US6639 Business Rules    Hong    Shirleen
+    Click New Booking With FOP Pop Up
+    Verify Window Exists    CDR Driving Account/FOP
+    Set FOP Value In Pop Up    CDR Driving Account/FOP    1122
+    Click Panel    Cust Refs
+    Verify CDR Is Disabled And Text Value Is Correct    DEPTNAME    AAA
+    Click Update PNR
+    Book Flight X Months From Now    LHRCDG/AAF    SS1Y1    FXP    6
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Cust Refs
+    Click Finish PNR
+    Retrieve PNR    ${current_pnr}
+
+[AB] Verify That CDR Field Is Disabled When Rule is Triggered
+    [Tags]    us6639    uk
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Click Panel    Cust Refs
+    Set CDR Value    TRVLCOST    1122
+    Verify CDR Is Disabled And Text Value Is Correct    DEPTNAME    AAA
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB] Verify That CDR Field Is Populated Based on FOP Pop Up Rule
+    [Tags]    us6639    uk
+    Open Power Express And Retrieve Profile    ${version}    TEST    U003WXR    en-GB    AutomationUK    UK AUTO AMADEUS
+    Select GDS    Amadeus
+    Set Client And Traveler    UK Amadeus 1 - SyEx ¦ US6639 Business Rules    Hong    Shirleen
+    Click New Booking With FOP Pop Up
+    Verify Window Exists    CDR Driving Account/FOP
+    Set FOP Value In Pop Up    CDR Driving Account/FOP    2222
+    Click Panel    Cust Refs
+    Verify CDR Is Enabled And Text Value is Correct    ALINE.BUS    123
+    Click Update PNR
+    Book Flight X Months From Now    LHRCDG/AAF    SS1Y1    FXP    6
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Cust Refs
+    Click Finish PNR
+    Retrieve PNR    ${current_pnr}
+
+[AB] Verify That CDR Field Is Populated When Rule is Triggered
+    [Tags]    us6639    uk
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Click Panel    Cust Refs
+    Set CDR Value    TRVLCOST    2222
+    Verify CDR Is Enabled And Text Value is Correct    ALINE.BUS    123
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB] Verify that When Rules Are Satisfied For Search Remarks In Air Segment, Field in Cust Ref Panel Is Populated
+    [Tags]    fr    us6218    not_ready
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    fr-FR    AutomationFR    FR AUTO AMADEUS
+    Select GDS    Amadeus
+    Set Client And Traveler    Amadeus FR 15 - Auto ¦ US6218 1A_BussinessRules_Read Itinerary    Juarez    Rosalie
+    Click New Booking
+    Book Flight X Months From Now    LHRFRA/ALH    SS1Y1    FXP    6
+    Click Read Booking
+    Click Panel    Cust Refs
+    Verify CDR Is Enabled And Text Value is Correct    COSTCENTER    BRTEST
+    Verify CDR Is Enabled And Text Value is Correct    GEID    6
+    Verify CDR Is Enabled And Text Value is Correct    EMPLOYEEID    12345
+    Populate All Panels (Except Given Panels If Any)    Cust Refs
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus
+    Verify Specific Line Is Written In The PNR    *0601*6
+    Verify Specific Line Is Written In The PNR    *0602*BRTEST
+    Verify Specific Line Is Written In The PNR    *0603*12345
+
+[AB] Verify that When Rules Are Satisfied For Search Remarks In Air Segment, A Selection Pop-Up Will Displayed And Makes Field Mandatory
+    [Tags]    fr    us6218    not_ready
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Verify Window Exists    EMEA Confirmation Booking
+    Set Value In Pop Up    EMEA Confirmation Booking    Yes
+    Click Panel    Cust Refs
+    Set CDR Value    EMPLOYEEID    ${EMPTY}
+    Verify CDR Is Mandatory    EMPLOYEEID
+    Set CDR Value    EMPLOYEEID    RPJ
+    Populate All Panels (Except Given Panels If Any)    Cust Refs
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Specific Line Is Written In The PNR    *0601*6
+    Verify Specific Line Is Written In The PNR    *0602*BRTEST
+    Verify Specific Line Is Written In The PNR    *0603*RPJ
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[AB] Verify that When Rules Are Satisfied For Search Remarks In Car Segment Value, A Selection Pop-Up Will Displayed And Write Remarks
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    fr-FR    AutomationFR    FR AUTO AMADEUS
+    Select GDS    Amadeus
+    Set Client And Traveler    Amadeus FR 15 - Auto ¦ US6218_1A_BusinessRules_Car    Mercado    Mae
+    Click New Booking
+    Book Active Car Segment X Month From Now    CDG
+    Click Read Booking
+    Click Panel    Cust Refs
+    Verify CDR Is Enabled And Text Value is Correct    GEID    R
+    Populate All Panels (Except Given Panels If Any)    Cust Refs
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus
+    Verify Specific Line Is Written In The PNR    BR CAR CITIES BOOKED CHECKING
+    Click Clear All
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Verify Window Exists    Before making a booking read below:
+    Set Value In Pop Up    Before making a booking read below:    Yes
+    Populate All Panels (Except Given Panels If Any)    Cust Refs
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Specific Line Is Written In The PNR    TEST BUSINESS RULES
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB] Verify that When Rules Are Satisfied For Search Remarks In Passive Segment Value, Field in Cust Ref Panel Is Populated
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    fr-FR    AutomationFR    FR AUTO AMADEUS
+    Select GDS    Amadeus
+    Set Client And Traveler    Amadeus FR 15 - Auto ¦ US6218 1A_BussinessRules_Read Itinerary    Juarez    Rosalie
+    Click New Booking
+    Book Passive Flight X Months From Now    CDGLHR
+    Click Read Booking
+    Click Panel    Cust Refs
+    Verify CDR Is Enabled And Text Value is Correct    EMPLOYEEID    BR222
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus
+    Verify Specific Line Is Written In The PNR    *0603*BR222
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}

@@ -1,0 +1,124 @@
+*** Settings ***
+Force Tags
+Resource          ../../../../resources/common/global_resources.txt
+Resource          ../../client_info/client_info_verification.txt
+Resource          ../other_services_verification.txt
+Resource          ../../../../resources/panels/client_info.txt
+Resource          ../../../../resources/panels/other_svcs.txt
+
+*** Test Cases ***
+
+*** Keywords ***
+Add Remarks In Exchange Order
+    [Arguments]    @{free_text_remark}
+    Activate Power Express Window
+    : FOR    ${item}    IN    @{free_text_remark}
+    \    Click Control Button    [NAME:EoAddFreeText]
+    \    Send    ${item}
+    \    Send Keys    {TAB}
+
+Add Remarks In Itinerary
+    [Arguments]    @{free_text_remark}
+    Activate Power Express Window
+    : FOR    ${item}    IN    @{free_text_remark}
+    \    Click Control Button    [NAME:IoAddFreeText]
+    \    Send    ${item}
+    \    Send Keys    {TAB}
+
+Get All Original Data From EO Grid
+    [Documentation]    This Keyword is used to get the original data/remarks from the left exchange order grid. Reusing this keyword in later script will modify(If the Left grid has been modified due to some reason) the variable storing the remarks and result in failure of script.
+    @{all_eo_remarks_list}    Get All Cell Values In Data Grid Table    [NAME:FromEoDataGridView]
+    Set Test Variable    ${all_eo_remarks_list}
+    [Return]    ${all_eo_remarks_list}
+
+Get All Original Data From IO Grid
+    [Documentation]    This Keyword is used to get the original data/remarks from the left Itinerary order grid. Reusing this keyword in later script will modify the variable storing the remarks(If the Left grid has been modified due to some reason) and result in failure of script.
+    @{all_io_remarks_list}    Get All Cell Values In Data Grid Table    [NAME:FromIoDataGridView]
+    Set Test Variable    ${all_io_remarks_list}
+    [Return]    ${all_io_remarks_list}
+
+Get Items In Selected Itinerary List Of Remarks Tab
+    @{get_values}    Get All Cell Values In Data Grid Pane    [NAME:ToIoDataGridView]
+    Lists Should Be Equal    ${selected_multiple_io_rmk_list}    ${get_values}
+
+Note The Last RIR Remark Line In The PNR
+    [Documentation]    This keyword is an abstraction for
+    ...
+    ...    ${last_itinerary_line} Retrieve Last RIR Line
+    ...
+    ...    ...and ensuring that the ${last_itinerary_line}'s value is available at other areas of the Test Case.
+    ${last_itinerary_line}    Retrieve Last RIR Line
+    Set Test Variable    ${last_itinerary_line}
+
+Note The Remarks Inside Selected Exchange Order List
+    @{get_values}    Get All Cell Values In Data Grid Pane    [NAME:ToEoDataGridView]
+    ${items_count}    Get Length    ${get_values}
+    Log    ${get_values}
+    @{selected_multiple_eo_rmk_list}    Create List
+    @{row_list}    Create List
+    : FOR    ${i}    IN RANGE    ${items_count}
+    \    ${get_cell_value}=    Get Cell Value In Data Grid Table    [NAME:ToEoDataGridView]    Row ${i}
+    \    Append To List    ${selected_multiple_eo_rmk_list}    ${get_cell_value}
+    \    Append To List    ${row_list}    Row ${i}
+    Log    ${selected_multiple_eo_rmk_list}
+    Set Test Variable    ${selected_multiple_eo_rmk_list}
+    Take Screenshot
+
+Note The Remarks Inside Selected Itinerary Remarks List
+    @{get_values}    Get All Cell Values In Data Grid Pane    [NAME:ToIoDataGridView]
+    ${items_count}    Get Length    ${get_values}
+    @{selected_multiple_io_rmk_list}    Create List
+    @{row_list}    Create List
+    : FOR    ${i}    IN RANGE    ${items_count}
+    \    ${get_cell_value}=    Get Cell Value In Data Grid Table    [NAME:FromIoDataGridView]    Row ${i}
+    \    Append To List    ${selected_multiple_io_rmk_list}    ${get_cell_value}
+    \    Append To List    ${row_list}    Row ${i}
+    Log    ${selected_multiple_io_rmk_list}
+    Set Test Variable    ${selected_multiple_io_rmk_list}
+    Take Screenshot
+
+Retrieve First RIR Line
+    @{captured_lines}=    Get Regexp Matches    ${pnr_details}    [^\\s](.+?)(?= RIR ${selected_multiple_io_rmk_list[0]})
+    ${first_itinerary_line}=    Catenate    ${EMPTY}    ${captured_lines[0]}
+    [Return]    ${first_itinerary_line}
+
+Retrieve Last RIR Line
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    @{captured_lines}=    Get Regexp Matches    ${pnr_details}    [^\\s](.+?)(?= RIR)
+    ${last_remark_line}=    Catenate    ${EMPTY}    ${captured_lines[-1]}
+    Log    Last line is ${last_remark_line}
+    Set Test Variable    ${last_remark_line}
+    [Return]    ${last_remark_line}
+
+Select One Or More Pre-Defined Other Service Exchange Order Remarks
+    [Arguments]    @{list_of_indices}
+    [Documentation]    This keyword is an alternative to a group of keywords being used for specific purpose. For example:
+    ...
+    ...    Select Multiple Items in Exchange Order Remarks Left Grid View By Index Range
+    ...
+    ...    Click Add Button in Exchange Order Remarks Grid View
+    ...
+    ...    Verify Multiple Selected Exchange Order Remarks Items Are Reflected In Right Grid View
+    ...
+    ...
+    ...    These keywords, altogether has one purpose, select one or more pre-defined exchange order remarks, click add button and ensuring what were selected, they appear as selected exchange order remarks.
+    ...
+    ...
+    ...    [uexr493]
+    Select Multiple Items in Exchange Order Remarks Left Grid View By Index Range    @{list_of_indices}
+    Click Add Button in Exchange Order Remarks Grid View
+    Verify Multiple Selected Exchange Order Remarks Items Are Reflected In Right Grid View
+
+Select One Or More Pre-Defined Other Service Itinerary Remarks
+    [Arguments]    @{list_of_indices}
+    Select Multiple Items in Itinerary Remarks Left Grid View By Index Range    @{list_of_indices}
+    Click Add Button In Itinerary Remarks Grid View
+    Verify Multiple Selected Exchange Order Remarks Items Are Reflected In Right Grid View
+    Verify Multiple Selected Itinerary Remarks Items Are Reflected In Right Grid VIew
+
+Verify That Expected Itinerary Remarks Are Appended At The Bottom Of RIR Lines Group
+    [Arguments]    @{remarks_list}
+    ${first_itinerary_line}=    Retrieve First RIR Line
+    Should Be True    ${first_itinerary_line} > ${last_remark_line}
+    Verify Specific Line Is Written In The PNR
+    Verify Specific CDR Is Not Shown Upon Load

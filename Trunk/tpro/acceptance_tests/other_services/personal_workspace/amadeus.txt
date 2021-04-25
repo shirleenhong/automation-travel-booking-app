@@ -1,0 +1,286 @@
+*** Settings ***
+Resource          ../../../../resources/common/global_resources.txt
+Resource          ../other_services_verification.txt
+Resource          ../../client_info/client_info_verification.txt
+Resource          ../../../../resources/panels/other_svcs.txt
+Resource          ../../../../resources/api_resource/remarks_core.txt
+
+*** Test Cases ***
+Selecting Tabs In The Other Services Panel
+    Set Test Variable    ${gds_switch}    galileo
+    Set Test Variable    ${locale}    en-GB
+    Comment    Click Other Services
+    Comment    Select Product    ADDITIONAL BSP AIR
+    Comment    Select Vendor    AIR FRANCE
+    Comment    Click Continue In Other Svcs
+    Comment    x    Click Panel    Vendor Info
+    Comment    x    Click Tab In Contact Details    [NAME:otherServicesContainer]
+    Select Tab In Other Services Panel    Vendor Info
+    Select Tab In Other Services Panel    Service Info
+    Select Tab In Other Services Panel    Remarks
+
+Click A Specific Cell Inside An EO Grid
+    Set Test Variable    ${gds_switch}    galileo
+    Set Test Variable    ${locale}    en-GB
+    Set Test Variable    ${ignore_verification}    False
+    Comment    ------->    Click Profile Button
+    Comment    ------->    Click Control Button    [NAME:EoGrid]    ${title_power_express}
+    Comment    Run Keyword If    "${ignore_verification}" == "False"    Wait Until Keyword Succeeds    60    1    Verify Control Object Is Visible
+    ...    [NAME:EoGrid]    ${title_power_express}
+    Comment    Control Focus    ${title_power_express}    ${EMPTY}    [NAME:EoGrid]
+    Comment    Control Click    ${title_power_express}    ${EMPTY}    [NAME:EoGrid]
+    Comment    Retrieve PNR    OEQGDV
+    Comment    Click Other Services
+    Click Panel    Other Svcs
+    Control Focus    ${title_power_express}    ${EMPTY}    [NAME:CwtTextBox1]
+    Send    {TAB 4}
+    Send    {ENTER}
+    Control Click
+
+Send Get Request To APAC Services
+    ${headers} =    Create Dictionary    content-type=application/json    authorization=Bearer eyJhbGciOiJIUzI1NiJ9.eyJhcHAiOiJhcGFjLXNlcnZpY2VzIn0.NxIxQdRQJ0Ws1_zQr6jbZJ3NQ0qevCBPnYQKuQ1fUQA
+    ${apac_service_url} =    Set Variable    https://int.apac-services.us-west-2.cbt-aws-cwt.com
+    ${apac_endpoint} =    Set Variable    /apac-services-rest/api/products/SG
+    Create Session    apacSession    ${apac_service_url}    headers=${headers}    verify=True
+    ${session_resp} =    Get Request    apacSession    ${apac_endpoint}
+    Should Be Equal As Strings    ${session_resp.status_code}    200
+    Comment    ${session_resp} =    HttpLibrary.HTTP.Parse Json    ${session_resp}
+    Comment    Log    ${session_resp.content}
+    Comment    ${result}=    Get Json Value    ${session_resp.content}    /[0]/vendor
+    Log    ${session_resp.content}
+    ${vendor_names} =    Get Value From Json    ${session_resp.content}    $..[1]..productCode
+    Log    ${vendor_names}
+    Comment    Log    ${session_resp.content[$..[?(@.description=="24 Hours Emergency Svcs")].productCode]}
+    Comment    ${vendor_names} =    Get Value From Json    ${session_resp.content}    $..[?(@.description=="24 Hours Emergency Svcs")].productCode
+    Comment    Log    ${result}
+    Comment    Log    ${session_resp.text}
+    Comment    Log    ${vendor_names}
+    Comment    # problem FAIL : Parse error at 1:4 near token ? (?)
+
+[SG] Verify That GST Field Is Displayed
+    [Documentation]    Limitation: Not yet able to handle multiple vendors in one product.
+    ${products_vendors_table} =    Create Dictionary
+    Set To Dictionary    ${products_vendors_table}    Despatch Charge    DESPATCH DEPARTMENT
+    Set To Dictionary    ${products_vendors_table}    Meet And Greet    Carlson Wagonlit GST
+    Set To Dictionary    ${products_vendors_table}    24 Hours Emergency Svcs    Carlson Wagonlit GST
+    Set To Dictionary    ${products_vendors_table}    MICE-GST    CARLSON WAGONLIT OTHERS
+    Set To Dictionary    ${products_vendors_table}    Hotel - Local Booking Fee    Carlson Wagonlit GST
+    Set To Dictionary    ${products_vendors_table}    Car - Local Booking Fee    Carlson Wagonlit GST
+    Set To Dictionary    ${products_vendors_table}    MISC - Local Booking Fee    Carlson Wagonlit GST
+    Set To Dictionary    ${products_vendors_table}    Management Fee    Carlson Wagonlit GST
+    Set To Dictionary    ${products_vendors_table}    CWT Refund Admin Fee    Carlson Wagonlit GST
+    Set To Dictionary    ${products_vendors_table}    MICE- Activities    Carlson Wagonlit GST
+    ${row_count}    Get Length    ${products_vendors_table}
+    ${keys} =    Get Dictionary Keys    ${products_vendors_table}
+    : FOR    ${each_row}    IN RANGE    ${row_count}
+    \    ${vendor} =    Get From Dictionary    ${products_vendors_table}    @{keys}[${each_row}]
+    \    Comment    Log    @{keys}[${each_row}] product has vendor ${vendor}
+    \    Wait Until Control Object Is Visible    [NAME:cboProduct]
+    \    Select Product    @{keys}[${each_row}]
+    \    Select Vendor    ${vendor}
+    \    Click Continue In Other Svcs
+    \    Verify Control Object Is Visible    [NAME:GSTTextBox]    ${title_power_express}
+    \    Get Control Text Value    [NAME:DescriptionTextBox]
+    \    ${length} =    Get Length    ${control_text_object}
+    \    Log    Description length: ${length}
+    \    Take Screenshot
+    \    Click Control Button    [NAME:CancelButton]
+
+Count Items Of Selected EO Remarks
+    Set Test Variable    ${gds_switch}    galileo
+    Set Test Variable    ${locale}    en-GB
+    Comment    Control Focus    ${EMPTY}    ${EMPTY}    [NAME:ToEoDataGridView]
+    Comment    Send    ${MOVEDOWN}    MD
+    Control Send    ${title_power_express}    Test Remark    [NAME:ToEoDataGridView]    {TAB}
+    Comment    :FOR    ${team}    IN    @{team_selection}
+    Comment    \    Win Activate    ${team_selection_window}    ${EMPTY}
+    Comment    \    Wait For Active Window    ${team_selection_window}    ${EMPTY}    60
+    Comment    \    Control Focus    ${team_selection_window}    ${EMPTY}    [NAME:btnOK]
+    Comment    \    Send Keys    {TAB * 2}
+    Comment    \    Control Focus    ${team_selection_window}    ${EMPTY}    [NAME:cchkSelectUnselect]
+    Comment    \    Send Keys    {TAB}
+    Comment    \    Control Focus    ${team_selection_window}    ${EMPTY}    [NAME:chklistTeam]
+    Comment    \    ${team_index}    Get Team Index Value    ${team}    ${user_profile}    ${syex_env}
+    ...    ${team_selection_window}
+    Comment    \    Send Keys    {HOME}
+    Comment    \    Run Keyword If    ${team_index} != 0    Send Keys    {DOWN ${team_index}}    {SPACE}
+    ...    ELSE    Send Keys    {SPACE}
+
+[SG] Verify That GST Field Is Not Displayed
+    [Documentation]    Limitation: Not yet able to handle multiple vendors in one product.
+    ${products_vendors_table} =    Create Dictionary
+    Set To Dictionary    ${products_vendors_table}    Miscellaneous - MICE    CARLSON WAGONLIT TRAVEL
+    Set To Dictionary    ${products_vendors_table}    Miscellaneous - MICE    MICE DEPARTMENT
+    Set To Dictionary    ${products_vendors_table}    Tour Package    CARLSON WAGONLIT TRAVEL
+    Set To Dictionary    ${products_vendors_table}    Tour Package    LOTUS TRAVEL PTE LTD
+    Set To Dictionary    ${products_vendors_table}    Tour Package    STAR WORLD AVIATION (S) PTE LTD
+    Set To Dictionary    ${products_vendors_table}    Tour Package    WORLDWIDE AVIATION SALES P/L
+    ${row_count}    Get Length    ${products_vendors_table}
+    Comment    ${keys} =    Get Dictionary Keys    ${products_vendors_table}
+    ${keys} =    Get Dictionary Values    ${products_vendors_table}
+    : FOR    ${each_row}    IN RANGE    ${row_count}
+    \    ${vendor} =    Get From Dictionary    ${products_vendors_table}    @{keys}[${each_row}]
+    \    Log    @{keys}[${each_row}] vendor
+    \    Select Product    @{keys}[${each_row}]
+    \    Select Vendor    ${vendor}
+    \    Click Continue In Other Svcs
+    \    Verify Control Object Is Not Visible    [NAME:GSTTextBox]    ${title_power_express}
+    \    Click Control Button    [NAME:CancelButton]
+
+temp
+    Set Suite Variable    ${gds_switch}    amadeus
+    Set Suite Variable    ${locale}    en-GB
+    Click Panel    Client Info
+    Comment    Steps:
+    Comment    1. In Amadeus, emulate to SG PCC: SINWL2100
+    Comment    2. Launch Power Express
+    Comment    3. Select Team: APAC QA
+    Comment    4. Select Client: APAC SYN CORP ¦ APAC SYN SG
+    Comment    5. ID Traveller: BEAR, SING
+    Comment    6. Click New Booking
+    Comment    7. In Client Info panel, select the following:
+    Comment    Form of Payment: <select a valid credit card or add a new one: VI4444333322221111 01/22>
+    Comment    Merchant: Airline
+    Comment    8. Book a flight: AN20DECSINMNL, SS1Y1
+    Comment    9. Do a fare quote: FXP
+    Comment    10. Click Read Booking
+    Comment    11. Make all panels green
+    Comment    12. Click Finish PNR
+    Comment    13. In Complete panel, click Other Services
+    Comment    14. In Other Svcs panel, select the following then click Continue:
+    Comment    Product: <any value>
+    Comment    Vendor: <any value>
+    Comment    15. In Service Info tab, verify that the following fields are auto-populated with the value from FOP line.
+    Comment    Expected Result: The following field(s) will be auto-populated with the value from FOP line:
+    Comment    Form Of Payment (FOP): CC
+    Comment    Card Type: <merchant e.g. VI>
+    Comment    Card Number: <credit card number e.g. 4444333322221111>
+    Comment    Expiry Date: <cc expiry month and year e.g. 01/22>
+    Comment    16. Verify that the following fields default to the correct value:
+    Comment    Expected Result: The following fields will default to the correct value:
+    Comment    Selling Price: <value from Services OR zero '0' if blank>
+    Comment    Date: <current date>
+    Comment    17. Manually change the Date to a past date
+    Comment    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Expected Result: Error icon will be displayed beside Date field with the message: "Cannot enter date earlier than date today"
+    Comment    18. Manually change the Date to the current date
+    Comment    19. Verify that the following fields are editable:
+    Comment    Expected Result: The following fields will be editable:
+    Comment    Vendor Contact
+    Comment    Nett Cost *this field will accept up to 2 decimal places
+    Comment    Selling Price *this field will accept up to 2 decimal places
+    Comment    Form of Payment (FOP)
+    Comment    Card Type
+    Comment    Card Number
+    Comment    Expiry Date
+    Comment    Description (max limit: 70-alphanumeric characters)
+    Comment    BTA Description (max limit: 20-alphanumeric characters)
+    Comment    Date
+    Comment    20. Populate all fields in Other Svcs panel
+    Comment    Expected Result: Other Svcs panel will be green
+    Comment    21. Verify that the following fields are optional. Delete, verify result then populate field again - do this for each of the following fields:
+    Comment    Expected Result: The following fields will be optional. Other Svcs panel will remain green even when field is blank.
+    Comment    Vendor Contact
+    Comment    Selling Price
+    Comment    BTA Description
+    Comment    22. Verify that the following fields are mandatory (gold when blank). Delete, verify result then populate field again - do this for each of the following fields:
+    Comment    Expected Result: The following fields will be mandatory - gold if blank. Other Svcs panel will turn red when each of the field is set to blank.
+    Comment    Form Of Payment (FOP)
+    Comment    Card Type
+    Comment    Card Number
+    Comment    Expiry Date
+    Comment    Description
+    Comment    Date
+    Comment    23. Verify that the following fields are auto-calculated and pre-populated with the correct values:
+    Comment    Expected Result: The following fields will be auto-calculate and pre-populated with the correct values:
+    Comment    Commission
+    Comment    GST Amount
+    Comment    Merchant Fee
+    Comment    Total Selling Price
+    Comment    24. Enter/select a value on each of the following fields then verify that they trigger the re-calculation of Commission, GST Amount, Merchant Fee and Total Selling Price after clicking Calculate:
+    Comment    Expected Result#1: The following fields will trigger the re-calculation of Commission, GST Amount, Merchant Fee and Total Selling Price
+    Comment    Nett Cost
+    Comment    Selling Price
+    Comment    Merchant Fee - CWT Absorb (ticked/unticked)
+    Comment    GST Amount - CWT Absorb (ticked/unticked)
+    Comment    Form Of Payment (Invoice, Credit Card (CC), Credit Card (CX))
+    Comment    Expected Result#2: Calculate button will be disabled
+    Comment    25. Enter/select a value on each of the following fields then verify if Calculate button will be enabled again
+    Comment    Expected Result#1: Calculate button will be enabled again
+    Comment    Expected Result#2: The following fields will not re-calculate yet until Calculate button is clicked
+    Comment    Nett Cost
+    Comment    Selling Price
+    Comment    Merchant Fee - CWT Absorb (ticked/unticked)
+    Comment    GST Amount - CWT Absorb (ticked/unticked)
+    Comment    Form Of Payment (Invoice, Credit Card (CC), Credit Card (CX))
+    Comment    25. Populate the following fields with valid values:
+    Comment    Form Of Payment: Credit Card (CC)
+    Comment    Card Type: VI *or value from FOP line
+    Comment    Card Number: 4444333322221111 *or value from FOP line
+    Comment    Expiry Date: 01/22 *or value from FOP line
+    Comment    BTA Description: BTA TEST DESCRIPTION *or any description
+    Comment    26. Take note of all the values in Services Info tab
+    Comment    27. Continue to the next Test Case
+    In Amadeus, emulate to HK PCC: SINWL2101    SINWL2101
+    Enter GDS Command
+    Gds Native.Get All Data From Terminal Window
+
+Create KW Computations
+    Compute Merchant Fee    sg    560    7.00    2.00    cx    False
+    Comment    Compute Merchant Fee    sg    560    7.00    2.00    cx
+    ...    True
+    Comment    Compute Merchant Fee    hk    465    7    2    CX
+    ...    False
+    Comment    Compute Merchant Fee    hk    465    7    2    CX
+    ...    True
+    Comment    Compute Total Selling Price    SG    100    7    14
+    Comment    Verify That Computed Selling Price Is Displayed In Power Express Is Correct    113.08    ${total_selling_price}
+    Comment    Compute Total Selling Price    HK    100    7    14
+    Comment    Verify That Computed Selling Price Is Displayed In Power Express Is Correct    114    ${total_selling_price}
+
+Reading A Log File
+    ${pnr_created_file}    OperatingSystem.Get File    ${public_documents_path}/pnr_created.txt
+    ${pnr_list}    Get Lines Containing String    ${pnr_created_file}    - ${gds_switch} - ${date}
+    ${log_file}    OperatingSystem.Get File    ${log_path}/${log_filename}
+    ${pnr_list}    Get Lines Containing String    ${pnr_created_file}    - ${gds_switch} - ${date}
+
+sample TC
+    Comment    Compute Merchant Fee    sg    560    7.00    2.00
+    Comment    Compute Merchant Fee    hk    465    7    2
+    Comment    Compute Merchant Fee    hk    465    7    2
+    Comment    Compute Total Selling Price    SG    100    7    14
+    Comment    Verify That Computed Selling Price Is Displayed In Power Express Is Correct    113.08    ${total_selling_price}
+    Comment    Compute Total Selling Price    HK    100    7    14
+    Comment    Verify That Computed Selling Price Is Displayed In Power Express Is Correct    114    ${total_selling_price}
+
+New way of booking a flight
+    Set Suite Variable    ${gds_switch}    amadeus
+    Set Suite Variable    ${locale}    en-GB
+    Open Power Express And Retrieve Profile    ${version}    Test    u004hxc    en-GB    hcuellar    APAC QA
+    Select GDS    Amadeus
+    Create New Booking With One Way Flight Using Default Values    APAC SYN CORP ¦ AUTOMATION HK - OS REMARK TAB (US863)    Bear    EightsixThree    SINMNL/ASQ
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Select Form Of Payment On Fare Quote Tab    Fare Quote 1    Invoice
+    Populate Fare Tab With Default Values    Fare Quote 1    fare_restriction_default=true
+    Comment    Click Finish PNR
+
+Masked CC Number practice
+    #Variables
+    ${fop_value} =    Set Variable    Credit Card (CC)    #EXPECTED    #UI FOP VALUE
+    ${fop_cc_type} =    Set Variable    VI    #EXPECTED    #UI CC TYPE
+    ${fop_cc_number} =    Set Variable    1234567890123456    #EXPECTED    #UI CC NUMBER
+    ${fop_expiry_date} =    Set Variable    12/25    #EXPECTED    #UI CC EXPIRY MM/YYYY
+    ${fop_cc_number_masked} =    Set Variable    True
+    #Segregate the masked and unmasked portion of expected credit card number
+    ${cc_number_digit_count} =    Get Length    ${fop_cc_number}
+    ${cc_last_four_digit} =    Get Slice From List    ${fop_cc_number}    -4    \    #EXPECTED    #UNMASKED PORTION OF CC NUMBER
+    Log    Last four digit: ${cc_last_four_digit}
+    ${cc_number_portion_masked} =    Evaluate    ${cc_number_digit_count} - 4
+    ${cc_number_portion_masked} =    Get Slice From List    ${fop_cc_number}    \    ${cc_number_portion_masked}    #EXPECTED    #MASKED PORTION OF CC NUMBER
+    \    Replace String
+
+*** Keywords ***
+_Select Tab In Other Services Panel
+    [Arguments]    ${tab_name}
+    Click Control Button    [NAME:otherServicesContainer]
+    Select Tab Control    ${tab_name}

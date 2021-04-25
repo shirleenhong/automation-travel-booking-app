@@ -1,0 +1,209 @@
+*** Settings ***
+Resource          ../../../../resources/common/global_resources.txt
+Resource          ../other_services_verification.txt
+Resource          ../../client_info/client_info_verification.txt
+Resource          ../../../../resources/panels/other_svcs.txt
+Resource          ../../../../resources/api_resource/remarks_core.txt
+Resource          ../other_services_form_of_payment_control.txt
+
+*** Test Cases ***
+[SG NB] Verify That Prepaid Hotel Product Behaves Correctly In Other Services Panel And Written In The PNR When FOP Type Is CX
+    Set Suite Variable    ${gds_switch}    amadeus
+    Set Suite Variable    ${locale}    en-GB
+    Open Power Express And Retrieve Profile    ${version}    Test    uexr493    en-GB    erepolidoru    APAC QA
+    Handle Generic Window Popup
+    Select GDS    Amadeus
+    Set Client And Traveler    APAC SYN CORP ¦ APAC SG OS AUTOMATION    BEAR    SGOTHERS
+    Click New Booking
+    Book Active Hotel    JT    LON    423    04MAR    06MAR    123456
+    ...    A1D    GBP425.00
+    Book Passive Hotel    LON    06MAR    06MAR    PLAZA HOTEL TWIN ROOM NO MEALS INCLUDED
+    Click Panel    Cust Refs
+    Click Update PNR
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Click Other Services    #SG Product    #SG Vendor    #HK Product    #HK Vendor
+    Select Product And Vendor    Prepaid Hotel    CARLSON WAGONLIT TRAVEL    #Hotel Prepaid    #ONE OFF VENDER
+    Click Tab In Other Services Panel    Hotel Info
+    Verify Hotel Info Fields Are Enabled
+    Verify Hotel Fields Are Disabled
+    Verify Default Form Of Payment Is Correct    Cash or Invoice
+    #Verify HHL Hotel Segments Are Displayed In The List
+    #Verify HTL Hotel Segments Are Displayed In The List
+    Verify Default Of Arrival Flight Is Correct
+    Verify Default Of Depart Flight Is Correct
+    Verify Error Icon Is Displayed When No Hotel Is Selected    Please select atleast one
+    Verify Arrival Flight Items Are Correct
+    Verify Departure Flight Items Are Correct
+    Click Finish PNR
+    Verify Error In Status Strip Text    Update Aborted - Please validate all activity panels
+
+[SG AB] Verify That Prepaid Hotel Product Behaves Correctly In Other Services Panel And Written In The PNR When FOP Type Is Cash Or Invoice
+    Comment    Set Suite Variable    ${locale}    en-GB
+    Comment    Set Suite Variable    ${gds_switch}    amadeus
+    Comment    Set Suite Variable    ${current_pnr}    QFN75H
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Book Flight X Months From Now    SINMNL/ASQ    SS1Y1    FXP/S2    6    3
+    Book Flight X Months From Now    MNLSIN/ASQ    SS1Y1    FXP/S3    6    5
+    Click Read Booking
+    Click Panel    Air Fare
+    Populate Fare Tab With Default Values    Fare Quote 1    fare_restriction_default=true
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Click Other Services    #SG Product    #    #HK Product
+    Select Product And Vendor    Prepaid Hotel    CARLSON WAGONLIT TRAVEL    #Hotel Prepaid    #ONE OFF VENDER
+
+[SG OS] Verify That Prepaid Hotel Product Behaves Correctly In Other Services Panel And Written In The PNR When FOP Type Is CX
+    Click Other Services    #SG Product    #    #HK Product
+    Select Product And Vendor    Prepaid Hotel    CARLSON WAGONLIT TRAVEL    #Hotel Prepaid    #ONE OFF VENDER
+
+[SG OS] Verify That Prepaid Hotel Product Behaves Correctly In Other Services Panel And Written In The PNR When FOP Type Is Cash Or Invoice
+    Click Other Services    #SG Product    #    #HK Product
+    Select Product And Vendor    Prepaid Hotel    CARLSON WAGONLIT TRAVEL    #Hotel Prepaid    #ONE OFF VENDER
+
+[HK NB] Verify That Prepaid Hotel Product Behaves Correctly In Other Services Panel And Written In The PNR When FOP Type Is CX
+    Set Suite Variable    ${gds_switch}    amadeus
+    Set Suite Variable    ${locale}    en-GB
+    Open Power Express And Retrieve Profile    ${version}    Test    uexr493    en-GB    erepolidoru    APAC QA
+    ...    Amadeus
+    Set Client And Traveler    APAC SYN CORP ¦ APAC HK OS AUTOMATION    BEAR    HKOTHERS
+    Click New Booking
+    Book Active Hotel    JT    LON    423    04MAR    06MAR    123456
+    ...    A1D    GBP425.00
+    Book Passive Hotel    LON    06MAR    06MAR    PLAZA HOTEL TWIN ROOM NO MEALS INCLUDED
+    Click Panel    Cust Refs
+    Populate Cust Refs Panel With Default Values
+    Click Update PNR
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Click Other Services    #HK Product    #    #SG Product
+    Select Product And Vendor    HOTEL - PREPAID    ONE OFF VENDER    #Prepaid Hotel    #CARLSON WAGONLIT TRAVEL
+    Click Tab In Other Services Panel    Hotel Info
+    Verify Hotel Info Fields Are Enabled
+    Verify Hotel Fields Are Disabled
+    Verify Default Form Of Payment Is Correct    Cash or Invoice
+    #Verify HHL Hotel Segments Are Displayed In The List
+    #Verify HTL Hotel Segments Are Displayed In The List
+    Verify Default Of Arrival Flight Is Correct
+    Verify Default Of Depart Flight Is Correct
+    Verify Error Icon Is Displayed When No Hotel Is Selected    Please select atleast one
+    Verify Arrival Flight Items Are Correct
+    Verify Departure Flight Items Are Correct
+    Click Finish PNR
+    Verify Error In Status Strip Text    Update Aborted - Please validate all activity panels
+
+[HK AB] Verify That Prepaid Hotel Product Behaves Correctly In Other Services Panel And Written In The PNR When FOP Type Is Cash Or Invoice
+    Set Suite Variable    ${gds_switch}    amadeus
+    Set Suite Variable    ${locale}    en-GB
+    Comment    Set Suite Variable    ${current_pnr}    QKFZ98    #ACPT ENV ANTI
+    Set Suite Variable    ${current_pnr}    QLMLJ8
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Book Flight X Months From Now    SINMNL/ASQ    SS1Y1    FXP/S2    6    3
+    Book Flight X Months From Now    MNLSIN/ASQ    SS1Y1    FXP/S3    6    5
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Click Other Services    #HK Product    #    #SG Product
+    Select Product And Vendor    HOTEL - PREPAID    ONE OFF VENDER    #Prepaid Hotel    #CARLSON WAGONLIT TRAVEL
+
+[HK OS] Verify That Prepaid Hotel Product Behaves Correctly In Other Services Panel And Written In The PNR When FOP Type Is CX
+    Click Other Services    #HK Product    #    #SG Product
+    Select Product And Vendor    Hotel Prepaid    ONE OFF VENDER    #Prepaid Hotel    #CARLSON WAGONLIT TRAVEL
+
+[HK OS] Verify That Prepaid Hotel Product Behaves Correctly In Other Services Panel And Written In The PNR When FOP Type Is Cash Or Invoice
+    Click Other Services    #HK Product    #    #SG Product
+    Select Product And Vendor    Hotel Prepaid    ONE OFF VENDER    #Prepaid Hotel    #CARLSON WAGONLIT TRAVEL
+    Verify Failed Form Of Payment Update Message
+
+*** Keywords ***
+Book Active Hotel
+    [Arguments]    ${hotel_code}    ${city_code}    ${last_three_chars_property_code}    ${checkin_date_ddmmm}    ${checkout_date_ddmmm}    ${confirmation_number}
+    ...    ${room_type}    ${rate_code}
+    [Documentation]    Sample Usage:
+    ...    \ \ 11AHSJTLON423 04MAR-06MAR/CF-123456/RT-A1D/RQ-GBP425.00
+    ...
+    ...    Where:
+    ...
+    ...    JT \ = <hotel_code> of JUMEIRAH CARLTON TOWER
+    ...
+    ...    LON \ = <city_code> of London
+    ...
+    ...    423 \ = \ last 3 chars of property code
+    ...
+    ...    04MAR \ = checkin in date
+    ...
+    ...    06MAR \ = check out date
+    ...
+    ...    CF-123456 = CF-<confirmation_number>
+    ...
+    ...    RT-A1D \ \ = RT-<room_type>
+    ...
+    ...    RQ-GBP425.00 \ = RQ-<rate_quote>
+    ...
+    ...
+    ...    Implementation Reference: http://www.amadeus.com/web/binaries/blobs/762/623/Training_Manual_1A_PK.pdf
+    Enter GDS Command    11AHS${hotel_code}${city_code} ${last_three_chars_property_code} ${checkin_date_ddmmm}-${checkout_date_ddmmm} /CF-${confirmation_number}/RT-${room_type}/RQ-${rate_code}
+
+Book Passive Hotel
+    [Arguments]    ${city_code}    ${checkin_date}    ${checkout_date}    ${free_text}
+    [Documentation]    HU1AHK1LON06MAR-06MAR/PLAZA HOTEL TWIN ROOM NO MEALS INCLUDED
+    Enter GDS Command    HU1AHK1${city_code} ${checkin_date} -${checkout_date}/${free_text}
+
+Get Arrival Flight Value
+    ${ui_arrival_flight}    Get Control Text Value    [NAME:ArrivalFlightComboBox]    ${title_power_express}
+    Set Suite Variable    ${ui_arrival_flight}
+
+Get Departure Flight Value
+    ${ui_depart_flight}    Get Control Text Value    [NAME:DepartFlightComboBox]    ${title_power_express}
+    Set Suite Variable    ${ui_depart_flight}
+
+Verify Arrival Flight Items Are Correct
+    ${expected_arrival_items}    Get Air Segments From GDS
+    ${ui_arrival_flights_items}    Get Dropdown Values    [NAME:ArrivalFlightComboBox]
+    ${ui_arrival_flights_items}    Remove Empty Value From List    ${ui_arrival_flights_items}
+    Log    Expected Arrival Segments: \n${expected_arrival_items}
+    Log    Actual Arrival Segments: \n${ui_arrival_flights_items}
+    Lists Should Be Equal    ${ui_arrival_flights_items}    ${expected_arrival_items}
+
+Verify Default Of Arrival Flight Is Correct
+    [Arguments]    ${arrival_flight}=${EMPTY}
+    Get Arrival Flight Value
+    Log    Expected Value: ${arrival_flight}
+    Log    Actual Value: ${ui_arrival_flight}
+    Run Keyword And Continue On Failure    Should Be Equal    ${arrival_flight}    ${ui_arrival_flight}
+
+Verify Default Of Depart Flight Is Correct
+    [Arguments]    ${depart_flight}=${EMPTY}
+    Get Departure Flight Value
+    Log    Expected Value: ${depart_flight}
+    Log    Actual Value: ${ui_depart_flight}
+    Run Keyword And Continue On Failure    Should Be Equal    ${depart_flight}    ${ui_depart_flight}
+
+Verify Departure Flight Items Are Correct
+    ${expected_departure_items}    Get Air Segments From GDS
+    ${ui_departure_items}    Get Dropdown Values    [NAME:DepartFlightComboBox]
+    ${ui_departure_items}    Remove Empty Value From List    ${ui_departure_items}
+    Log    Expected Departure Segments: \n${expected_departure_items}
+    Log    Actual Departure Segments: \n${ui_departure_items}
+    Lists Should Be Equal    ${ui_departure_items}    ${expected_departure_items}
+
+Verify Error Icon Is Displayed When No Hotel Is Selected
+    [Arguments]    ${expected_tooltip}
+    Verify Error Icon Is Displayed For Ticket Type    ${expected_tooltip}    OtherServicesSegmentControl
+
+Verify Hotel Fields Are Disabled
+    Verify Control Object Is Disabled    [NAME:CommisionTextBox]
+    Verify Control Object Is Disabled    [NAME:MerchantFeeTextBox]
+    Verify Control Object Is Disabled    [NAME:DiSellingPriceTextBox]
+    Verify Control Object Is Disabled    [NAME:MerchantFeeAbsorbCheckBox]
+    Verify Control Object Is Disabled    [NAME:ExhangeOrderNumberTextBox]
+
+Verify Hotel Info Fields Are Enabled
+    Verify Control Object Is Enabled    [NAME:VendorContactTextBox]
+    Verify Control Object Is Enabled    [NAME:NetCostTextBox]
+    Verify Control Object Is Enabled    [NAME:SellingPriceTextBox]
+    Verify Control Object Is Enabled    [NAME:PassengerIdTextBox]

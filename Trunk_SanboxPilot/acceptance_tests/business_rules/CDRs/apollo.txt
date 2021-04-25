@@ -1,0 +1,202 @@
+*** Settings ***
+Force Tags        apollo
+Resource          ../business_rules_verification.txt
+
+*** Test Cases ***
+[NB] Verify That Static CDRs With Values Are Disabled But Written Into The PNR
+    [Tags]    us4694
+    Open Power Express And Retrieve Profile    ${version}    Test    U001RTM    en-US    rmartinez    NORAM QA
+    Select GDS    Apollo
+    Set Client And Traveler    Apollo 2 - SyEx ¦ 1V US4846 QA Test    Silver    Thora
+    Select Client Account Value    U1A2E ¦ Apollo 2 - SyEx ¦ 1V US4846 QA Test
+    Select Trip Type Value    Business
+    Click New Booking
+    Verify CDR Is Not Visible    Accounting Codes
+    Verify CDR Is Not Visible    TS-Business Unit Name
+    Verify CDR Is Visible    CostCent
+    Verify CDR Is Visible    Dept Name
+    Verify CDR Is Visible    Matrix DP Code
+    Verify CDR Is Visible    Reason for Travel
+    Verify CDR Is Visible    SU Department Name
+    Verify CDR Is Visible    T-Booking Date
+    Verify CDR Is Visible    T-Supervisor
+    Tick Show All Client Defined References
+    Verify CDR Is Disabled And Text Value Is Correct    Accounting Codes    TST1
+    Verify CDR Is Disabled And Text Value Is Correct    TS-Business Unit Name    ITDEV
+    Set CDR Value    Dept Name    CONTR
+    Set CDR Value    Matrix DP Code    ${empty}
+    Tick Not Known At Time Of Booking    TICK
+    Click Update PNR
+    Retrieve PNR Details From Travelport    ${current_pnr}
+    Verify Specific Line Is Written In The PNR    U16-TST1
+    Verify Specific Line Is Written In The PNR    U15-CONTR
+    Verify Specific Line Is Written In The PNR    U13-ITDEV
+    Book Flight X Months From Now    JFKLAX+AA    01Y1    T:$BS1    6    1
+    Book Flight X Months From Now    LAXJFK+AA    01Y1    T:$BS2    6    6
+    Click Read Booking
+    Click Panel    Cust Refs
+    Verify CDR Is Visible    CostCent
+    Verify CDR Is Enabled And Text Value Is Correct    Matrix DP Code    P444
+    Verify CDR Is Visible    Reason for Travel
+    Verify CDR Is Visible    SU Department Name
+    Verify CDR Is Visible    T-Booking Date
+    Verify CDR Is Visible    T-Supervisor
+    Verify CDR Is Disabled And Text Value Is Correct    Accounting Codes    TST1
+    Verify CDR Is Disabled And Text Value Is Correct    TS-Business Unit Name    ITDEV
+    Populate All Panels (Except Given Panels If Any)    Cust Refs
+    Click Panel    Cust Refs
+    Set CDR Value    Matrix DP Code    ${empty}
+    Tick Not Known At Time Of Booking    TICK
+    Click Finish PNR
+    Retrieve PNR Details From Travelport    ${current_pnr}
+    Verify Specific Line Is Written In The PNR    U16-TST1
+    Verify Specific Line Is Written In The PNR    U15-CONTR
+    Verify Specific Line Is Written In The PNR    U13-ITDEV
+
+[AB] Verify That Static CDRs With Values Are Disabled But Written Into The PNR
+    [Tags]    us4694
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Click Panel    Cust Refs
+    Verify CDR Is Visible    CostCent
+    Verify CDR Is Visible    Reason for Travel
+    Verify CDR Is Visible    SU Department Name
+    Verify CDR Is Visible    T-Booking Date
+    Verify CDR Is Visible    T-Supervisor
+    Verify CDR Is Not Visible    Accounting Codes
+    Verify CDR Is Not Visible    TS-Business Unit Name
+    Verify CDR Is Not Visible    Dept Name
+    Verify CDR Is Not Visible    Matrix DP Code
+    Tick Show All Client Defined References
+    Verify CDR Is Disabled And Text Value Is Correct    Accounting Codes    TST1
+    Verify CDR Is Disabled And Text Value Is Correct    TS-Business Unit Name    ITDEV
+    Verify CDR Is Disabled And Text Value Is Correct    Dept Name    CONTR
+    Verify CDR Is Disabled And Text Value Is Correct    Matrix DP Code    P333
+    Populate All Panels (Except Given Panels If Any)    Cust Refs
+    Click Panel    Cust Refs
+    Tick Not Known At Time Of Booking    TICK
+    Click Finish PNR
+    Retrieve PNR Details From Travelport    ${current_pnr}
+    Verify Specific Line Is Written In The PNR    U16-TST1
+    Verify Specific Line Is Written In The PNR    U15-CONTR
+    Verify Specific Line Is Written In The PNR    G*DP/P333
+    Verify Specific Line Is Written In The PNR    U13-ITDEV
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB] Verify that Transactional CDRs Are Disabled Or Enabled Based On Rules And Are Written Into The PNR
+    [Tags]    us4694    valid_fail    de6711
+    Open Power Express And Retrieve Profile    ${version}    Test    U001RTM    en-US    rmartinez    NORAM QA
+    Select GDS    Apollo
+    Set Client And Traveler    Apollo 2 - SyEx ¦ 1V US4846 QA Test    Ryder    Deandra
+    Select Client Account Value    U12M6 ¦ "BURLINGTON RESOURCES, INC." ¦ 1V US4846 QA Test
+    Select Trip Type Value    Personal
+    Click New Booking
+    Verify CDR Is Visible    CostCent
+    Verify CDR Is Enabled And Text Value Is Correct    Dept Name    QA
+    Verify CDR Is Enabled And Text Value Is Correct    Matrix DP Code    P444
+    Verify CDR Is Visible    SU Department Name
+    Verify CDR Is Visible    T-Booking Date
+    Verify CDR Is Visible    TS-Business Unit Name
+    Verify CDR Is Not Visible    Reason for Travel
+    Verify CDR Is Not Visible    Accounting Codes
+    Verify CDR Is Not Visible    T-Supervisor
+    Tick Show All Client Defined References
+    Verify CDR Is Enabled And Text Value Is Correct    Accounting Codes    TST1
+    Verify CDR Is Disabled And Text Value Is Correct    T-Supervisor    WILL
+    Set CDR Value    Dept Name    ${empty}
+    Set CDR Value    Matrix DP Code    ${empty}
+    Set CDR Value    Reason for Travel    RECRUITING
+    Tick Not Known At Time Of Booking    TICK
+    Click Update PNR
+    Retrieve PNR Details From Travelport    ${current_pnr}
+    Verify Specific Line Is Written In The PNR    U16-TST1
+    Verify Specific Line Is Written In The PNR    U12-RECRUITING
+    Verify Specific Line Is Written In The PNR    U11-WILL
+    Book Flight X Months From Now    MSPORD+AA    01Y1    T:$BS1    6    1
+    Book Flight X Months From Now    ORDMSP+AA    01Y1    T:$BS2    6    6
+    Click Read Booking
+    Click Panel    Cust Refs
+    Verify CDR Is Enabled And Text Value Is Correct    Accounting Codes    TST1
+    Verify CDR Is Visible    CostCent
+    Verify CDR Is Enabled And Text Value Is Correct    Dept Name    QA
+    Verify CDR Is Enabled And Text Value Is Correct    Matrix DP Code    P444
+    Verify CDR Is Enabled And Text Value Is Correct    Reason for Travel    TESTING
+    Verify CDR Is Visible    SU Department Name
+    Verify CDR Is Visible    T-Booking Date
+    Verify CDR Is Visible    TS-Business Unit Name
+    Verify CDR Is Disabled And Text Value Is Correct    T-Supervisor    WILL
+    Set CDR Value    Dept Name    ${empty}
+    Set CDR Value    Matrix DP Code    P111
+    Set CDR Value    Reason for Travel    RECRUITING
+    Set CDR Value    T-Booking Date    031717
+    Populate All Panels (Except Given Panels If Any)    Cust Refs
+    Click Panel    Cust Refs
+    Tick Not Known At Time Of Booking    TICK
+    Click Finish PNR
+    Retrieve PNR Details From Travelport    ${current_pnr}
+    Verify Specific Line Is Written In The PNR    U16-TST1
+    Verify Specific Line Is Written In The PNR    G*DP/P111
+    Verify Specific Line Is Written In The PNR    U12-RECRUITING
+    Verify Specific Line Is Written In The PNR    U10-031717
+    Verify Specific Line Is Written In The PNR    U11-WILL
+
+[AB] Verify that Transactional CDRs Are Disabled Or Enabled Based On Rules And Are Written Into The PNR
+    [Tags]    us4694    valid_fail    de6711
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Click Panel    Cust Refs
+    Verify CDR Is Visible    CostCent
+    Verify CDR Is Enabled And Text value Is Correct    Dept Name    QA
+    Verify CDR Is Visible    SU Department Name
+    Verify CDR Is Visible    TS-Business Unit Name
+    Verify CDR Is Not Visible    Accounting Codes
+    Verify CDR Is Not Visible    Matrix DP Code
+    Verify CDR Is Not Visible    Reason for Travel
+    Verify CDR Is Not Visible    T-Booking Date
+    Verify CDR Is Not Visible    T-Supervisor
+    Tick Show All Client Defined References
+    Verify CDR Is Enabled And Text value Is Correct    Accounting Codes    TST1
+    Verify CDR Is Enabled And Text value Is Correct    Matrix DP Code    P111
+    Verify CDR Is Disabled And Text Value Is Correct    Reason for Travel    RECRUITING
+    Verify CDR Is Disabled And Text Value Is Correct    T-Booking Date    031717
+    Verify CDR Is Disabled And Text Value Is Correct    T-Supervisor    WILL
+    Set CDR Value    Matrix DP Code    P222
+    Verify CDR Is Enabled And Text value Is Correct    Reason for Travel    RECRUITING
+    Verify CDR Is Enabled And Text value Is Correct    T-Booking Date    031717
+    Verify CDR Is Enabled And Text value Is Correct    T-Supervisor    WILL
+    Set CDR Value    Reason for Travel    TRAINING
+    Set CDR Value    Matrix DP Code    P111
+    Verify CDR Is Enabled And Text value Is Correct    Reason for Travel    TRAINING
+    Verify CDR Is Disabled And Text Value Is Correct    T-Booking Date    031717
+    Verify CDR Is Disabled And Text Value Is Correct    T-Supervisor    WILL
+    Set CDR Value    CostCent    MNL
+    Set CDR Value    Dept Name    LEGAL
+    Set CDR Value    SU Department Name    TEAMLOKI
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Retrieve PNR Details From Travelport    ${current_pnr}
+    Verify Specific Line Is Written In The PNR    U16-TST1
+    Verify Specific Line Is Written In The PNR    U14-MNL
+    Verify Specific Line Is Written In The PNR    U15-LEGAL
+    Verify Specific Line Is Written In The PNR    G*DP/P111
+    Verify Specific Line Is Written In The PNR    U12-TRAINING
+    Verify Specific Line Is Written In The PNR    U17-TEAMLOKI
+    Verify Specific Line Is Written In The PNR    U10-031717
+    Verify Specific Line Is Written In The PNR    U11-WILL
+    Click Clear All
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Verify CDR Is Visible    TS-Business Unit Name
+    Tick Show All Client Defined References
+    Verify CDR Is Enabled And Text Value Is Correct    Accounting Codes    TST1
+    Verify CDR Is Disabled And Text Value Is Correct    CostCent    MNL
+    Verify CDR Is Disabled And Text Value Is Correct    Dept Name    LEGAL
+    Verify CDR Is Enabled And Text Value Is Correct    Matrix DP Code    P111
+    Verify CDR Is Disabled And Text Value Is Correct    Reason for Travel    TRAINING
+    Verify CDR Is Enabled And Text Value Is Correct    SU Department Name    TEAMLOKI
+    Verify CDR Is Disabled And Text Value Is Correct    T-Booking Date    031717
+    Verify CDR Is Disabled And Text Value Is Correct    T-Supervisor    WILL
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}

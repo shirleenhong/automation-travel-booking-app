@@ -1,0 +1,11 @@
+*** Settings ***
+Resource          ../../../resources/common/global_resources.txt
+
+*** Test Cases ***
+Contact Tracking
+    Open Power Express And Retrieve Profile    ${version}    ${syex_env}    U003WXR    en-GB    AutomationUK    UK Head Office Test Team
+
+Try
+    Verify    http://sp.carlsonwagonlit.com/sites/ManilaAppDev/_layouts/15/WopiFrame.aspx?sourcedoc=/sites/ManilaAppDev/Reference/QA/Documents/Power%20Express%20One%20Note/Power%20Express&action=default&RootFolder=%2fsites%2fManilaAppDev%2fReference%2fQA%2fDocuments%2fPower%20Express%20One%20Note%2fPower%20Express \ RIDE: args -v test_environment:local -v version:18.2 --removekeywords wuks -v syex_env:sandboxpilot \ Click here for the installer. \ \ \\VWNV02AX00670\PowerExpress\Installers \ Root https://ci1.carlsonwagonlit.com/nexus/content/repositories/releases/com/carlson/cwt/syex/PowerExpressSetup/ \ 17.7.32_Test http://ci1.carlsonwagonlit.com/nexus/content/repositories/releases/com/carlson/cwt/syex/PowerExpressSetup/17.7.32_Test/ \ \ \\VWNV02AX00670\PowerExpress\Installers \ \ https://cwt.service-now.com/ithelp \ \ \ \ Sabre 1002 ely09rep ene183ly \ DB ExpressAutomation Expr355Aut0_eal1 \ Domain uexr493 T3n202k17 YanT3n18 YanT3n18 \ "C:\Program Files (x86)\Carlson Wagonlit Travel\Power Express 18.2\PowerExpress.exe" ENV:SANDBOXPILOT testuser:U003WXR \ https://www.flowerdelivery.com.ph/index.php?route=checkout/checkout 3ly.Rep    Duplicate    Sequence
+    Verify     Remark 1    Duplicate    Sequence
+    Verify     Remark 2

@@ -1,0 +1,80 @@
+*** Settings ***
+Resource          ../../../../resources/common/global_resources.txt
+Resource          ../other_services_verification.txt
+Resource          ../../client_info/client_info_verification.txt
+Resource          ../../../../resources/panels/other_svcs.txt
+Resource          ../../../../resources/api_resource/remarks_core.txt
+
+*** Test Cases ***
+SG MCO MPD Tab
+    #Create a PNR
+    Comment    Create PNR Using Credit Card As FOP    SG
+    #    Add Segment using AA Segment Booking Fee
+    Comment    Select Product And Vendor    AA SEGMENT BOOKING FEE    BANK SETTLEMENT PLAN
+    #    Get/Set/Populate MCO/MPD Fields
+    Click Tab In Other Services Panel    MCO/MPD
+    #    Get/Set Remarks Free Text and Grid
+    Get MCO Info Values
+    Get MCO Traveller Info Values
+    Get MCO Remarks Value
+    #    Amend the EO with AA Segment Booking Fee
+    #    Get/Set/Populate MCO/MPD Fields
+    #    Verify Remarks Free Text and Grid Are Displayed Correctly
+    #    Verify Remarks Are Written For AA Segment Booking Fee
+    #
+    #    Add BSP Ticket and MPD
+    #    Get/Set/Populate MCO/MPD Fields
+    #    Verify Remarks Free Text and Grid Are Displayed Correctly
+    #    Amend the EO with BSP Ticket and MPD
+    #    Get/Set/Populate MCO/MPD Fields
+    #    Verify Remarks Free Text and Grid Are Displayed Correctly
+    #    Verify Remarks Are Written For BSP Ticket and MPD
+
+HK MCO MPD Tab
+    #Create a PNR
+    Comment    Create PNR Using Credit Card As FOP    HK
+    #    Add Segment using BSP Air Ticket
+    Comment    Select Product And Vendor    BSP Air Ticket    ????
+    #    Get/Set/Populate MCO/MPD Fields
+    Click Tab In Other Services Panel    MCO/MPD
+    #    Get/Set Remarks Free Text and Grid
+    Get MCO Info Values
+    Get MCO Traveller Info Values
+    Get MCO Remarks Value
+    #    Amend the EO with BSP Air Ticket
+    #    Get/Set/Populate MCO/MPD Fields
+    #    Verify Remarks Free Text and Grid Are Displayed Correctly
+    #    Verify Remarks Are Written For BSP Air Ticket
+    #
+    #    Add Additional BSP Air
+    #    Get/Set/Populate MCO/MPD Fields
+    #    Verify Remarks Free Text and Grid Are Displayed Correctly
+    #    Amend the EO with Additional BSP Air
+    #    Get/Set/Populate MCO/MPD Fields
+    #    Verify Remarks Free Text and Grid Are Displayed Correctly
+    #    Verify Remarks Are Written For Additional BSP Air
+
+*** Keywords ***
+Get MCO Info Values
+    ${mco_record_locator}    Get Control Text    <record locator id>
+    ${mco_type_of_service}    Get Control Text    <Type of service id>
+    ${mco_location_of_issuance}    Get Control Text    <lssuance of location id>
+    ${mco_contact}    Get Control Text    <contact id>
+    ${mco_fop}    Get Control Text    <fop id>
+    ${mco_equiv_amt_paid}    Get Control Text    <equip amoun paid id>
+    ${mco_headline_currency}    Get Control Text    <headline currency id>
+    ${mco_taxes}    Get Control Text    <taxes id>
+    ${mco_exchange_rate}    Get Control Text    <rate of exchange id>
+    ${mco_issue_in_exchange_for}    Get Control Text    <issue in exchange for id>
+    ${mco_in_conjunction_with}    Get Control Text    <in conjunction with id>
+    ${mco_original_fop}    Get Control Text    <original fop id>
+    ${mco_original_place_of_issue}    Get Control Text    <original original place of issue id>
+
+Get MCO Traveller Info Values
+    ${mco_selected_traveller_name}    Get Control Text    <id of Name dropdown list>
+    ${mco_dropdown_traveller_names}    Get Dropdown Values    <id of Name dropdown list>
+    @{mco_added_traveller_names}    Get List Items    <id of traveller list field>
+
+Get MCO Remarks Value
+    ${mco_free_text}    Get Control Text    <id of mco free text>
+    ${mco_added_remarks}    Get List Items    <id of remarks list field>

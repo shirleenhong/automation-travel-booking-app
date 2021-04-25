@@ -1,0 +1,45 @@
+*** Settings ***
+Resource          ../../../resources/common/global_resources.txt
+
+*** Keywords ***
+Get BTA Description Value
+    [Arguments]    ${identifier}=${EMPTY}
+    ${bta_description}    Get Control Text Value    [NAME:BtaDescriptionTextBox]
+    Set Suite Variable    ${bta_description}
+    Set Suite Variable    ${bta_description_${identifier}}    ${bta_description}
+    [Return]    ${bta_description}
+
+Get Date Value
+    [Arguments]    ${identifier}=${EMPTY}
+    Comment    ${additional_info_date}    Get Control Text Value    [NAME:dtpDate]
+    Comment    ${additional_info_date}    Get Control Edit Value    [NAME:DatePickerControl]
+    ${additional_info_date}    Get Control Text Value    [NAME:DatePickerControl]
+    Set Suite Variable    ${additional_info_date}
+    Set Suite Variable    ${additional_info_date_${identifier}}    ${additional_info_date}
+    Comment    ${info_date_for_remarks}    Convert Date To Gds Format    ${additional_info_date}    %d/%m/%Y    true
+    ${info_date_for_remarks}    Convert Date To Gds Format    ${additional_info_date}    %m/%d/%Y    true
+    Set Suite Variable    ${info_date_for_remarks}
+    Set Suite Variable    ${info_date_for_remarks_${identifier}}    ${info_date_for_remarks}
+    [Return]    ${additional_info_date}
+
+Get Description From Additional Information
+    [Arguments]    ${identifier}=${EMPTY}
+    ${description}    Get Control Text Value    [NAME:DescriptionTextBox]
+    Set Suite Variable    ${description}
+    Set Suite Variable    ${description_${identifier}}    ${description}
+    [Return]    ${description}
+
+Get Exchange Order Value
+    ${exchange_order}    Get Control Text Value    [NAME:ExhangeOrderNumberTextBox]
+    Set Suite Variable    ${exchange_order}
+    [Return]    ${exchange_order}
+
+Get Other Services Additional Information Details
+    [Arguments]    ${identifier}=${EMPTY}
+    Get Product    #Needed for AOS scripts
+    Get Description From Additional Information    ${identifier}
+    Get BTA Description Value    ${identifier}
+    Get Date Value    ${identifier}
+    Comment    Get Exchange Order Value
+    Run Keyword If    "${product.upper()}"=="DOC BANK FEE"    Get Unused Ticket Number
+    [Teardown]    Take Screenshot

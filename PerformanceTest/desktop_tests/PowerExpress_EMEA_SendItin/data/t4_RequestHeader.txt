@@ -1,0 +1,16 @@
+POST /Citrix/PilotWeb/Authentication/GetAuthMethods HTTP/1.1
+Csrf-Token: B28F8D77DE489D789A2C266CDDE17BB7
+Accept: application/xml, text/xml, */*; q=0.01
+X-Citrix-IsUsingHTTPS: Yes
+X-Requested-With: XMLHttpRequest
+Referer: https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/
+Accept-Language: en-US
+Accept-Encoding: gzip, deflate
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko
+Host: emea.cwtdesktop.pilot.int.carlsonwagonlit.com
+Content-Length: 0
+DNT: 1
+Connection: Keep-Alive
+Cache-Control: no-cache
+Cookie: CsrfToken=B28F8D77DE489D789A2C266CDDE17BB7; CtxsPluginAssistantState=Done; CtxsDeviceId=WR_nDtGMx5-gUIEfaKT6; ASP.NET_SessionId=dzwpzqxjslp02bqhq0e0vynz
+

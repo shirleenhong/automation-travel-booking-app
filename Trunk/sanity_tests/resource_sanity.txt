@@ -1,0 +1,11 @@
+*** Settings ***
+Resource          ../acceptance_tests/client_info/client_info_verification.txt
+Resource          ../tpro/acceptance_tests/air_fare/air_fare_verification.txt
+Resource          ../acceptance_tests/air_fare/air_fare_verification.txt
+Resource          ../resources/common/global_resources.txt
+Resource          ../acceptance_tests/gds/gds_verification.txt
+Resource          ../tpro/acceptance_tests/car/car_verification.txt
+Resource          ../tpro/acceptance_tests/pspt_and_visa/pspt_and_visa_verification.txt
+Resource          ../tpro/acceptance_tests/delivery/delivery_verification.txt
+
+*** Keywords ***

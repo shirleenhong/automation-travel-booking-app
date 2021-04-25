@@ -1,0 +1,16 @@
+POST /Citrix/InternalWeb/Resources/List HTTP/1.1
+Accept: application/json, text/javascript, */*; q=0.01
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Csrf-Token: 9D80BF732A2A03FDA92A705B86EE7FEE
+X-Citrix-IsUsingHTTPS: Yes
+X-Requested-With: XMLHttpRequest
+Referer: https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/
+Accept-Language: en-US
+Accept-Encoding: gzip, deflate
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko
+Host: apac.cwtdesktop.uat.int.carlsonwagonlit.com
+Content-Length: 35
+Connection: Keep-Alive
+Cache-Control: no-cache
+Cookie: CsrfToken=9D80BF732A2A03FDA92A705B86EE7FEE; CtxsPluginAssistantState=Done; ASP.NET_SessionId=i4o4yxu1tapv0kggw43g5jwe
+

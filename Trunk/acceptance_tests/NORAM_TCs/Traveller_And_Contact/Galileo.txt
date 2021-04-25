@@ -1,0 +1,26 @@
+*** Settings ***
+Resource          ../../../resources/common/global_resources.txt
+
+*** Test Cases ***
+Verify That Traveler And Arranger From Different Client Top Units Can Be Retrieve
+    Comment    Set Suite Variable    ${gds_switch}    sabre
+    Comment    Set Suite Variable    ${locale}    en-GB
+    Open Power Express And Retrieve Profile    ${version}    ${syex_env}    U003WXR    en-US    AutomationUS    UK Head Office Test Team
+    Select GDS    Galileo
+    Set Client And Traveler    Sabre 16 - Auto ¦ US4363    auto    name
+    Select PCC/CompanyProfile/TravellerProfile    1S/3W7F/AUTOSABRESTAR1/205937634/
+    Untick Traveller Checkbox
+    Set Client And Traveler    Sabre 15 - Auto ¦ US1426    AutoOneFiveEight    NoramTrvlrFour
+    Select PCC/CompanyProfile/TravellerProfile    1S/3W7F/AUTOSABRESTAR1/192458960/
+    Select Client Account Value    U11M9 ¦ ALUMIPLATE ¦ US4363
+    Comment    Verify That New Booking Is Possible After Selecting Contact And Traveller From Different Top Units
+
+[NB] Verify That Traveller Name Is Same After New Booking Same Traveller Option Via Clear All
+    [Documentation]    Pre-condition: Power express just completed a booking.
+    ...
+    ...    When start a new booking via Clear All > New Booking, Same Traveller:
+    ...    Traveller and contact from previous booking is loaded. \ Account number and FOP can be changed.
+    ...    Workflows i.e. New Booking, Amend Cancel (exclusion NORAM) or Send Itin
+    Click Clear All New Booking Same Traveller
+    Verify Last Name Is Correct    Traveller    AutoOneFiveOneTwo
+    Verify First Name Is Correct    Traveller    NoramTrvlrTwo

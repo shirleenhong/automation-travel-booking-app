@@ -1,0 +1,6 @@
+*** Settings ***
+Resource          ../../../resources/common/global_resources.txt
+Resource          ../../id_traveller/id_traveller_verification.txt
+Resource          ../../complete/complete_verification.txt
+
+*** Test Cases ***

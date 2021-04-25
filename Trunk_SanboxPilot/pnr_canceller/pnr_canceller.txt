@@ -1,0 +1,420 @@
+*** Settings ***
+Resource          ../resources/common/global_resources.txt
+Resource          ../resources/variables/db_variables.txt
+
+*** Test Cases ***
+PNR Canceller (Sabre)
+    [Tags]    sabre
+    ${startTime}    Get Cancellation Start Time
+    @{queryResults}    Get List of New PNRs from DB    ${version}    1S    ${startTime}
+    Set Test Variable    ${index}    0
+    Activate Sabre Red Workspace
+    : FOR    ${entry}    IN    @{queryResults}
+    \    ${PNRLocator}    Set Variable    ${queryResults[${index}][0]}
+    \    ${index}    Evaluate    ${index} + 1
+    \    ${isValid}    Validate PNR    ${PNRLocator}
+    \    Run Keyword If    "${isValid}" == "True"    Cancel Booking (Sabre)    ${PNRLocator}
+    Log    ${index} PNR/s found...
+
+PNR Canceller (Apollo)
+    [Tags]    apollo
+    ${startTime}    Get Cancellation Start Time
+    @{queryResults}    Get List of New PNRs from DB    ${version}    1V    ${startTime}
+    Set Test Variable    ${index}    0
+    Activate Travelport Window
+    : FOR    ${entry}    IN    @{queryResults}
+    \    ${PNRLocator}    Set Variable    ${queryResults[${index}][0]}
+    \    ${index}    Evaluate    ${index} + 1
+    \    ${isValid}    Validate PNR    ${PNRLocator}
+    \    Run Keyword If    "${isValid}" == "True"    Cancel Booking (Apollo)    ${PNRLocator}
+    Log    ${index} PNR/s found...
+
+PNR Canceller (Galileo)
+    [Tags]    galileo
+    Set Test Variable    ${GDS_Switch}    galileo
+    ${startTime}    Get Cancellation Start Time
+    Set Test Variable    ${index}    0
+    @{PCC}    Create List    1IW    781Q    5AA9    5A08    46T
+    ...    YW9    9CU    E7A    LK9    3VX    UT8
+    ...    E5X    7OW    C0Z    KN6    34RP    34RY
+    ...    34VP    781Q
+    : FOR    ${pcc_code}    IN    @{PCC}
+    \    @{queryResults}    Get PNRs From DB    ${version}    1G    ${startTime}    ${pcc_code}
+    \    ${length}    Get Length    ${queryResults}
+    \    Continue For Loop If    ${length} <= 0
+    \    Activate Travelport Window
+    \    Enter Command In Native GDS    SEM/${pcc_code}/AG
+    \    Galileo Cancel Loop    @{queryResults}
+
+PNR Canceller (Amadeus)
+    [Tags]    amadeus
+    ${startTime}    Get Cancellation Start Time
+    @{queryResults}    Get List of New PNRs from DB    ${version}    1A    ${startTime}
+    Set Test Variable    ${index}    0
+    Activate Amadeus Selling Platform
+    Send    IG{ENTER}
+    Sleep    2
+    Send    JUM/O-PARWL210G{ENTER}
+    : FOR    ${entry}    IN    @{queryResults}
+    \    ${PNRLocator}    Set Variable    ${queryResults[${index}][0]}
+    \    ${index}    Evaluate    ${index} + 1
+    \    ${isValid}    Validate PNR    ${PNRLocator}
+    \    Run Keyword If    ${isValid} == True    Cancel Booking (Amadeus)    ${PNRLocator}    True
+    Log    ${index} PNR/s found...
+
+PNR Canceller (Local Copy)
+    [Tags]    local
+    Comment    Open Power Express And Retrieve Profile    ${version}    ${syex_env}    U003WXR    fr-FR    AutomationFR
+    ...    FR Head Office Test Team
+    Comment    Select GDS    Amadeus
+    Comment    Set Suite Variable    ${locale}    en-GB
+    Set Suite Variable    ${gds_switch}    galileo
+    ${date}    ExtendedCustomSyExLibrary.Get Current Date
+    ${date}    Subtract Days In Syex Format    ${date}    1    False    #Uncomment if you want to use different date aside from current date
+    ${pnr_created_file}    OperatingSystem.Get File    ${public_documents_path}/pnr_created.txt
+    ${pnr_list}    Get Lines Containing String    ${pnr_created_file}    - ${gds_switch} - ${date}
+    ${pnr_list}    Replace String    ${pnr_list}    - shell pnr    ${EMPTY}
+    ${pnr_list}    Replace String    ${pnr_list}    - ${gds_switch} - ${date}    ${EMPTY}
+    @{pnrs}    Split To Lines    ${pnr_list}
+    @{pnrs}    Remove Duplicates    ${pnrs}
+    Activate GDS Native
+    Run Keyword If    "${gds_switch}" == "amadeus"    Run Keywords    Send    IG{ENTER}
+    ...    AND    Sleep    2
+    Run Keyword If    "${gds_switch}" == "amadeus"    Send    JUM/O-PARWL210G{ENTER}
+    Sleep    2
+    : FOR    ${pnr}    IN    @{pnrs}
+    \    Run Keyword If    "${gds_switch}" == "sabre"    Cancel Booking (Sabre)    ${pnr}
+    \    Run Keyword If    "${gds_switch}" == "apollo"    Cancel Booking (Apollo)    ${pnr}
+    \    Run Keyword If    "${gds_switch}" == "amadeus"    Cancel Booking (Amadeus)    ${pnr}
+    \    Run Keyword If    "${gds_switch}" == "galileo"    Cancel Booking (Galileo)    ${pnr}
+
+PNR Canceller Sandbox Pilot (Galileo)
+    [Tags]    galileo
+    Set Test Variable    ${GDS_Switch}    galileo
+    ${startTime}    Get Cancellation Start Time
+    Set Test Variable    ${index}    0
+    @{PCC}    Create List    1IW    781Q    5AA9    5A08    46T
+    ...    YW9    9CU    E7A    LK9    3VX    UT8
+    ...    E5X    7OW    C0Z    KN6    34RP    34RY
+    ...    34VP    781Q
+    :FOR    ${pcc_code}    IN    @{PCC}
+    \    @{queryResults}    Get PNRs From Sandbox Pilot DB    ${version}    1G    ${startTime}    ${pcc_code}
+    \    ${length}    Get Length    ${queryResults}
+    \    Continue For Loop If    ${length} <= 0
+    \    Comment    Activate Travelport Window
+    \    Comment    Enter Command In Native GDS    SEM/${pcc_code}/AG
+    \    Comment    Galileo Cancel Loop    @{queryResults}
+    \    Log    @{queryResults}
+
+*** Keywords ***
+Cancel Booking (Amadeus)
+    [Arguments]    ${current_pnr}    ${cancel_resa_rail}=True
+    Send    RT${current_pnr}{ENTER}
+    Sleep    2
+    Send    {SHIFT}+{PAUSE}
+    Sleep    1
+    Take A Screenshot
+    Send    RTI{ENTER}
+    Sleep    1
+    ${data_clipboard}    Get Clipboard Data Amadeus
+    ${is_no_itin}    Run Keyword And Return Status    Should Contain Any    ${data_clipboard}    AUCUN ELEMENT TROUVE    NO ELEMENT FOUND
+    Take A Screenshot
+    Run Keyword If    ${is_no_itin} == False    Cancel Amadeus PNR    ${current_pnr}    ${cancel_resa_rail}
+
+Cancel Booking (Apollo)
+    [Arguments]    ${PNRLocator}
+    Send    {TAB}1{TAB 2}
+    Sleep    2
+    Send    {CTRLDOWN}S{CTRLUP}
+    Sleep    2
+    Send    *${PNRLocator}{ENTER}
+    Sleep    2
+    Send    XT{ENTER}
+    Sleep    2
+    Send    XI{ENTER}
+    Sleep    2
+    Send    R:CWTTESTPNR{ENTER}
+    Sleep    2
+    Send    ER{ENTER}
+    Sleep    1
+    Send    I{ENTER}
+    Sleep    2
+    Send    *${PNRLocator}{ENTER}
+    Sleep    2
+    Send    XI{ENTER}
+    Sleep    2
+    Send    {CTRLDOWN}{HOME}{CTRLUP}
+    Sleep    1
+    Send    {CTRLDOWN}{SHIFTDOWN}{END}{SHIFTUP}{CTRLUP}
+    Sleep    1
+    Send    ^c
+    Sleep    1
+    Take Screenshot
+    ${data_clipboard}    Run Keyword And Continue On Failure    Get Data From Clipboard
+    Log    ${data_clipboard}
+    Clear Data From Clipboard
+    Send    I{ENTER}
+    Run Keyword And Continue On Failure    Should Contain    ${data_clipboard}    NO ITIN    ${PNRLocator} not cancelled    FALSE
+
+Cancel Booking (Galileo)
+    [Arguments]    ${PNRLocator}
+    ${ticketed_pnr}    Create List
+    : FOR    ${index}    IN RANGE    0    999
+    \    Send    {CTRLDOWN}S{CTRLUP}
+    \    Sleep    2
+    \    Send    I{ENTER}
+    \    Sleep    2
+    \    Send    *${PNRLocator}{ENTER}
+    \    Sleep    2
+    \    Take A Screenshot
+    \    Send    FXALL{ENTER}
+    \    Sleep    2
+    \    Send    XI{ENTER}
+    \    Sleep    2
+    \    ${data_clipboard}    Get Clipboard Data Travelport
+    \    ${is_no_active_itin}    Run Keyword And Return Status    Should Contain    ${data_clipboard.upper()}    NO ACTIVE ITINERARY PRESENT TO CANCEL
+    \    Exit For Loop If    ${is_no_active_itin} == True
+    \    Send    NP.THIS IS A TEST PNR{ENTER}
+    \    Sleep    2
+    \    Send    R.CWTPTEST{ENTER}
+    \    Sleep    2
+    \    Send    ER{ENTER}
+    \    Sleep    2
+    \    Send    ER{ENTER}
+    \    Sleep    1
+    \    Send    ^a
+    \    Sleep    1
+    \    Send    ^c
+    \    Sleep    1
+    \    Send    {DOWN}
+    \    Sleep    1
+    \    ${data_clipboard}    Get Data From Clipboard
+    \    Send    {END}
+    \    Sleep    2
+    \    ${is_simultaneous_exist1}    Run Keyword And Return Status    Should Contain    """${data_clipboard.upper()}"""    SIMULTANEOUS
+    \    ${is_simultaneous_exist2}    Run Keyword And Return Status    Should Contain    """${data_clipboard.upper()}"""    SIMULTANEOUS CHANGES
+    \    Run Keyword If    "${is_simultaneous_exist1}" == "False" and "${is_simultaneous_exist2}" == "False"    Exit For Loop
+    Send    *I{ENTER}
+    Sleep    2
+    ${data_clipboard}    Get Clipboard Data Travelport
+    Run Keyword And Continue On Failure    Should Contain    ${data_clipboard.upper()}    NO ITINERARY
+    ${is_ticketed}    Check PNR If Ticketed
+    Run Keyword If    "${is_ticketed}" == "True"    Store Ticketed PNR In A File    ${PNRLocator}
+    Send    I{ENTER}
+    Sleep    2
+
+Cancel Booking (Sabre)
+    [Arguments]    ${PNRLocator}
+    Send    ^!{BS}
+    Sleep    0.5
+    Send    *${PNRLocator}{ENTER}
+    Sleep    2
+    Send    PQD-ALL{ENTER}
+    Sleep    2
+    Send    XI{ENTER}
+    Sleep    2
+    Send    6CWTTESTPNR{ENTER}
+    Sleep    2
+    Send    ER{ENTER}
+    Sleep    2
+    Send    I{ENTER}
+    Sleep    2
+    Send    ^!{BS}
+    Sleep    0.5
+    Send    *${PNRLocator}{ENTER}
+    Sleep    2
+    Send    {ALTDOWN}E
+    Sleep    0.5
+    Send    A
+    Sleep    0.5
+    Send    {ALTUP}
+    Sleep    2
+    Send    {ALTDOWN}E
+    Sleep    0.5
+    Send    C
+    Sleep    0.5
+    Send    {ALTUP}
+    Take Screenshot
+    ${data_clipboard}    Run Keyword And Continue On Failure    Get Data From Clipboard
+    Log    ${data_clipboard}
+    Clear Data From Clipboard
+    Send    I{ENTER}
+    Run Keyword And Continue On Failure    Should Contain    ${data_clipboard}    ${PNRLocator}    ${PNRLocator} not displayed    FALSE
+    ${isRestricted}    Run Keyword And Return Status    Should Contain    ${data_clipboard}    ‡RESTRICTED‡ *NOT AA PNR*
+    ${isSecured}    Run Keyword And Return Status    Should Contain    ${data_clipboard}    SECURED PNR
+    Run Keyword And Continue On Failure    Run Keyword If    "${isRestricted}" == "True" or "${isSecured}" == "True"    FAIL    Cannot cancel PNR since it is restricted or secured
+    ...    ELSE    Should Contain    ${data_clipboard}    NO ITIN    ${PNRLocator} not cancelled    FALSE
+
+Cancel Resarail (Amadeus)
+    Send    {SHIFTDOWN}{PAUSE}{SHIFTUP}
+    Sleep    2
+    Send    RL{ENTER}
+    Get Clipboard Data Amadeus
+    ${2C_line} =    Get Lines Containing String    ${data_clipboard}    2C/
+    ${resa_rail_pnr} =    Get String Using Marker    ${2C_line}    2C/    ${SPACE}
+    Set Test Variable    ${resa_rail_pnr}
+    Sleep    2
+    Send    {SHIFTDOWN}{PAUSE}{SHIFTUP}
+    Sleep    2
+    Send    R/RT${resa_rail_pnr}{ENTER}
+    Get Clipboard Data Amadeus
+    ${pnr_status}    Run Keyword And Return Status    Should Contain    ${data_clipboard.upper()}    FIN OU IGNOR
+    Run Keyword If    ${pnr_status} == True    Cancel Resarail Handling
+    Send    {SHIFTDOWN}{PAUSE}{SHIFTUP}
+    Sleep    2
+    Send    R/XI{ENTER}
+    Sleep    2
+    Send    R/RFAG{ENTER}
+    Sleep    2
+    Send    R/ER{ENTER}
+    Sleep    2
+    Send    R/ER{ENTER}
+    Sleep    2
+    Send    R/RT{ENTER}
+    Sleep    2
+    Send    IR{ENTER}
+    Sleep    2
+    Send    R/RT${resa_rail_pnr}{ENTER}
+    Get Clipboard Data Amadeus
+    ${is_cancelled}    Run Keyword And Return Status    Run Keyword And Continue On Failure    Should Contain    ${data_clipboard.upper()}    PAS D'ITINERAIRE
+    Run Keyword If    ${is_cancelled} == False    Cancel Resarail (Amadeus)
+
+Cancel Resarail Handling
+    Send    {SHIFTDOWN}{PAUSE}{SHIFTUP}
+    Sleep    2
+    Send    R/RFAG{ENTER}
+    Sleep    2
+    Send    R/ER{ENTER}
+    Sleep    2
+    Send    R/ER{ENTER}
+    Sleep    2
+    Send    R/IR{ENTER}
+    Sleep    2
+    Send    IR{ENTER}
+    Sleep    2
+    Send    R/RT${resa_rail_pnr}{ENTER}
+    Sleep    2
+
+Galileo Cancel Loop
+    [Arguments]    @{queryResults}
+    Activate Travelport Terminal Window
+    : FOR    ${entry}    IN    @{queryResults}
+    \    ${PNRLocator}    Set Variable    ${queryResults[${index}][0]}
+    \    ${index}    Evaluate    ${index} + 1
+    \    ${isValid}    Validate PNR    ${PNRLocator}
+    \    Run Keyword If    "${isValid}" == "True"    Cancel Booking (Galileo)    ${PNRLocator}
+    Log    ${index} PNR/s found...
+
+Get Cancellation Start Time
+    @{date}    Get Time    year, month, day    NOW - 8 day
+    Set Test Variable    ${startTime}    ${date[0]}-${date[1]}-${date[2]} 00:00:00
+    [Return]    ${startTime}
+
+Get List of New PNRs from DB
+    [Arguments]    ${version}    ${gds}    ${startTime}
+    Connect To Power Express Database
+    @{queryResults}    Query    Select distinct PNRLocator from ApplicationOverallTransactionTime where SystemUserLoginIdentifier IN ('U003WXR') and ApplicationVersionNumber LIKE '%${version}%' and GDSCode = '${gds}' and OverallTransactionStartTime >= '${startTime}'
+    Disconnect From Database
+    [Return]    @{queryResults}
+
+Get PNRs From DB
+    [Arguments]    ${version}    ${gds}    ${startTime}    ${pcc}
+    Connect To Power Express Database
+    @{queryResults}    Query    SELECT DISTINCT pnrlocator FROM [dbo].[ApplicationUsage] a INNER JOIN [dbo].[ApplicationOverallTransactionTime] b ON a.[ApplicationOverallTransactionTimeID] = b.[ApplicationOverallTransactionTimeID] WHERE a.GDSCode = '${gds}' AND b.BookingTypeId=1 AND a.pseudocityorofficeid = '${pcc}' AND a.ApplicationUsageDate >= '${startTime}' AND b.SystemUserLoginIdentifier IN ('U003WXR','U004HXC', 'U003JDC', 'U003AXO', 'UCXS922', 'UDXR636', 'U007BXT', 'URXL469', 'U012EXS', 'U006AXN') AND b.ApplicationVersionNumber LIKE '%${version}%' AND pnrlocator IS NOT NULL
+    Disconnect From Database
+    [Return]    @{queryResults}
+
+Get PNRs From Sandbox Pilot DB
+    [Arguments]    ${version}    ${gds}    ${startTime}    ${pcc}
+    Connect To Syex Sandbox Pilot DB
+    @{queryResults}    Query    SELECT DISTINCT pnrlocator FROM [dbo].[ApplicationUsage] a INNER JOIN [dbo].[ApplicationOverallTransactionTime] b ON a.[ApplicationOverallTransactionTimeID] = b.[ApplicationOverallTransactionTimeID] WHERE a.GDSCode = '${gds}' AND b.BookingTypeId=1 AND a.pseudocityorofficeid = '${pcc}' AND a.ApplicationUsageDate >= '${startTime}' AND b.SystemUserLoginIdentifier IN ('U003WXR') AND b.ApplicationVersionNumber LIKE '%${version}%' AND pnrlocator IS NOT NULL
+    Disconnect From Database
+    [Return]    @{queryResults}
+
+Validate PNR
+    [Arguments]    ${pnr}
+    ${isValid}    Run Keyword And Return Status    Should Match RegExp    ${pnr}    ^[A-Z0-9][A-Z0-9][A-Z0-9][A-Z0-9][A-Z0-9][A-Z0-9]$
+    Run Keyword If    ${isValid} == False    Log    Invalid PNR found in DB : ${pnr}    WARN
+    [Return]    ${isValid}
+
+Check PNR If Ticketed
+    #This will check if the PNR is ticketed
+    Send    *HTI{ENTER}
+    Click Travelport Popup Ok Button
+    Sleep    3
+    Send    ^a
+    Sleep    1
+    Send    ^c
+    Sleep    1
+    Send    {DOWN}
+    Sleep    1
+    ${data_clipboard}    Get Data From Clipboard
+    Send    {END}
+    Sleep    2
+    ${is_pnr_ticketed_exist_1}    Run Keyword And Return Status    Should Contain    """${data_clipboard.upper()}"""    \/VOID
+    ${status}    Set Variable If    "${is_pnr_ticketed_exist_1}" == "True"    True    False
+    [Return]    ${status}
+
+Store Ticketed PNR In A File
+    [Arguments]    ${pnr_locator}
+    ${is_ticketed_pnr_file_exist}    Run Keyword and Return Status    OperatingSystem.File Should Exist    ${CURDIR}\\${GDS_Switch}_Ticketed_PNRs.txt
+    Run Keyword If    "${is_ticketed_pnr_file_exist}" == "False"    Create File    ${CURDIR}\\${GDS_Switch}_Ticketed_PNRs.txt    ${pnr_locator}
+    ...    ELSE    Append To File New Line    ${CURDIR}\\${GDS_Switch}_Ticketed_PNRs.txt    ${pnr_locator}
+
+Cancel Amadeus PNR
+    [Arguments]    ${current_pnr}    ${cancel_resa_rail}=True
+    Send    IG{ENTER}
+    Sleep    2
+    ${resa_rail_pnr}    Run Keyword If    '${cancel_resa_rail}' == 'True'    Get Resarail Record Locator    ${current_pnr}
+    Run Keyword If    '${cancel_resa_rail}' == 'True' and "${resa_rail_pnr}" != "${EMPTY}"    Cancel Resa Rail Booking    ${resa_rail_pnr}
+    Activate Amadeus Selling Platform
+    Send    RT${current_pnr}{ENTER}
+    Sleep    2
+    Take A Screenshot
+    Send    IR{ENTER}
+    Sleep    2
+    Send    TTE/ALL{ENTER}
+    Sleep    2
+    Send    XI{ENTER}
+    Sleep    1
+    Send    XI{ENTER}
+    Sleep    2
+    Send    RFCWTPTEST{ENTER}
+    Sleep    2
+    Send    {SHIFT}+{PAUSE}
+    Sleep    1
+    Send    QE/FRAWL2378/70C12{ENTER}
+    Sleep    1
+    ${data_clipboard}    Get Clipboard Data Amadeus
+    ${is_simultaneous_changes}    Run Keyword And Return Status    Should Contain Any    ${data_clipboard}    SIMULT    PARALLEL
+    Send    {SHIFT}+{PAUSE}
+    Sleep    1
+    Send    ER{ENTER}
+    ${data_clipboard}    Get Clipboard Data Amadeus
+    Sleep    1
+    ${is_simultaneous_changes2}    Run Keyword And Return Status    Should Contain    ${data_clipboard}    SIMULT    PARALLEL
+    Run Keyword If    ${is_simultaneous_changes} == True or ${is_simultaneous_changes2} == True    Cancel Amadeus PNR
+    Send    {SHIFT}+{PAUSE}
+    Sleep    1
+    Send    ER{ENTER}
+    Sleep    2
+    Send    IG{ENTER}
+    Sleep    2
+    Send    RT${current_pnr}{ENTER}
+    Sleep    2
+    Send    RTI{ENTER}
+    Sleep    2
+    ${data_clipboard}    Get Clipboard Data Amadeus
+    Run Keyword And Continue On Failure    Should Contain Any    ${data_clipboard}    AUCUN ELEMENT TROUVE    NO ELEMENT FOUND    msg=${current_pnr} still has itinerary segments    values=False
+
+Get Resarail Record Locator
+    [Arguments]    ${current_pnr}
+    Send    RT${current_pnr}{ENTER}
+    Sleep    2
+    Send    RL{ENTER}
+    Sleep    2
+    ${data_clipboard}    Get Clipboard Data Amadeus
+    ${2C_line} =    Get Lines Containing String    ${data_clipboard}    2C/
+    ${resa_rail_pnr} =    Get String Using Marker    ${2C_line}    2C/    ${SPACE}
+    Set Test Variable    ${resa_rail_pnr}
+    [Return]    ${resa_rail_pnr}

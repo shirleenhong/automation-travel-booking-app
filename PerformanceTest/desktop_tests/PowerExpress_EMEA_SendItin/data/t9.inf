@@ -1,0 +1,15 @@
+[t9]
+FileName1=t9.xml
+URL1=https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/ExplicitAuth/AllowSelfServiceAccountManagement
+Total=3
+RequestHeaderFile=t9_RequestHeader.txt
+RequestBodyFile=NONE
+ResponseHeaderFile=t9_ResponseHeader.txt
+ContentType=application/xml
+SnapshotXmlFile=snapshot_9.xml
+FileName2=t9_L0NpdHJpeC9QaWxvdC9yZXNvdXJjZXMvdjIvTTNkT01VZE5Sa1YwVDBkMGEwTnJZVEkzY2xoMGJrTjJRMWRTVDFsU2RUaFdTVlZCVFdaU1ZsUmlkejAtL2ltYWdl.png
+URL2=https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/Resources/Icon/L0NpdHJpeC9QaWxvdC9yZXNvdXJjZXMvdjIvTTNkT01VZE5Sa1YwVDBkMGEwTnJZVEkzY2xoMGJrTjJRMWRTVDFsU2RUaFdTVlZCVFdaU1ZsUmlkejAtL2ltYWdl?size=128
+FileName3=t9_ico_desktop_ready_482FD91B201F2A55.png
+URL3=https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/images/1x/ico_desktop_ready_482FD91B201F2A55.png
+[ProtocolInfo]
+ProtocolId=QTWeb

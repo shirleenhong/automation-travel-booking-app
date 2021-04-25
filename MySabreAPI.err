@@ -1,0 +1,404 @@
+
+15:10:27.415 03/03/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+15:10:27.415:::15128 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+15:10:27.415:::15128 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+15:10:27.415:::15128 ERROR apiUtils.printMemory () : null data pointer  
+15:10:27.415:::15128 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+15:10:27.415:::15128 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+15:15:03.404 03/03/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+15:15:03.404:::12280 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+15:15:03.404:::12280 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+15:15:03.404:::12280 ERROR apiUtils.printMemory () : null data pointer  
+15:15:03.404:::12280 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+15:15:03.404:::12280 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+15:26:27.544 03/03/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+15:26:27.544:::12508 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+15:26:27.544:::12508 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+15:26:27.560:::12508 ERROR apiUtils.printMemory () : null data pointer  
+15:26:27.560:::12508 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+15:26:27.560:::12508 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+15:31:22.040 03/03/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+15:31:22.040:::13084 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+15:31:22.040:::13084 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+15:31:22.040:::13084 ERROR apiUtils.printMemory () : null data pointer  
+15:31:22.040:::13084 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+15:31:22.040:::13084 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+16:03:22.761 03/03/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+16:03:22.761:::13752 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+16:03:22.761:::13752 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+16:03:22.761:::13752 ERROR apiUtils.printMemory () : null data pointer  
+16:03:22.761:::13752 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+16:03:22.761:::13752 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+16:13:18.804 03/03/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+16:13:18.804:::12976 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+16:13:18.804:::12976 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+16:13:18.804:::12976 ERROR apiUtils.printMemory () : null data pointer  
+16:13:18.804:::12976 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+16:13:18.804:::12976 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+16:17:44.454 03/03/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+16:17:44.454:::15332 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+16:17:44.454:::15332 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+16:17:44.454:::15332 ERROR apiUtils.printMemory () : null data pointer  
+16:17:44.454:::15332 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+16:17:44.454:::15332 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+16:27:03.366 03/03/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+16:27:03.366:::208 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+16:27:03.366:::208 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+16:27:03.366:::208 ERROR apiUtils.printMemory () : null data pointer  
+16:27:03.366:::208 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+16:27:03.366:::208 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+16:37:49.231 03/03/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+16:37:49.231:::11888 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+16:37:49.231:::11888 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+16:37:49.247:::11888 ERROR apiUtils.printMemory () : null data pointer  
+16:37:49.247:::11888 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+16:37:49.247:::11888 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+16:43:31.595 03/03/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+16:43:31.595:::9408 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+16:43:31.595:::9408 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+16:43:31.595:::9408 ERROR apiUtils.printMemory () : null data pointer  
+16:43:31.595:::9408 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+16:43:31.595:::9408 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+16:49:59.472 03/03/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+16:49:59.472:::5832 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+16:49:59.472:::5832 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+16:49:59.472:::5832 ERROR apiUtils.printMemory () : null data pointer  
+16:49:59.472:::5832 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+16:49:59.472:::5832 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+17:02:44.491 03/03/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+17:02:44.491:::13928 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+17:02:44.491:::13928 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+17:02:44.491:::13928 ERROR apiUtils.printMemory () : null data pointer  
+17:02:44.491:::13928 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+17:02:44.491:::13928 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+17:11:32.110 03/03/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+17:11:32.110:::14376 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+17:11:32.110:::14376 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+17:11:32.110:::14376 ERROR apiUtils.printMemory () : null data pointer  
+17:11:32.110:::14376 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+17:11:32.110:::14376 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+17:20:28.138 03/03/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+17:20:28.138:::7020 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+17:20:28.138:::7020 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+17:20:28.138:::7020 ERROR apiUtils.printMemory () : null data pointer  
+17:20:28.138:::7020 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+17:20:28.138:::7020 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+17:29:19.224 03/03/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+17:29:19.224:::1176 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+17:29:19.224:::1176 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+17:29:19.239:::1176 ERROR apiUtils.printMemory () : null data pointer  
+17:29:19.239:::1176 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+17:29:19.239:::1176 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+17:38:55.717 03/03/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+17:38:55.717:::10980 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+17:38:55.717:::10980 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+17:38:55.717:::10980 ERROR apiUtils.printMemory () : null data pointer  
+17:38:55.717:::10980 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+17:38:55.717:::10980 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+17:47:32.978 03/03/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+17:47:32.978:::14616 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+17:47:32.978:::14616 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+17:47:32.978:::14616 ERROR apiUtils.printMemory () : null data pointer  
+17:47:32.978:::14616 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+17:47:32.978:::14616 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+17:54:17.936 03/03/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+17:54:17.936:::15244 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+17:54:17.936:::15244 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+17:54:17.936:::15244 ERROR apiUtils.printMemory () : null data pointer  
+17:54:17.936:::15244 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+17:54:17.936:::15244 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+18:09:55.654 03/03/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+18:09:55.654:::13980 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+18:09:55.654:::13980 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+18:09:55.654:::13980 ERROR apiUtils.printMemory () : null data pointer  
+18:09:55.654:::13980 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+18:09:55.654:::13980 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+18:41:19.758 03/03/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+18:41:19.758:::9860 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+18:41:19.758:::9860 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+18:41:19.758:::9860 ERROR apiUtils.printMemory () : null data pointer  
+18:41:19.758:::9860 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+18:41:19.758:::9860 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+18:48:38.692 03/03/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+18:48:38.692:::15008 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+18:48:38.692:::15008 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+18:48:38.692:::15008 ERROR apiUtils.printMemory () : null data pointer  
+18:48:38.692:::15008 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+18:48:38.692:::15008 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+18:59:12.676 03/03/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+18:59:12.676:::8876 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+18:59:12.676:::8876 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+18:59:12.676:::8876 ERROR apiUtils.printMemory () : null data pointer  
+18:59:12.676:::8876 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+18:59:12.676:::8876 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+19:08:26.637 03/03/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+19:08:26.637:::13836 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+19:08:26.637:::13836 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+19:08:26.637:::13836 ERROR apiUtils.printMemory () : null data pointer  
+19:08:26.637:::13836 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+19:08:26.637:::13836 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+19:19:09.767 03/03/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+19:19:09.767:::11756 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+19:19:09.767:::11756 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+19:19:09.767:::11756 ERROR apiUtils.printMemory () : null data pointer  
+19:19:09.767:::11756 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+19:19:09.767:::11756 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+19:27:16.643 03/03/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+19:27:16.643:::7124 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+19:27:16.643:::7124 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+19:27:16.643:::7124 ERROR apiUtils.printMemory () : null data pointer  
+19:27:16.643:::7124 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+19:27:16.643:::7124 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+20:42:29.440 03/05/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+20:42:29.455:::10348 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+20:42:29.471:::10348 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+20:42:29.486:::10348 ERROR apiUtils.printMemory () : null data pointer  
+20:42:29.486:::10348 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+20:42:29.486:::10348 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+20:43:28.295:::10348 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+20:43:28.295:::10348 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+20:43:28.310:::10348 ERROR apiUtils.printMemory () : null data pointer  
+20:43:28.310:::10348 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+20:43:28.310:::10348 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+20:44:41.038 03/05/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+20:44:41.038:::9100 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+20:44:41.038:::9100 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+20:44:41.053:::9100 ERROR apiUtils.printMemory () : null data pointer  
+20:44:41.053:::9100 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+20:44:41.053:::9100 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+20:50:26.400 03/05/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+20:50:26.400:::3528 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+20:50:26.400:::3528 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+20:50:26.416:::3528 ERROR apiUtils.printMemory () : null data pointer  
+20:50:26.416:::3528 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+20:50:26.416:::3528 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+20:53:18.047 03/05/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+20:53:18.047:::10416 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+20:53:18.047:::10416 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+20:53:18.063:::10416 ERROR apiUtils.printMemory () : null data pointer  
+20:53:18.063:::10416 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+20:53:18.063:::10416 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+21:01:50.798 03/05/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+21:01:50.798:::9900 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+21:01:50.798:::9900 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+21:01:50.798:::9900 ERROR apiUtils.printMemory () : null data pointer  
+21:01:50.798:::9900 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+21:01:50.798:::9900 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+21:04:40.811 03/05/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+21:04:40.811:::7496 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+21:04:40.811:::7496 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+21:04:40.811:::7496 ERROR apiUtils.printMemory () : null data pointer  
+21:04:40.811:::7496 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+21:04:40.811:::7496 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+21:09:02.068 03/05/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+21:09:02.068:::7308 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+21:09:02.068:::7308 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+21:09:02.068:::7308 ERROR apiUtils.printMemory () : null data pointer  
+21:09:02.068:::7308 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+21:09:02.068:::7308 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+21:11:52.088 03/05/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+21:11:52.088:::9248 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+21:11:52.088:::9248 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+21:11:52.104:::9248 ERROR apiUtils.printMemory () : null data pointer  
+21:11:52.104:::9248 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+21:11:52.104:::9248 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+21:14:08.730 03/05/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+21:14:08.730:::7600 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+21:14:08.730:::7600 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+21:14:08.745:::7600 ERROR apiUtils.printMemory () : null data pointer  
+21:14:08.745:::7600 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+21:14:08.745:::7600 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+21:18:39.234 03/05/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+21:18:39.234:::7808 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+21:18:39.234:::7808 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+21:18:39.234:::7808 ERROR apiUtils.printMemory () : null data pointer  
+21:18:39.234:::7808 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+21:18:39.234:::7808 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+21:23:20.356 03/05/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+21:23:20.356:::10008 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+21:23:20.356:::10008 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+21:23:20.372:::10008 ERROR apiUtils.printMemory () : null data pointer  
+21:23:20.372:::10008 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+21:23:20.372:::10008 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+21:26:58.197 03/05/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+21:26:58.197:::11084 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+21:26:58.197:::11084 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+21:26:58.213:::11084 ERROR apiUtils.printMemory () : null data pointer  
+21:26:58.213:::11084 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+21:26:58.213:::11084 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+21:28:57.344 03/05/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+21:28:57.344:::9960 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+21:28:57.344:::9960 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+21:28:57.359:::9960 ERROR apiUtils.printMemory () : null data pointer  
+21:28:57.359:::9960 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+21:28:57.359:::9960 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+21:30:51.388 03/05/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+21:30:51.388:::9780 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+21:30:51.388:::9780 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+21:30:51.404:::9780 ERROR apiUtils.printMemory () : null data pointer  
+21:30:51.404:::9780 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+21:30:51.404:::9780 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+21:32:48.155 03/05/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+21:32:48.155:::8080 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+21:32:48.155:::8080 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+21:32:48.155:::8080 ERROR apiUtils.printMemory () : null data pointer  
+21:32:48.155:::8080 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+21:32:48.155:::8080 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+21:34:47.673 03/05/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+21:34:47.673:::10520 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+21:34:47.673:::10520 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+21:34:47.688:::10520 ERROR apiUtils.printMemory () : null data pointer  
+21:34:47.688:::10520 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+21:34:47.688:::10520 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+21:36:41.252 03/05/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+21:36:41.252:::10988 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+21:36:41.252:::10988 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+21:36:41.252:::10988 ERROR apiUtils.printMemory () : null data pointer  
+21:36:41.252:::10988 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+21:36:41.252:::10988 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+21:38:36.237 03/05/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+21:38:36.237:::6992 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+21:38:36.237:::6992 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+21:38:36.253:::6992 ERROR apiUtils.printMemory () : null data pointer  
+21:38:36.253:::6992 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+21:38:36.253:::6992 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+21:40:31.045 03/05/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+21:40:31.045:::8188 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+21:40:31.045:::8188 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+21:40:31.061:::8188 ERROR apiUtils.printMemory () : null data pointer  
+21:40:31.061:::8188 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+21:40:31.061:::8188 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+21:42:30.448 03/05/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+21:42:30.448:::5300 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+21:42:30.448:::5300 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+21:42:30.464:::5300 ERROR apiUtils.printMemory () : null data pointer  
+21:42:30.464:::5300 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+21:42:30.464:::5300 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+21:44:26.458 03/05/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+21:44:26.473:::5784 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+21:44:26.473:::5784 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+21:44:26.473:::5784 ERROR apiUtils.printMemory () : null data pointer  
+21:44:26.473:::5784 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+21:44:26.473:::5784 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+21:46:26.702 03/05/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+21:46:26.702:::1808 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+21:46:26.702:::1808 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+21:46:26.718:::1808 ERROR apiUtils.printMemory () : null data pointer  
+21:46:26.718:::1808 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+21:46:26.718:::1808 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+21:48:25.466 03/05/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+21:48:25.481:::10024 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+21:48:25.481:::10024 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+21:48:25.481:::10024 ERROR apiUtils.printMemory () : null data pointer  
+21:48:25.481:::10024 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+21:48:25.481:::10024 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+21:50:24.816 03/05/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+21:50:24.816:::7628 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+21:50:24.816:::7628 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+21:50:24.832:::7628 ERROR apiUtils.printMemory () : null data pointer  
+21:50:24.832:::7628 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+21:50:24.832:::7628 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+21:52:19.056 03/05/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+21:52:19.056:::10644 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+21:52:19.056:::10644 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+21:52:19.072:::10644 ERROR apiUtils.printMemory () : null data pointer  
+21:52:19.072:::10644 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+21:52:19.072:::10644 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+21:54:15.257 03/05/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+21:54:15.257:::1436 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+21:54:15.257:::1436 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+21:54:15.272:::1436 ERROR apiUtils.printMemory () : null data pointer  
+21:54:15.272:::1436 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+21:54:15.272:::1436 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+21:56:11.155 03/05/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+21:56:11.155:::9532 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+21:56:11.155:::9532 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+21:56:11.170:::9532 ERROR apiUtils.printMemory () : null data pointer  
+21:56:11.170:::9532 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+21:56:11.170:::9532 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+21:58:07.578 03/05/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+21:58:07.578:::10992 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+21:58:07.578:::10992 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+21:58:07.593:::10992 ERROR apiUtils.printMemory () : null data pointer  
+21:58:07.593:::10992 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+21:58:07.593:::10992 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+22:00:23.777 03/05/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+22:00:23.777:::10936 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+22:00:23.777:::10936 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+22:00:23.792:::10936 ERROR apiUtils.printMemory () : null data pointer  
+22:00:23.792:::10936 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+22:00:23.792:::10936 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+22:02:40.481 03/05/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+22:02:40.481:::10500 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+22:02:40.481:::10500 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+22:02:40.496:::10500 ERROR apiUtils.printMemory () : null data pointer  
+22:02:40.496:::10500 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+22:02:40.496:::10500 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+22:04:57.341 03/05/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+22:04:57.341:::7664 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+22:04:57.341:::7664 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+22:04:57.341:::7664 ERROR apiUtils.printMemory () : null data pointer  
+22:04:57.341:::7664 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+22:04:57.341:::7664 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 
+
+22:07:15.237 03/05/2018 emuapi.dll version= 2, 1, 0, 3  buildDateAndTime= Jan 18 2010 14:53:44  computerName=LWPHL1UEXR493  loggerThread= false 
+22:07:15.237:::7876 ERROR <<<sync.getLockImpl(), retcode= -4 SYNC_MUTEX_NOT_FOUND, lock= 0, name= apiClientMutex 
+22:07:15.237:::7876 ERROR <<<apiClient.clientConnect(), getClientCommonLock failed, retcode= 3 API_UNAVAILABLE 
+22:07:15.252:::7876 ERROR apiUtils.printMemory () : null data pointer  
+22:07:15.252:::7876 ERROR apiClient.clientDisconnect () : g_lock.lock was NULL, must not currently be connected, abort clientDisconnect() 
+22:07:15.252:::7876 ERROR apiClient.clientDisconnect () : returns with retcode 1 SM_FAILURE 

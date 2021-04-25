@@ -1,0 +1,207 @@
+*** Settings ***
+Force Tags        sabre    US5509
+Resource          ../amend_verification.txt
+
+*** Test Cases ***
+[1S NORAM][AB] Verify That Amend Panel Is Displayed And Touch Level Line Is Written When PNR Has CIC Code D7Q
+    [Tags]
+    Open Power Express And Retrieve Profile    ${version}    Test    U001RTM    en-US    rmartinez    NORAM QA
+    Select GDS    Sabre
+    Emulate PCC    3W7F
+    Set Client And Traveler    Sabre 1 - SyEx ¦ Drummers    Carlson    Curtis
+    Select PCC/CompanyProfile/TravellerProfile    1S/3W7F/SABRE1SYEX/143218026/
+    Select Client Account    U1SOE ¦ SOE CFA ¦ Drummers
+    Click New Booking
+    Tick Not Known At Time Of Booking
+    Click Panel    Cust Refs
+    Set CDR Value    Matrix DP Code    ${EMPTY}
+    Click Create Shell
+    Click Clear All
+    Add CN Remark    X/-CN/RTM    5X/-CN/D7Q
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Book Flight X Months From Now    DENLAX‡UA    01Y1    WPRQ‡S2    5    1
+    Book Flight X Months From Now    LAXDEN‡UA    01Y1    WPRQ‡S3    5    10
+    Click Read Booking
+    Verify Actual Panel Contains Expected Panel    Amend
+    Click Panel    Amend
+    Verify Touch Reason is Visible
+    Verify Touch Level Default Value    AM - Offline Handling
+    Verify Notes Checkbox Is Checked
+    Select Touch Level    AM - Offline Handling
+    Select Touch Reason    Air
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Retrieve PNR Details From Sabre Red    ${current_pnr}    *X/    0
+    Verify Specific Line Is Written In The PNR    X/-CN/RTM
+    Verify Specific Line Is Written In The PNR    X/-EB/AM8/GIA
+
+[1S NORAM][AB] Verify That CIC Code Is Not Updated When Touch Level Is AM/CT, ChangeBackOfficeAgentIdentifier Is on OBT untouched or exchange, PNR Has No Exchange
+    Open Power Express And Retrieve Profile    ${version}    Test    U001RTM    en-US    rmartinez    NORAM QA
+    Select GDS    Sabre
+    Emulate PCC    3W7F
+    Set Client And Traveler    Sabre 1 - SyEx ¦ Drummers    Carlson    Curtis
+    Select PCC/CompanyProfile/TravellerProfile    1S/3W7F/SABRE1SYEX/143218026/
+    Select Client Account    U1SOE ¦ SOE CFA ¦ Drummers
+    Click New Booking
+    Tick Not Known At Time Of Booking
+    Click Panel    Cust Refs
+    Set CDR Value    Matrix DP Code    ${EMPTY}
+    Click Create Shell
+    Click Clear All
+    Add CN Remark    X/-CN/RTM    5X/-CN/D7Q    5X/-EB/AM8/GID
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Book Flight X Months From Now    ORDATL‡UA    01Y1    WPRQ‡S2    5    1
+    Book Flight X Months From Now    ATLORD‡UA    01Y1    WPRQ‡S3    5    10
+    Click Read Booking
+    Verify Actual Panel Contains Expected Panel    Amend
+    Click Panel    Amend
+    Verify Touch Level Dropdown Values    AM - Offline Handling
+    Verify Touch Reason Is Visible
+    Verify Notes Checkbox Is Visible
+    Select Touch Level    Online assisted by OSC
+    Select Touch Reason    Hotel
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Retrieve PNR Details From Sabre Red    ${current_pnr}    *X/    0
+    Verify Specific Line Is Written In The PNR    X/-CN/D7Q
+    Verify Specific Line Is Written In The PNR    X/-EB/CT8/GIH
+
+[1S NORAM][AB] Verify That CIC Code Is Updated When Touch Level Is AM/CT, ChangeBackOfficeAgentIdentifier Is on OBT untouched or exchange, PNR Has Exchange
+    Add Exchange Line    5T‡EXCH1    5T‡TKT1-IRP1/PA-200.00/CA-0.00/EA-295.00/NF-1890.95
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Verify Realised Savings Code Default Value    E - Exchange
+    Verify Actual Panel Contains Expected Panel    Amend
+    Click Panel    Amend
+    Verify Touch Level Default Value    AM - Offline Handling
+    Verify Touch Reason Is Visible
+    Select Touch Reason    Exchange
+    Tick Notes Checkbox In Amend Panel
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Execute Simultaneous Change Handling    [1S NORAM][AB] Verify That CIC Code Is Updated When Touch Level Is AM/CT, ChangeBackOfficeAgentIdentifier Is on OBT untouched or exchange, PNR Has Exchange
+    Retrieve PNR Details From Sabre Red    ${current_pnr}    *X/    0
+    Verify Specific Line Is Written In The PNR    X/-CN/RTM
+    Verify Specific Line Is Written In The PNR    X/-EB/AM8/NIE
+
+[1S NORAM][NB] Verify That CIC Code Is Not Updated When Touch Level Is EB, ChangeBackOfficeAgentIdentifier Is on OBT untouched or exchange, PNR Has No Exchange
+    Open Power Express And Retrieve Profile    ${version}    Test    U001RTM    en-US    rmartinez    NORAM QA
+    Select GDS    Sabre
+    Emulate PCC    3W7F
+    Set Client And Traveler    Sabre 1 - SyEx ¦ Drummers    Carlson    Curtis
+    Select PCC/CompanyProfile/TravellerProfile    1S/3W7F/SABRE1SYEX/143218026/
+    Select Client Account    U1SOE ¦ SOE CFA ¦ Drummers
+    Click New Booking
+    Tick Not Known At Time Of Booking
+    Click Panel    Cust Refs
+    Set CDR Value    Matrix DP Code    ${EMPTY}
+    Click Create Shell
+    Click Clear All
+    Add CN Remark    X/-CN/RTM    5X/-CN/D7Q
+    Enter Specific Command On Native GDS    6CWTPTEST    ER    IG
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Book Flight X Months From Now    CDGLHR‡AF    01Y1    WPRQ‡S2    5    1
+    Book Flight X Months From Now    LHRCDG‡AF    01Y1    WPRQ‡S3    6    1
+    Click Read Booking
+    Verify Actual Panel Contains Expected Panel    Amend
+    Click Panel    Amend
+    Verify Touch Level Default Value    AM - Offline Handling
+    Verify Notes Checkbox Is Visible
+    Verify Touch Reason Is Visible
+    Select Touch Level    Online Unassisted
+    Tick Notes Checkbox In Amend Panel
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Retrieve PNR Details From Sabre Red    ${current_pnr}    *X/    0
+    Verify Specific Line Is Written In The PNR    X/-CN/D7Q
+    Verify Specific Line Is Written In The PNR    X/-EB/EB8
+
+[1S NORAM][AB] Verify That CIC Code Is Not Updated When Touch Level Is EB, ChangeBackOfficeAgentIdentifier Is on OBT untouched or exchange, PNR Has Exchange
+    Add Exchange Line    5T‡EXCH1    5T‡TKT1-IRP1/PA-200.00/CA-0.00/EA-295.00/NF-1890.95
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Verify Realised Savings Code Default Value    E - Exchange
+    Verify Actual Panel Contains Expected Panel    Amend
+    Click Panel    Amend
+    Verify Touch Level Default Value    AM - Offline Handling
+    Verify Touch Reason Is Visible
+    Verify Notes Checkbox Is Checked
+    Select Touch Level    Online Unassisted
+    UnTick Notes Checkbox In Amend Panel
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Execute Simultaneous Change Handling    [1S NORAM][AB] Verify That CIC Code Is Not Updated When Touch Level Is EB, ChangeBackOfficeAgentIdentifier Is on OBT untouched or exchange, PNR Has Exchange
+    Retrieve PNR Details From Sabre Red    ${current_pnr}    *X/    0
+    Verify Specific Line Is Written In The PNR    X/-CN/D7Q
+    Verify Specific Line Is Written In The PNR    X/-EB/EB8
+
+*** Keywords ***
+Add Exchange Line
+    [Arguments]    ${exchange_line}    ${exchange_line2}
+    : FOR    ${INDEX}    IN RANGE    5
+    \    Set Exchange Line    ${exchange_line}    ${exchange_line2}
+    \    Exit For Loop If    ${is_simultaneous} == False
+
+[1S NORAM][AB] Verify That CIC Code Is Not Updated When Touch Level Is EB, ChangeBackOfficeAgentIdentifier Is on OBT untouched or exchange, PNR Has Exchange
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Verify Realised Savings Code Default Value    E - Exchange
+    Verify Actual Panel Contains Expected Panel    Amend
+    Click Panel    Amend
+    Verify Touch Level Default Value    AM - Offline Handling
+    Verify Touch Reason Is Visible
+    Verify Notes Checkbox Is Checked
+    Select Touch Level    Online Unassisted
+    UnTick Notes Checkbox In Amend Panel
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+
+Add CN Remark
+    [Arguments]    ${cn_remove}    ${cn_add}    ${cn_eb_line}=${EMPTY}
+    : FOR    ${INDEX}    IN RANGE    5
+    \    Retrieve PNR Details From Sabre Red    ${current_pnr}    *X/    0
+    \    ${line_number}    Get Line Number In PNR Remarks    ${cn_remove}
+    \    Enter Specific Command On Native GDS    5${line_number}[
+    \    Enter Specific Command On Native GDS    ${cn_add}    ${cn_eb_line}
+    \    Enter Specific Command On Native GDS    6CWTPTEST    ER    IG
+    \    ${clip_data}    Get Clipboard Data
+    \    ${is_simulataneous}    Run Keyword And Return Status    Should Contain    ${clip_data}    SIMULTANEOUS
+    \    Send    IG
+    \    Exit For Loop If    ${is_simulataneous} == False
+
+[1S NORAM][AB] Verify That CIC Code Is Updated When Touch Level Is AM/CT, ChangeBackOfficeAgentIdentifier Is on OBT untouched or exchange, PNR Has Exchange
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Verify Realised Savings Code Default Value    E - Exchange
+    Verify Actual Panel Contains Expected Panel    Amend
+    Click Panel    Amend
+    Verify Touch Level Default Value    AM - Offline Handling
+    Verify Touch Reason Is Visible
+    Select Touch Reason    Exchange
+    Tick Notes Checkbox In Amend Panel
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+
+Set Exchange Line
+    [Arguments]    ${exchange_line}    ${exchange_line2}
+    Retrieve PNR Details From Sabre Red    ${current_pnr}    MD    0
+    Enter Specific Command On Native GDS    ${exchange_line}    ${exchange_line2}    6CWTPTEST    ER
+    ${clip_data}    Get Clipboard Data Sabre
+    ${is_simultaneous}    Run Keyword And Return Status    Should Contain    ${clip_data}    SIMULTANEOUS CHANGES
+    Set Test Variable    ${is_simultaneous}
+    Send    IG

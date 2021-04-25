@@ -1,0 +1,17 @@
+[t9]
+FileName1=t9.xml
+URL1=https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/ExplicitAuth/AllowSelfServiceAccountManagement
+Total=4
+RequestHeaderFile=t9_RequestHeader.txt
+RequestBodyFile=NONE
+ResponseHeaderFile=t9_ResponseHeader.txt
+ContentType=application/xml
+SnapshotXmlFile=snapshot_9.xml
+FileName2=t9_L0NpdHJpeC9JbnRlcm5hbC9yZXNvdXJjZXMvdjIvTTNkT01VZE5Sa1YwVDBkMGEwTnJZVEkzY2xoMGJrTjJRMWRTVDFsU2RUaFdTVlZCVFdaU1ZsUmlkejAtL2ltYWdl.png
+URL2=https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/Resources/Icon/L0NpdHJpeC9JbnRlcm5hbC9yZXNvdXJjZXMvdjIvTTNkT01VZE5Sa1YwVDBkMGEwTnJZVEkzY2xoMGJrTjJRMWRTVDFsU2RUaFdTVlZCVFdaU1ZsUmlkejAtL2ltYWdl?size=128
+FileName3=t9_ico_desktop_ready_482FD91B201F2A55.png
+URL3=https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/receiver/images/1x/ico_desktop_ready_482FD91B201F2A55.png
+FileName4=t9_suggestions.html
+URL4=https://ieonline.microsoft.com/iedomainsuggestions/ie11/suggestions.en-US
+[ProtocolInfo]
+ProtocolId=QTWeb

@@ -1,0 +1,71 @@
+[General]
+Type=Multi
+DefaultCfg=default.cfg
+ParameterFile=PowerExpress_EMEA_SendItin.prm
+GlobalParameterFile=
+NewFunctionHeader=1
+RunType=cci
+ActionLogicExt=action_logic
+LastActiveAction=Action
+MajorVersion=12
+MinorVersion=60
+ActiveTypes=Citrix_ICA,QTWeb
+GenerateTypes=Citrix_ICA,QTWeb
+AdditionalTypes=Citrix_ICA,QTWeb
+DevelopTool=Vugen
+LastModifyVer=12.60.0.971
+ParamLeftBrace={
+ParamRightBrace=}
+ScriptLanguage=C
+LastCodeGenerationVer=12.55.0.911
+DisableRegenerate=0
+Encoding=ANSI
+Description=
+ScriptLocale=en-PH
+[Actions]
+vuser_init=vuser_init.c
+SendItin=SendItin.c
+vuser_end=vuser_end.c
+[RunLogicFiles]
+Default Profile=default.usp
+[ExtraFiles]
+globals.h=
+[VuserProfiles]
+Profiles=Default Profile
+[CfgFiles]
+Default Profile=default.cfg
+[Modified Actions]
+vuser_init=1
+SendItin=1
+vuser_end=1
+[Recorded Actions]
+vuser_init=0
+SendItin=1
+vuser_end=1
+[Replayed Actions]
+vuser_init=1
+SendItin=1
+vuser_end=1
+[Interpreters]
+vuser_init=cci
+SendItin=cci
+vuser_end=cci
+[TransactionsOrder]
+Order="Citrix_LoginPage__*delimiter*__Citrix_Login__*delimiter*__Sellco Login__*delimiter*__Creating PNR__*delimiter*__Citrix Logout"
+[StateManagement]
+LastReplayStatus=3
+[ActiveReplay]
+LastReplayedRunName=result1
+ActiveRunName=result1
+[Transactions]
+Citrix_LoginPage=
+Citrix_Login=
+"Sellco Login"=
+"Creating PNR"=
+"Citrix Logout"=
+[ParameterSimulation]
+NumVusers=40
+IsDurationIndefinite=0
+NumIterationsUntilCompletion=1
+IterationFromRTS=0
+NumIterationIndefinitely=1

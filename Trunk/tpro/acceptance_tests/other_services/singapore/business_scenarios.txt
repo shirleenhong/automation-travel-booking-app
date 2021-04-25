@@ -1,0 +1,302 @@
+*** Settings ***
+Force Tags        business_scenarios
+Resource          ../other_services.txt
+
+*** Test Cases ***
+[NB] Verify That Train Remarks Are Written In The Accounting Lines For Cash
+    Create PNR Using Cash As FOP    SG    True
+    Click Panel    Other Svcs
+    Populate Exchange Order Product    Train Tickets    CARLSON WAGONLIT TRAVEL    Cash    Remarks
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Get Routing Details
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR
+    Click Panel    Other Svcs
+    Get Exchange Order Number Using Product    Train Tickets
+    Retrieve PNR Details From Amadeus    command=RTY
+    Verify That Train And Ferry Remarks Are Written In PNR When FOP Is Cash Or Invoice    Train Tickets    15    021007    #us1322
+
+[AOS] Verify That Train Remarks Are Written In The Accounting Lines For Cash
+    Retrieve PNR And Populate Amend Workflow    SG
+    Click Panel    Other Svcs
+    #Verify Train Values are Correct
+    Click Amend EO    ${eo_number_Train Tickets}
+    Verify Form Of Payment Details Are Correct    Cash
+    Get Other Services Cost Details    Train Tickets
+    Verify Vendor Contact Value Is Correct    Vendor Test
+    Verify Nett Cost Value Is Correct    1000.00
+    Verify Selling Price Value Is Correct    2500.00
+    Verify Commission Fee Value Is Correct    1500.00
+    Verify Merchant Fee Value Is Correct    0.00
+    Verify Total Selling Price Value Is Correct    2500.00
+    Verify Departure Routing Details Are Correct    Singapore    Philippines    Train Ride
+    Verify Return Routing Details Are Correct    Philippines    Singapore    Train Ride
+    Verify Exchange Order Number    ${eo_number_Train Tickets}
+    Get Other Services Form Of Payment Details    Train Tickets
+    Get Routing Details
+    Click Update Button In EO Panel    Service Info
+    Click Finish PNR    keyword=Amend Booking For Verify That Train Remarks Are Written In The Accounting Lines For Cash
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Train Remarks Are Written In The Accounting Lines For Cash
+    Click Panel    Other Svcs
+    Get Exchange Order Number Using Product    Train Tickets
+    Retrieve PNR Details From Amadeus    command=RTY
+    Verify That Train And Ferry Remarks Are Written In PNR When FOP Is Cash Or Invoice    Train Tickets    15    021007    #us1322
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB] Verify That Ferry Remarks Are Written In The Accounting Lines For Credit Card
+    Create PNR Using Credit Card As FOP    SG    True
+    Click Panel    Other Svcs
+    Populate Exchange Order Product    FERRY    Batam Fast Ferry Pte Ltd    Credit Card (CX)    Remarks
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Get Routing Details
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR
+    Click Panel    Other Svcs
+    Get Exchange Order Number Using Product    FERRY
+    Retrieve PNR Details From Amadeus    command=RTY
+    Verify That Train And Ferry Remarks Are Written In PNR When FOP Is Credit Card    FERRY    14    021006
+
+[AOS] Verify That Ferry Remarks Are Wirtten In The Accounting Lines For Credit Card
+    Retrieve PNR And Populate Amend Workflow    SG
+    Click Panel    Other Svcs
+    #Verify Train Values are Correct
+    Click Amend EO    ${eo_number_FERRY}
+    Verify Form Of Payment Details Are Correct    BTA CTCL VI/VI************7710/D0823    Credit Card (CX)    #change FOP Type from EMPTY to Credit Card (CX) once decision has been made
+    Select FOP Type    Credit Card (CX)    #remove once defaulting of FOP type has been decided
+    Get Other Services Cost Details    FERRY
+    Verify Vendor Contact Value Is Correct    Vendor Test
+    Verify Nett Cost Value Is Correct    1000.00
+    Verify Selling Price Value Is Correct    2500.00
+    Verify Commission Fee Value Is Correct    1550.00
+    Verify Merchant Fee Value Is Correct    50.00
+    Verify Total Selling Price Value Is Correct    2550.00
+    Verify Departure Routing Details Are Correct    Singapore    Philippines    Train Ride
+    Verify Return Routing Details Are Correct    Philippines    Singapore    Train Ride
+    Verify Exchange Order Number    ${eo_number_FERRY}
+    Get Other Services Form Of Payment Details    FERRY
+    Get Routing Details
+    Click Update Button In EO Panel    Service Info
+    Click Finish PNR    keyword=Amend Booking For Verify That Ferry Remarks Are Wirtten In The Accounting Lines For Credit Card
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Ferry Remarks Are Wirtten In The Accounting Lines For Credit Card
+    Click Panel    Other Svcs
+    Get Exchange Order Number Using Product    FERRY
+    Retrieve PNR Details From Amadeus    command=RTY
+    Verify That Train And Ferry Remarks Are Written In PNR When FOP Is Credit Card    FERRY    14    021006
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB] Verify That Accounting Remarks For Multiple EOs Are Written Using Credit Card
+    Create PNR Using Credit Card As FOP    SG    True
+    Click Panel    Other Svcs
+    #Visa Cost
+    Populate Exchange Order Product    Visa Cost    VISA ARRANGED BY CONSULTANT    Credit Card (CX)    Remarks    Vendor Info
+    Get Other Services Cost Details    Visa Cost
+    Get Other Services Form Of Payment Details    Visa Cost
+    Get Other Service Visa Processing Country Details    Visa Cost
+    Click Add Button In EO Panel    Visa Info
+    #Visa Handling
+    Populate Exchange Order Product    Visa Handling Fee    Carlson Wagonlit GST    Credit Card (CX)    Remarks    Vendor Info
+    Get Other Services Cost Details    Visa Handling Fee
+    Get Other Services Form Of Payment Details    Visa Handling Fee
+    Get Other Service Visa Processing Country Details    Visa Handling Fee
+    Click Add Button In EO Panel    Visa Info
+    #Despatch
+    Populate Exchange Order Product    Despatch Charge    DESPATCH DEPARTMENT    Credit Card (CX)    Remarks    Vendor Info
+    Get Other Services Cost Details    Despatch Charge
+    Get Other Services Additional Information Details    Despatch Charge
+    Get Other Services Form Of Payment Details    Despatch Charge
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR
+    Click Panel    Other Svcs
+    Get Exchange Order Number Using Product    Visa Cost
+    Get Exchange Order Number Using Product    Visa Handling Fee
+    Get Exchange Order Number Using Product    Despatch Charge
+    Retrieve PNR Details from Amadeus    command=RTY
+    Verify Other Services Visa Cost Accounting General Remarks    Visa Cost    VISA ARRANGED BY CONSULTANT    Credit Card (CX)
+    Verify Other Services Credit Card Fees Accounting Remarks Are Written    4484886032737710    VI    08    2023    Credit Card (CX)    SG
+    Verify Other Services Visa Handling Accounting General Remarks    Visa Handling Fee    Carlson Wagonlit GST    Credit Card (CX)    SG
+    Verify Other Services Credit Card Fees Accounting Remarks Are Written    4484886032737710    VI    08    2023    Credit Card (CX)    SG
+    Verify Other Services With GST Accounting General Remarks    Despatch Charge    DESPATCH DEPARTMENT    Credit Card (CX)
+    Verify Other Services Credit Card Fees Accounting Remarks Are Written    4484886032737710    VI    08    2023    Credit Card (CX)    SG
+
+[AOS] Verify That Accounting Remarks For Multiple EOs Are Written Using Credit Card
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Update PNR for EN or GB
+    Click Read Booking
+    Click Panel    Other Svcs
+    #Verify VISA Cost Values are Correct
+    Click Amend EO    ${eo_number_Visa Cost}
+    Verify Form Of Payment Details Are Correct    BTA CTCL VI/VI************7710/D0823    Credit Card (CX)    #change FOP Type from EMPTY to Credit Card (CX) once decision has been made
+    Select FOP Type    Credit Card (CX)    #remove once defaulting of FOP type has been decided
+    Get Other Services Cost Details    Visa Cost
+    Verify Vendor Contact Value Is Correct    Vendor Test
+    Verify Nett Cost Value Is Correct    1000.00
+    Verify Selling Price Value Is Correct    2500.00
+    Verify Commission Fee Value Is Correct    1550.00
+    Verify Merchant Fee Value Is Correct    50.00
+    Verify Total Selling Price Value Is Correct    2550.00
+    Verify Visa Processing Country Details    Singapore    Other    Single    Month(s)    Normal    ${EMPTY}
+    ...    0137563466343
+    Verify Exchange Order Number    ${eo_number_Visa Cost}
+    Comment    Get Other Services Cost Details    Visa Cost
+    Get Other Services Form Of Payment Details    Visa Cost
+    Get Other Service Visa Processing Country Details    Visa Cost
+    Click Update Button In EO Panel    Visa Info
+    #Verify VISA Handling Values are Correct
+    Click Amend EO    ${eo_number_Visa Handling Fee}
+    Verify Form Of Payment Details Are Correct    BTA CTCL VI/VI************7710/D0823    Credit Card (CX)    #change FOP Type from EMPTY to Credit Card (CX) once decision has been made
+    Get Other Services Cost Details    Visa Handling Fee
+    Verify Vendor Contact Value Is Correct    Vendor Test
+    Verify Nett Cost Value Is Correct    1000.00
+    Verify Selling Price Value Is Correct    2500.00
+    Verify Commission Fee Value Is Correct    1500.00
+    Verify GST Value Is Correct    175.00
+    Verify Merchant Fee Value Is Correct    0.00
+    Verify Total Selling Price Value Is Correct    2500.00
+    Verify Visa Processing Country Details    Singapore    Other    Single    Month(s)    Normal    ${EMPTY}
+    ...    0137563466343
+    Verify Exchange Order Number    ${eo_number_Visa Handling Fee}
+    Comment    Get Other Services Cost Details    Visa Cost
+    Get Other Services Form Of Payment Details    Visa Handling Fee
+    Get Other Service Visa Processing Country Details    Visa Handling Fee
+    Click Update Button In EO Panel    Visa Info
+    #Verify Despatch Charge Values are Correct
+    Click Amend EO    ${eo_number_Despatch Charge}
+    Verify Form Of Payment Details Are Correct    BTA CTCL VI/VI************7710/D0823    Credit Card (CX)    #change FOP Type from EMPTY to Credit Card (CX) once decision has been made
+    Get Other Services Cost Details
+    Verify Vendor Contact Value Is Correct    Vendor Test
+    Verify Nett Cost Value Is Correct    1000.00
+    Verify Selling Price Value Is Correct    2500.00
+    Verify Commission Fee Value Is Correct    1550.47
+    Verify GST Value Is Correct    175.00
+    Verify Merchant Fee Value Is Correct    54.00
+    Verify Total Selling Price Value Is Correct    2550.47
+    Verify Description Value From Additional Information Is Correct    Despatch Charge
+    Verify BTA Description Value Is Correct    Despatch Charge
+    Verify Exchange Order Number    ${eo_number_Despatch Charge}
+    Get Other Services Form Of Payment Details    Despatch Charge
+    Get Other Services Additional Information Details    Despatch Charge
+    Click Update Button In EO Panel    Service Info
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR    keyword=Amend Booking For Verify That Accounting Remarks For Multiple EOs Are Written Using Credit Card
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Accounting Remarks For Multiple EOs Are Written Using Credit Card
+    Click Panel    Other Svcs
+    Get Exchange Order Number Using Product    Visa Cost
+    Get Exchange Order Number Using Product    Visa Handling Fee
+    Get Exchange Order Number Using Product    Despatch Charge
+    Retrieve PNR Details from Amadeus    command=RTY
+    Verify Other Services Visa Cost Accounting General Remarks    Visa Cost    VISA ARRANGED BY CONSULTANT    Credit Card (CX)
+    Verify Other Services Credit Card Fees Accounting Remarks Are Written    4484886032737710    VI    08    2023    Credit Card (CX)    SG
+    Verify Other Services Visa Handling Accounting General Remarks    Visa Handling Fee    Carlson Wagonlit GST    Credit Card (CX)    SG
+    Verify Other Services Credit Card Fees Accounting Remarks Are Written    4484886032737710    VI    08    2023    Credit Card (CX)    SG
+    Verify Other Services With GST Accounting General Remarks    Despatch Charge    DESPATCH DEPARTMENT    Credit Card (CX)
+    Verify Other Services Credit Card Fees Accounting Remarks Are Written    4484886032737710    VI    08    2023    Credit Card (CX)    SG
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Amend Booking For Verify That Train Remarks Are Written In The Accounting Lines For Cash
+    Retrieve PNR And Populate Amend Workflow    SG
+    Click Panel    Other Svcs
+    #Verify Train Values are Correct
+    Click Amend EO    ${eo_number_Train Tickets}
+    Verify Form Of Payment Details Are Correct    Cash
+    Get Other Services Cost Details    Train Tickets
+    Verify Vendor Contact Value Is Correct    Vendor Test
+    Verify Nett Cost Value Is Correct    1000.00
+    Verify Selling Price Value Is Correct    2500.00
+    Verify Commission Fee Value Is Correct    1500.00
+    Verify Merchant Fee Value Is Correct    0.00
+    Verify Total Selling Price Value Is Correct    2500.00
+    Verify Departure Routing Details Are Correct    Singapore    Philippines    Train Ride
+    Verify Return Routing Details Are Correct    Philippines    Singapore    Train Ride
+    Verify Exchange Order Number    ${eo_number_Train Tickets}
+    Get Other Services Form Of Payment Details    Train Tickets
+    Get Routing Details
+    Click Update Button In EO Panel    Service Info
+    Click Finish PNR
+
+Amend Booking For Verify That Ferry Remarks Are Wirtten In The Accounting Lines For Credit Card
+    Retrieve PNR And Populate Amend Workflow    SG
+    Click Panel    Other Svcs
+    #Verify Train Values are Correct
+    Click Amend EO    ${eo_number_FERRY}
+    Verify Form Of Payment Details Are Correct    BTA CTCL VI/VI************7710/D0823    ${EMPTY}    #change FOP Type from EMPTY to Credit Card (CX) once decision has been made
+    Select FOP Type    Credit Card (CX)    #remove once defaulting of FOP type has been decided
+    Get Other Services Cost Details    FERRY
+    Verify Vendor Contact Value Is Correct    Vendor Test
+    Verify Nett Cost Value Is Correct    1000.00
+    Verify Selling Price Value Is Correct    2500.00
+    Verify Commission Fee Value Is Correct    1550.00
+    Verify Merchant Fee Value Is Correct    50.00
+    Verify Total Selling Price Value Is Correct    2550.00
+    Verify Departure Routing Details Are Correct    Singapore    Philippines    Train Ride
+    Verify Return Routing Details Are Correct    Philippines    Singapore    Train Ride
+    Verify Exchange Order Number    ${eo_number_FERRY}
+    Get Other Services Form Of Payment Details    FERRY
+    Get Routing Details
+    Click Update Button In EO Panel    Service Info
+    Click Finish PNR
+
+Amend Booking For Verify That Accounting Remarks For Multiple EOs Are Written Using Credit Card
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Update PNR for EN or GB
+    Click Read Booking
+    Click Panel    Other Svcs
+    #Verify VISA Cost Values are Correct
+    Click Amend EO    ${eo_number_Visa Cost}
+    Verify Form Of Payment Details Are Correct    BTA CTCL VI/VI************7710/D0823    Credit Card (CX)    #change FOP Type from EMPTY to Credit Card (CX) once decision has been made
+    Select FOP Type    Credit Card (CX)    #remove once defaulting of FOP type has been decided
+    Get Other Services Cost Details    Visa Cost
+    Verify Vendor Contact Value Is Correct    Vendor Test
+    Verify Nett Cost Value Is Correct    1000.00
+    Verify Selling Price Value Is Correct    2500.00
+    Verify Commission Fee Value Is Correct    1550.00
+    Verify Merchant Fee Value Is Correct    50.00
+    Verify Total Selling Price Value Is Correct    2550.00
+    Verify Visa Processing Country Details    Singapore    Other    Single    Month(s)    Normal    ${EMPTY}
+    ...    0137563466343
+    Verify Exchange Order Number    ${eo_number_Visa Cost}
+    Comment    Get Other Services Cost Details    Visa Cost
+    Get Other Services Form Of Payment Details    Visa Cost
+    Get Other Service Visa Processing Country Details    Visa Cost
+    Click Update Button In EO Panel    Visa Info
+    #Verify VISA Handling Values are Correct
+    Click Amend EO    ${eo_number_Visa Handling Fee}
+    Verify Form Of Payment Details Are Correct    BTA CTCL VI/VI************7710/D0823    Credit Card (CX)    #change FOP Type from EMPTY to Credit Card (CX) once decision has been made
+    Get Other Services Cost Details    Visa Handling Fee
+    Verify Vendor Contact Value Is Correct    Vendor Test
+    Verify Nett Cost Value Is Correct    1000.00
+    Verify Selling Price Value Is Correct    2500.00
+    Verify Commission Fee Value Is Correct    1500.00
+    Verify GST Value Is Correct    175.00
+    Verify Merchant Fee Value Is Correct    0.00
+    Verify Total Selling Price Value Is Correct    2500.00
+    Verify Visa Processing Country Details    Singapore    Other    Single    Month(s)    Normal    ${EMPTY}
+    ...    0137563466343
+    Verify Exchange Order Number    ${eo_number_Visa Handling Fee}
+    Comment    Get Other Services Cost Details    Visa Cost
+    Get Other Services Form Of Payment Details    Visa Handling Fee
+    Get Other Service Visa Processing Country Details    Visa Handling Fee
+    Click Update Button In EO Panel    Visa Info
+    #Verify Despatch Charge Values are Correct
+    Click Amend EO    ${eo_number_Despatch Charge}
+    Verify Form Of Payment Details Are Correct    BTA CTCL VI/VI************7710/D0823    Credit Card (CX)    #change FOP Type from EMPTY to Credit Card (CX) once decision has been made
+    Get Other Services Cost Details
+    Verify Vendor Contact Value Is Correct    Vendor Test
+    Verify Nett Cost Value Is Correct    1000.00
+    Verify Selling Price Value Is Correct    2500.00
+    Verify Commission Fee Value Is Correct    1550.47
+    Verify GST Value Is Correct    175.00
+    Verify Merchant Fee Value Is Correct    54.00
+    Verify Total Selling Price Value Is Correct    2550.47
+    Verify Description Value From Additional Information Is Correct    Despatch Charge
+    Verify BTA Description Value Is Correct    Despatch Charge
+    Verify Exchange Order Number    ${eo_number_Despatch Charge}
+    Get Other Services Form Of Payment Details    Despatch Charge
+    Get Other Services Additional Information Details    Despatch Charge
+    Click Update Button In EO Panel    Service Info
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR    keyword=Amend Booking For Verify That Accounting Remarks For Multiple EOs Are Written Using Credit Card

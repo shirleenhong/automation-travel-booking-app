@@ -1,0 +1,48 @@
+*** Settings ***
+
+*** Test Cases ***
+1A Verify That Traveller Is Automatically Identified And Prepopulate The Information For Top Unit And Subunit In the Info Field In Power Express
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    fr-FR    AutomationFR    FR QA Team Amadeus
+    Drop Test Data To TestDropFolder    #sample only and will be created for JSON drop folder
+    Get Information From Contact Tab In Power Express    Traveller/Contact
+    Verify Expected Information From Contact Tab In Power Express
+    Verify Contact Tab Name
+    Verify Contact Tab Last Name
+    Verify Contact Tab Email Address
+    Verify Client Account In The Contact Tab
+    Verify Contact Tab Telephone
+    Verify Specific Remark Is Written In The PNR
+
+test
+    Open Power Express And Retrieve Profile From Agent Platform    ${version}    Test    ap:mlp1    sysuserguid:14:446BF
+
+*** Keywords ***
+Get Information From Contact Tab In Power Express
+    [Arguments]    ${tab_name}
+    Get First Name From Contact Tab    ${tab_name}
+    Get Last Name From Contact Tab    ${tab_name}
+    Get Email Address From Contact Tab    ${tab_name}
+    Get PCC/CompanyProfile/TravellerProfile From Contact Tab    ${tab_name}
+    Get Client Account Number From Contact Tab    ${tab_name}
+    Get Trip Type From Contact Tab
+    [Return]    ${actual_firstname}    ${actual_lastname}    ${actual_email}    ${actual_pcc_company_traveller_profile}    ${actual_client_account}
+
+Verify Contact Tab Name
+    [Arguments]    ${expected_name}
+    Click Tab In Contact Details    ${tab_name}
+    Should Be Equal    ${actual_firstname}    ${expected_name}
+
+Open Power Express And Retrieve Profile From Agent Platform
+    [Arguments]    ${version}    ${syex_env}    ${ap_parameter}=${EMPTY}    ${sysuserguid}=${EMPTY}
+    Run Keyword If    "${use_local_dev_build}" == "True"    Use Local Dev Build    ${username}
+    ...    ELSE    Launch Power Express    ${version}    ${syex_env}    ${use_mock_env}    ${ap_parameter}
+    ...    ${sysuserguid}
+    Set Suite Variable    ${locale}
+    Run Keyword Unless    '${syex_env.lower()}' == 'master' or '${syex_env.lower()}' == 'emea' or '${syex_env.lower()}' == 'noram'    Set User Settings    ${locale}
+    Run Keyword Unless    '${syex_env.lower()}' == 'master' or '${syex_env.lower()}' == 'emea' or '${syex_env.lower()}' == 'noram'    Select Profile    ${user_profile}
+    Set Suite Variable    ${user_profile}
+    Run Keyword If    "${team}" != "${EMPTY}"    Run Keywords    Clear Team Selection
+    ...    AND    Select Team    ${team}
+    Set Suite Variable    ${current_pnr}    ${EMPTY}
+    Set Suite Variable    ${pcc}    ${EMPTY}
+    Set Suite Variable    ${uid}    ${username}

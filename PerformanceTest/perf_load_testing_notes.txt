@@ -1,0 +1,46 @@
+Load Test Strategy:
+
+Multiple Batches of Run:
+•	20 VUsers
+•	10 Iterations
+•	Compare result for every batches
+•	Collect PerfMon data in Citrix Server (EIT Citrix is currently doing it)
+
+Once we have good result for 20Vusers with 10 iterations add more load by:
+•	Adding more VUSers 
+•	Adding more Booking Iterations.
+•	Extending New Booking to Send Itin or Amend Booking
+
+==============
+LR Test Servers:
+•	VWSNG1AX00089
+•	VWSNG1AX00090
+•	VWSNG1AX00091
+
+==============
+
+Execution Checklist:
+
+Pre-execution:
+1 ) Delete all files from these location:
+\\VWSNG1IR01006\d$\SyEx_Logs
+\\VWSNG1IR01007\d$\SyEx_Logs
+\\VWSNG1IR01008\d$\SyEx_Logs
+
+\\VWSNG1IR01006\d$\test_result
+\\VWSNG1IR01007\d$\test_result
+\\VWSNG1IR01008\d$\test_result
+
+Execution in Controller/VUGEN:
+1) Check the script in VUGEN, then identify if you have correct parameters
+   Booking iterations
+   UseMockEnv = False
+   CitrixLogin
+
+2) VUsers = Max is 20
+   Duration until completion
+
+3) Go to utility\report_generator
+   Reset network connection. Enter "net use * /del" in the command line
+   Modify "PerfLogsParser.exe.config"
+   Run "PerfLogsParser.exe" as admin

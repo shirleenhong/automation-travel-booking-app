@@ -1,0 +1,33 @@
+*** Settings ***
+Force Tags        amadeus    emea
+Resource          ../recap_verification.txt
+Resource          ../../gds/gds_verification.txt
+
+*** Test Cases ***
+[NB SE] Verify That Itinerary Is Not Sent To Queue When Itinerary Product SO Is Set To None
+    [Tags]    us3878    se
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    en-GB    AutomationUK    UK AUTO AMADEUS
+    Select GDS    amadeus
+    Set Client And Traveler    Optimize Auto - Amadeus SE ¦ US3878 A2SI 1A SE    Sweden    Optimize Auto
+    Click New Booking
+    Book One Way Flight X Months From Now    MSPORD/AUA    6
+    Tick Not Known At Time Of Booking For Form Of Payment
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Verify Queue Remark Is Written    FRAWL2378    70    1    1
+
+[SI SE] Verify That Itinerary Is Sent To Queue When Itinerary Product SO Is Set To None
+    [Tags]    us3878    se
+    Retrieve PNR    ${current_pnr}
+    Click Send Itinerary
+    Click Finish PNR    Send Itinerary
+    Execute Simultaneous Change Handling    Send Itinerary
+    Verify Queue Remark Is Written    FRAWL2378    70    1    1
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Send Itinerary
+    Retrieve PNR    ${current_pnr}
+    Click Send Itinerary
+    Click Finish PNR    Send Itinerary

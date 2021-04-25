@@ -1,0 +1,199 @@
+*** Settings ***
+Force Tags        galileo    emea
+Resource          ../complete_verification.txt
+
+*** Test Cases ***
+[NB UK] Verify That Remarks Updated Message Is Displayed After Finish PNR When Changes Value Not In Dropdown List Is Entered
+    [Tags]    uat    emea    uk
+    Open Power Express And Retrieve Profile    ${version}    ${syex_env}    U003WXR    en-GB    AutomationUK    UK Head Office Test Team
+    Select GDS    Galileo
+    Set Client And Traveler    UK STAFF TEST ¦ AUTO UK-STAFF TEST    Automason    Yuri
+    Select Client Account    717171 ¦ VAT CHANGES TESTING. ¦ AUTO UK-STAFF TEST
+    Click New Booking
+    Update PNR for EN or GB
+    Verify Message Is Not Displayed In Summary    Remarks Update Failed
+    Book Flight X Months From Now    MSPORD/UA    01Y1    \    6    0
+    Book Flight X Months From Now    ORDMSP/UA    01Y1    FQ:NR    6    5
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Set High Fare Field (If blank) with Charged Fare
+    Set Low Fare Field (If blank) with Charged Fare
+    Select Realised Saving Code Value    C1 - Client Negotiated Fare Accepted
+    Select Missed Saving Code Value    NA - No Alternative Fare Available
+    Select Class Code Value    YD - Economy Discounted Fare
+    Select Fare Restriction    SEMI FLEXIBLE
+    Set Changes Value    Before departure Free of charge plus fare difference
+    Set Cancellation Value    Non Refundable
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Finish PNR
+    Verify PNR Is Successfully Created
+    Verify Message Is Displayed In Summary    Remarks Updated
+    Retrieve PNR Details From Travelport    ${current_pnr}
+    Verify Specific Line Is Written In The PNR    CHANGE OF RESERVATION : BEFORE DEPARTURE FREE OF CHARGE PLUS FARE DIFF
+    Verify Specific Line Is Written In The PNR    CANCELLATION : NON REFUNDABLE
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB UK] Verify That Remarks Updated Message Is Displayed After Finish PNR When Booking Contains 5 Sectors With Individual Filed Fares And Multiple CDR Values Entered
+    [Tags]    uat    emea    uk    de6281    de6282    valid_fail
+    ...    data_dependent
+    Open Power Express And Retrieve Profile    ${version}    ${syex_env}    U003WXR    en-GB    AutomationUK    UK Head Office Test Team
+    Select GDS    Galileo
+    Set Client And Traveler    UK STAFF TEST ¦ AUTO UK-STAFF TEST    Automason    Ara
+    Set Client And Traveler    UK STAFF TEST ¦ AUTO UK-STAFF TEST    Automason    Yuri
+    Select Client Account    208154 ¦ CWT BUSINESS STAFF ACCOUNT ¦ AUTO UK-STAFF TEST
+    Click New Booking
+    Update PNR for EN or GB
+    Verify Message Is Not Displayed In Summary    Remarks Update Failed
+    Book Flight X Months From Now    MANLHR/AF    01Y1*    FQS1.2    5    0
+    Book Flight X Months From Now    LHRCDG/AF    01Y1    FQS3    5    5
+    Book Flight X Months From Now    CDGAMS/AF    01Y1    FQS4    5    10
+    Book Flight X Months From Now    AMSARN/SK    01Y1    FQS5    5    15
+    Book Flight X Months From Now    ARNMAN/SK    01Y1    FQS6    5    20
+    Click Read Booking
+    Click Panel    Air Fare
+    Populate All Fare Tabs With Values
+    Click Panel    Cust Refs
+    Populate CDRs With Values
+    Click Panel    Client Fees
+    Select Fee From Dropdown    UK Virtual Card Payment Fee    Hotel Client Virtual Card${SPACE}
+    Select Fee From Dropdown    Bookingcom hotel fee    No Bookingcom hotel booked
+    Populate All Panels (Except Given Panels If Any)    Air Fare    Cust Refs    Client Fees
+    Click Panel    Air Fare
+    Click Finish PNR
+    Verify PNR Is Successfully Created
+    Verify Message Is Displayed In Summary    Remarks Updated
+    Retrieve PNR Details From Travelport    ${current_pnr}
+    Verify Fare Remarks For 5 Sectors Are Written In The PNR
+    Verify Itinerary Remarks For 5 Sectors Are Written In The PNR
+    Verify CDR Values Entered Are Written In the PNR
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB UK] Verify That RETRY Message Is Displayed And PNR Is Created Without Error
+    [Tags]    uat    uk    emea
+    Open Power Express And Retrieve Profile    ${version}    ${syex_env}    U003WXR    en-GB    AutomationUK    UK Head Office Test Team
+    Select GDS    Galileo
+    Set Client And Traveler    UK STAFF TEST ¦ AUTO UK-STAFF TEST    Automason    Yuri
+    Select Client Account    717171 ¦ VAT CHANGES TESTING. ¦ AUTO UK-STAFF TEST
+    Click New Booking
+    Click Panel    Client Info
+    Tick Not Known At Time Of Booking For Form Of Payment
+    Click Update PNR
+    Book Flight X Months From Now    NCEORY/AF    01Y1    \    4
+    Book Flight X Months From Now    CDGJFK/AF    01Y1    FQ:NR    4
+    Click Read Booking
+    Click Panel    Air Fare
+    Populate Fare Tab With Default Values    Fare 1
+    Click Panel    Client Fees
+    Select Fee From Dropdown    Bookingcom hotel fee    No Bookingcom hotel booked
+    Populate All Panels (Except Given Panels If Any)    Air Fare    Client Fees
+    Click Finish PNR Expecting Popup Message    Express is unable to end the PNR.${\n}${\n}GDS Response: CHECK MINIMUM CONNECT TIME SEGMENTS 01/02${\n}${\n}PLEASE CHECK THE CONNECTION BETWEEN SEGMENTS${\n}${\n}Please make necessary updates directly in the GDS and select the retry button to End the PNR.
+    Verify PNR Is Successfully Created
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB UK] Verify That Remarks Update Error Is Not Displayed When PNR Contains RQ Entry
+    [Tags]    uat    uk    emea
+    Open Power Express And Retrieve Profile    ${version}    ${syex_env}    U003WXR    en-GB    AutomationUK    UK Head Office Test Team
+    Select GDS    Galileo
+    Set Client And Traveler    UK STAFF TEST ¦ AUTO UK-STAFF TEST    Automason    Yuri
+    Select Client Account    717171 ¦ VAT CHANGES TESTING. ¦ AUTO UK-STAFF TEST
+    Click New Booking
+    Update PNR for EN or GB
+    Book Flight X Months From Now    MANMCO/VS    01W1    \    3
+    Book Flight X Months From Now    MCOMAN/VS    01W1    FQ    3    2
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR    \    15
+
+[AB UK] Verify That Remarks Update Error Is Not Displayed When PNR Contains RQ Entry
+    [Tags]    uat    uk    emea
+    Retrieve PNR Details From Travelport    ${current_pnr}
+    Enter Specific Command On Native GDS    RQ.GENR/VS*TEST RQ    R.CWTPTEST    ER    I
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Change Itinerary Flight Date    1    3    10    False
+    Click Panel    Client Info
+    Tick Not Known At Time Of Booking For Form Of Payment
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR Expecting Popup Message    Express is unable to end the PNR.${\n}${\n}GDS Response: ITIN CHANGE - SERVICING REQUEST MAY BE INVALIDATED${\n}${\n}Please make necessary updates directly in the GDS and select the retry button to End the PNR.
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Remarks Update Error Is Not Displayed When PNR Contains RQ Entry
+    Verify PNR Is Successfully Updated
+    [Teardown]
+
+[CB UK] Verify That PNR Is Cancelled Without Errors When PNR Contains RQ Entry
+    [Tags]    uat    uk    emea
+    Retrieve PNR    ${current_pnr}
+    Click Cancel Booking
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR Expecting Popup Message    Express is unable to end the PNR.${\n}${\n}GDS Response: ITIN CHANGE - SERVICING REQUEST MAY BE INVALIDATED${\n}${\n}Please make necessary updates directly in the GDS and select the retry button to End the PNR.
+    Execute Simultaneous Change Handling    Cancel Booking With RQ Entry
+    Verify PNR Is Successfully Cancelled
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Amend Booking For Verify That Remarks Update Error Is Not Displayed When PNR Contains RQ Entry
+    Retrieve PNR Details From Travelport    ${current_pnr}
+    Enter Specific Command On Native GDS    RQ.GENR/VS*TEST RQ    R.CWTPTEST    ER    I
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Change Itinerary Flight Date    1    3    10    False
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR Expecting Popup Message    Express is unable to end the PNR.${\n}${\n}GDS Response: ITIN CHANGE - SERVICING REQUEST MAY BE INVALIDATED${\n}${\n}Please make necessary updates directly in the GDS and select the retry button to End the PNR.
+
+Cancel Booking With RQ Entry
+    Retrieve PNR    ${current_pnr}
+    Click Cancel Booking
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR Expecting Popup Message    Express is unable to end the PNR.${\n}${\n}GDS Response: ITIN CHANGE - SERVICING REQUEST MAY BE INVALIDATED${\n}${\n}Please make necessary updates directly in the GDS and select the retry button to End the PNR.
+
+Populate All Fare Tabs With Values
+    : FOR    ${index}    IN RANGE    1    6
+    \    Populate Fare Tab With Default Values    Fare ${index}
+
+Populate CDRs With Values
+    Set CDR Value    TRVLCOST    VB0003
+    Set CDR Value    AUTHMANG    AAAAA
+    Set CDR Value    CHARGECC    VB0003
+    Set CDR Value    BILLABLE    N
+    Set CDR Value    PAYMENT.    9876
+    Set CDR Value    CNTRYCDE.    UK
+    Set CDR Value    TRAVREAS.    YK
+    Set CDR Value    TRAVTYPE.    A2
+    Set CDR Value    HOTEL...    H00
+    Set CDR Value    EVENTID.    123XYZ
+    Tick Not Known At Time Of Booking    TICK
+
+Verify CDR Values Entered Are Written In the PNR
+    Verify Specific Line Is Written In The PNR    FREE TEXT-*0601*VB0003
+    Verify Specific Line Is Written In The PNR    FREE TEXT-*0602*AAAAA
+    Verify Specific Line Is Written In The PNR    FREE TEXT-*0603*VB0003
+    Verify Specific Line Is Written In The PNR    FREE TEXT-*0604*N
+    Verify Specific Line Is Written In The PNR    FREE TEXT-*0605*9876
+    Verify Specific Line Is Written In The PNR    FREE TEXT-*0606*UK
+    Verify Specific Line Is Written In The PNR    FREE TEXT-*0607*YK
+    Verify Specific Line Is Written In The PNR    FREE TEXT-*0608*A2
+    Verify Specific Line Is Written In The PNR    FREE TEXT-*0609*H00
+    Verify Specific Line Is Written In The PNR    FREE TEXT-*0610*123XYZ
+
+Verify Fare Remarks For ${x} Sectors Are Written In The PNR
+    ${count_of_hfbf_remark_per_segment}    Evaluate    ${x}*15
+    Verify Text Contains Expected Value X Times Only    ${pnr_details}    HF*MERCHANT FEES-    ${x}
+    Verify Text Contains Expected Value X Times Only    ${pnr_details}    HF*BF-    ${count_of_hfbf_remark_per_segment}
+
+Verify Itinerary Remarks For ${x} Sectors Are Written In The PNR
+    Verify Text Contains Expected Value X Times Only    ${pnr_details}    ${SPACE}ROUTING :${SPACE}    ${x}
+    Verify Text Contains Expected Value X Times Only    ${pnr_details}    ${SPACE}HIGH FARE :${SPACE}    ${x}
+    Verify Text Contains Expected Value X Times Only    ${pnr_details}    ${SPACE}CHARGED FARE :${SPACE}    ${x}
+    Verify Text Contains Expected Value X Times Only    ${pnr_details}    ${SPACE}LOWEST FARE :${SPACE}    ${x}
+    Verify Text Contains Expected Value X Times Only    ${pnr_details}    ${SPACE}SAVINGS ACHIEVED VS HIGH FARE${SPACE}    ${x}
+    Verify Text Contains Expected Value X Times Only    ${pnr_details}    ${SPACE}SAVINGS MISSED VS LOWEST FARE${SPACE}    ${x}
+    Verify Text Contains Expected Value X Times Only    ${pnr_details}    ${SPACE}MAIN RESTRICTIONS:    ${x}
+    Verify Text Contains Expected Value X Times Only    ${pnr_details}    ${SPACE}CHANGE OF RESERVATION :${SPACE}    ${x}
+    Verify Text Contains Expected Value X Times Only    ${pnr_details}    ${SPACE}CANCELLATION :${SPACE}    ${x}
+    Verify Text Contains Expected Value X Times Only    ${pnr_details}    ${SPACE}REROUTING :${SPACE}    ${x}
+    Verify Text Contains Expected Value X Times Only    ${pnr_details}    ${SPACE}VALID ON :${SPACE}    ${x}
+    Verify Text Contains Expected Value X Times Only    ${pnr_details}    ${SPACE}MINIMUM STAY :${SPACE}    ${x}
+    Verify Text Contains Expected Value X Times Only    ${pnr_details}    ${SPACE}MAXIMUM STAY :${SPACE}    ${x}
+    Verify Text Contains Expected Value X Times Only    ${pnr_details}    ${SPACE}THIS FARE WILL BE ISSUED AS AN${SPACE}    ${x}

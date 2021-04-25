@@ -1,0 +1,30 @@
+*** Settings ***
+Resource          ../../../../resources/common/global_resources.txt
+Resource          ../other_services_verification.txt
+Resource          ../../client_info/client_info_verification.txt
+Resource          ../../../../resources/panels/other_svcs.txt
+Resource          ../../../../resources/api_resource/remarks_core.txt
+
+*** Test Cases ***
+Get Antigua Agent Sign In (UID or SIGN)
+    ${profile_info}    Set Variable    PROFILE STAFF NUMBER
+    ${profile_value}    Get Value From Profile Information (Amadeus)    ${profile_info}
+    Log    ${profile_info} has the value of ${profile_value}
+
+test
+    ${date_and_time}    Set Variable If    ("${date_and_time_departure_to}" =="${EMPTY}" and "${date_and_time_arrival_to}" !="${EMPTY}")    ${date_and_time_arrival_to}    ${date_and_time_departure_to}
+    ${date_and_time}    Set Variable If    ("${date_and_time_departure_to}" =="${EMPTY}" and "${date_and_time_arrival_to}" !="${EMPTY}")    ${date_and_time_arrival_to}    ${date_and_time_departure_to}
+    ${date_and_time}
+
+*** Keywords ***
+Get Value From Profile Information (Amadeus)
+    [Arguments]    ${target_info}
+    ${raw_sign_identities}    Get Data From GDS Screen    JGD    True
+    ${raw_sign_identity_line}    Get Lines Matching Regexp    ${raw_sign_identities}    .*${target_info}.*
+    ${raw_sign_identity_line}    Strip String    ${raw_sign_identity_line}
+    ${profile_info}    ${profile_value}    Split String    ${raw_sign_identity_line}    -    1
+    ${profile_info}    Strip String    ${profile_info}
+    ${profile_value}    Strip String    ${profile_value}
+    Log    ${profile_info}: ${profile_value}
+    Set Suite Variable    ${profile_value}
+    [Return]    ${profile_value}

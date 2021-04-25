@@ -1,0 +1,32 @@
+*** Settings ***
+Documentation     This resource file covers all reusable actions for Complete Panel related test cases
+Variables         ../variables/complete_control_objects.py
+Resource          ../common/core.txt
+
+*** Keywords ***
+Get PNR Record Locator
+    Wait Until Keyword Succeeds    120    1    Verify Progress Info Window is Not Active
+    ${get_pnr} =    Get Control Text Value    [NAME:ctxtLocator]    ${title_power_express}
+    Run Keyword If    '${get_pnr}' != '${EMPTY}'    Set Suite Variable    ${current_pnr}    ${get_pnr}
+
+Verify PNR Message
+    ${pnr_message} =    Get Control Text Value    [NAME:TableLayoutPanel2]    ${title_power_express}
+    ${pnr_message2} =    Get Control Text Value    ${label_end_message}    ${title_power_express}
+    ${is_failed_queue_placement} =    Run Keyword And Return Status    Should Contain    ${pnr_message}    Failed queue placement
+    Run Keyword Unless    ${is_failed_queue_placement} == False    Log    Failed queue placement    WARN
+    Should Not Contain    ${pnr_message2}    NEED TICKETING TI    NEED TICKETING TI
+    Should Not Contain    ${pnr_message2}    NO TRANSACTION PRESENT    NO TRANSACTION PRESENT
+    ${simultaneous_changes} =    Run Keyword And Return Status    Should Contain    ${pnr_message}    SIMULT
+    ${simultaneous_changes_2} =    Run Keyword And Return Status    Should Contain    ${pnr_message2}    SIMULT
+    ${simultaneous_changes}    Set Variable If    "${simultaneous_changes}" == "True" or "${simultaneous_changes_2}" == "True"    True    False
+    Set Test Variable    ${simultaneous_changes}
+    [Teardown]
+
+Verify Requested Booking File Segments Is Cancelled
+    ${cancel_message} =    Get Control Text Value    ${label_end_message}    ${title_power_express}
+    Verify Text Contains Expected Value    ${cancel_message}    Segment
+    [Teardown]
+
+Verify Simultaneous Changes To PNR Error Message Is Displayed
+    Run Keyword And Continue On Failure    Should Be Equal    True    ${simultaneous_changes}    Simultaneous Changes To PNR error message is not displayed.    FALSE
+    [Teardown]    Take Screenshot

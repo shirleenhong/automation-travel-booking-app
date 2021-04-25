@@ -1,0 +1,807 @@
+*** Settings ***
+Force Tags        amadeus
+Resource          ../../../acceptance_tests/air_fare/air_fare_verification.txt
+Resource          ../air_fare/air_fare_verification.txt
+Resource          ../unused_document/unused_document_verification.txt
+
+*** Test Cases ***
+[NB][SI][HK][OS] Verify That Unused Tickets Avaialable And The RMT And Accounting Remarks Are Written For BSP, Revalidation and Doc Bank Fee EO Are Written When Using Credit Card And Invoice
+    [Tags]    hk    us1389    us1541
+    Open Power Express And Retrieve Profile    ${version}    Test    uexr493    en-GB    erepolidoru    APAC QA
+    ...    Amadeus
+    Select GDS    Amadeus
+    Set Client And Traveler    APAC SYN CORP ¦ APAC HK OS AUTOMATION    BEAR    HKOTHERS
+    Click Tab In Top Left    Unused Documents
+    Add Unused Ticket (Dummy)    1-Paper    1237896550    079    XYZ163    10.09 USD
+    Use Ticket Number From Unused Documents Tab (Screen)    1237896550
+    Click Tab In Top Left    GDS Screen
+    Click New Booking
+    Retrieve PNR Details From Amadeus    command=RT    refresh_needed=False
+    Verify RMT Line Is Written    PR    079    1237896550    10.09    BEAR/HKOTHERS
+    Click Panel    Client Info
+    Select Form Of Payment    BTA CTCL VI/VI************7710/D0823
+    Update PNR for EN or GB
+    Book Flight X Months From Now    SINMNL/ASQ    SS1Y1    FXP/S2    6    3
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Other Svcs
+    Click Panel    Other Svcs
+    #EO NB
+    #BSP Ticket
+    Populate Exchange Order Product    BSP AIR TICKET    BSP    Credit Card (CX)    Remarks    Vendor Info    MCO/MPD
+    Get Other Services Form Of Payment Details    BSP AIR TICKET
+    Get Selected Air Segment From Air Segment Grid    BSP AIR TICKET
+    Get Ticket Info Fee Values    HK    BSP AIR TICKET
+    Click MI Tab
+    Get MI Fields Values    BSP AIR TICKET
+    Click Add Button In EO Panel    Ticket Info
+    #Revalidation Fee
+    Populate Exchange Order Product    REVALIDATION FEE    CWT    Credit Card (CX)    Remarks    Vendor Info
+    Click Tab In Other Services Panel    Ticket Type
+    Get Ticket No Value
+    Click Tab In Other Services Panel    Service Info
+    Get Other Services Cost Details    identifier=REVALIDATION FEE
+    Get Other Services Form Of Payment Details    identifier=REVALIDATION FEE
+    Get Other Services Additional Information Details    identifier=REVALIDATION FEE
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    REVALIDATION FEE
+    #Doc Bank Fee
+    Populate Exchange Order Product    DOC BANK FEE    CWT    Invoice    Remarks    Vendor Info
+    Populate Unused Ticket Number    079    1237896550    999
+    Get Other Services Cost Details    DOC BANK FEE
+    Get Other Services Additional Information Details    DOC BANK FEE
+    Get Other Services Form Of Payment Details    DOC BANK FEE
+    Click Add Button In EO Panel    Service Info
+    #EO NB Finish
+    Click Finish PNR
+    Click Panel    Other Svcs
+    Get Exchange Order Number Using Product    BSP AIR TICKET
+    Get Exchange Order Number Using Product    REVALIDATION FEE
+    Get Exchange Order Number Using Product    DOC BANK FEE
+    #Remarks Verification
+    Retrieve PNR Details From Amadeus
+    Verify BSP Ticket Accounting Remarks Are Written    BSP AIR TICKET    BSP    HK    identifier=BSP AIR TICKET
+    Verify Other Services Doc Bank Fee Service Accounting Remarks    DOC BANK FEE    CWT    Invoice    HK    identifier=DOC BANK FEE
+    Verify Other Services General Notepad Remarks    REVALIDATION FEE
+    Verify Other Services Transaction Fee Generic Accounting Remarks    REVALIDATION FEE    CWT    Credit Card (CX)    BSP (without File Fare)    02    2
+    ...    HK    identifier=REVALIDATION FEE
+
+[AB][SI][HK][OS] Verify That Unused Tickets Avaialable And The RMT And Accounting Remarks Are Written For BSP, Revalidation and Doc Bank Fee EO Are Written When Using Credit Card And Invoice
+    [Tags]    hk    us1389    us1541
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Retrieve PNR    ${current_pnr}
+    Click Tab In Top Left    GDS Screen
+    Verify RMT Line Is Written    PR    079    1237896550    10.09    BEAR/HKOTHERS
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Other Svcs
+    #Revisiting Previously Added EOs
+    Click Panel    Other Svcs
+    #Verify BSP Ticket Values are Correct
+    Click Amend EO    ${eo_number_BSP AIR TICKET}
+    Verify Form Of Payment Details Are Correct    BTA CTCL VI/VI************7710/D0823    Credit Card (CX)
+    Tick Select All Segments
+    Get Selected Air Segment From Air Segment Grid    BSP AIR TICKET
+    Get Ticket Info Fee Values    HK    BSP AIR TICKET
+    Get Other Services Form Of Payment Details    identifier=BSP AIR TICKET
+    Verify Exchange Order Number    ${eo_number_BSP AIR TICKET}
+    Click MI Tab
+    Get MI Fields Values    BSP AIR TICKET
+    Click Update Button In EO Panel    Ticket Info
+    #Verify Revalidation Fee Values are Correct
+    Click Amend EO    ${eo_number_REVALIDATION FEE}
+    Verify Form Of Payment Details Are Correct    BTA CTCL VI/VI************7710/D0823    Credit Card (CX)
+    Verify Vendor Contact Value Is Correct    Vendor Test
+    Verify Exchange Order Number    ${eo_number_REVALIDATION FEE}
+    Click Tab In Other Services Panel    Ticket Type
+    Get Ticket No Value
+    Tick Select All Segments
+    Click Tab In Other Services Panel    Service Info
+    Get Other Services Form Of Payment Details    identifier=REVALIDATION FEE
+    Get Other Services Cost Details    identifier=REVALIDATION FEE
+    Get Other Services Additional Information Details    identifier=REVALIDATION FEE
+    Click Update Button In EO Panel    Service Info
+    #Verify Doc Bank Fee Values are Correct
+    Click Amend EO    ${eo_number_DOC BANK FEE}
+    Verify Form Of Payment Details Are Correct    Invoice
+    Get Other Services Cost Details    DOC BANK FEE
+    Get Other Services Additional Information Details    DOC BANK FEE
+    Get Other Services Form Of Payment Details    DOC BANK FEE
+    Verify Unused Ticket Info Details Are Correct    079    1237896550    999
+    Verify Exchange Order Number    ${eo_number_DOC BANK FEE}
+    Click Update Button In EO Panel    Service Info
+    Click Finish PNR    Amend to Verify That Unused Tickets Avaialable And The RMT And Accounting Remarks Are Written For BSP, Revalidation and Doc Bank Fee EO Are Written When Using Credit Card And Invoice
+    Execute Simultaneous Change Handling    Amend to Verify That Unused Tickets Avaialable And The RMT And Accounting Remarks Are Written For BSP, Revalidation and Doc Bank Fee EO Are Written When Using Credit Card And Invoice
+    Click Panel    Other Svcs
+    Get Exchange Order Number Using Product    BSP AIR TICKET
+    Get Exchange Order Number Using Product    REVALIDATION FEE
+    Get Exchange Order Number Using Product    DOC BANK FEE
+    Retrieve PNR Details from Amadeus
+    Verify BSP Ticket Accounting Remarks Are Written    BSP AIR TICKET    BSP    HK    identifier=BSP AIR TICKET
+    Verify Other Services Doc Bank Fee Service Accounting Remarks    DOC BANK FEE    CWT    Invoice    HK    identifier=DOC BANK FEE
+    Verify Other Services General Notepad Remarks    REVALIDATION FEE
+    Verify Other Services Transaction Fee Generic Accounting Remarks    REVALIDATION FEE    CWT    Credit Card (CX)    BSP (without File Fare)    02    2
+    ...    HK    identifier=REVALIDATION FEE
+    Verify RMT Line Is Written    PR    079    1237896550    10.09    BEAR/HKOTHERS
+    [Teardown]
+
+[HK][SI] Verify That Unused Tickets Avaialable And The RMT And Accounting Remarks Are Written For BSP, Revalidation and Doc Bank Fee EO Are Written When Using Credit Card And Invoice
+    [Tags]    hk    us1389
+    Retrieve PNR    ${current_pnr}
+    Click Send Itinerary
+    Click Panel    Delivery
+    Tick Receive Invoice Checkbox
+    Click Finish PNR
+    Click Tab In Top Left    GDS Screen
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify RMT Line Is Written    PR    079    1237896550    10.09    BEAR/HKOTHERS
+    Click Tab In Top Left    Unused Documents
+    Set Ticket Number To New Status    1237896550    Expired
+    [Teardown]    Run Keyword And Ignore Error    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[HK][NB] Verify That Unused Tickets Available And The RMT Remarks Are Written When Air segment booking without TST but with Document Bank Fee
+    [Tags]    hk    us1389    us1541
+    Open Power Express And Retrieve Profile    ${version}    Test    uexr493    en-GB    erepolidoru    APAC QA
+    ...    Amadeus
+    Select GDS    Amadeus
+    Set Client And Traveler    APAC SYN CORP ¦ APAC HK OS AUTOMATION    BEAR    HKOTHERS
+    Click Tab In Top Left    Unused Documents
+    Add Unused Ticket (Dummy)    1-Paper    1237896569    160    XYZ163    10.09 USD
+    Use Ticket Number From Unused Documents Tab (Screen)    1237896569
+    Click Tab In Top Left    GDS Screen
+    Click New Booking
+    Retrieve PNR Details From Amadeus    command=RT    refresh_needed=False
+    Verify RMT Line Is Written    CX    160    1237896569    10.09    BEAR/HKOTHERS
+    Click Panel    Client Info
+    Select Form Of Payment    Invoice
+    Click Panel    Cust Refs
+    Populate Cust Refs Panel With Default Values
+    Update PNR for EN or GB
+    Book Flight X Months From Now    SINMNL/ASQ    SS1Y1    \    6    3
+    Click Read Booking
+    Click Panel    Other Svcs
+    #Add BSP Air Ticket EO
+    Populate Exchange Order Product    BSP AIR TICKET    BSP    Invoice    Remarks    Vendor Info    MCO/MPD
+    Get Other Services Form Of Payment Details    BSP AIR TICKET
+    Get Selected Air Segment From Air Segment Grid    BSP AIR TICKET
+    Get Ticket Info Fee Values    HK    BSP AIR TICKET
+    Click MI Tab
+    Get MI Fields Values    BSP AIR TICKET
+    Click Add Button In EO Panel    Ticket Info
+    #Add Doc Bank Fee EO
+    Select Product And Vendor    DOC BANK FEE    CWT
+    Populate Service Info Cost Details    Vendor Contact    630    730
+    Populate Unused Ticket Number    160    1237896540
+    Set BTA Description    ${EMPTY}
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Invoice
+    Get Other Services Form Of Payment Details    identifier=DOC BANK FEE
+    Get Other Services Cost Details    identifier=DOC BANK FEE
+    Get Other Services Additional Information Details    identifier=DOC BANK FEE
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Add Button In EO Panel    Service Info
+    #Add Revalidation Fee EO
+    Select Product And Vendor    REVALIDATION FEE    CWT
+    Populate Service Info Cost Details    CWT Vendor    350    680
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Invoice
+    Get Other Services Cost Details    identifier=REVALIDATION FEE
+    Get Other Services Form Of Payment Details    identifier=REVALIDATION FEE
+    Get Other Services Additional Information Details    identifier=REVALIDATION FEE
+    Click Ticket Type Tab
+    Populate Ticket Type With Default Values    BSP (without File Fare)
+    Select Air Segment    2
+    Get Ticket No Value
+    Click Add Button In EO Panel    Service Info
+    Populate All Panels (Except Given Panels If Any)    Other Svcs
+    Click Finish PNR
+    Click Panel    Other Svcs
+    Get Exchange Order Number Using Product    BSP AIR TICKET
+    Get Exchange Order Number Using Product    DOC BANK FEE
+    Get Exchange Order Number Using Product    REVALIDATION FEE
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    #Unused Document Remarks Verification
+    Verify RMT Line Is Written    CX    160    1237896569    10.09    BEAR/HKOTHERS
+    #EO Remarks Verification
+    Verify BSP Ticket Accounting Remarks Are Written    BSP AIR TICKET    BSP    HK    identifier=BSP AIR TICKET
+    Verify Other Services Doc Bank Fee Service Accounting Remarks    DOC BANK FEE    CWT    Invoice    HK    identifier=DOC BANK FEE
+    Verify Other Services General Notepad Remarks    DOC BANK FEE
+    Verify Other Services General Notepad Remarks    REVALIDATION FEE
+    Verify Other Services Transaction Fee Generic Accounting Remarks    REVALIDATION FEE    CWT    Invoice    BSP (without File Fare)    02    2
+    ...    HK    identifier=REVALIDATION FEE
+    [Teardown]
+
+[HK][SI] Verify That Unused Tickets Available And The RMT Remarks Are Written When Air segment booking without TST but with Document Bank Fee
+    [Tags]    hk    us1389
+    Retrieve PNR    ${current_pnr}
+    Click Send Itinerary
+    Click Panel    Delivery
+    Tick Receive Invoice Checkbox
+    Click Finish PNR
+    Click Tab In Top Left    GDS Screen
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify RMT Line Is Written    CX    160    1237896569    10.09    BEAR/HKOTHERS
+    Click Tab In Top Left    Unused Documents
+    Set Ticket Number To New Status    1237896569    Expired
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[HK][NB] Verify That Unused Tickets Avaialable And The RMT Remarks Are Written When Booked Air segment and create TST with Document Bank Fee
+    [Tags]    hk    us1389
+    Open Power Express And Retrieve Profile    ${version}    Test    uexr493    en-GB    erepolidoru    APAC QA
+    ...    Amadeus
+    Select GDS    Amadeus
+    Set Client And Traveler    APAC SYN CORP ¦ APAC HK OS AUTOMATION    BEAR    HKOTHERS
+    Click New Booking
+    Click Panel    Client Info
+    Select Form Of Payment    Cash
+    Update PNR for EN or GB
+    Book Flight X Months From Now    SINHKG/ACX    SS1Y1    FXP/S2    3
+    Book Flight X Months From Now    HKGMNL/APR    SS1Y1    FXP/S3    3    2
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Other Svcs
+    Click Finish PNR
+    Verify Tickets Are Successfully Issued    S2
+    Verify Tickets Are Successfully Issued    S3
+    Get Ticket Number From PNR    refresh_needed=False
+
+[HK][AB][OS] Verify That Unused Tickets Avaialable And The RMT Remarks Are Written When Booked Air segment and create TST with Document Bank Fee
+    [Tags]    hk    us1389    us1541
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Tab In Top Left    Unused Documents
+    Add Unused Ticket (Dummy)    1-Paper    0007896640    079    XYZ163    10.09 USD
+    Use Ticket Number From Unused Documents Tab (Screen)    0007896640
+    Click Tab In Top Left    GDS Screen
+    Exchange Ticketed PNR    S3    MNLBKK/APR    SS1Y1    3    2    refresh_needed=False
+    Click Read Booking    True
+    Verify Exchange Pop-up Window Is Displayed    is an exchange ticket transaction.The additional collection amount will pre-populate into thecharged fare box.    verification_mode=contains    multi_line_search_flag=true
+    Retrieve PNR Details From Amadeus    command=RT    refresh_needed=False
+    Verify RMT Line Is Written    PR    079    0007896640    10.09    BEAR/HKOTHERS
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 2
+    Verify Realised Savings Code Default Value    EX - EXCHANGE
+    Populate All Panels (Except Given Panels If Any)    Other Services
+    #BSP Ticket
+    Populate Exchange Order Product    BSP AIR TICKET    BSP    Cash    Remarks    Vendor Info    MCO/MPD
+    Get Other Services Form Of Payment Details    BSP AIR TICKET
+    Get Selected Air Segment From Air Segment Grid    BSP AIR TICKET
+    Get Ticket Info Fee Values    HK    BSP AIR TICKET
+    Click MI Tab
+    Get MI Fields Values    BSP AIR TICKET
+    Click Add Button In EO Panel    Ticket Info
+    #Revalidation Fee
+    Populate Exchange Order Product    REVALIDATION FEE    CWT    Cash    Remarks    Vendor Info
+    Get Other Services Cost Details    identifier=REVALIDATION FEE
+    Get Other Services Form Of Payment Details    identifier=REVALIDATION FEE
+    Get Other Services Additional Information Details    identifier=REVALIDATION FEE
+    Click Tab In Other Services Panel    Ticket Type
+    Populate Ticket Type With Default Values    BSP (without File Fare)
+    Select Air Segment    2
+    Get Ticket Type Details
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    REVALIDATION FEE
+    #Doc Bank Fee
+    Select Product And Vendor    DOC BANK FEE    CWT
+    Populate Service Info Cost Details    Vendor Test    344    566
+    Verify Form Of Payment Details Are Correct    Cash
+    Verify FOP Type Is Disabled
+    Set Description    DOC BANK FEE
+    Set BTA Description    DOC BANK FEE
+    Set Date    10/30/2018
+    Populate Unused Ticket Number    079    0007896640
+    Get Other Services Cost Details    DOC BANK FEE
+    Get Other Services Additional Information Details    DOC BANK FEE
+    Get Other Services Form Of Payment Details    DOC BANK FEE
+    Click Add Button In EO Panel    Service Info
+    Click Panel    Recap
+    Click Finish PNR    Amend To Verify That Unused Tickets Avaialable And The RMT Remarks Are Written When Booked Air segment and create TST with Document Bank Fee
+    Execute Simultaneous Change Handling    Amend To Verify That Unused Tickets Avaialable And The RMT Remarks Are Written When Booked Air segment and create TST with Document Bank Fee
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify RMT Line Is Written    PR    079    0007896640    10.09    BEAR/HKOTHERS
+    Click Panel    Other Svcs
+    Get Exchange Order Number Using Product    BSP AIR TICKET
+    Get Exchange Order Number Using Product    REVALIDATION FEE
+    Get Exchange Order Number Using Product    DOC BANK FEE
+    Generate Exchange Order Creation Date    P1
+    Verify BSP Ticket Accounting Remarks Are Written    BSP AIR TICKET    BSP    HK    identifier=BSP AIR TICKET
+    Verify Other Services General Notepad Remarks    REVALIDATION FEE
+    Verify Other Services Transaction Fee Generic Accounting Remarks    REVALIDATION FEE    CWT    Cash    BSP (without File Fare)    02    2
+    ...    HK    identifier=REVALIDATION FEE
+    Verify Other Services Doc Bank Fee Service Accounting Remarks    DOC BANK FEE    CWT    Cash    HK    identifier=DOC BANK FEE
+    Verify Other Services General Notepad Remarks    DOC BANK FEE
+
+[HK][AB][AOS] Verify That Unused Tickets Avaialable And The RMT Remarks Are Written When Booked Air segment and create TST with Document Bank Fee
+    [Tags]    hk    us1389    us1541
+    Retrieve PNR And Populate Amend Workflow    HK
+    Click Panel    Other Svcs
+    Click Amend EO    ${eo_number_DOC BANK FEE}
+    Get Other Services Cost Details
+    #Verification Unused Ticket
+    Verify Unused Ticket Info Details Are Correct    079    0007896640
+    Populate Unused Ticket Number    079    0007896640    999
+    Set BTA Description    ${EMPTY}
+    Get Other Services Cost Details    DOC BANK FEE
+    Get Other Services Additional Information Details    DOC BANK FEE
+    Get Other Services Form Of Payment Details    DOC BANK FEE
+    Click Update Button In EO Panel    Service Info
+    Click Finish PNR    Amend To Verify That Unused Tickets Avaialable And The RMT Remarks Are Written When Booked Air segment and create TST with Document Bank Fee During Amend Workflow
+    Execute Simultaneous Change Handling    Amend To Verify That Unused Tickets Avaialable And The RMT Remarks Are Written When Booked Air segment and create TST with Document Bank Fee During Amend Workflow
+    Click Panel    Other Svcs
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Other Services Doc Bank Fee Service Accounting Remarks    DOC BANK FEE    CWT    Cash    HK    identifier=DOC BANK FEE
+    Click Tab In Top Left    Unused Documents
+    Set Ticket Number To New Status    0007896640    Expired
+    [Teardown]
+
+[HK][AB][CEO] Verify That Accounting Lines For Doc Bank Fee Is Not Written When Cancelled
+    [Tags]    hk    us1570    team_chiu
+    Retrieve PNR And Populate Amend Workflow    fop_dropdown_value=Invoice
+    Click Panel    Other Svcs
+    Cancel EO    ${eo_number_DOC BANK FEE}    Service Info    HK
+    Click Finish PNR    [HK]Amend Verify That Accounting Lines For Doc Bank Fee Is Not Written When Cancelled
+    Execute Simultaneous Change Handling    [HK]Amend Verify That Accounting Lines For Doc Bank Fee Is Not Written When Cancelled
+    Verify PNR Is Successfully Created    False    1 Exchange Order(s) Successfully Cancelled    #Need to change Message
+    Retrieve PNR Details From Amadeus
+    Click Panel    Other Svcs
+    Get Exchange Order Number Using Product    DOC BANK FEE
+    Verify Exchange Order Record Details Are Correct    HK    DOC BANK FEE    CWT    MS    ${EMPTY}    Cancelled
+    ...    is_new_eo=False    is_completed_date=False
+    #Not Written
+    Verify Other Services Doc Bank Fee Service Accounting Remarks Are Not Written    DOC BANK FEE    HK    Cash
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[SG][NB]Verify That Unused Tickets Available And The RMT Remarks Are Written When Booked Air segment and create TST with Document Bank Fee
+    [Tags]    sg    us1389    us1598    us1816    team_chiu
+    Open Power Express And Retrieve Profile    ${version}    Test    uexr493    en-GB    erepolidoru    APAC QA
+    ...    Amadeus
+    Select GDS    Amadeus
+    Set Client And Traveler    APAC SYN CORP ¦ APAC SG OS AUTOMATION    BEAR    SGOTHERS
+    Click New Booking
+    Click Tab In Top Left    Unused Documents
+    Add Unused Ticket (Dummy)    1-Paper    0007654321    079    XYZ163    10.09 USD
+    Use Ticket Number From Unused Documents Tab (Screen)    0007654321
+    Click Tab In Top Left    GDS Screen
+    Click Panel    Client Info
+    Select Form Of Payment    Invoice
+    Update PNR for EN or GB
+    Book Flight X Months From Now    SINHKG/ACX    SS1Y1    FXP/S2    3
+    Book Flight X Months From Now    HKGMNL/APR    SS1Y1    FXP/S3    3    2
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Other Svcs
+    #BSP Ticket
+    Populate Exchange Order Product    BSP Ticket And MPD    BANK SETTLEMENT PLAN    Invoice    Remarks    Vendor Info    MCO/MPD
+    Get Other Services Form Of Payment Details    BSP Ticket And MPD
+    Get Selected Air Segment From Air Segment Grid    BSP Ticket And MPD
+    Get Ticket Info Fee Values    SG    BSP Ticket And MPD
+    Click MI Tab
+    Set MI Low Fare    245.60
+    Get MI Fields Values    BSP Ticket And MPD
+    Click Add Button In EO Panel    Ticket Info
+    #Revalidation Fee
+    Populate Exchange Order Product    Reissue-Revalidation Fee    CARLSON WAGONLIT TRAVEL    Invoice    Remarks    Vendor Info
+    Click Tab In Other Services Panel    Ticket Type
+    Get Ticket No Value
+    Click Tab In Other Services Panel    Service Info
+    Get Other Services Cost Details    identifier=Reissue-Revalidation Fee
+    Get Other Services Form Of Payment Details    identifier=Reissue-Revalidation Fee
+    Get Other Services Additional Information Details    identifier=Reissue-Revalidation Fee
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    Reissue-Revalidation Fee
+    #Doc Bank Fee
+    Select Product And Vendor    DOC BANK FEE    Carlson Wagonlit GST
+    Populate Service Info Cost Details    AIR FRANCE    0.00    566
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Invoice
+    Set Description    Description 1
+    Set BTA Description    BTA description 2
+    Set Date    10/30/2019
+    Verify No Error Icon Is Displayed For Additional Information Date
+    Populate Unused Ticket Number    111    0007654321    999
+    Tick CWT Absorb Checkbox For GST
+    Compute Other Services Fees    7    0    true    false
+    Get Other Services Form Of Payment Details    DOC BANK FEE
+    Get Other Services Cost Details    DOC BANK FEE
+    Get Other Services Additional Information Details    DOC BANK FEE
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    CANCELLATION OF RESERVATION NOT ALLOWED    VACCINATION NEEDED
+    Click Add Button In EO Panel    Service Info
+    #Doc Bank Fee Ended of New Booking
+    Click Finish PNR
+    Click Panel    Other Svcs
+    Get Exchange Order Number Using Product    BSP Ticket And MPD
+    Get Exchange Order Number Using Product    Reissue-Revalidation Fee
+    Get Exchange Order Number Using Product    DOC BANK FEE
+    Retrieve PNR Details From Amadeus
+    Verify BSP Ticket Accounting Remarks Are Written    BSP Ticket And MPD    BANK SETTLEMENT PLAN    SG    identifier=BSP Ticket And MPD
+    Verify Other Services Doc Bank Fee Service Accounting Remarks    DOC BANK FEE    Carlson Wagonlit GST    Invoice    SG    identifier=DOC BANK FEE
+    Verify Other Services General Notepad Remarks    DOC BANK FEE
+    Verify Other Services General Notepad Remarks    Reissue-Revalidation Fee
+    Verify Other Services Transaction Fee Generic Accounting Remarks    Reissue-Revalidation Fee    CARLSON WAGONLIT TRAVEL    Invoice    BSP (without File Fare)    02    2
+    ...    SG    identifier=Reissue-Revalidation Fee
+    Verify Tickets Are Successfully Issued    S2
+    Verify Tickets Are Successfully Issued    S3
+    Get Ticket Number From PNR    refresh_needed=False
+
+[SG][AB][AOS] Verify That Unused Tickets Available And The RMT Remarks Are Written When Booked Air segment and create TST with Document Bank Fee
+    [Tags]    sg    us1389    us1598    us1816    team_chiu
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Tab In Top Left    Unused Documents
+    Add Unused Ticket (Dummy)    1-Paper    0088776222    079    XYZ163    10.09 USD
+    Use Ticket Number From Unused Documents Tab (Screen)    0088776222
+    Click Tab In Top Left    GDS Screen
+    Exchange Ticketed PNR    S3    MNLBKK/APR    SS1Y1    3    2    refresh_needed=False
+    Click Read Booking    True
+    Verify Exchange Pop-up Window Is Displayed    is an exchange ticket transaction.The additional collection amount will pre-populate into thecharged fare box.    verification_mode=contains    multi_line_search_flag=true
+    Retrieve PNR Details From Amadeus    command=RT    refresh_needed=False
+    Verify RMT Line Is Written    PR    079    0088776222    10.09    BEAR/SGOTHERS
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 2
+    Verify Realised Savings Code Default Value    EX - EXCHANGE
+    Populate All Panels (Except Given Panels If Any)    Other Svcs
+    Click Panel    Other Svcs
+    Populate Segments And Fop In Other Services Error EO
+    #Add Doc Bank EO here
+    Click Panel    Other Svcs
+    Click Amend EO    ${eo_number_DOC BANK FEE}
+    Get Other Services Cost Details
+    Verify Vendor Contact Value Is Correct    AIR FRANCE
+    Verify Nett Cost Value Is Correct    0.00
+    Verify Selling Price Value Is Correct    566.00
+    Verify Commission Fee Value Is Correct    528.97
+    Verify GST Value Is Correct    0.00
+    Verify Merchant Fee Value Is Correct    0.00
+    Verify Total Selling Price Value Is Correct    528.97
+    Verify Description Value From Additional Information Is Correct    Description 1
+    Verify BTA Description Value Is Correct    BTA description 2
+    Verify Form Of Payment Details Are Correct    Invoice
+    #Verification Unused Ticket
+    Verify Unused Ticket Info Details Are Correct    111    0007654321    999
+    #2nd Population
+    Populate Service Info Cost Details    Vendor Contact    0.00    832
+    Populate Unused Ticket Number    123    0088776222
+    Set BTA Description    ${EMPTY}
+    #2nd Population
+    Get Other Services Form Of Payment Details    DOC BANK FEE
+    Get Other Services Cost Details    DOC BANK FEE
+    Get Other Services Additional Information Details    DOC BANK FEE
+    Click Update Button In EO Panel    Service Info
+    #Doc Bank EO Verification Ended here
+    Click Finish PNR    Amend to Verify That Unused Tickets Avaialable And The RMT Remarks Are Written When Booked Air segment and create TST with Document Bank Fee for SG
+    Execute Simultaneous Change Handling    Amend to Verify That Unused Tickets Avaialable And The RMT Remarks Are Written When Booked Air segment and create TST with Document Bank Fee for SG
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify RMT Line Is Written    PR    079    0088776222    10.09    BEAR/SGOTHERS
+    Click Tab In Top Left    Unused Documents
+    Set Ticket Number To New Status    0088776222    Expired
+    Click Tab In Top Left    GDS Screen
+    Click Panel    Other Svcs
+    Get Exchange Order Number Using Product    DOC BANK FEE
+    Verify Other Services Doc Bank Fee Service Accounting Remarks    DOC BANK FEE    Carlson Wagonlit GST    Invoice    SG    identifier=DOC BANK FEE
+    Verify Other Services General Notepad Remarks    DOC BANK FEE
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[SG][NB][OS] Verify That Unused Tickets Available And The RMT Remarks Are Written When Air segment booking without TST but with Reissue Fee And Doc Bank Fee
+    [Tags]    sg    us1389    us1598    us1816    team_chiu
+    Open Power Express And Retrieve Profile    ${version}    Test    uexr493    en-GB    erepolidoru    APAC QA
+    ...    Amadeus
+    Select GDS    Amadeus
+    Set Client And Traveler    APAC SYN CORP ¦ APAC SG OS AUTOMATION    BEAR    SGOTHERS
+    Click Tab In Top Left    Unused Documents
+    Add Unused Ticket (Dummy)    1-Paper    1389159800    079    XYZ163    10.09 USD
+    Use Ticket Number From Unused Documents Tab (Screen)    1389159800
+    Click Tab In Top Left    GDS Screen
+    Click New Booking
+    Retrieve PNR Details From Amadeus    command=RT    refresh_needed=False
+    Verify RMT Line Is Written    PR    079    1389159800    10.09    BEAR/SGOTHERS
+    Click Panel    Client Info
+    Select Form Of Payment    Cash
+    Update PNR for EN or GB
+    Book Flight X Months From Now    SINMNL/ASQ    SS1Y1    \    6    3
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Other Svcs
+    Click Panel    Other Svcs
+    Select Product And Vendor    Reissue-Revalidation Fee    CARLSON WAGONLIT TRAVEL
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CX)    TEST CARD/AX***********0009/D0822/CVV****
+    Populate Service Info Cost Details    CWT Vendor    350    680
+    Click Ticket Type Tab
+    Populate Ticket Type With Default Values    BSP (without File Fare)
+    Get Ticket Type Details
+    Click Tab In Other Services Panel    Service Info
+    Get Other Services Cost Details    identifier=Reissue-Revalidation Fee
+    Get Other Services Form Of Payment Details    identifier=Reissue-Revalidation Fee
+    Get Other Services Additional Information Details    identifier=Reissue-Revalidation Fee
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    Reissue-Revalidation Fee
+    Select Product And Vendor    DOC BANK FEE    Carlson Wagonlit GST
+    Populate Service Info Cost Details    AIR FRANCE    0    788
+    Set Description    Description 1
+    Set BTA Description    BTA description 2
+    Set Date    10/30/2019
+    Verify No Error Icon Is Displayed For Additional Information Date
+    Populate Unused Ticket Number    079    1389159800
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    TEST CARD/AX***********0009/D0822/CVV****
+    Verify Form Of Payment Details Are Correct    TEST CARD/AX***********0009/D0822/CVV****    Credit Card (CX)
+    Verify FOP Type Is Disabled
+    Verify Nett Cost Field Is Disabled
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Get Other Services Additional Information Details
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    CANCELLATION OF RESERVATION NOT ALLOWED    VACCINATION NEEDED
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    DOC BANK FEE
+    Click Finish PNR
+    Click Panel    Other Svcs
+    Verify EO Status For Third Party Vendor    Completed    1
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify RMT Line Is Written    PR    079    1389159800    10.09    BEAR/SGOTHERS
+    Get Exchange Order Number Using Product    DOC BANK FEE
+    Get Exchange Order Number Using Product    Reissue-Revalidation Fee
+    Generate Exchange Order Creation Date    P1
+    Verify Other Services Doc Bank Fee Service Accounting Remarks    DOC BANK FEE    Carlson Wagonlit GST    Credit Card (CX)    SG
+    Verify Other Services General Notepad Remarks    DOC BANK FEE
+    Verify Other Services General Notepad Remarks    Reissue-Revalidation Fee
+    Verify Other Services Transaction Fee Generic Accounting Remarks    Reissue-Revalidation Fee    CARLSON WAGONLIT TRAVEL    Credit Card (CX)    BSP (without File Fare)    2    2
+    ...    SG    identifier=Reissue-Revalidation Fee
+
+[SG][AB][AOS] Verify That Unused Tickets Available And The RMT Remarks Are Written When Air segment booking without TST but with Reissue Fee And Doc Bank Fee
+    [Tags]    sg    us1389    us1598    us1816    team_chiu
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Other Svcs
+    Click Amend EO    ${eo_number_DOC BANK FEE}
+    Populate Unused Ticket Number    079    1389159800    999
+    Set BTA Description    ${EMPTY}
+    Get Other Services Form Of Payment Details
+    Get Other Services Cost Details
+    Get Other Services Additional Information Details
+    Click Update Button In EO Panel    Service Info
+    Click Finish PNR    Amend To Verify That Unused Tickets Available And The RMT Remarks Are Written When Air segment booking without TST but with Reissue Fee And Doc Bank Fee
+    Execute Simultaneous Change Handling    Amend To Verify That Unused Tickets Available And The RMT Remarks Are Written When Air segment booking without TST but with Reissue Fee And Doc Bank Fee
+    Click Panel    Other Svcs
+    Get Exchange Order Number Using Product    DOC BANK FEE
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Other Services Doc Bank Fee Service Accounting Remarks    DOC BANK FEE    Carlson Wagonlit GST    Credit Card (CX)    SG
+    Verify Other Services General Notepad Remarks    DOC BANK FEE
+
+[SG][AB][CEO] Verify That Accounting Lines For Doc Bank Fee Is Not Written When Cancelled
+    [Tags]    sg    us1570    team_chiu
+    Retrieve PNR And Populate Amend Workflow    fop_dropdown_value=Invoice
+    Click Panel    Other Svcs
+    Cancel EO    ${eo_number_DOC BANK FEE}    Service Info    SG
+    Click Finish PNR    Amend Verify That Accounting Lines For Doc Bank Fee Is Not Written When Cancelled
+    Execute Simultaneous Change Handling    Amend Verify That Accounting Lines For Doc Bank Fee Is Not Written When Cancelled
+    Verify PNR Is Successfully Created    False    1 Exchange Order(s) Successfully Cancelled    #Need to change Message
+    Retrieve PNR Details From Amadeus
+    Click Panel    Other Svcs
+    Get Exchange Order Number Using Product    DOC BANK FEE
+    Verify Exchange Order Record Details Are Correct    SG    DOC BANK FEE    Carlson Wagonlit GST    MS    ${EMPTY}    Cancelled
+    ...    is_new_eo=False
+    #Not Written
+    Verify Other Services Doc Bank Fee Service Accounting Remarks Are Not Written    DOC BANK FEE    SG    Credit Card (CX)
+
+[SG][SI] Verify That Unused Tickets Available And The RMT Remarks Are Written When Air segment booking without TST but with Reissue Fee And Doc Bank Fee
+    [Tags]    sg    us1389
+    Retrieve PNR    ${current_pnr}
+    Click Send Itinerary
+    Click Panel    Delivery
+    Tick Receive Invoice Checkbox
+    Click Finish PNR    Amend SI Verify That Unused Tickets Available And The RMT Remarks Are Written When Air segment booking without TST but with Reissue Fee And Doc Bank Fee
+    Execute Simultaneous Change Handling    Amend SI Verify That Unused Tickets Available And The RMT Remarks Are Written When Air segment booking without TST but with Reissue Fee And Doc Bank Fee
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify RMT Line Is Written    PR    079    1389159800    10.09    BEAR/SGOTHERS
+    Click Tab In Top Left    Unused Documents
+    Set Ticket Number To New Status    1389159800    Expired
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Amend To Verify That Unused Tickets Avaialable And The RMT Remarks Are Written When Booked Air segment and create TST with Document Bank Fee
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Tab In Top Left    Unused Documents
+    Add Unused Ticket (Dummy)    1-Paper    0007896640    079    XYZ163    10.09 USD
+    Use Ticket Number From Unused Documents Tab (Screen)    0007896640
+    Click Tab In Top Left    GDS Screen
+    Exchange Ticketed PNR    S3    MNLBKK/APR    SS1Y1    3    2    refresh_needed=False
+    Click Read Booking    True
+    Verify Exchange Pop-up Window Is Displayed    is an exchange ticket transaction.The additional collection amount will pre-populate into the charged fare box.If an EMD is needed, use the EMD sub-tab to add EMD details into the PNR.    verification_mode=contains    multi_line_search_flag=true
+    Retrieve PNR Details From Amadeus    command=RT    refresh_needed=False
+    Verify RMT Line Is Written    PR    079    0007896640    10.09    BEAR/HKOTHERS
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 2
+    Verify Realised Savings Code Default Value    EX - EXCHANGE
+    Populate All Panels (Except Given Panels If Any)    Other Services
+    #BSP Ticket
+    Populate Exchange Order Product    BSP AIR TICKET    BSP    Cash    Remarks    Vendor Info    MCO/MPD
+    Get Other Services Form Of Payment Details    BSP AIR TICKET
+    Get Selected Air Segment From Air Segment Grid    BSP AIR TICKET
+    Get Ticket Info Fee Values    HK    BSP AIR TICKET
+    Click MI Tab
+    Get MI Fields Values    BSP AIR TICKET
+    Click Add Button In EO Panel    Ticket Info
+    #Revalidation Fee
+    Populate Exchange Order Product    REVALIDATION FEE    CWT    Cash    Remarks    Vendor Info
+    Get Other Services Cost Details    identifier=REVALIDATION FEE
+    Get Other Services Form Of Payment Details    identifier=REVALIDATION FEE
+    Get Other Services Additional Information Details    identifier=REVALIDATION FEE
+    Click Tab In Other Services Panel    Ticket Type
+    Populate Ticket Type With Default Values    BSP (without File Fare)
+    Select Air Segment    2
+    Get Ticket Type Details
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    REVALIDATION FEE
+    #Doc Bank Fee
+    Select Product And Vendor    DOC BANK FEE    CWT
+    Populate Service Info Cost Details    Vendor Test    344    566
+    Verify Form Of Payment Details Are Correct    Cash
+    Verify FOP Type Is Disabled
+    Set Description    DOC BANK FEE
+    Set BTA Description    DOC BANK FEE
+    Set Date    10/30/2018
+    Populate Unused Ticket Number    079    0007896640
+    Get Other Services Cost Details    DOC BANK FEE
+    Get Other Services Additional Information Details    DOC BANK FEE
+    Get Other Services Form Of Payment Details    DOC BANK FEE
+    Click Add Button In EO Panel    Service Info
+    Click Panel    Recap
+    Click Finish PNR    Amend To Verify That Unused Tickets Avaialable And The RMT Remarks Are Written When Booked Air segment and create TST with Document Bank Fee
+
+Amend To Verify That Unused Tickets Avaialable And The RMT Remarks Are Written When Booked Air segment and create TST with Document Bank Fee During Amend Workflow
+    Retrieve PNR And Populate Amend Workflow    HK
+    Click Panel    Other Svcs
+    Click Amend EO    ${eo_number_DOC BANK FEE}
+    Get Other Services Cost Details
+    #Verification Unused Ticket
+    Verify Unused Ticket Info Details Are Correct    079    0007896640
+    Populate Unused Ticket Number    079    0007896640    999
+    Set BTA Description    ${EMPTY}
+    Get Other Services Cost Details    DOC BANK FEE
+    Get Other Services Additional Information Details    DOC BANK FEE
+    Get Other Services Form Of Payment Details    DOC BANK FEE
+    Click Update Button In EO Panel    Service Info
+    Click Finish PNR    Amend To Verify That Unused Tickets Avaialable And The RMT Remarks Are Written When Booked Air segment and create TST with Document Bank Fee During Amend Workflow
+
+Amend to Verify That Unused Tickets Avaialable And The RMT Remarks Are Written When Exchange TST applies Transaction Fee for HK
+    Retrieve PNR    ${current_pnr}
+    Click Tab In Top Left    GDS Screen
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify RMT Line Is Written    PR    079    1237896540    10.09    BEAR/HKOTHERS
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Other Svcs
+    #Revisiting Previously Added EOs
+    Get Exchange Order Number Using Product    TRANSACTION FEE
+    Click Amend EO    ${eo_number}
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    VI    4444333322221111    12    2026    #us1322
+    Click Ticket Type Tab
+    Select Air Segment    2
+    Click Update Button In EO Panel    Service Info
+    Select Product And Vendor    DOC BANK FEE    CWT
+    Populate Service Info Cost Details    CWT Vendor    350    680
+    Manually Add Form Of Payment (FOP) In Other Services    \    AX    378282246310005    12    2026
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    DOC BANK FEE
+    Click Finish PNR    Amend to Verify That Unused Tickets Avaialable And The RMT Remarks Are Written When Exchange TST applies Transaction Fee for HK
+
+Amend to Verify That Unused Tickets Avaialable And The RMT Remarks Are Written When Booked Air segment and create TST with Document Bank Fee for SG
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Tab In Top Left    Unused Documents
+    Add Unused Ticket (Dummy)    1-Paper    0088776222    079    XYZ163    10.09 USD
+    Use Ticket Number From Unused Documents Tab (Screen)    0088776222
+    Click Tab In Top Left    GDS Screen
+    Exchange Ticketed PNR    S3    MNLBKK/APR    SS1Y1    3    2    refresh_needed=False
+    Click Read Booking    True
+    Verify Exchange Pop-up Window Is Displayed    is an exchange ticket transaction.The additional collection amount will pre-populate into the charged fare box.If an EMD is needed, use the EMD sub-tab to add EMD details into the PNR.    verification_mode=contains    multi_line_search_flag=true
+    Retrieve PNR Details From Amadeus    command=RT    refresh_needed=False
+    Verify RMT Line Is Written    PR    079    0088776222    10.09    BEAR/SGOTHERS
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 2
+    Verify Realised Savings Code Default Value    EX - EXCHANGE
+    Populate All Panels (Except Given Panels If Any)    Other Svcs
+    Click Panel    Other Svcs
+    Populate Segments And Fop In Other Services Error EO
+    #Add Doc Bank EO here
+    Click Panel    Other Svcs
+    Click Amend EO    ${eo_number_DOC BANK FEE}
+    Get Other Services Cost Details
+    Verify Vendor Contact Value Is Correct    AIR FRANCE
+    Verify Nett Cost Value Is Correct    0.00
+    Verify Selling Price Value Is Correct    566.00
+    Verify Commission Fee Value Is Correct    528.97
+    Verify GST Value Is Correct    0.00
+    Verify Merchant Fee Value Is Correct    0.00
+    Verify Total Selling Price Value Is Correct    528.97
+    Verify Description Value From Additional Information Is Correct    Description 1
+    Verify BTA Description Value Is Correct    BTA description 2
+    Verify Form Of Payment Details Are Correct    Invoice
+    #Verification Unused Ticket
+    Verify Unused Ticket Info Details Are Correct    111    0007654321    999
+    #2nd Population
+    Populate Service Info Cost Details    Vendor Contact    0.00    832
+    Populate Unused Ticket Number    123    0088776222
+    Set BTA Description    ${EMPTY}
+    #2nd Population
+    Get Other Services Form Of Payment Details
+    Get Other Services Cost Details
+    Get Other Services Additional Information Details
+    Click Update Button In EO Panel    Service Info
+    #Doc Bank EO Verification Ended here
+    Click Finish PNR    Amend to Verify That Unused Tickets Avaialable And The RMT Remarks Are Written When Booked Air segment and create TST with Document Bank Fee for SG
+
+Amend to Verify That Unused Tickets Avaialable And The RMT And Accounting Remarks Are Written For BSP, Revalidation and Doc Bank Fee EO Are Written When Using Credit Card And Invoice
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Retrieve PNR    ${current_pnr}
+    Click Tab In Top Left    GDS Screen
+    Verify RMT Line Is Written    PR    079    1237896540    10.09    BEAR/HKOTHERS
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Other Svcs
+    #Revisiting Previously Added EOs
+    Click Panel    Other Svcs
+    #Verify BSP Ticket Values are Correct
+    Click Amend EO    ${eo_number_BSP AIR TICKET}
+    Verify Form Of Payment Details Are Correct    BTA CTCL VI/VI************7710/D0823    Credit Card (CX)
+    Tick Select All Segments
+    Get Selected Air Segment From Air Segment Grid    BSP AIR TICKET
+    Get Ticket Info Fee Values    HK    BSP AIR TICKET
+    Get Other Services Form Of Payment Details    identifier=BSP AIR TICKET
+    Verify Exchange Order Number    ${eo_number_BSP AIR TICKET}
+    Click MI Tab
+    Get MI Fields Values    BSP AIR TICKET
+    Click Update Button In EO Panel    Ticket Info
+    #Verify Revalidation Fee Values are Correct
+    Click Amend EO    ${eo_number_REVALIDATION FEE}
+    Verify Form Of Payment Details Are Correct    BTA CTCL VI/VI************7710/D0823    Credit Card (CX)
+    Verify Vendor Contact Value Is Correct    Vendor Test
+    Verify Exchange Order Number    ${eo_number_REVALIDATION FEE}
+    Click Tab In Other Services Panel    Ticket Type
+    Get Ticket No Value
+    Tick Select All Segments
+    Click Tab In Other Services Panel    Service Info
+    Get Other Services Form Of Payment Details    identifier=REVALIDATION FEE
+    Get Other Services Cost Details    identifier=REVALIDATION FEE
+    Get Other Services Additional Information Details    identifier=REVALIDATION FEE
+    Click Update Button In EO Panel    Service Info
+    #Verify Doc Bank Fee Values are Correct
+    Click Amend EO    ${eo_number_DOC BANK FEE}
+    Verify Form Of Payment Details Are Correct    Invoice
+    Get Other Services Cost Details    DOC BANK FEE
+    Get Other Services Additional Information Details    DOC BANK FEE
+    Get Other Services Form Of Payment Details    DOC BANK FEE
+    Verify Unused Ticket Info Details Are Correct    555    1234567899    999
+    Verify Exchange Order Number    ${eo_number_DOC BANK FEE}
+    Click Update Button In EO Panel    Service Info
+    Click Finish PNR    Amend to Verify That Unused Tickets Avaialable And The RMT And Accounting Remarks Are Written For BSP, Revalidation and Doc Bank Fee EO Are Written When Using Credit Card And Invoice
+
+Amend To Verify That Unused Tickets Available And The RMT Remarks Are Written When Air segment booking without TST but with Reissue Fee And Doc Bank Fee
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Other Svcs
+    Click Amend EO    ${eo_number_DOC BANK FEE}
+    Populate Unused Ticket Number    079    1389159800    999
+    Set BTA Description    ${EMPTY}
+    Get Other Services Form Of Payment Details
+    Get Other Services Cost Details
+    Get Other Services Additional Information Details
+    Click Update Button In EO Panel    Service Info
+    Click Finish PNR    Amend To Verify That Unused Tickets Available And The RMT Remarks Are Written When Air segment booking without TST but with Reissue Fee And Doc Bank Fee
+
+Amend SI Verify That Unused Tickets Available And The RMT Remarks Are Written When Air segment booking without TST but with Reissue Fee And Doc Bank Fee
+    Retrieve PNR    ${current_pnr}
+    Click Send Itinerary
+    Click Panel    Delivery
+    Tick Receive Invoice Checkbox
+    Click Finish PNR    Amend SI Verify That Unused Tickets Available And The RMT Remarks Are Written When Air segment booking without TST but with Reissue Fee And Doc Bank Fee
+
+Amend Verify That Accounting Lines For Doc Bank Fee Is Not Written When Cancelled
+    Retrieve PNR And Populate Amend Workflow    fop_dropdown_value=Invoice
+    Click Panel    Other Svcs
+    Cancel EO    ${eo_number_DOC BANK FEE}    Service Info    SG
+    Click Finish PNR    Amend Verify That Accounting Lines For Doc Bank Fee Is Not Written When Cancelled
+
+[HK]Amend Verify That Accounting Lines For Doc Bank Fee Is Not Written When Cancelled
+    Retrieve PNR And Populate Amend Workflow    fop_dropdown_value=Invoice
+    Click Panel    Other Svcs
+    Cancel EO    ${eo_number_DOC BANK FEE}    Service Info    HK
+    Click Finish PNR    [HK]Amend Verify That Accounting Lines For Doc Bank Fee Is Not Written When Cancelled

@@ -1,0 +1,75 @@
+*** Settings ***
+Resource          shared/core.txt
+Resource          shared/utilities.txt
+Resource          shared/variables.txt
+Resource          shared/verifications.txt
+
+*** Keywords ***
+Cosolidate Expected Data
+    [Arguments]    ${expected_data}
+    ${collection_expected_data}    Create List
+    ${splitted_expected_data}    Split String    ${expected_data}    |
+    : FOR    ${data}    IN    @{splitted_expected_data}
+    \    Append To List    ${collection_expected_data}    ${data.strip()}
+    Log List    ${collection_expected_data}
+    [Return]    ${collection_expected_data}
+
+Verify Accounting Remarks Are Not Retrieved
+    [Arguments]    ${expected_accounting_remarks}    ${is_regexp}=false
+    Verify Remarks Are Not Retrieved    ${expected_accounting_remarks}    ${is_regexp}
+
+Verify Accounting Remarks Are Retrieved Correctly
+    [Arguments]    ${expected_accounting_remarks}
+    Verify Remarks Are Retrieved Correctly    ${expected_accounting_remarks}
+
+Verify General Remarks Are Not Retrieved
+    [Arguments]    ${general_remarks}    ${is_regexp}=False
+    Verify Remarks Are Not Retrieved    ${general_remarks}    ${is_regexp}=False
+
+Verify General Remarks Are Retrieved Correctly
+    [Arguments]    ${general_remarks}
+    Verify Remarks Are Retrieved Correctly    ${general_remarks}
+
+Verify Itinerary Remarks Are Not Retrieved
+    [Arguments]    @{itinerary_remarks}
+    Verify Remarks Are Not Retrieved    @{itinerary_remarks}
+
+Verify Itinerary Remarks Are Retrieved Correctly
+    [Arguments]    ${expected_itin_remarks}
+    Verify Remarks Are Retrieved Correctly    ${expected_itin_remarks}
+
+Verify Remarks Are Not Retrieved
+    [Arguments]    ${expected_remark}    ${is_regexp}=False
+    ${expected_data}    Cosolidate Expected Data    ${expected_remark}
+    ${actual_remarks}    Create List
+    ${remarks_length}    Get JSON Array Length    /remarks
+    : FOR    ${index}    IN RANGE    0    ${remarks_length}
+    \    ${remark}    Get Json Value    ${test_response.content}    /remarks/${index}
+    \    ${remark}    Replace String    ${remark}    "    ${EMPTY}
+    \    Append To List    ${actual_remarks}    ${remark.strip()}
+    : FOR    ${data}    IN    @{expected_data}
+    \    Run Keyword If    '${is_regexp.lower()}'== 'false'    Verify List Does Not Contains Value    ${actual_remarks}    ${data}
+    \    Run Keyword And Continue On Failure    Run Keyword If    '${is_regexp.lower()}'== 'true'    Should Not Contain Match    ${actual_remarks}    regexp=${data}
+
+Verify Remarks Are Retrieved Correctly
+    [Arguments]    ${expected_remark}
+    ${expected_data}    Cosolidate Expected Data    ${expected_remark}
+    ${actual_remarks}    Create List
+    ${remarks_length}    Get JSON Array Length    /remarks
+    : FOR    ${index}    IN RANGE    0    ${remarks_length}
+    \    ${remark}    Get Json Value    ${test_response.content}    /remarks/${index}
+    \    ${remark}    Replace String    ${remark}    "    ${EMPTY}
+    \    Append To List    ${actual_remarks}    ${remark.strip()}
+    Verify List Contains Sub List    ${actual_remarks}    ${expected_data}
+
+Verify Reporting Remarks Are Not Retrieved
+    [Arguments]    @{cdr_remarks}
+    Verify Remarks Are Not Retrieved    @{cdr_remarks}
+
+Verify Reporting Remarks Are Retrieved Correctly
+    [Arguments]    ${expected_cdr_remarks}
+    Verify Remarks Are Retrieved Correctly    ${expected_cdr_remarks}
+
+Verify Response Message Is Correct
+    [Arguments]    ${expected_message}
+    Verify Json Value Is Correct    /message    ${expected_message}

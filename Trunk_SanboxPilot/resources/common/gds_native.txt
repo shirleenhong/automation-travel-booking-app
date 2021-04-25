@@ -1,0 +1,1340 @@
+*** Settings ***
+Resource          global_resources.txt
+
+*** Variables ***
+${sikuli_image_path}    ${CURDIR}/../sikuli
+
+*** Keywords ***
+Activate Amadeus Selling Platform
+    [Arguments]    ${clear_form}=True
+    Win Activate    SELLING PLATFORM    ${EMPTY}
+    Win Wait Active    SELLING PLATFORM    ${EMPTY}
+    Control Focus    SELLING PLATFORM    ${EMPTY}    [CLASS:RichEdit20A; INSTANCE:1]
+    Handle Amadeus Popup
+    Run Keyword If    ${clear_form} == True    Run Keywords    Send    {SHIFTDOWN}{PAUSE}{SHIFTUP}
+    ...    AND    Sleep    1
+
+Activate Amadeus TST Webpage Dialog
+    Win Activate    TST -- Webpage Dialog    ${EMPTY}
+    Comment    Control Click    TST -- Webpage Dialog    ${EMPTY}    [CLASS:Internet Explorer_Server; INSTANCE:1]
+    Sleep    1
+
+Activate GDS Native
+    Run Keyword If    '${GDS_switch}' == 'amadeus'    Activate Amadeus Selling Platform
+    ...    ELSE IF    '${GDS_switch}' == 'galileo' or '${GDS_switch}' == 'apollo'    Activate Travelport Window
+    ...    ELSE IF    '${GDS_switch}' == 'sabre'    Activate Sabre Red Workspace
+
+Activate Sabre Red Workspace
+    Win Activate    Sabre® Red™ Workspace - Sabre Travel Network    ${EMPTY}
+    Control Focus    Sabre® Red™ Workspace - Sabre Travel Network    ${EMPTY}    ${EMPTY}
+    Set Test Variable    ${gds_switch}    sabre
+
+Activate Travelport Window
+    Win Activate    ${title_galileo_desktop}    ${EMPTY}
+    Sleep    4
+    ${booking_updated_popup_exists} =    Win Exists    ${title_booking_updated}    ${EMPTY}
+    ${pnr_updated_popup_exists} =    Win Exists    ${title_pnr_was_updated}    ${EMPTY}
+    Run Keyword If    ${booking_updated_popup_exists} == 1    Run Keywords    Control Click    ${title_booking_updated}    ${EMPTY}    ${btn_OK_booking_updated}
+    ...    AND    Sleep    3
+    ...    ELSE IF    ${pnr_updated_popup_exists} == 1    Run Keywords    Control Click    ${title_pnr_was_updated}    ${EMPTY}
+    ...    ${btn_pnr_was_updated}
+    ...    AND    SLEEP    3
+    Run Keyword If    "${test_environment}" == "sit_stable"    Win Activate    Travelport Smartpoint App - Window 1    ${EMPTY}
+    ...    ELSE    Win Activate    ${title_smartpoint}    ${EMPTY}
+    Activate Travelport Terminal Window
+    Send    ^w
+    Sleep    2
+
+Add KDS Remarks
+    [Arguments]    ${kds_remarks}
+    Activate Travelport Window
+    : FOR    ${INDEX}    IN RANGE    10
+    \    Send    I{ENTER}
+    \    Sleep    2
+    \    Send    *${current_pnr}{ENTER}
+    \    Sleep    2
+    \    Send    ${kds_remarks}{ENTER}
+    \    Sleep    2
+    \    Send    R.CWTPTEST{ENTER}
+    \    Sleep    2
+    \    Send    ER{ENTER}
+    \    Sleep    2
+    \    Send    ER{ENTER}
+    \    Sleep    2
+    \    ${data_clipboard}    Get Clipboard Data Travelport
+    \    ${is_simultaneous_exist}    Run Keyword And Return Status    Should Contain    ${data_clipboard}    SIMULT
+    \    Exit For Loop If    ${is_simultaneous_exist} == False
+    Send    I{ENTER}
+    [Teardown]    Take Screenshot
+
+Add YQ tax for TST ${segment_number}
+    Activate Amadeus Selling Platform
+    Send    {SHIFTDOWN}{PAUSE}{SHIFTUP}
+    Sleep    2
+    Send    TQT/T${segment_number}{ENTER}
+    Wait Until Window Exists    TST -- Webpage Dialog    60    5
+    Activate Amadeus TST Webpage Dialog
+    Send    {TAB 22}
+    Send    {SPACE}
+    ${list_of_taxes_appeared}    Run Keyword and Return Status    Wait Until Window Exists    List of taxes -- Webpage Dialog    15    1
+    Run Keyword If    ${list_of_taxes_appeared} == False    Wait Until Window Exists    Listes des taxes -- Webpage Dialog    15    1
+    ${tax_window_title}    Set Variable If    ${list_of_taxes_appeared} == False    Listes des taxes -- Webpage Dialog    List of taxes -- Webpage Dialog
+    Win Activate    ${tax_window_title}    ${EMPTY}
+    Send    {TAB 16}
+    Sleep    2
+    Send    3.33
+    Sleep    2
+    Send    {TAB}
+    Sleep    2
+    Send    YQ
+    Sleep    2
+    Send    {ENTER}
+    Wait Until Window Exists    TST -- Webpage Dialog    20    1
+    Send    {ENTER}
+    ${webdialog_appeared}    Run Keyword and Return Status    Wait Until Window Exists    Selling Platform messages -- Webpage Dialog    20    1
+    Run Keyword If    ${webdialog_appeared} == False    Wait Until Window Exists    Selling Platform Messages Selling Platform -- Webpage Dialog    20    1
+    ${webdialog_title}    Set Variable If    ${webdialog_appeared} == False    Selling Platform messages -- Webpage Dialog    Selling Platform Messages Selling Platform -- Webpage Dialog
+    Run Keyword If    ${webdialog_appeared} == True    Run Keywords    Win Activate    ${webdialog_title}
+    ...    AND    Send    {ENTER}
+    Win Close    TST -- Webpage Dialog    ${EMPTY}
+    Sleep    5
+
+Cancel Amadeus PNR
+    [Arguments]    ${current_pnr}    ${emulate_back_to_home_pcc}=False    ${cancel_resa_rail}=False
+    Run Keyword If    '${cancel_resa_rail}' == 'True'    Get Resa Rail PNR    ${current_pnr}
+    Run Keyword If    '${cancel_resa_rail}' == 'True'    Cancel Resa Rail Booking    ${resa_rail_pnr}
+    Activate Amadeus Selling Platform
+    Send    RT${current_pnr}{ENTER}
+    Sleep    2
+    Send    IR{ENTER}
+    Sleep    2
+    Send    TTE/ALL{ENTER}
+    Sleep    1
+    Send    XI{ENTER}
+    Sleep    1
+    Send    XI{ENTER}
+    Sleep    2
+    Comment    Send    XE2{ENTER}
+    Comment    Sleep    2
+    Comment    Send    XE2{ENTER}
+    Comment    Sleep    2
+    Send    RFCWTPTEST{ENTER}
+    Sleep    2
+    Send    {SHIFT}+{PAUSE}
+    Sleep    1
+    Send    QE/FRAWL2378/70C12{ENTER}
+    Get Clipboard Data Amadeus
+    ${is_simultaneous_changes}    Run Keyword And Return Status    Should Contain Any    ${data_clipboard}    SIMULT    PARALLEL
+    Run Keyword If    ${is_simultaneous_changes} == True    Cancel Amadeus PNR    ${current_pnr}
+    Send    {SHIFT}+{PAUSE}
+    Sleep    1
+    Send    ER{ENTER}
+    Get Clipboard Data Amadeus
+    ${is_simultaneous_changes}    Run Keyword And Return Status    Should Contain Any    ${data_clipboard}    SIMULT    PARALLEL
+    Run Keyword If    ${is_simultaneous_changes} == True    Cancel Amadeus PNR    ${current_pnr}
+    Send    {SHIFT}+{PAUSE}
+    Sleep    1
+    Send    ER{ENTER}
+    Sleep    1
+    Send    IG{ENTER}
+    Sleep    1
+    Send    RT${current_pnr}{ENTER}
+    Sleep    2
+    Send    RTI{ENTER}
+    Sleep    2
+    ${data_clipboard}    Get Clipboard Data Amadeus
+    Run Keyword And Continue On Failure    Should Contain Any    ${data_clipboard}    AUCUN ELEMENT TROUVE    NO ELEMENT FOUND    msg=${current_pnr} still has itinerary segments    values=False
+    Send    IG{ENTER}
+    Sleep    1
+    Run Keyword If    '${emulate_back_to_home_pcc}'=='True'    Send    JUO{ENTER}
+
+Cancel Apollo PNR
+    [Arguments]    ${current_pnr}
+    Activate Travelport Window
+    Log    ${current_pnr}
+    : FOR    ${INDEX}    IN RANGE    20
+    \    Send    I{ENTER}
+    \    Sleep    2
+    \    Send    *${current_pnr}{ENTER}
+    \    Sleep    2
+    \    Send    XT{ENTER}
+    \    Sleep    2
+    \    Send    XI{ENTER}
+    \    Sleep    2
+    \    Send    R:CWTPTEST{ENTER}
+    \    Sleep    2
+    \    Send    ER{ENTER}
+    \    Sleep    2
+    \    ${data_clipboard}    Get Clipboard Data Travelport
+    \    Send    ER{ENTER}
+    \    Sleep    2
+    \    ${data_clipboard}    Get Clipboard Data Travelport
+    \    ${is_simultaneous_exist}    Run Keyword And Return Status    Should Contain    ${data_clipboard.upper()}    SIMULTANEOUS
+    \    Send    *I{ENTER}
+    \    Sleep    2
+    \    ${data_clipboard}    Get Clipboard Data Travelport
+    \    ${is_no_itin}    Run Keyword And Return Status    Should Contain    ${data_clipboard.upper()}    NO ITIN
+    \    Exit For Loop If    ${is_simultaneous_exist} == False and ${is_no_itin} == True
+    Send    I{ENTER}
+    Sleep    2
+
+Cancel Galileo PNR
+    [Arguments]    ${current_pnr}    ${emulate_back_to_home_pcc}=False    ${extra_command}=NO
+    Activate Travelport Window
+    Log    ${current_pnr}
+    : FOR    ${INDEX}    IN RANGE    20
+    \    Send    {CTRLDOWN}S{CTRLUP}
+    \    Sleep    2
+    \    Send    I{ENTER}
+    \    Sleep    2
+    \    Send    *${current_pnr}{ENTER}
+    \    Run Keyword If    "${extra_command.upper()}" != "NO"    Run Keywords    Send    ${extra_command}{ENTER}
+    \    ...    AND    Sleep    2
+    \    Sleep    2
+    \    Send    FXALL{ENTER}
+    \    Sleep    2
+    \    Send    XI{ENTER}
+    \    Sleep    2
+    \    Send    NP.THIS IS A TEST PNR{ENTER}
+    \    Sleep    2
+    \    Send    R.CWTPTEST{ENTER}
+    \    Sleep    2
+    \    Send    ER{ENTER}
+    \    Sleep    2
+    \    ${data_clipboard}    Get Clipboard Data Travelport
+    \    ${is_simultaneous_exist}    Run Keyword And Return Status    Should Contain    ${data_clipboard.upper()}    SIMULTANEOUS
+    \    Send    ER{ENTER}
+    \    Sleep    2
+    \    ${data_clipboard}    Get Clipboard Data Travelport
+    \    ${is_simultaneous_exist2}    Run Keyword And Return Status    Should Contain    ${data_clipboard.upper()}    SIMULTANEOUS
+    \    Exit For Loop If    ${is_simultaneous_exist} == False or ${is_simultaneous_exist2} == False
+    Send    *I{ENTER}
+    Sleep    2
+    ${data_clipboard}    Get Clipboard Data Travelport
+    Run Keyword And Continue On Failure    Should Contain    ${data_clipboard.upper()}    NO ITINERARY
+    Send    I{ENTER}
+    Sleep    2
+    Run Keyword If    ${emulate_back_to_home_pcc} == True    Run Keywords    Send    SEM/46T/AG{ENTER}
+    ...    AND    Sleep    2
+
+Cancel PNR Thru GDS Native
+    [Arguments]    ${current_pnr}    ${emulate_back_to_home_pcc}=True    ${cancel_resa_rail}=False    ${extra_command}=NO
+    Run Keyword If    '${GDS_switch.lower()}' == 'amadeus'    Cancel Amadeus PNR    ${current_pnr}    ${emulate_back_to_home_pcc}    ${cancel_resa_rail}
+    Run Keyword If    '${GDS_switch.lower()}' == 'sabre'    Cancel Sabre PNR    ${current_pnr}
+    Run Keyword If    '${GDS_switch.lower()}' == 'galileo'    Cancel Galileo PNR    ${current_pnr}    ${emulate_back_to_home_pcc}    extra_command=${extra_command}
+    Run Keyword If    '${GDS_switch.lower()}' == 'apollo'    Cancel Apollo PNR    ${current_pnr}
+    [Teardown]    Click Clear All
+
+Cancel Sabre PNR
+    [Arguments]    ${current_pnr}
+    Activate Sabre Red Workspace
+    Clear Data From Clipboard
+    : FOR    ${INDEX}    IN RANGE    20
+    \    Send    I{ENTER}
+    \    Sleep    2
+    \    Send    *${current_pnr}{ENTER}
+    \    Sleep    2
+    \    Send    PQD-ALL{ENTER}
+    \    Sleep    1
+    \    Send    XI{ENTER}
+    \    Sleep    2
+    \    Send    6CWTPTEST{ENTER}
+    \    Sleep    2
+    \    Send    ^!{BS}
+    \    Sleep    1
+    \    Send    ER{ENTER}
+    \    Sleep    2
+    \    Get Clipboard Data Sabre
+    \    ${is_simultaneous_exist}    Run Keyword And Return Status    Should Not Contain    ${data_clipboard}    SIMULTANEOUS
+    \    Exit For Loop If    ${is_simultaneous_exist} == True
+    Send    ER{ENTER}
+    Sleep    1
+    Send    I{ENTER}
+    Sleep    2
+    Send    *${current_pnr}{ENTER}
+    Sleep    2
+    Send    ^!{BS}
+    Sleep    1
+    Send    *I{ENTER}
+    Sleep    2
+    ${data_clipboard}    Get Clipboard Data Sabre
+    Run Keyword And Continue On Failure    Should Contain    ${data_clipboard}    NO ITIN
+
+Change Itinerary Flight Date
+    [Arguments]    ${segment_number}    ${number_of_months}    ${number_of_days}    ${end_retrieve_flag}=True
+    ${new_date}    Set Departure Date X Months From Now In Gds Format    ${number_of_months}    ${number_of_days}
+    ${base_date}    Evaluate    ${number_of_days}-1
+    ${ticketing_date}    Set Departure Date X Months From Now In Gds Format    ${number_of_months}    ${base_date}
+    : FOR    ${INDEX}    IN RANGE    21
+    \    Run Keyword If    '${gds_switch}'=='galileo' and ${end_retrieve_flag}==False    Enter Specific Command On Native GDS    @${segment_number}/${new_date}    FQ    T.TAU/${ticketing_date}
+    \    Run Keyword If    '${gds_switch}'=='galileo' and ${end_retrieve_flag}==True    Run Keywords    Enter Specific Command On Native GDS    @${segment_number}/${new_date}    FQ
+    \    ...    T.TAU/${ticketing_date}
+    \    ...    AND    End And Retrieve PNR
+    \    Get Clipboard Data
+    \    ${is_simultaneous_exist}    Run Keyword And Return Status    Should Contain    """${data_clipboard.upper()}"""    SIMULTANEOUS
+    \    Run Keyword If    ${is_simultaneous_exist} == True    Sleep    5
+    \    Exit For Loop If    ${is_simultaneous_exist} == False
+
+Change Tax Value For TST ${segment_number}
+    Activate Amadeus Selling Platform
+    Send    {SHIFTDOWN}{PAUSE}{SHIFTUP}
+    Sleep    1
+    Send    IR{ENTER}
+    Sleep    2
+    Send    RT${current_pnr}{ENTER}
+    Sleep    2
+    Send    {SHIFTDOWN}{PAUSE}{SHIFTUP}
+    Sleep    1
+    Send    TQT/T${segment_number}{ENTER}
+    Wait Until Window Exists    TST -- Webpage Dialog    60    5
+    Activate Amadeus TST Webpage Dialog
+    Take Screenshot
+    Send    {TAB 22}
+    Send    {SPACE}
+    ${list_of_taxes_appeared}    Run Keyword and Return Status    Wait Until Window Exists    List of taxes -- Webpage Dialog    15    1
+    Run Keyword If    ${list_of_taxes_appeared} == False    Wait Until Window Exists    Listes des taxes -- Webpage Dialog    15    1
+    ${tax_window_title}    Set Variable If    ${list_of_taxes_appeared} == False    Listes des taxes -- Webpage Dialog    List of taxes -- Webpage Dialog
+    Win Activate    ${tax_window_title}    ${EMPTY}
+    Send    {TAB}
+    Send    ^c
+    ${data_clipboard} =    Get Data From Clipboard
+    Take Screenshot
+    ${adjusted_tax_amount} =    Evaluate    ${data_clipboard} + 5
+    Send    ${adjusted_tax_amount}
+    Take Screenshot
+    Send    {ENTER}
+    Wait Until Window Exists    TST -- Webpage Dialog    20    1
+    Send    {ENTER}
+    ${webdialog_appeared}    Run Keyword and Return Status    Wait Until Window Exists    Selling Platform messages -- Webpage Dialog    20    1
+    Run Keyword If    ${webdialog_appeared} == False    Wait Until Window Exists    Selling Platform Messages Selling Platform -- Webpage Dialog    20    1
+    ${webdialog_title}    Set Variable If    ${webdialog_appeared} == False    Selling Platform messages -- Webpage Dialog    Selling Platform Messages Selling Platform -- Webpage Dialog
+    Run Keyword If    ${webdialog_appeared} == True    Run Keywords    Win Activate    ${webdialog_title}
+    ...    AND    Send    {ENTER}
+    Take Screenshot
+    Sleep    1
+    Send    {ESC}
+    Sleep    1
+    Win Close    TST -- Webpage Dialog    ${EMPTY}
+    Sleep    5
+    [Teardown]
+
+Clear Amadeus GDS Screen
+    Activate Amadeus Selling Platform
+    Send    {SHIFT}+{PAUSE}
+
+Create Amadeus Rail Using Resarail
+    [Arguments]    ${current_pnr}    ${surname}    ${firstname}    ${title}    ${birthday}    ${delivery_method}
+    ...    ${city_pair}    ${return_pair}=${EMPTY}
+    Activate Amadeus Selling Platform
+    Send    {SHIFT}+{PAUSE}
+    Sleep    1
+    Send    R/RFAG{ENTER}
+    Sleep    1
+    Send    R/RFAG{ENTER}
+    Sleep    1
+    Send    R/NM1${surname}/${firstname} ${title}$D-${birthday}{ENTER}
+    Sleep    2
+    Send    R/NMALL@&NC{ENTER}
+    Sleep    2
+    Send    R/APADF{ENTER}
+    Sleep    2
+    ${trip_date} =    Set Departure Date X Months From Now In Gds Format    2
+    Send    R/AN${trip_date}${city_pair}{ENTER}
+    Sleep    3
+    Send    R/SS1AF1!4G0"IN{ENTER}
+    Sleep    3
+    ${return_date} =    Set Departure Date X Months From Now In Gds Format    3
+    Run Keyword If    '${return_pair}' != '${EMPTY}'    Send    R/AN${return_date}${city_pair}{ENTER}
+    Run Keyword If    '${return_pair}' != '${EMPTY}'    Sleep    3
+    Run Keyword If    '${return_pair}' != '${EMPTY}'    Send    R/SS1AF1!4G0"IN{ENTER}
+    Sleep    3
+    Send    R/FXP$${delivery_method}{ENTER}
+    Sleep    3
+    Send    R/ER{ENTER}
+    Sleep    1
+    Send    R/ER{ENTER}
+    Sleep    1
+    Send    IR{ENTER}
+    Sleep    1
+
+Create One Way Rail Booking Using Amadeus Rail Display Thru Web
+    [Arguments]    ${office_id}    ${departure_station}    ${destination_station}    ${issuing_mode}    ${rail_company}=${EMPTY}
+    Open Browser    https://sellservermodules.amadeus.com/app_sell/apf/init/airrail?LANGUAGE=GB&FIXED_ATID=${at_id}&SITE=ARAVARAV&CONTEXT_MENU=true&OFFICE_ID=${office_id}&AGENT_SIGN=0001&AGENT_INITIALS=AA&AGENT_DUTY_CODE=SU&CSX_PRF_TYPE=T&CSX_PRF_RECLOC=W12SVN&FORCE_REFRESH=12542168    gc
+    Maximize Browser Window
+    Wait Until Element Is Not Visible    xpath//div[contains(@id,'xOverlay']    60
+    Wait Until Element Is Visible    suppPositionPanel    60
+    Run Keyword If    '${rail_company}' != '${EMPTY}'    Run Keywords    Click Element    xpath=//span[contains(@id,'selectRailCompany0_input')]
+    ...    AND    Press Key    xpath=//span[contains(@id,'selectRailCompany0_input')]    ${rail_company}
+    ...    AND    Press Key    xpath=//span[contains(@id,'selectRailCompany0_input')]    \\13
+    Input Text    xpath=//input[contains(@id,'dep0_input')]    ${departure_station}
+    Input Text    xpath=//input[contains(@id,'dest0_input')]    ${destination_station}
+    ${trip_date} =    Set Rail Trip Date X Months From Now    2
+    Input Text    xpath=//input[contains(@id,'date0_input')]    ${trip_date}
+    Input Text    xpath=//input[contains(@id,'time0_input')]    10:00
+    Click Element    xpath=//td[@id='suppPositionBoundRemove_1']
+    Click Element    xpath=//div[@id='buttonSearch']/span
+    Wait Until Element Is Not Visible    xpath=//div[contains(@id,'xOverlay')]    60
+    Wait Until Element Is Not Visible    xpath=//div[contains(@id,'xOverlay')]    60
+    Wait Until Element Is Not Visible    xpath=//div[contains(@id,'xOverlay')]//span[contains(text(),'Please wait')]    60
+    Sleep    2
+    ${is_error_section_present}    Run Keyword And Return Status    Selenium2Library.Element Should Be Visible    xpath=//div[@class='errorSection']//li[contains(text(),'Please try again later.')]
+    Run Keyword If    ${is_error_section_present} == True    Run Keywords    Input Text    xpath=//input[contains(@id,'date0_input')]    ${trip_date}
+    ...    AND    Click Element    xpath=//div[@id='buttonSearch']/span
+    ...    AND    Wait Until Element Is Not Visible    xpath=//div[contains(@id,'xOverlay')]    60
+    Wait Until Element Is Not Visible    xpath=//div[contains(@id,'xOverlay')]//span[contains(text(),'Please wait')]    60
+    Wait Until Element Is Visible    xpath=//div[@id='tabPanel']/span/span[1]//div[@class='proposalBox'][1]//table[@class='quotesViewTable']/tbody/tr[1]//td[@class='buttonTd']    60
+    Click Element    xpath=//div[@id='tabPanel']/span/span[1]//div[@class='proposalBox'][1]//table[@class='quotesViewTable']/tbody/tr[1]//td[@class='buttonTd']
+    Execute Javascript    var a=document.getElementsByClassName("imgSelect");a[0].click();    #Selects first segment
+    Wait Until Element Is Not Visible    xpath//div[contains(@id,'xOverlay']    60
+    Wait Until Element Is Visible    xpath=//span[contains(text(),'Continue')]    60
+    Click Element    xpath=//span[contains(text(),'Continue')]
+    Wait Until Element Is Not Visible    xpath//div[contains(@id,'xOverlay']    60
+    #Selects Issuing Mode
+    Wait Until Element Is Visible    xpath=//span[contains(@id,'issuingModeOptions_input')]    60
+    Click Element    xpath=//span[contains(@id,'issuingModeOptions_input')]
+    Press Key    xpath=//span[contains(@id,'issuingModeOptions_input')]    ${issuing_mode}
+    Sleep    1
+    Press Key    xpath=//span[contains(@id,'issuingModeOptions_input')]    \\13
+    Run Keyword If    '${issuing_mode}' == 'Ticketless Email'    Input Text    xpath=//span[contains(@id,'EMAIL')]//input[contains(@id, 'input')]    automation@carlsonwagonlit.com
+    ...    ELSE IF    '${issuing_mode}' == 'Ticketless Phone' and '${office_id}' == 'STORA27CT'    Input Text    xpath=//span[contains(@id,'emailFoidSectionEMAIL')]//input[contains(@id, 'input')]    +46701111111
+    Wait Until Keyword Succeeds    60    1    Element Should Be Visible    xpath=//button[contains(@id,'book')]
+    Selenium2Library.Mouse Down    xpath=//button[contains(@id,'book')]
+    Click Element    xpath=//button[contains(@id,'book')]    #Clicks Book Button
+    Wait Until Element Is Not Visible    xpath//div[contains(@id,'xOverlay']    60
+    Wait Until Element Is Visible    xpath=//li/span[@class='eotSuggestion']    60
+    ${submit_message} =    Get Text    xpath=//li/span[@class='eotSuggestion']
+    Should Contain    ${submit_message}    Your rail reservation has been successfully processed
+    ${rail_pnr} =    Get Text    xpath=//div[@class='provider-recloc__line__number']/div[contains(@id,provider-recloc)]
+    ${amadeus_pnr} =    Get Text    xpath=//div[contains(text(), 'Amadeus record locator')]/following-sibling::div
+    Capture Page Screenshot
+    Wait Until Element Is Visible    xpath=//div[@class='saveButton']/span/button    60
+    Click Element    xpath=//div[@class='saveButton']/span/button
+    Wait Until Element Is Not Visible    xpath//div[contains(@id,'xOverlay']    60
+    Append To File    C:\\Users\\Public\\Documents\\pnr_created.txt    ${\n}${rail_pnr} - ${GDS_switch} - rail
+    [Teardown]    Close Browser
+
+Create Round Trip Rail Booking Using Amadeus Rail Display Thru Web
+    [Arguments]    ${office_id}    ${departure_station}    ${destination_station}    ${issuing_mode}    ${rail_company}=${EMPTY}
+    Open Browser    https://sellservermodules.amadeus.com/app_sell/apf/init/airrail?LANGUAGE=GB&FIXED_ATID=${at_id}&SITE=ARAVARAV&CONTEXT_MENU=true&OFFICE_ID=${office_id}&AGENT_SIGN=0001&AGENT_INITIALS=AA&AGENT_DUTY_CODE=SU&CSX_PRF_TYPE=T&CSX_PRF_RECLOC=W12SVN&FORCE_REFRESH=12542168    gc
+    Maximize Browser Window
+    Wait Until Element Is Not Visible    xpath//div[contains(@id,'xOverlay']    60
+    Wait Until Element Is Visible    suppPositionPanel    60
+    Run Keyword If    '${rail_company}' != '${EMPTY}'    Run Keywords    Click Element    xpath=//span[contains(@id,'selectRailCompany0_input')]
+    ...    AND    Press Key    xpath=//span[contains(@id,'selectRailCompany0_input')]    ${rail_company}
+    ...    AND    Press Key    xpath=//span[contains(@id,'selectRailCompany0_input')]    \\13
+    Input Text    xpath=//input[contains(@id,'dep0_input')]    ${departure_station}
+    Input Text    xpath=//input[contains(@id,'dest0_input')]    ${destination_station}
+    ${trip_date} =    Set Rail Trip Date X Months From Now    2
+    Input Text    xpath=//input[contains(@id,'date0_input')]    ${trip_date}
+    Input Text    xpath=//input[contains(@id,'time0_input')]    10:00
+    ${trip_date2} =    Set Rail Trip Date X Months From Now    2    1
+    Input Text    xpath=//input[contains(@id,'date1_input')]    ${trip_date2}
+    Input Text    xpath=//input[contains(@id,'time1_input')]    10:00
+    Click Element    xpath=//div[@id='buttonSearch']/span
+    Wait Until Element Is Not Visible    xpath=//div[contains(@id,'xOverlay')]    60
+    Wait Until Element Is Not Visible    xpath=//div[contains(@id,'xOverlay')]    60
+    Wait Until Element Is Not Visible    xpath=//div[contains(@id,'xOverlay')]//span[contains(text(),'Please wait')]    60
+    Sleep    2
+    ${is_error_section_present}    Run Keyword And Return Status    Selenium2Library.Element Should Be Visible    xpath=//div[@class='errorSection']//li[contains(text(),'Please try again later.')]
+    Run Keyword If    ${is_error_section_present} == True    Run Keywords    Input Text    xpath=//input[contains(@id,'date0_input')]    ${trip_date}
+    ...    AND    Click Element    xpath=//div[@id='buttonSearch']/span
+    ...    AND    Wait Until Element Is Not Visible    xpath=//div[contains(@id,'xOverlay')]    60
+    Wait Until Element Is Not Visible    xpath=//div[contains(@id,'xOverlay')]//span[contains(text(),'Please wait')]    60
+    #Selects first topmost itinerary
+    Wait Until Element Is Visible    xpath=//div[@id='tabPanel']/span/span[1]//div[@class='proposalBox'][1]//table[@class='quotesViewTable']/tbody/tr[1]//td[@class='buttonTd']    60
+    Click Element    xpath=//div[@id='tabPanel']/span/span[1]//div[@class='proposalBox'][1]//table[@class='quotesViewTable']/tbody/tr[1]//td[@class='buttonTd']
+    Execute Javascript    var a=document.getElementsByClassName("imgSelect");a[0].click();
+    Wait Until Element Is Not Visible    xpath//div[contains(@id,'xOverlay']    60
+    #Selects second topmost itinerary
+    Sleep    5
+    Wait Until Element Is Visible    xpath=//div[@id='tabPanel']/span/span[2]//div[@class='proposalBox'][1]//table[@class='quotesViewTable']/tbody/tr[1]//td[@class='buttonTd']    60
+    Click Element    xpath=//div[@id='tabPanel']/span/span[2]//div[@class='proposalBox'][1]//table[@class='quotesViewTable']/tbody/tr[1]//td[@class='buttonTd']
+    Execute Javascript    var b=document.getElementsByClassName("imgSelect");b[1].click();
+    Wait Until Element Is Not Visible    xpath//div[contains(@id,'xOverlay']    60
+    Wait Until Element Is Visible    xpath=//span[contains(text(),'Continue')]    60
+    Click Element    xpath=//span[contains(text(),'Continue')]
+    Wait Until Element Is Not Visible    xpath//div[contains(@id,'xOverlay']    60
+    #Selects Issuing Mode
+    Wait Until Element Is Visible    xpath=//span[contains(@id,'issuingModeOptions_input')]    60
+    Click Element    xpath=//span[contains(@id,'issuingModeOptions_input')]
+    Press Key    xpath=//span[contains(@id,'issuingModeOptions_input')]    ${issuing_mode}
+    Sleep    1
+    Press Key    xpath=//span[contains(@id,'issuingModeOptions_input')]    \\13
+    Run Keyword If    '${issuing_mode}' == 'Ticketless Email'    Input Text    xpath=//span[contains(@id,'EMAIL')]//input[contains(@id, 'input')]    automation@carlsonwagonlit.com
+    ...    ELSE IF    '${issuing_mode}' == 'Ticketless Phone' and '${office_id}' == 'STORA27CT'    Input Text    xpath=//span[contains(@id,'EMAIL')]//input[contains(@id, 'input')]    +46701111111
+    Wait Until Keyword Succeeds    60    1    Element Should Be Visible    xpath=//button[contains(@id,'book')]
+    Selenium2Library.Mouse Down    xpath=//button[contains(@id,'book')]
+    Click Element    xpath=//button[contains(@id,'book')]    #Clicks Book Button
+    Wait Until Element Is Not Visible    xpath//div[contains(@id,'xOverlay']    60
+    Wait Until Element Is Visible    xpath=//li/span[@class='eotSuggestion']    60
+    ${submit_message} =    Get Text    xpath=//li/span[@class='eotSuggestion']
+    Should Contain    ${submit_message}    Your rail reservation has been successfully processed
+    ${rail_pnr} =    Get Text    xpath=//div[@class='provider-recloc__line__number']/div[contains(@id,provider-recloc)]
+    ${amadeus_pnr} =    Get Text    xpath=//div[contains(text(), 'Amadeus record locator')]/following-sibling::div
+    Capture Page Screenshot
+    Wait Until Element Is Visible    xpath=//div[@class='saveButton']/span/button    60
+    Click Element    xpath=//div[@class='saveButton']/span/button
+    Wait Until Element Is Not Visible    xpath//div[contains(@id,'xOverlay']    60
+    Append To File    C:\\Users\\Public\\Documents\\pnr_created.txt    ${\n}${rail_pnr} - ${GDS_switch} - rail
+    [Teardown]    Close Browser
+
+Determine Amadeus Offer Remark Lines
+    [Arguments]    ${current_pnr}
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Set Test Variable    ${counter}    0
+    ${start_line_number}    Get Line Number In Amadeus PNR Remarks    RIR \\*OFFER\\*\\*
+    @{pnr_details_list}    Split To Lines    ${pnr_details}
+    : FOR    ${line}    IN    @{pnr_details_list}
+    \    ${eval_line} =    Run Keyword and Return Status    Should Contain    ${line}    RIR *OFFER**
+    \    ${counter}    Run Keyword If    "${eval_line}" == "True"    Evaluate    ${counter} + 1
+    \    ...    ELSE    Evaluate    ${counter} + 0
+    ${number_of_remarks}    Evaluate    ${counter} - 1
+    ${number_of_remarks}    Convert To Integer    ${number_of_remarks}
+    ${last_line_number}    Evaluate    ${start_line_number} + ${number_of_remarks}
+    Set Test Variable    ${offer_line_numbers}    ${start_line_number}-${last_line_number}
+
+Determine If Next Fare Exists
+    [Arguments]    ${counter}
+    ${next_value}    Evaluate    ${counter} + 1
+    ${next_fare_exists}    Run Keyword If    ${counter} == ${number_of_fares}    Set Variable    >
+    ...    ELSE    Set Variable    FQ${next_value}
+    [Return]    ${next_fare_exists}
+
+Determine If Next Quote Exists
+    [Arguments]    ${current_fare_number}
+    ${next_value}    Evaluate    ${current_fare_number} + 1
+    ${contains}    Run Keyword And Return Status    Should Contain    ${pnr_details}    QUOTE NUMBER: ${next_value}
+    ${next_fare_exists}    Run Keyword If    "${contains}" == "False"    Set Variable    >
+    ...    ELSE    Set Variable    QUOTE NUMBER: ${next_value}
+    [Return]    ${next_fare_exists}
+
+Determine Line Start Value
+    ${contains_equ}    Run Keyword And Return Status    Should Contain    ${base_fare_value}    EQU
+    ${start_value}    Run Keyword If    "${contains_equ}" == "True"    Set Variable    EQU
+    ...    ELSE    Set Variable    FARE
+    [Return]    ${start_value}
+
+Determine Received From Text
+    ${received_from}    Set Variable If    "${GDS_switch.lower()}" == "amadeus"    RFTESTPNR    "${GDS_switch.lower()}" == "sabre"    6TESTPNR    "${GDS_switch.lower()}" == "apollo"
+    ...    R:CWTUSER    "${GDS_switch.lower()}" == "galileo"    R.CWTUSER
+    Set Test Variable    ${received_from}
+
+Determine Specific Amadeus Offer Remark Lines
+    [Arguments]    ${current_pnr}    ${offer_number}
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    ${start_line_number}    Get Line Number In Amadeus PNR Remarks    RIR \\*OFFER\\*\\*\\<B\\>PROPOSITION NO ${offer_number}\\<\\/B\\>
+    ${pnr_details}    Get String Between Strings    ${pnr_details}    RIR *OFFER**<B>PROPOSITION NO ${offer_number}</B>*    RIR *OFFER**DETAILS
+    ${last_line_number}    Evaluate    ${start_line_number} + 9
+    Set Test Variable    ${offer_line_numbers}    ${start_line_number}-${last_line_number}
+
+Edit PNR Remarks
+    [Arguments]    ${current_pnr}    ${original_remark}    ${new_remark}    ${galileo_remark_type}=${EMPTY}
+    Activate GDS Native
+    Determine Received From Text
+    ${line_number}    Run Keyword If    "${GDS_switch.lower()}" != "amadeus"    Get Line Number In PNR Remarks    ${original_remark}
+    ...    ELSE    Get Line Number In Amadeus PNR Remarks    ${original_remark}
+    ${line_number_and_remark}    Set Variable If    "${GDS_switch.lower()}" == "sabre"    5${line_number}${new_remark}    "${GDS_switch.lower()}" == "amadeus"    ${line_number}/${new_remark}    "${GDS_switch.lower()}" == "galileo"
+    ...    ${galileo_remark_type}.${line_number}@${new_remark}
+    ${ignore_command}    Set Variable If    "${GDS_switch.lower()}" != "amadeus"    I{ENTER}    IG{ENTER}
+    ${retrieve_pnr_command}    Set Variable If    "${GDS_switch.lower()}" != "amadeus"    *${current_pnr}{ENTER}    rt${current_pnr}{ENTER}
+    : FOR    ${counter}    IN RANGE    1    10
+    \    Run Keyword If    "${GDS_switch.lower()}" == "sabre"    Run Keywords    Send    {CTRLDOWN}{SHIFTDOWN}
+    \    ...    AND    Send    {BS}
+    \    ...    AND    Send    {CTRLUP}{SHIFTUP}
+    \    Send    ${ignore_command}
+    \    Sleep    1
+    \    Send    ${retrieve_pnr_command}
+    \    Sleep    2
+    \    Send    ${line_number_and_remark}
+    \    Sleep    1
+    \    Send    {ENTER}
+    \    Sleep    2
+    \    Send    ${received_from}{ENTER}
+    \    Sleep    2
+    \    Send    ER{ENTER}
+    \    Sleep    2
+    \    Get Clipboard Data
+    \    ${is_simultaneous_exist1}    Run Keyword And Return Status    Should Contain    """${data_clipboard.upper()}"""    SIMULTANEOUS
+    \    ${is_simultaneous_exist2}    Run Keyword And Return Status    Should Contain    """${data_clipboard.upper()}"""    SIMULTANEOUS CHANGES
+    \    Exit For Loop If    "${is_simultaneous_exist1}" == "False" and "${is_simultaneous_exist2}" == "False"
+    Send    ER{ENTER}
+    Sleep    2
+    Send    ${ignore_command}
+    Sleep    1
+
+End And Retrieve PNR
+    [Arguments]    ${enter_in_native_gds}=True
+    ${received_from}    Set Variable If    '${gds_switch}'=='galileo'    R.CWTTEST    '${gds_switch}'=='sabre'    6CWTTEST    '${gds_switch}'=='amadeus'
+    ...    RFCWTPTEST    '${gds_switch}'=='apollo'    R:CWTPTEST
+    Run Keyword If    ${enter_in_native_gds}==True    Enter Specific Command On Native GDS    ${received_from}    ER    ER
+    ...    ELSE    Enter GDS Command    ${received_from}    ER    ER
+
+Enter Command In Native GDS
+    [Arguments]    @{gds_commands}
+    : FOR    ${gds_command}    IN    @{gds_commands}
+    \    Run Keyword If    '${GDS_switch}' == 'sabre'    Send    ^!{BS}
+    \    Run Keyword If    '${GDS_switch}' == 'sabre'    Send Sabre Command    ${gds_command}
+    \    ...    ELSE    Send    ${gds_command}{ENTER}
+    \    Take Screenshot
+    \    Run Keyword If    '${gds_switch}' == 'galileo' or '${gds_switch}' == 'apollo'    Wait Until Smartpoint Terminal Is Refreshed
+    [Teardown]    Take Screenshot
+
+Enter LCC Remarks For Specific Airline Code
+    [Arguments]    ${airline_code}    ${currency}    ${base_fare_amount}    ${tax_1}    ${tax_2}    ${tax_3}
+    ...    ${grand_total_amount}    ${ticket_number}    ${cf_code}    ${vendor_code}    ${commission_amount}
+    ${write_command}    Set Variable If    "${GDS_switch.upper()}" == "SABRE"    5H-F‡    "${GDS_switch.upper()}" == "APOLLO"    ¤:5H¤F/
+    Enter GDS Command    ${write_command}LCC-${airline_code}*BASE FARE ${currency} ${base_fare_amount}
+    Enter GDS Command    ${write_command}LCC-${airline_code}*TAX1 C${tax_1}
+    Enter GDS Command    ${write_command}LCC-${airline_code}*TAX2 H${tax_2}
+    Enter GDS Command    ${write_command}LCC-${airline_code}*TAX3 D${tax_3}
+    Enter GDS Command    ${write_command}LCC-${airline_code}*GRAND TOTAL ${currency} ${grand_total_amount}
+    Enter GDS Command    ${write_command}LCC-${airline_code}*TK-${ticket_number}
+    Enter GDS Command    ${write_command}LCC-${airline_code}*CF-${cf_code}
+    Enter GDS Command    ${write_command}LCC-${airline_code}*VN-${vendor_code}
+    Enter GDS Command    ${write_command}LCC-${airline_code}*COMM-${commission_amount} ${currency}
+    [Teardown]    Take Screenshot
+
+Enter Specific Command On Native GDS
+    [Arguments]    @{gds_command}
+    Activate GDS Native
+    Run Keyword If    '${GDS_switch}' == 'sabre'    Enter Command In Native GDS    @{gds_command}
+    Run Keyword If    '${GDS_switch}' == 'amadeus'    Enter Command In Native GDS    @{gds_command}
+    Run Keyword If    '${GDS_switch}' == 'apollo' or '${GDS_switch}' == 'galileo'    Enter Command In Native GDS    @{gds_command}
+    Activate Power Express Window
+
+Force Ignore To GDS
+    Activate GDS Native
+    ${ignore_command}    Set Variable If    "${GDS_switch.lower()}" != "amadeus"    I{ENTER}    IG{ENTER}
+    Send    ${ignore_command}
+
+Get All Data From Smart Panel
+    Clear Data From Clipboard
+    Run Keyword If    "${test_environment}" == "sit_stable"    Run Keywords    Win Activate    Travelport Smartpoint App - PNR Viewer    ${EMPTY}
+    ...    AND    Sleep    1
+    ${smart_panel_data} =    Get Travelport Smart Window Details
+    ${data_line_count} =    Get Line Count    ${smart_panel_data}
+    Run Keyword If    ${data_line_count} < 6    Get All Data From Smart Panel
+    Set Test Variable    ${pnr_details}    ${smart_panel_data}
+    [Teardown]    Take Screenshot
+    [Return]    ${pnr_details}
+
+Get All Data From Terminal Window
+    [Arguments]    ${gds_command}    ${wait_time}=2    ${performl_md}=True
+    Set Test Variable    ${history}    ${EMPTY}
+    Set Test Variable    ${previous_clipboard}    ${EMPTY}
+    Sleep    2
+    Send    ${gds_command}{ENTER}
+    Sleep    2
+    Wait Until Smartpoint Terminal Is Refreshed
+    ${data_clipboard}    Get Clipboard Data Travelport
+    : FOR    ${INDEX}    IN RANGE    21
+    \    Run Keyword If    """${data_clipboard}""" == """${previous_clipboard}"""    Exit For Loop
+    \    ...    ELSE    Set Test Variable    ${previous_clipboard}    ${data_clipboard}
+    \    ${history}    Catenate    ${history}    ${previous_clipboard}
+    \    Run Keyword If    "${performl_md}" == "True"    Run Keywords    Send    MD{ENTER}
+    \    ...    AND    Sleep    2
+    \    ${data_clipboard}    Get Clipboard Data Travelport
+    \    ${is_command_invalid} =    Run Keyword And Return Status    Should Contain    ${data_clipboard}    INVLD
+    \    ${is_command_invalid_2} =    Run Keyword And Return Status    Should Contain    ${data_clipboard}    INVALID
+    \    Exit For Loop If    ${is_command_invalid} == True or ${is_command_invalid_2} == True or "${performl_md}" == "False"
+    Set Test Variable    ${terminal_window_data}    ${history.strip()}
+    [Teardown]    Take Screenshot
+    [Return]    ${terminal_window_data}
+
+Get All Data On Blue Window
+    [Arguments]    ${gds_command}
+    Set Test Variable    ${history}    ${EMPTY}
+    Set Test Variable    ${previous_clipboard}    ${EMPTY}
+    Clear Data From Clipboard
+    Sleep    2
+    Send    ${gds_command}{ENTER}
+    Sleep    2
+    : FOR    ${index}    IN RANGE    0    99
+    \    Sleep    0.5
+    \    Send    ^a
+    \    Sleep    1
+    \    Send    ^c
+    \    Sleep    1
+    \    Send    {DOWN}
+    \    Sleep    1
+    \    ${data_clipboard}    Get Data From Clipboard
+    \    Run Keyword If    """${data_clipboard}""" == """${previous_clipboard}"""    Exit For Loop
+    \    ...    ELSE    Set Test Variable    ${previous_clipboard}    ${data_clipboard}
+    \    ${is_command_invalid} =    Run Keyword And Return Status    Should Contain    ${data_clipboard}    INVLD
+    \    ${is_command_invalid_2} =    Run Keyword And Return Status    Should Contain    ${data_clipboard}    INVALID
+    \    Exit For Loop If    ${is_command_invalid} == True or ${is_command_invalid_2} == True
+    \    Send    {END}
+    \    Sleep    1
+    \    Send    MD{ENTER}
+    \    Sleep    0.5
+    \    ${history}    Catenate    ${history}    ${previous_clipboard}
+    Set Test Variable    ${blue_window_data}    ${history.strip()}
+    [Return]    ${blue_window_data}
+
+Get All Data On Gray Window
+    Clear Data From Clipboard
+    Sleep    1
+    Click Object    ${sikuli_image_path}/smartpoint_ALL.png    ${similarity}    ${timeout}
+    Sleep    3
+    Control Click    ${path_galileo_desktop}    ${EMPTY}    ${galileo_text_control}
+    Click Object    ${sikuli_image_path}/identify.png    ${similarity}    ${timeout}
+    Sleep    1
+    Send    {CTRLDOWN}ac{CTRLUP}
+    Sleep    1
+    ${gray_winbdow_data} =    Get Data From Clipboard
+    [Return]    ${gray_winbdow_data}
+
+Get Amadeus Multiple Rail TSTs Amount
+    [Arguments]    ${rail_tst_1}    ${rail_tst_2}
+    Activate Amadeus Selling Platform
+    Send    {SHIFTDOWN}{PAUSE}{SHIFTUP}
+    Sleep    1
+    Send    TQT/${rail_tst_1}{ENTER}
+    Sleep    2
+    Send    {CTRLDOWN}ac{CTRLUP}
+    Sleep    1
+    ${data_clipboard} =    Get Data From Clipboard
+    ${rail_amount_line}    Get Lines Containing String    ${data_clipboard}    CPN VALUE
+    ${rail_amount_currency}    Fetch From Right    ${rail_amount_line}    -
+    ${rail_amount_nocurrency}    Remove String Using Regexp    ${rail_amount_currency}    [A-Z]
+    Set Test Variable    ${tst_amount_1}    ${rail_amount_nocurrency}
+    Send    {SHIFTDOWN}{PAUSE}{SHIFTUP}
+    Sleep    1
+    Send    TQT/${rail_tst_2}{ENTER}
+    Sleep    2
+    Send    {CTRLDOWN}ac{CTRLUP}
+    Sleep    1
+    ${data_clipboard} =    Get Data From Clipboard
+    ${rail_amount_line}    Get Lines Containing String    ${data_clipboard}    CPN VALUE
+    ${rail_amount_currency}    Fetch From Right    ${rail_amount_line}    -
+    ${rail_amount_nocurrency}    Remove String Using Regexp    ${rail_amount_currency}    [A-Z]
+    Set Test Variable    ${tst_amount_2}    ${rail_amount_nocurrency}
+    ${total_rail_tst}    Evaluate    ${tst_amount_1}+${tst_amount_2}
+    Set Test Variable    ${rail_tst_amount}    ${total_rail_tst}
+    Clear Data From Clipboard
+
+Get Amadeus Offer Amount
+    [Arguments]    ${fare_tab}
+    ${fare_tab_index}    Fetch From Right    ${fare_tab}    ${SPACE}
+    Activate Amadeus Selling Platform
+    Enter GDS Command    RT    RTOF
+    Get Clipboard Data Amadeus
+    ${total_offer_line} =    Get Lines Containing String    ${data_clipboard}    ${fare_tab_index} OFFER
+    ${total_offer_amount} =    Get String Using Marker    ${total_offer_line}    TOTAL    EUR
+    ${total_offer_amount} =    Remove All Non-Integer (retain period)    ${total_offer_amount}
+    [Return]    ${total_offer_amount}
+
+Get Amadeus Rail TST Amount
+    [Arguments]    ${rail_tst_number}
+    Activate Amadeus Selling Platform
+    Send    {SHIFTDOWN}{PAUSE}{SHIFTUP}
+    Sleep    1
+    Send    TQT/${rail_tst_number}{ENTER}
+    Sleep    2
+    Send    {CTRLDOWN}ac{CTRLUP}
+    Sleep    1
+    ${data_clipboard} =    Get Data From Clipboard
+    ${rail_amount_line}    Get Lines Containing String    ${data_clipboard}    CPN VALUE
+    ${rail_amount_currency}    Fetch From Right    ${rail_amount_line}    -
+    ${rail_amount_nocurrency}    Remove String Using Regexp    ${rail_amount_currency}    [A-Z]
+    Set Test Variable    ${rail_tst_amount}    ${rail_amount_nocurrency.strip()}
+
+Get Base Fare And Tax From Galileo For Fare X Tab
+    [Arguments]    ${fare_tab}
+    ${number_of_fares}    Fetch From Right    ${fare_tab}    ${SPACE}
+    Set Test Variable    ${number_of_fares}
+    ${subset}    Get String Between Strings    ${pnr_details}    FQ${number_of_fares}    /S${number_of_fares}
+    ${base_fare_value}    Get Lines Containing String    ${subset}    FARE
+    Set Test Variable    ${base_fare_value}
+    ${line_to_start_from}    Determine Line Start Value
+    ${base_fare_value}    Fetch From Right    ${base_fare_value}    ${line_to_start_from}
+    ${base_fare_value}    Fetch From Left    ${base_fare_value}    TAX
+    ${base_fare_value}    Remove Leading And Ending Spaces    ${base_fare_value}
+    ${currency}    Get Substring    ${base_fare_value}    0    3
+    ${base_fare_value}    Remove All Non-Integer (retain period)    ${base_fare_value}
+    Set Test Variable    ${base_fare_value_${number_of_fares}}    ${base_fare_value}
+    ${total_fare}    Get Lines Matching Regexp    ${subset}    .*ADT\ \ .*
+    ${total_fare}    Fetch From Right    ${total_fare}    ${currency}
+    ${total_fare}    Remove All Non-Integer (retain period)    ${total_fare}
+    ${total_tax}    Evaluate    ${total_fare} - ${base_fare_value_${number_of_fares}}
+    ${country_code}    Get Country Code Based On Currency    ${currency}
+    ${gst_identifier}    Set Variable If    "${country_code.upper()}" == "NZ"    NZ    "${country_code.upper()}" == "AU"    UO    "${country_code.upper()}" == "MY"
+    ...    D8
+    ${gst_amount}    Get String Matching Regexp    TAX [0-9]+\.[0-9][0-9]${gst_identifier}    ${subset}
+    ${gst_amount}    Run Keyword If    "${gst_amount}" != "0"    Remove All Non-Integer (retain period)    ${gst_amount}
+    ...    ELSE    Set Variable    ${gst_amount}
+    ${gst_amount}    Set Variable If    "${gst_amount}" != "."    ${gst_amount}    0
+    ${total_tax_less_gst}    Run Keyword If    "${gst_amount}" > 0 and "${gst_amount}" != "."    Evaluate    ${total_tax} - ${gst_amount}
+    Set Test Variable    ${gst_amount_${number_of_fares}}    ${gst_amount}
+    Set Test Variable    ${tax_amount_${number_of_fares}}    ${total_tax}
+    Set Test Variable    ${total_tax_less_gst_${number_of_fares}}    ${total_tax_less_gst}
+    Set Test Variable    ${currency}
+    Set Test Variable    ${total_fare_${number_of_fares}}    ${total_fare}
+
+Get Base Fare From Sabre For Fare X Tab
+    [Arguments]    ${fare_tab}    ${currency}    ${store_fare_command}=WPRQ'S
+    ${fare_index}    Fetch From Right    ${fare_tab}    ${SPACE}
+    Retrieve PNR Details From Sabre Red    ${current_pnr}    ${store_fare_command}${fare_index}
+    ${base_fare}    Get String Matching Regexp    ${currency.upper()}[0-9]+\.[0-9][0-9]    ${pnr_details}
+    ${base_fare}    Remove All Non-Integer (retain period)    ${base_fare}
+    Set Suite Variable    ${fare_${fare_index}_base_fare}    ${base_fare}
+    [Teardown]    Take Screenshot
+
+Get Base Fare Value From Amadeus For Fare X Tab
+    [Arguments]    ${fare_tab}    ${currency}
+    ${fare_index}    Fetch From Right    ${fare_tab}    ${SPACE}
+    ${segment_number}    Evaluate    ${fare_index} + 1
+    Retrieve PNR Details From Amadeus    ${current_pnr}    FXB/S${segment_number}
+    ${base_fare}    Get String Matching Regexp    ${currency.upper()}[${SPACE},0-9]+\.[0-9][0-9][${SPACE}]+\    ${pnr_details}
+    ${base_fare}    Remove All Non-Integer (retain period)    ${base_fare}
+    Set Test Variable    ${fare_${fare_index}_base_fare}    ${base_fare}
+    Set Test Variable    ${fare_index}
+
+Get Base or Nett Fare Value
+    [Arguments]    ${nett_fare}    ${base_fare}
+    ${base_or_nett_fare_value}    Run Keyword If    "${nett_fare}" != "${EMPTY}" and "${nett_fare}" != "0"    Set Variable    ${nett_fare}
+    ...    ELSE    Set Variable    ${base_fare}
+    Set Test Variable    ${base_or_nett_fare_value}
+
+Get Clipboard Data
+    Run Keyword If    "${GDS_switch}" == "amadeus"    Get Clipboard Data Amadeus
+    ...    ELSE IF    "${GDS_switch}" == "galileo" or "${GDS_switch}" == "apollo"    Get Clipboard Data Travelport
+    ...    ELSE IF    "${GDS_switch}" == "sabre"    Get Clipboard Data Sabre
+
+Get Clipboard Data Amadeus
+    Clear Data From Clipboard
+    Activate Amadeus Selling Platform    False
+    ${data_clipboard}    Get Control Text Value    [CLASS:RichEdit20A; INSTANCE:1]    SELLING PLATFORM
+    Log    ${data_clipboard}
+    Set Test Variable    ${data_clipboard}
+    [Teardown]    Take Screenshot
+    [Return]    ${data_clipboard}
+
+Get Clipboard Data Sabre
+    Activate Sabre Red Workspace
+    Copy Content From Sabre
+    ${data_clipboard} =    Clip Get
+    Log    ${data_clipboard}
+    Set Test Variable    ${data_clipboard}
+    [Teardown]
+    [Return]    ${data_clipboard}
+
+Get Clipboard Data Travelport
+    Win Activate    Window 1    ${EMPTY}
+    Wait For Active Window    Window 1    ${EMPTY}
+    Send    !h
+    Sleep    1
+    Clear Data From Clipboard
+    Send    {CTRLDOWN}{HOME}{CTRLUP}
+    Send    {CTRLDOWN}{SHIFTDOWN}{END}{SHIFTUP}{CTRLUP}
+    Send    ^a
+    Sleep    1
+    Send    !h
+    Sleep    1
+    Send    ^c
+    Sleep    1
+    Send    {DOWN}
+    Send    {END}
+    ${data_clipboard}    Clip Get
+    Log    ${data_clipboard}
+    Set Test Variable    ${data_clipboard}    ${data_clipboard.strip()}
+    [Return]    ${data_clipboard}
+
+Get Discount or Rebate Value
+    [Arguments]    ${mark_up_amount}    ${commission_rebate_amount}
+    ${mark_up_amount}    Set Variable If    "${mark_up_amount}" == "${EMPTY}"    0    ${mark_up_amount}
+    ${mark_up_amount}    Convert To Float    ${mark_up_amount}
+    ${commission_rebate_amount}    Set Variable If    "${commission_rebate_amount}" == "${EMPTY}"    0    ${commission_rebate_amount}
+    ${commission_rebate_amount}    Convert To Float    ${commission_rebate_amount}
+    ${discount_or_rebate_value}    Set Variable If    ${mark_up_amount} > 0    ${mark_up_amount}    -${commission_rebate_amount}
+    Set Test Variable    ${discount_or_rebate_value}
+
+Get Discount or Rebate Value For CITI
+    [Arguments]    ${mark_up_amount}
+    ${mark_up_amount}    Set Variable If    "${mark_up_amount}" == "${EMPTY}"    0    ${mark_up_amount}
+    ${mark_up_amount}    Convert To Float    ${mark_up_amount}
+    Comment    ${commission_rebate_amount}    Set Variable If    "${commission_rebate_amount}" == "${EMPTY}"    0    ${commission_rebate_amount}
+    Comment    ${commission_rebate_amount}    Convert To Float    ${commission_rebate_amount}
+    Comment    ${discount_or_rebate_value}    Set Variable If    ${mark_up_amount} > 0    ${mark_up_amount}    -${commission_rebate_amount}
+    Set Test Variable    ${discount_or_rebate_value}    ${mark_up_amount}
+
+Get Fare Amount Value For Fare X Tab
+    [Arguments]    ${fare_tab}
+    [Documentation]    Kindly Run "Get Base Fare Value From Galileo For X Number Of Fares" Prior To This Keyword
+    ${fare_tab_index} =    Fetch From Right    ${fare_tab}    ${SPACE}
+    Set Test Variable    ${fare_tab_index}
+    Click Panel    Air Fare
+    Click Fare Tab    ${fare_tab}
+    Click Details Tab
+    Get High Fare Value    ${fare_tab}
+    Get Charged Fare Value    ${fare_tab}
+    Get Low Fare Value    ${fare_tab}
+    Click Pricing Extras Tab
+    Get Nett Fare Value    ${fare_tab}
+    Get Mark-Up Amount Value    ${fare_tab}
+    Get Commission Rebate Amount Value    ${fare_tab}
+    Get Base or Nett Fare Value    ${nett_fare_value_${fare_tab_index}}    ${base_fare_value_${fare_tab_index}}
+    Get Discount or Rebate Value    ${mark_up_value_${fare_tab_index}}    ${commission_rebate_value_${fare_tab_index}}
+    ${computed_fare_amount}    Evaluate    ${base_or_nett_fare_value} + ${discount_or_rebate_value}
+    Set Test Variable    ${fare_amount_${fare_tab_index}}    ${computed_fare_amount}
+
+Get Fare Amount Value For Fare X Tab For CITI
+    [Arguments]    ${fare_tab}
+    [Documentation]    Kindly Run "Get Base Fare Value From Galileo For X Number Of Fares" Prior To This Keyword
+    ${fare_tab_index} =    Fetch From Right    ${fare_tab}    ${SPACE}
+    Set Test Variable    ${fare_tab_index}
+    Click Panel    Air Fare
+    Click Fare Tab    ${fare_tab}
+    Click Details Tab
+    Get High Fare Value    ${fare_tab}
+    Get Charged Fare Value    ${fare_tab}
+    Get Low Fare Value    ${fare_tab}
+    Click Pricing Extras Tab
+    Get Nett Fare Value    ${fare_tab}
+    Get Mark-Up Amount Value    ${fare_tab}
+    Get Base or Nett Fare Value    ${nett_fare_value_${fare_tab_index}}    ${base_fare_value_${fare_tab_index}}
+    Get Discount or Rebate Value For CITI    ${mark_up_value_${fare_tab_index}}
+    ${computed_fare_amount}    Evaluate    ${base_or_nett_fare_value} + ${discount_or_rebate_value}
+    Set Test Variable    ${fare_amount_${fare_tab_index}}    ${computed_fare_amount}
+
+Get Itinerary Remarks From Galileo For Fare X
+    [Arguments]    ${fare_tab}
+    ${fare_index}    Fetch From Right    ${fare_tab}    ${SPACE}
+    Set Test Variable    ${fare_index}
+    : FOR    ${counter}    IN RANGE    1    ${fare_index}+1
+    \    ${next_fare}    Determine If Next Quote Exists    ${counter}
+    \    ${subset}    Get String Between Strings    ${pnr_details}    QUOTE NUMBER: ${counter}    ${next_fare}
+    Set Test Variable    ${pnr_details}    ${subset}
+
+Get LCC Remarks
+    ${lcc_identifier}    Set Variable If    '${GDS_switch.lower()}' == 'sabre'    H-F‡    '${GDS_switch.lower()}' == 'apollo'    F/    '${GDS_switch.lower()}' == 'amadeus'
+    ...    RMF${space}
+    ${lcc_remarks}    Get Lines Containing String    ${pnr_details}    ${lcc_identifier}LCC
+    ${actual_lcc_remarks}    Split To Lines    ${lcc_remarks}
+    ${collection_of_lcc_remarks}    Create List
+    : FOR    ${lcc_remark}    IN    @{actual_lcc_remarks}
+    \    ${converted_lcc_remark}    Convert To String    ${lcc_remark}
+    \    ${converted_lcc_remark}    Fetch From Right    ${converted_lcc_remark}    ${lcc_identifier}
+    \    ${converted_lcc_remark}    Replace String    ${converted_lcc_remark}    ‡    ${SPACE}
+    \    Append To List    ${collection_of_lcc_remarks}    ${converted_lcc_remark.strip()}
+    Log List    ${collection_of_lcc_remarks}
+    [Return]    ${collection_of_lcc_remarks}
+
+Get Line Number In Amadeus PNR Remarks
+    [Arguments]    ${remark}
+    ${remark_line}    Get Lines Matching Regexp    ${pnr_details}    .*${remark}.*
+    ${remark_line_count}    Get Line Count    ${remark_line}
+    ${line_no}    Get Substring    ${remark_line}    0    3
+    ${line_no}    Remove String Using Regexp    ${line_no}    [^\\d]
+    [Return]    ${line_no}
+
+Get Line Number In PNR Remarks
+    [Arguments]    ${string_to_search}
+    Set Test Variable    ${line_0001}    ${EMPTY}
+    @{lines}=    Split to lines    ${pnr_details}
+    : FOR    ${line}    IN    @{lines}
+    \    ${eval_line} =    Run Keyword and Return Status    Should Contain    ${line}    ${string_to_search}
+    \    Run Keyword If    "${eval_line}" == "True"    Set Test Variable    ${line_0001}    ${line}
+    \    #This will only get the last string match; Need to refactor if last string matched is not the expected line number
+    ${line_0001}    Fetch from Left    ${line_0001}    .
+    ${line_0001}    Remove Leading and Ending Spaces    ${line_0001}
+    [Return]    ${line_0001}
+
+Get Lowest Fare Value
+    [Arguments]    ${computed_charged_fare}    ${low_fare}    ${mark_up_amount}
+    ${low_fare}    Evaluate    ${low_fare} + ${mark_up_amount}
+    ${lowest_fare_value}    Run Keyword If    ${computed_charged_fare} < ${low_fare}    Set Variable    ${computed_charged_fare}
+    ...    ELSE    Set Variable    ${low_fare}
+    Set Test Variable    ${lowest_fare_value}
+
+Get PCC and Team ID from GDS Logs in Sabre Red
+    ${team_line}    Get Lines Containing String    ${pnr_details}    TEAM
+    ${team_line}    Remove All Spaces    ${team_line}
+    ${teamid} =    Fetch From Right    ${team_line}    TEAM
+    Set Test Variable    ${teamid}
+    ${pcc_line}    Get Lines Containing String    ${pnr_details}    PCC
+    ${pcc_line}    Remove All Spaces    ${pcc_line}
+    ${pcc}    Fetch From Right    ${pcc_line}    PCC
+    Set Test Variable    ${pcc}
+
+Get RF, SF and LF value For Fare X Tab
+    [Arguments]    ${fare_tab}
+    [Documentation]    Kindly Run "Get Base Fare Value From Galileo For X Number Of Fares" Prior To This Keyword
+    ${fare_tab_index} =    Fetch From Right    ${fare_tab}    ${SPACE}
+    Set Test Variable    ${fare_tab_index}
+    Click Panel    Air Fare
+    Click Fare Tab    ${fare_tab}
+    Click Details Tab
+    Get High Fare Value    ${fare_tab}
+    Get Charged Fare Value    ${fare_tab}
+    Get Low Fare Value    ${fare_tab}
+    Click Pricing Extras Tab
+    Get Nett Fare Value    ${fare_tab}
+    Get Mark-Up Amount Value    ${fare_tab}
+    Get Commission Rebate Amount Value    ${fare_tab}
+    Get Base or Nett Fare Value    ${nett_fare_value_${fare_tab_index}}    ${base_fare_value_${fare_tab_index}}
+    Get Discount or Rebate Value    ${mark_up_value_${fare_tab_index}}    ${commission_rebate_value_${fare_tab_index}}
+    ${computed_charged_fare}    Evaluate    ${base_or_nett_fare_value} + ${tax_amount_${fare_tab_index}} + ${discount_or_rebate_value}
+    ${computed_charged_fare}    Run Keyword If    "${currency}" == "HKD"    Convert To String    ${computed_charged_fare}
+    ...    ELSE    Set Variable    ${computed_charged_fare}
+    ${computed_charged_fare}    Run Keyword If    "${currency}" == "HKD"    Fetch From Left    ${computed_charged_fare}    .
+    ...    ELSE    Set Variable    ${computed_charged_fare}
+    ${set_mark_up_amount}    Set Variable If    "${mark_up_value_${fare_tab_index}}" == "${EMPTY}"    0    ${mark_up_value_${fare_tab_index}}
+    Get Selling Fare Value    ${base_or_nett_fare_value}    ${set_mark_up_amount}
+    Get Lowest Fare Value    ${computed_charged_fare}    ${low_fare_value_${fare_tab_index}}    ${set_mark_up_amount}
+    Get Ref Fare Value    ${computed_charged_fare}    ${high_fare_value_${fare_tab_index}}
+    Comment    Set Test Variable    ${commission_rebate_value_${fare_tab_index}}
+    Set Test Variable    ${base_or_nett_fare_value_${fare_tab_index}}    ${base_or_nett_fare_value}
+    Set Test Variable    ${lowest_fare_value_${fare_tab_index}}    ${lowest_fare_value}
+    Set Test Variable    ${ref_fare_value_${fare_tab_index}}    ${ref_fare_value}
+    Set Test Variable    ${selling_fare_value_${fare_tab_index}}    ${selling_fare_value}
+
+Get Ref Fare Value
+    [Arguments]    ${computed_charged_fare}    ${high_fare}
+    ${high_fare}    Set Variable If    ${computed_charged_fare} > ${high_fare}    ${computed_charged_fare}    ${high_fare}
+    ${ref_fare_value}    Run Keyword If    "${currency}" == "HKD"    Fetch From Left    ${high_fare}    .
+    ...    ELSE    Set Variable    ${high_fare}
+    Set Test Variable    ${ref_fare_value}
+
+Get Selling Fare Value
+    [Arguments]    ${fare_value}    ${mark_up_amount}
+    ${selling_fare_value}    Evaluate    ${fare_value} + ${mark_up_amount}
+    Set Test Variable    ${selling_fare_value}
+
+Get Shell PNR Remark Line
+    [Arguments]    ${current_pnr}=${EMPTY}
+    Retrieve PNR Details    ${current_pnr}
+    ${shell_pnr_line}    Set Variable If    "${gds_switch}" == "galileo" or "${gds_switch}" == "apollo"    T \ ** \ TEXT **    #${EMPTY} #Reserved for other GDS
+    ${shell_pnr_line}    Get Lines Containing String    ${pnr_details}    ${shell_pnr_line}
+    ${shell_pnr_line}    Remove Line Number    ${shell_pnr_line}
+    Set Test Variable    ${shell_pnr_line}
+
+Get TST Number
+    [Arguments]    ${segment_number}
+    ${tst_line_using_segment}    Get Lines Using Regexp    ${data_clipboard}    ${charged_fare_${fare_tab_index}}+.+${segment_number[1:]}
+    ${tst0_line}    Get Lines Containing String    ${data_clipboard}    TST0
+    ${tst_line_raw}    Run Keyword If    "${tst0_line}" != "${EMPTY}"    Split String    ${tst0_line}    ${SPACE}
+    ...    ELSE    Split String    ${tst_line_using_segment}    ${SPACE}
+    ${tst_number}    Run Keyword If    "${tst0_line}" != "${EMPTY}"    Remove String Using Regexp    ${tst_line_raw[0]}    TST.0*
+    ...    ELSE    Evaluate    ''.join(${tst_line_raw[:1]})
+    Set Test Variable    ${tst_number}    T${tst_number}
+
+Get TST Details From Amadeus
+    [Arguments]    ${fare_tab}    ${passenger_type}    ${segment_number}    ${tst_number}=${EMPTY}
+    ${fare_tab_index}    Fetch From Right    ${fare_tab}    ${SPACE}
+    Set Test Variable    ${fare_tab_index}
+    Clear Data From Clipboard
+    Activate Amadeus Selling Platform
+    Enter GDS Command    RT    TQT/${passenger_type}/${segment_number}
+    Get Clipboard Data Amadeus
+    ${is_tst_present}    Run Keyword And Return Status    Should Contain    ${data_clipboard}    TST0
+    Set Test Variable    ${is_tst_present}
+    Run Keyword If    "${tst_number}" != "${EMPTY}"    Get Base Fare From Amadeus    ${tst_number}    ${fare_tab}
+    Run Keyword If    ${is_tst_present} == True and "${tst_number}" == "${EMPTY}"    Get Base Fare, Currency, Tst Number And Segment Airline Code    ${fare_tab}
+    ...    ELSE    Run Keywords    Get TST Number    ${segment_number}
+    ...    AND    Get Base Fare From Amadeus    ${tst_number}    ${fare_tab}
+
+Get Tax Amount For Specific Tax Type On Fare X
+    [Arguments]    ${tax_type}    ${fare_tab}
+    ${fare_index}    Fetch From Right    ${fare_tab}    ${SPACE}
+    Set Test Variable    ${fare_index}
+    ${x_tax_value}    Get String Matching Regexp    [0-9]+\.[0-9]+${tax_type}    ${pnr_details}
+    ${x_tax_value}    Remove All Non-Integer (retain period)    ${x_tax_value}
+    Set Test Variable    ${x_tax_value_${fare_index}}    ${x_tax_value}
+
+Get Total Fare From Galileo
+    [Arguments]    ${fare_tab}    ${segment_number}    ${current_pnr}=${EMPTY}
+    ${fare_tab_index}    Fetch From Right    ${fare_tab}    ${SPACE}
+    Retrieve PNR Details From Travelport    ${current_pnr}    *FF${segment_number}    \    \    False
+    ${total_fare_line} =    Get Lines Using Regexp    ${pnr_details}    ADT.*G
+    ${total_fare_raw} =    Fetch From Right    ${total_fare_line}    ${SPACE}
+    ${total_fare} =    Remove All Non-Integer (retain period)    ${total_fare_raw}
+    @{currency_and_total_fare_raw} =    Split String    ${total_fare_line}
+    Set Suite Variable    ${total_fare_${fare_tab_index}}    ${total_fare}
+    Set Suite Variable    ${currency_and_total_fare_${fare_tab_index}}    ${currency_and_total_fare_raw[-2:-1]}
+    [Return]    ${total_fare_${fare_tab_index}}
+
+Get Total For All Tickets From Galileo For X Number Of Fares
+    [Arguments]    ${number_of_fares}=1
+    Set Test Variable    ${total_for_all_tickets_value}    0
+    Retrieve PNR Details From Travelport    ${current_pnr}    *RI
+    : FOR    ${counter}    IN RANGE    1    ${number_of_fares}+1
+    \    ${next_fare}    Determine If Next Quote Exists    ${counter}
+    \    ${subset}    Get String Between Strings    ${pnr_details}    QUOTE NUMBER: ${counter}    ${next_fare}
+    \    ${total_amount_value}    Get Lines Containing String    ${subset}    TOTAL AMOUNT
+    \    ${total_amount_value}    Fetch From Right    ${total_amount_value}    TOTAL AMOUNT:
+    \    ${total_amount_value}    Remove Leading And Ending Spaces    ${total_amount_value}
+    \    ${currency}    Get Substring    ${total_amount_value}    0    3
+    \    ${total_amount_value}    Remove All Non-Integer (retain period)    ${total_amount_value}
+    \    ${total_for_all_tickets_value}    Evaluate    ${total_amount_value} + ${total_for_all_tickets_value}
+    Set Test Variable    ${currency}
+    Set Test Variable    ${total_for_all_tickets_value}
+
+Handle Amadeus Popup
+    Sleep    2
+    ${amadeus_viewer_exists} =    Win Exists    Amadeus Viewer    ${EMPTY}
+    Run Keyword If    ${amadeus_viewer_exists} == 1    Win Activate    Amadeus Viewer    ${EMPTY}
+    Run Keyword If    ${amadeus_viewer_exists} == 1    Run Keywords    Send    {TAB}
+    ...    AND    Send    {ENTER}
+    ...    AND    Sleep    2
+    ${webpage_dialog_exists} =    Win Exists    Error -- Webpage Dialog    ${EMPTY}
+    Run Keyword If    ${webpage_dialog_exists} == 1    Win Activate    Error -- Webpage Dialog    ${EMPTY}
+    Run Keyword If    ${webpage_dialog_exists} == 1    Run Keywords    Send    {TAB}
+    ...    AND    Send    {ESCAPE}
+    ...    AND    Sleep    2
+    ${amadeus_dialog_exists} =    Win Exists    Selling Platform messages
+    Run Keyword If    ${amadeus_dialog_exists} == 1    Run Keywords    Win Activate    Selling Platform messages
+    ...    AND    Send    {TAB}
+    ...    AND    Send    {ENTER}
+    ...    AND    Sleep    2
+
+Handle Send To PNR Error - Sabre GDS
+    Activate Sabre Red Workspace
+    Sleep    2
+    Send    5/{ENTER}
+    Sleep    5
+    Activate Power Express Window
+
+Handle Ticketing Information Error - Galileo GDS
+    [Arguments]    ${gds_command}
+    Sleep    2
+    Activate Travelport Window
+    Send    {TAB}1{TAB}
+    Sleep    1
+    Send    {ENTER}
+    Sleep    2
+    Send    ${gds_command}{ENTER}
+    Sleep    2
+    Send    R.CWTPTEST{ENTER}
+    Sleep    2
+    Send    ER{ENTER}
+    Sleep    2
+    Send    *R{ENTER}
+    Sleep    2
+    Send    {CTRLDOWN}{HOME}{CTRLUP}
+    Sleep    1
+    Send    {CTRLDOWN}{SHIFTDOWN}{END}{SHIFTUP}{CTRLUP}
+    Sleep    1
+    Send    ^c
+    Sleep    3
+
+Modify PNR Remark
+    [Arguments]    ${original_remark}    ${new_remark}    ${galileo_remark_type}=${EMPTY}
+    : FOR    ${INDEX}    IN RANGE    21
+    \    ${line_number}    Run Keyword If    "${GDS_switch.lower()}" != "amadeus"    Get Line Number In PNR Remarks    ${original_remark}
+    \    ...    ELSE    Get Line Number In Amadeus PNR Remarks    ${original_remark}
+    \    ${modify_remark_command}    Set Variable If    "${GDS_switch}" == "sabre"    5${line_number}[${new_remark}    "${GDS_switch}" == "amadeus"    ${line_number}/${new_remark}
+    \    ...    "${GDS_switch}" == "galileo"    ${galileo_remark_type}.${line_number}@FT-${new_remark}
+    \    Sleep    1
+    \    Run Keyword If    "${GDS_switch}" == "amadeus"    Run Keywords    Send    {SHIFTDOWN}{PAUSE}{SHIFTUP}
+    \    ...    AND    Sleep    1
+    \    Send    ${modify_remark_command}
+    \    Sleep    1
+    \    Send    {ENTER}
+    \    Sleep    1
+    \    Get Clipboard Data
+    \    ${is_parallele_exists}    Run Keyword And Return Status    Should Contain    ${data_clipboard.upper()}    PARALLELE
+    \    Run Keyword If    "${GDS_switch}" == "amadeus" and ${is_parallele_exists} == True    Retrieve PNR Details From Amadeus    ${current_pnr}
+    \    Exit For Loop If    ${is_parallele_exists} == False
+
+Modify Transaction Codes
+    [Arguments]    ${original_code}    ${new_code}    ${galileo_remark_type}=${EMPTY}
+    Determine Received From Text
+    ${ignore_command}    Set Variable If    "${GDS_switch}" != "amadeus"    I{ENTER}    IG{ENTER}
+    ${original_7311}    Set Variable If    "${GDS_switch}" == "amadeus"    \\*7311\\*${original_code}    "${GDS_switch}" == "sabre"    .*7311*${original_code}    "${GDS_switch}" == "galileo"
+    ...    *7311*${original_code}
+    ${original_6311}    Set Variable If    "${GDS_switch}" == "amadeus"    \\*6311\\*${original_code}    "${GDS_switch}" == "sabre"    .*6311*${original_code}    "${GDS_switch}" == "galileo"
+    ...    *6311*${original_code}
+    ${original_1311}    Set Variable If    "${GDS_switch}" == "amadeus"    \\*1311\\*${original_code}    "${GDS_switch}" == "sabre"    .*1311*${original_code}    "${GDS_switch}" == "galileo"
+    ...    *1311*${original_code}
+    ${original_3311}    Set Variable If    "${GDS_switch}" == "amadeus"    \\*3311\\*${original_code}    "${GDS_switch}" == "sabre"    .*3311*${original_code}    "${GDS_switch}" == "galileo"
+    ...    *3311*${original_code}
+    ${new_7311}    Set Variable If    "${GDS_switch}" == "amadeus"    *7311*${new_code}    "${GDS_switch}" == "sabre"    .*7311*${new_code}    "${GDS_switch}" == "galileo"
+    ...    *7311*${new_code}
+    ${new_6311}    Set Variable If    "${GDS_switch}" == "amadeus"    *6311*${new_code}    "${GDS_switch}" == "sabre"    .*6311*${new_code}    "${GDS_switch}" == "galileo"
+    ...    *6311*${new_code}
+    ${new_1311}    Set Variable If    "${GDS_switch}" == "amadeus"    *1311*${new_code}    "${GDS_switch}" == "sabre"    .*1311*${new_code}    "${GDS_switch}" == "galileo"
+    ...    *1311*${new_code}
+    ${new_3311}    Set Variable If    "${GDS_switch}" == "amadeus"    *3311*${new_code}    "${GDS_switch}" == "sabre"    .*3311*${new_code}    "${GDS_switch}" == "galileo"
+    ...    *3311*${new_code}
+    : FOR    ${ctr}    IN RANGE    1    11
+    \    Run Keyword If    "${GDS_switch}" == "sabre"    Retrieve PNR Details From Sabre Red    ${current_pnr}    *.    2
+    \    Run Keyword If    "${GDS_switch}" == "galileo"    Retrieve PNR Details From Travelport    ${current_pnr}    *DI
+    \    Run Keyword If    "${GDS_switch}" == "amadeus"    Retrieve PNR Details From Amadeus    ${current_pnr}
+    \    Modify PNR Remark    ${original_7311}    ${new_7311}    ${galileo_remark_type}
+    \    Modify PNR Remark    ${original_6311}    ${new_6311}    ${galileo_remark_type}
+    \    Modify PNR Remark    ${original_1311}    ${new_1311}    ${galileo_remark_type}
+    \    Modify PNR Remark    ${original_3311}    ${new_3311}    ${galileo_remark_type}
+    \    Send    ${received_from}{ENTER}
+    \    Sleep    1
+    \    Run Keyword If    "${GDS_switch}" == "amadeus"    Run Keywords    Send    {SHIFTDOWN}{PAUSE}{SHIFTUP}
+    \    ...    AND    Sleep    1
+    \    Send    ER{ENTER}
+    \    Get Clipboard Data
+    \    ${is_simultaneous_exist}    Run Keyword And Return Status    Should Contain    ${data_clipboard.upper()}    SIMULT
+    \    ${is_parallel_exists}    Run Keyword And Return Status    Should Contain    ${data_clipboard.upper()}    PARALLEL
+    \    ${is_modification_exists}    Run Keyword And Return Status    Should Contain    ${data_clipboard.upper()}    MODIFIFICATIONS
+    \    Run Keyword If    "${GDS_switch}" == "amadeus"    Run Keywords    Send    {SHIFTDOWN}{PAUSE}{SHIFTUP}
+    \    ...    AND    Sleep    1
+    \    Send    ER{ENTER}
+    \    Get Clipboard Data
+    \    ${is_simultaneous_exist2}    Run Keyword And Return Status    Should Contain    ${data_clipboard.upper()}    SIMULT
+    \    ${is_parallel_exists2}    Run Keyword And Return Status    Should Contain    ${data_clipboard.upper()}    PARALLEL
+    \    ${is_modification_exists2}    Run Keyword And Return Status    Should Contain    ${data_clipboard.upper()}    MODIFIFICATIONS
+    \    Run Keyword If    "${GDS_switch}" == "amadeus"    Run Keywords    Send    RT{ENTER}
+    \    ...    AND    Sleep    2
+    \    Send    ${ignore_command}
+    \    Exit For Loop If    ${is_simultaneous_exist} == False and ${is_parallel_exists} == False and ${is_modification_exists} == False and ${is_simultaneous_exist2} == False and ${is_parallel_exists2} == False and ${is_modification_exists2} == False
+
+Move Down Until End Of Scroll
+    Activate Sabre Red Workspace
+    : FOR    ${INDEX}    IN RANGE    20
+    \    Send Sabre Command    MD
+    \    ${data_clipboard}    Get Clipboard Data Sabre
+    \    ${is_nothing_to_scroll_or_end_of_scroll} =    Run Keyword And Return Status    Should Contain Any    ${data_clipboard}    NOTHING TO SCROLL    END OF SCROLL
+    \    Comment    ${nothing_to_scroll} =    Run Keyword And Return Status    Should Contain    ${data_clipboard}    NOTHING TO SCROLL
+    \    Comment    ${end_of_scroll} =    Run Keyword And Return Status    Should Contain    ${data_clipboard}    END OF SCROLL
+    \    Comment    Exit For Loop If    ${end_of_scroll} == True or ${nothing_to_scroll} == True
+    \    Exit For Loop If    ${is_nothing_to_scroll_or_end_of_scroll} == True
+
+Move Down X Times
+    [Arguments]    ${number_of_down}
+    Activate Sabre Red Workspace
+    : FOR    ${INDEX}    IN RANGE    1    ${number_of_down} + 1
+    \    Send Sabre Command    MD
+
+Navigate To Amadeus Command Page
+    Activate Amadeus Selling Platform
+    Control Click    SELLING PLATFORM    ${EMPTY}    [CLASS:Internet Explorer_Server; INSTANCE:1]    ${EMPTY}    1    124
+    ...    45
+    Sleep    2
+
+Remove PNR Remark
+    [Arguments]    ${remark}    ${galileo_remark_type}=${EMPTY}
+    ${line_number}    Run Keyword If    "${GDS_switch}" != "amadeus"    Get Line Number In PNR Remarks    ${remark}
+    ...    ELSE    Get Line Number In Amadeus PNR Remarks    ${remark}
+    ${remove_command}    Set Variable If    "${GDS_switch}" == "sabre"    5${line_number}[    "${GDS_switch}" == "amadeus"    XE${line_number}    "${GDS_switch}" == "galileo"
+    ...    ${galileo_remark_type}.${line_number}@
+    Sleep    1
+    Run Keyword If    "${GDS_switch}" == "amadeus"    Run Keywords    Send    {SHIFTDOWN}{PAUSE}{SHIFTUP}
+    ...    AND    Sleep    1
+    Send    ${remove_command}
+    Sleep    1
+    Send    {ENTER}
+    Sleep    1
+
+Remove PNR Remark And End Transaction
+    [Arguments]    ${remark}    ${galileo_remark_type}=${EMPTY}
+    Determine Received From Text
+    ${ignore_command}    Set Variable If    "${GDS_switch}" != "amadeus"    I{ENTER}    IG{ENTER}
+    : FOR    ${ctr}    IN RANGE    1    11
+    \    Run Keyword If    "${GDS_switch}" == "sabre"    Retrieve PNR Details From Sabre Red    ${current_pnr}    *.    2
+    \    Run Keyword If    "${GDS_switch}" == "galileo"    Retrieve PNR Details From Travelport    ${current_pnr}    *DI
+    \    Run Keyword If    "${GDS_switch}" == "amadeus"    Retrieve PNR Details From Amadeus    ${current_pnr}
+    \    Remove PNR Remark    ${remark}    ${galileo_remark_type}
+    \    Send    ${received_from}{ENTER}
+    \    Sleep    1
+    \    Run Keyword If    "${GDS_switch}" == "amadeus"    Run Keywords    Send    {SHIFTDOWN}{PAUSE}{SHIFTUP}
+    \    ...    AND    Sleep    1
+    \    Send    ER{ENTER}
+    \    Sleep    1
+    \    Get Clipboard Data
+    \    ${is_simultaneous_exist}    Run Keyword And Return Status    Should Contain    ${data_clipboard.upper()}    SIMULT
+    \    ${is_parallel_exists}    Run Keyword And Return Status    Should Contain    ${data_clipboard.upper()}    PARALLEL
+    \    ${is_modification_exists}    Run Keyword And Return Status    Should Contain    ${data_clipboard.upper()}    MODIFIFICATIONS
+    \    Run Keyword If    "${GDS_switch}" == "amadeus"    Run Keywords    Send    RT{ENTER}
+    \    ...    AND    Sleep    1
+    \    Send    ${ignore_command}
+    \    Exit For Loop If    ${is_simultaneous_exist} == False and ${is_parallel_exists} == False and ${is_modification_exists} == False
+
+Retrieve PNR Details
+    [Arguments]    ${current_pnr}
+    Run Keyword If    "${gds_switch}" == "galileo" or "${gds_switch}" == "apollo"    Retrieve PNR Details From Travelport    ${current_pnr}
+    ...    ELSE IF    "${gds_switch}" == "sabre"    Retrieve PNR Details From Sabre Red    ${current_pnr}
+    ...    ELSE IF    "${gds_switch}" == "amadeus"    Retrieve PNR Details From Amadeus    ${current_pnr}
+
+Retrieve PNR Details From Amadeus
+    [Arguments]    ${current_pnr}=${EMPTY}    ${command}=${EMPTY}    ${refresh_needed}=True
+    Activate Amadeus Selling Platform
+    Clear Data From Clipboard
+    Run Keyword If    "${current_pnr}" != "${EMPTY}"    Run Keywords    Send    RT${current_pnr}{ENTER}
+    ...    AND    Sleep    2
+    Run Keyword If    '${refresh_needed}' == 'True'    Run Keywords    Send    {SHIFT}+{PAUSE}
+    ...    AND    Sleep    1
+    ...    AND    Send    IR{ENTER}
+    ...    AND    Sleep    2
+    Run Keyword If    "${command}" != "${EMPTY}"    Run Keywords    Send    ${command}{ENTER}
+    ...    AND    Sleep    3
+    Set Test Variable    ${pnr_details}    ${EMPTY}
+    Set Test Variable    ${previous_clipboard}    ${EMPTY}
+    : FOR    ${index}    IN RANGE    0    50
+    \    ${data_clipboard}    Get Clipboard Data Amadeus
+    \    ${is_not_scrollable}    Run Keyword And Return Status    Should Contain    ${data_clipboard}    REQUESTED DISPLAY NOT SCROLLABLE
+    \    Run Keyword If    """${data_clipboard}""" == """${previous_clipboard}""" or ${is_not_scrollable} == True    Exit For Loop
+    \    ...    ELSE    Set Test Variable    ${previous_clipboard}    ${data_clipboard}
+    \    ${pnr_details} =    Catenate    ${pnr_details}    ${previous_clipboard}
+    \    Sleep    1
+    \    Send    {SHIFT}+{PAUSE}
+    \    Sleep    1
+    \    Send    MD{ENTER}
+    ${sorted_pnr_details} =    Sort Pnr Details    ${pnr_details}
+    Set Test Variable    ${pnr_details}    ${sorted_pnr_details}
+    Log    ${pnr_details}
+    [Teardown]    Take Screenshot
+    [Return]    ${pnr_details}
+
+Retrieve PNR Details From Sabre Red
+    [Arguments]    ${pnr}=${EMPTY}    ${command}=${EMPTY}    ${move_down}=Until End Of Scroll    ${default_sleep}=5
+    Activate Sabre Red Workspace
+    Clear Data From Clipboard
+    Send    ^!{BS}
+    Sleep    2
+    Run Keyword If    "${pnr}" != "${EMPTY}"    Send Sabre Command    IG    *${pnr}
+    ${command}    Replace String    ${command}    ‡    '
+    Run Keyword If    "${command}" != "${EMPTY}"    Send Sabre Command    ${command}
+    Run Keyword If    "${move_down}" != "Until End Of Scroll"    Move Down X Times    ${move_down}
+    ...    ELSE    Move Down Until End of Scroll
+    ${pnr_details}    Get Clipboard Data Sabre
+    Set Test Variable    ${pnr_details}    ${pnr_details.strip()}
+    Log    ${pnr_details}
+    [Teardown]    Take Screenshot
+    [Return]    ${pnr_details}
+
+Retrieve PNR Details From Travelport
+    [Arguments]    ${current_pnr}=${EMPTY}    ${gds_command}=*ALL    ${wait_time}=1    ${project}=non-apac    ${performl_md}=True
+    Activate Travelport Window
+    Run Keyword If    '${current_pnr}' != '${EMPTY}'    Run Keywords    Send    *${current_pnr}{ENTER}
+    ...    AND    Sleep    2
+    ...    ELSE    Send    *R{ENTER}
+    ${gds_command}    Replace String    ${gds_command}    +    {SHIFTDOWN}={SHIFTUP}
+    Run Keyword If    '${gds_command}' != '${EMPTY}'    Run Keywords    Send    *R{ENTER}
+    ...    AND    Sleep    2
+    ${pnr_details} =    Run Keyword If    '${gds_command}' == '*ALL'    Get All Data From Smart Panel
+    ...    ELSE    Get All Data From Terminal Window    ${gds_command}    ${wait_time}    ${performl_md}
+    Set Test Variable    ${pnr_details}
+    Log    ${pnr_details}
+    [Teardown]    Take Screenshot
+    [Return]    ${pnr_details}
+
+Retrieve PNR From Amadeus
+    Activate Amadeus Selling Platform
+    Clear Data From Clipboard
+    Send    RT{ENTER}
+    Sleep    2
+    Set Test Variable    ${pnr_details}    ${EMPTY}
+    Set Test Variable    ${previous_clipboard}    ${EMPTY}
+    Send    {CTRLDOWN}ac{CTRLUP}
+    ${data_clipboard} =    Get Data From Clipboard
+    Set Test Variable    ${pnr_details}    ${data_clipboard.strip()}
+
+Verify Smartpoint Terminal Is Refreshed
+    Verify Image Does Not Exists    busy_travelport.PNG
+    Comment    ${data_clipboard}    Get Clipboard Data Travelport
+    Comment    ${chevron_line}    Get Line    ${data_clipboard.strip()}    -1
+    Comment    Log    ${chevron_line}
+    Comment    Should Match Regexp    ${chevron_line}    ^>$|^\\)>$
+    Comment    Set Test Variable    ${data_clipboard}
+
+Wait Until Smartpoint Terminal Is Refreshed
+    Wait Until Keyword Succeeds    60    2    Verify Smartpoint Terminal Is Refreshed
+    Sleep    2

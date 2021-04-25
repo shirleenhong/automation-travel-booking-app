@@ -1,0 +1,378 @@
+*** Settings ***
+Suite Setup
+Force Tags        amadeus
+Resource          ../../client_info/client_info_verification.txt
+Resource          ../other_services_verification.txt
+Resource          ../../air_fare/air_fare_verification.txt
+Resource          ../other_services.txt
+
+*** Test Cases ***
+[IN NB] Verify That Correct Remarks Will Be Written Using Amount FOP Type is Cash or Invoice
+    [Tags]    backlog    not_ready
+    Open Power Express And Retrieve Profile    ${version}    Test    u003jdc    en-GB    jcabela    APAC QA
+    Select GDS    Amadeus
+    Set Client And Traveler    APAC SYN CORP ¦ APAC SYN IN    BEAR    SING
+    Click New Booking
+    Select Form Of Payment    Cash
+    Click Panel    Cust Refs
+    Click Update PNR
+    Book Flight X Months From Now    SINMNL/APR    SS1Y1    FXP/S2    6    3
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Click Other Services
+    Select Product    Despatch
+    Select Vendor    Carlson Wagonlit GST
+    Click Continue In Other Svcs
+    Populate Service Info With Values (IN)    QA Vendor    200    5    6    QA Description    QA Details
+    Get Service Info Fields
+    Verify Calculations In Other Services    ${tab}    ${country}
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Specific Remark Is Written In The PNR    ${set_of_remarks}
+
+[IN AB] Verify That Correct Remarks Will Be Written Using Amount FOP Type is CX
+    [Tags]    backlog    not_ready
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Click Panel    Client Info
+    Manually Set Value In Form Of Payment    VI    4444333322221111    1220
+    Select Merchant Fee Type    Airline
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Click Other Services
+    Select Product    Despatch
+    Select Vendor    Carlson Wagonlit GST
+    Click Continue In Other Svcs
+    Populate Service Info With Values (IN)    QA Vendor    200    5    6    QA Description    QA Details
+
+[IN NB] Verify That Correct Remarks Will Be Written Using Percentage FOP Type is BTC.
+    [Tags]    backlog    not_ready
+    [Setup]    Set Product and Vendor Related Values For India    8    00800361    14    0.5    0.5
+    ...    2
+    ${discount_amount}=    Set Variable    400
+    ${commission_amount}=    Set Variable    200
+    ${nett_cost}=    Set Variable    500
+    Set Test Variable    ${discount_amount}
+    Set Test Variable    ${commission_amount}
+    Set Test Variable    ${nett_cost}
+    Comment    Verify Calculations In Other Services    Service Info    IN
+    Click Control    [NAME:PaymentButton]    1
+    Click Menuitem Control    Cash
+
+[IN AB] Verify That Correct Remarks Will Be Written Using Percentage FOP Type is CC
+    [Tags]    backlog    not_ready
+    Create PNR Using FOP Type CC
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Click Panel    Client Info
+    Manually Set Value In Form Of Payment    VI    4444333322221111    1220
+    Select Merchant Fee Type    Airline
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Click Other Services
+    Select Product    Despatch
+    Select Vendor    Carlson Wagonlit GST
+    Click Continue In Other Svcs
+    Populate Service Info With Values (IN)    QA Vendor    200    5%    6%    QA Description    QA Details
+    Get Service Info Fields
+    Verify Calculations In Other Services    ${tab}    ${country}
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Specific Remark Is Written In The PNR    CC
+
+*** Keywords ***
+Amend Booking For Verify That Accounting Lines For Other Services With GST Are Written When FOP Is CX And BTA Description Is Blank For SG
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Comment    Populate Air Fare Savings Code    RF - Restricted Fare Accepted    P - Passenger Declined Restricted Fare    CW - Business CWT Nett Fare
+    Click Panel    Client Info
+    Select Merchant Fee Type    Airline
+    Populate All Panels (Except Given Panels If Any)    Client Info    Air Fare
+    Click Panel    Delivery
+    Select Delivery Method    Amadeus edited TKXL
+    Click Finish PNR
+
+Amend Booking For Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Cash or Invoice And BTA Description Is Blank
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Comment    Populate Air Fare Savings Code    RF - Restricted Fare Accepted    P - Passenger Declined Restricted Fare    CW - Business CWT Nett Fare
+    Populate All Panels (Except Given Panels If Any)    Client Info    Air Fare
+    Comment    Click Panel    Client Info
+    Comment    Select Merchant Fee Type    Airline
+    Click Panel    Delivery
+    Select Delivery Method    Amadeus edited TKXL
+    Click Finish PNR
+    Re-Execute Amend Booking For Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Cash or Invoice And BTA Description Is Blank If Simultaneous Change Error Is Displayed
+    Click Other Services
+    Select Product    Despatch Charge
+    Select Vendor    DESPATCH DEPARTMENT
+    Click Continue In Other Svcs
+    Click Tab In Other Services Panel    Service Info
+    Populate Service Info With Values    Vendor Contact    400.5    500.5    Cash or Invoice    ${EMPTY}    ${EMPTY}
+    ...    ${EMPTY}    ${EMPTY}    Description 1    ${EMPTY}
+    Click Calculate
+    Get Service Info Field Values
+    Get Product Code    sg    ${product}
+    Get GST Percentage    sg    ${product}
+    Get Vendor Code    sg    ${product}    ${vendor}
+    Click Finish PNR    ${EMPTY}    5    Other Svcs
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Accounting Remarks For Other Services Are Written In RM Lines    sg    true
+
+Amend Booking For Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Cash or Invoice And BTA Description Is Blank For SG
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Comment    Populate Air Fare Savings Code    RF - Restricted Fare Accepted    P - Passenger Declined Restricted Fare    CW - Business CWT Nett Fare
+    Populate All Panels (Except Given Panels If Any)    Client Info    Air Fare
+    Comment    Click Panel    Client Info
+    Comment    Select Merchant Fee Type    Airline
+    Click Panel    Delivery
+    Select Delivery Method    Amadeus edited TKXL
+    Click Finish PNR
+    Re-Execute Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Cash or Invoice And BTA Description Is Blank If Simultaneous Change Error Is Displayed
+    Click Other Services
+    Select Product    Air Commission Returned
+    Select Vendor    REBATE
+    Click Continue In Other Svcs
+    Click Tab In Other Services Panel    Service Info
+    Populate Service Info With Values    Vendor Contact    400.5    500.5    Cash or Invoice    ${EMPTY}    ${EMPTY}
+    ...    ${EMPTY}    ${EMPTY}    Description 1    ${EMPTY}
+    Click Calculate
+    Get Service Info Field Values
+    Get Product Code    sg    ${product}
+    Get GST Percentage    sg    ${product}
+    Get Vendor Code    sg    ${product}    ${vendor}
+    Click Finish PNR    ${EMPTY}    5    Other Svcs
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Accounting Remarks For Other Services Are Written in RM Lines    sg    false
+
+Amend Booking For Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Cash or Invoice And BTA Description Is Blank For HK
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Comment    Populate Air Fare Savings Code    RF - Restricted Fare Accepted    P - Passenger Declined Restricted Fare    CW - Business CWT Nett Fare
+    Populate All Panels (Except Given Panels If Any)    Client Info    Air Fare
+    Comment    Click Panel    Client Info
+    Comment    Select Merchant Fee Type    Airline
+    Click Panel    Delivery
+    Select Delivery Method    Amadeus edited TKXL
+    Click Finish PNR
+    Re-Execute Amend Booking For Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Cash or Invoice And BTA Description Is Blank If Simultaneous Change Error Is Displayed
+    Click Other Services
+    Select Product    Airline Penalty Fee
+    Select Vendor    CARLSON WAGONLIT TRAVEL
+    Click Continue In Other Svcs
+    Click Tab In Other Services Panel    Service Info
+    Populate Service Info With Values    Vendor Contact    400.5    500.5    Cash or Invoice    ${EMPTY}    ${EMPTY}
+    ...    ${EMPTY}    ${EMPTY}    Description 1    ${EMPTY}
+    Click Calculate
+    Get Service Info Field Values
+    Get Product Code    hk    ${product}
+    Get GST Percentage    hk    ${product}
+    Get Vendor Code    hk    ${product}    ${vendor}
+    Click Finish PNR    ${EMPTY}    5    Other Svcs
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Accounting Remarks For Other Services Are Written in RM Lines    hk    false
+
+Create PNR Using FOP Type CC
+    Open Power Express And Retrieve Profile    ${version}    Test    u003jdc    en-GB    jcabela    APAC QA
+    Select GDS    Amadeus
+    Set Client And Traveler    APAC SYN CORP ¦ APAC SYN IN    BEAR    SING
+    Click New Booking
+    Manually Set Value In Form Of Payment    VI    4444333322221111    1220
+    Select Merchant Fee Type    Airline
+    Click Update PNR
+    Book Flight X Months From Now    SINMNL/APR    SS1Y1    FXP/S2    6    3
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+
+Create PNR Using FOP Type BTC
+    Open Power Express And Retrieve Profile    ${version}    Test    u003jdc    en-GB    jcabela    APAC QA
+    Select GDS    Amadeus
+    Set Client And Traveler    APAC SYN CORP ¦ APAC SYN IN    BEAR    SING
+    Click New Booking
+    Select Form Of Payment    Cash
+    Click Panel    Cust Refs
+    Click Update PNR
+    Book Flight X Months From Now    SINMNL/APR    SS1Y1    FXP/S2    6    3
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+
+Get Contact No from Vendor Info Tab
+    ${contact_no}    Get Control Text Value    [NAME:ContactNumberTextBox]
+    Set Suite Variable    ${contact_no}
+
+Get DateTime And Location For Passive Segment
+    ${date_time}    Set Variable IF    ("${date_and_time_departure_to}" !="${EMPTY}" and "${date_and_time_arrival_to}" =="${EMPTY}")    ${date_and_time_departure_to}
+    ${date_time}    Set Variable IF    ("${date_and_time_departure_to}" =="${EMPTY}" and "${date_and_time_arrival_to}" !="${EMPTY}")    ${date_and_time_arrival_to}
+    ${date_and_time_to}    Split String    ${date_time}    ${SPACE}
+    ${date_temp}    Set Variable    ${date_and_time_to[0]}
+    ${time_temp}    Set Variable    ${date_and_time_to[1]}
+    ${date}    Convert Date To Gds Format    ${date_temp}    %d/%m/%Y    is_year_needed=false
+    ${time}    Set Variable    ${time_temp.replace(":","")}
+    ${location}    Set Variable IF    ("${date_and_time_departure_to}" !="${EMPTY}" and "${date_and_time_arrival_to}" =="${EMPTY}") or ("${date_and_time_departure_to}" !="${EMPTY}" and "${date_and_time_arrival_to}" !="${EMPTY}")    ${location_value_departure_to.upper()}    ${location_value_arrival_to.upper()}
+    ${location_description}    Set Variable IF    ("${date_and_time_departure_to}" !="${EMPTY}" and "${date_and_time_arrival_to}" =="${EMPTY}") or ("${date_and_time_departure_to}" !="${EMPTY}" and "${date_and_time_arrival_to}" !="${EMPTY}")    ${description_value_departure_to}    ${description_value_arrival_to}
+    Set Suite Variable    ${date}
+    Set Suite Variable    ${time}
+    Set Suite Variable    ${location}
+    Set Suite Variable    ${location_description}
+
+Validate Passive Segments
+    [Arguments]    ${product}    ${vendor}    ${country}
+    ${vendor_code_number}    Get Vendor Code    ${country}    ${product}    ${vendor}
+    Run Keyword If    ("${country}" == "SG" and "${product}" =="Car Transfer") or ("${country}" == "HK" and "${product}" =="Car Rental Prepaid") or ("${country}" == "HK" and "${product}" =="LIMOUSINE")    Get DateTime And Location For Passive Segment
+    Run Keyword If    ("${country}" == "HK" and "${product}" =="LIMOUSINE") and ("${date_and_time_departure_to}" !="${EMPTY}) and ("${date_and_time_arrival_to}" =="${EMPTY})    Verify Specific Line Is Written In The PNR    RU1AHK1HKG${date}-/TYP-LIM/SUC-${vendor_code_number}/SUN-${vendor}/SUT-${contact_no}/STP-${location_value_departure_from}${description_value_departure_from}/SD-${date}/ST-${time}/EP-${location_value_departure_to}${description_value_departure_to}/TTL-${total_selling_price}HKD/TK-${eo_number}
+    Run Keyword If    ("${country}" == "HK" and "${product}" =="LIMOUSINE") and ("${date_and_time_departure_to}" =="${EMPTY}) and ("${date_and_time_arrival_to}" !="${EMPTY})    Verify Specific Line Is Written In The PNR    RU1AHK1HKG${date}-/TYP-LIM/SUC-${vendor_code_number}/SUN-${vendor}/SUT-${contact_no}/STP-${location_value_arrival_from}${description_value_arrival_from}/SD-${date}/ST-${time}/EP-${location_value_arrival_to}${description_value_arrival_to}/TTL-${total_selling_price}HKD/TK-${eo_number}
+    Run Keyword If    ("${country}" == "SG" and "${product}" =="Car Transfer")    Verify Specific Line Is Written In The PNR    RU1AHK1DXB${date}-/TYP-TFR/SUC-${vendor_code_number}/SUN-${vendor}/SUT-${contact_no}/STP-${location}${location_description}/SD-${date}/ST-${time}/EP-${location}${location_description}/TK-${eo_number}
+    Run Keyword If    ("${country}" == "HK" and "${product}" =="Car Rental Prepaid")    Verify Specific Line Is Written In The PNR    RU1AHK1HKG${date}-/TYP-TFR/SUC-${vendor_code_number}/SUN-${vendor}/SUT-${contact_no}/STP-${location}${location_description}/SD-${date}/ST-${time}/EP-${location}${location_description}/TTL-${total_selling_price}HKD/TK-${eo_number}
+    Run Keyword If    ("${country}" == "HK" and "${product}" =="LIMOUSINE")    Verify Specific Line Is Written In The PNR    RU1AHK1HKG${date}-/TYP-LIM/SUC-${vendor_code_number}/SUN-${vendor}/SUT-${contact_no}/STP-${location}${location_description}/SD-${date}/ST-${time}/EP-${location}${location_description}/TTL-${total_selling_price}HKD/TK-${eo_number}
+    ${dep_date}    Run Keyword If    ("${country}" == "SG" and "${product}" =="Train Tickets") or ("${country}" == "HK" and "${product}" =="TRAIN TICKET") or ("${country}" == "SG" and "${product}" =="FERRY") or ("${country}" == "HK" and "${product}" =="FERRY TICKET")    Convert Date To Gds Format    ${depart_date}    %m/%d/%Y    false
+    ${ret_date}    Run Keyword If    ("${country}" == "SG" and "${product}" =="Train Tickets") or ("${country}" == "HK" and "${product}" =="TRAIN TICKET") or ("${country}" == "SG" and "${product}" =="FERRY") or ("${country}" == "HK" and "${product}" =="FERRY TICKET")    Convert Date To Gds Format    ${return_date}    %m/%d/%Y    false
+    Run Keyword If    ("${country}" == "HK" and "${product}" =="TRAIN TICKET")    Verify Specific Line Is Written In The PNR    RU1AHK1HKG${dep_date}-/TYP-TRN/SUC-${vendor_code_number}/SUN-${vendor}//SUT-${contact_no}/STS-HK/STP-${depart_origin}/SD-${dep_date}/EP-${depart_destination}/ED-${ret_date}/CL-${class_cabin}/TTL-${selling_price}${country}D/TK-${eo_number}
+    Run Keyword If    ("${country}" == "SG" and "${product}" =="Train Tickets")    Verify Specific Line Is Written In The PNR    RU1AHK1KEL${dep_date}-/TYP-TRN/SUC-${vendor_code_number}/SUN-${vendor}/SUT-${contact_no}/STS-HK/STP-${depart_origin}/SD-${dep_date}/EP-${depart_destination}/ED-${ret_date}/CL-${class_cabin}/TTL-${selling_price}${country}D/TK-${eo_number}
+    Run Keyword If    ("${country}" == "SG" and "${product}" =="FERRY")    Verify Specific Line Is Written In The PNR    RU1AHK1KEL${dep_date}-/TYP-SEA/SUC-${vendor_code_number}/SUN-${vendor}/SUT-${contact_no}/STS-HK/STP-${depart_origin}/SD-${dep_date}/EP-${depart_destination}/ED-${ret_date}/CL-${class_cabin}/TTL-${selling_price}${country}D/TK-${eo_number}
+    Run Keyword If    ("${country}" == "HK" and "${product}" =="FERRY TICKET")    Verify Specific Line Is Written In The PNR    RU1AHK1HKG${dep_date}-/TYP-SEA/SUC-${vendor_code_number}/SUN-${vendor}/SUT-${contact_no}/STS-HK/STP-${depart_origin}/SD-${dep_date}/EP-${depart_destination}/ED-${ret_date}/CL-${class_cabin}/TTL-${selling_price}${country}D/TK-${eo_number}
+    ${date1}=    Generate Date X Months From Now    3
+    ${date}    Run Keyword If    ("${country}" == "HK" and "${product}" =="DISCOUNT")    Convert Date To Gds Format    ${date1}    %d/%m/%Y    is_year_needed=false
+    Run Keyword If    ("${country}" == "HK" and "${product}" =="DISCOUNT")    Verify Specific Line Is Written In The PNR    RU1AHK1HKG${date}/TYP-OTH/SUC-${vendor_code_number}/SUN-${vendor}/TTL-${total_selling_price}HKD/TK-${eo_number}/SI-DISCOUNT
+
+Obsolete_Verify That Car Remarks Are Written In PNR When FOP is Cash Or Invoice
+    [Arguments]    ${product}    ${vendor}    ${fop}    ${country}
+    Verify Other Services Generic Accounting Remarks    ${product}    ${vendor}    ${fop}    ${country}
+    Comment    Verify Other Services Cash Or Invoice Fees Accounting Remarks Are Written    ${country}
+    ${gst_amount}    Get Variable Value    ${gst_amount}    ${EMPTY}
+    Run Keyword If    "${gst_amount}" != "${EMPTY}" and "${country}" == "SG"    Verify Specific Line Is Written In The PNR    RM *MSX/S${total_selling_price}/SF${total_selling_price}/C${commission}/G${gst_amount}/FS
+    Run Keyword If    "${gst_amount}" == "${EMPTY}" and "${country}" == "SG"    Verify Specific Line Is Written In The PNR    RM *MSX/S${total_selling_price}/SF${total_selling_price}/C${commission}/FS
+    Run Keyword If    "${country}" == "HK"    Verify Specific Line Is Written In The PNR    RM *MSX/A${total_selling_price}/SF${total_selling_price}/C${commission}/FS/FF40-${location_value_departure_from.upper()}-${location_value_departure_to.upper()}
+    Comment    Run Keyword If    "${country}" == "SG"    Verify Specific Line Is Written In The PNR    RM *MSX/FF40-${location_value_departure_from.upper()}-${location_value_departure_to.upper()}/FF41-${date_and_time_departure_to}
+    ${date_and_time}    Split String    ${date_and_time_departure_to}    ${SPACE}
+    ${date}    Set Variable    ${date_and_time[0]}
+    ${time}    Set Variable    ${date_and_time[1]}
+    ${date_to}    Convert Date To Gds Format    ${date}    %d/%m/%Y    is_year_needed=true
+    Run Keyword If    "${country}" == "SG"    Verify Specific Line Is Written In The PNR    RM *MSX/FF40-${location_value_departure_from.upper()}-${location_value_departure_to.upper()}/FF41-${date_to} ${time.replace(":","")}
+    Run Keyword If    "${country}" == "HK"    Verify Specific Line Is Written In The PNR    RM *MSX/FF41-${date_to} ${time.replace(":","")}/FF34-AB/FF35-OTH
+    Comment    Verify Multiple Remarks Are Written In The PNR    RM *MSX/FF34-AB/FF35-OTH/FF36-M/FF47-CWT
+    Run Keyword If    "${country}" == "SG"    Verify Specific Line Is Written In The PNR    RM *MSX/FF34-AB/FF35-OTH/FF36-M/FF47-CWT
+    Run Keyword If    "${country}" == "HK"    Verify Specific Line Is Written In The PNR    RM *MSX/FF36-M/FF47-CWT
+
+Verify Vendor Contact Net Cost and Selling Value are correct
+    [Arguments]    ${expected vendor}
+    Verify Actual Value Matches Expected Value
+
+Get Relation And Premium Details In Insured Grid
+    ${insured_data}    Get All Cell Values In Data Grid Table    [NAME:InsuredGridView]
+    Log List    ${insured_data}
+    ${relation_collection}    Create List
+    : FOR    ${row_data}    IN    @{insured_data}
+    \    ${row_data}    Split String    ${row_data}    ;
+    \    Append To List    ${relation_collection}    ${row_data[2:4]}
+    Log List    ${relation_collection}
+    Set Suite Variable    ${relation_collection}
+
+Verify Insurance General Remarks
+    [Arguments]    ${product_name}
+    Get Agent Login ID from Amadeus
+    @{date_time}    Split String    ${date_for_eo}    ${SPACE}
+    ${eo_date}    Convert Date To Gds Format    ${date_time[0]}    %m/%d/%Y    true
+    ${eo_date}    Get Substring    ${eo_date}    \    -2
+    ${eo_time}    Split String    ${date_time[1]}    :
+    ${utc_time}    Set Variable    ${eo_time[0]}${eo_time[1]}Z
+    Verify Specific Remark Is Written In The PNR    II\\*\\*\\*\\*\\* INSURANCE INFORMATION \\*\\*\\*\\*\\*\\* ${agent_id[4:].upper()} ${eo_date} \\d{4}\\w    true
+    Log List    ${insured_collection}
+    Verify Specific Remark Is Written In The PNR    I\\*PLAN SELECTED-${actual_plan_selected.upper()} ${agent_id[4:].upper()} ${eo_date} \\d{4}\\w    true
+    Verify Specific Remark Is Written In The PNR    II\\*\\*\\*\\*\\*\\*\\* INSURED PERSONS \\*\\*\\*\\*\\*\\*\\*\\*\\* ${agent_id[4:].upper()} ${eo_date} \\d{4}\\w    true
+    : FOR    ${name}    IN    ${name_list}
+    \    Verify Specific Remark Is Written In The PNR    I\\* ${name[0].upper()} ${agent_id[4:].upper()} ${eo_date} \\d{4}\\w    true
+    Verify Specific Remark Is Written In The PNR    II\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\* ${agent_id[4:].upper()} ${eo_date} \\d{4}\\w    true
+    Run Keyword If    "${insuree_address}"!="${EMPTY}"    Verify Specific Remark Is Written In The PNR    I\\*INSURED ADDRESS -${insuree_address.upper()} ${agent_id[4:].upper()} ${eo_date} \\d{4}\\w    true
+    Run Keyword If    "${actual_geographic_area}"!="${EMPTY}"    Verify Specific Remark Is Written In The PNR    I\\*GEOGRAPHICAL AREA- ${actual_geographic_area.upper()} ${agent_id[4:].upper()} ${eo_date} \\d{4}\\w    true
+    ${from_date}    Convert Date To Gds Format    ${actual_from_date}    %d/%m/%Y    false
+    Verify Specific Remark Is Written In The PNR    I\\*INSURANCE PERIOD/DAYS- ${number_of_days}/FROM- ${from_date} ${agent_id[4:].upper()} ${eo_date} \\d{4}\\w    true
+    Run Keyword If    "${form_of_payment}" !="Cash or Invoice"    Verify Specific Remark Is Written In The PNR    I\\*FOP FROM CLIENT- ${form_of_payment_vendor} ${agent_id[4:].upper()} ${eo_date} \\d{4}\\w    true
+    Verify Specific Remark Is Written In The PNR    I\\*SELLING PRICE- ${total_selling_price} ${agent_id[4:].upper()} ${eo_date} \\d{4}\\w    true
+    Verify Specific Remark Is Written In The PNR    I\\*COST PRICE- ${cost_price} ${agent_id[4:].upper()} ${eo_date} \\d{4}\\w    true
+    Verify Specific Remark Is Written In The PNR    II\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\* ${agent_id[4:].upper()} ${eo_date} \\d{4}\\w    true
+    Verify Specific Remark Is Written In The PNR    RM XO\\*XO NUMBER ${eo_number} ISSUED ${agent_id[4:].upper()} ${eo_date}\\s\\d{4}\\w    true
+    Verify Specific Remark Is Written In The PNR    RM XO\\*FOR SERVICE TYPE: ${product_name.upper()} ${agent_id[4:].upper()} ${eo_date}\\s\\d{4}\\w    true
+    : FOR    ${rel}    IN    @{relation_collection}
+    \    Run Keyword IF    "${rel}" != "[]"    Verify Specific Remark Is Written In The PNR    I\\*RELATION - ${rel[0].upper()}/PREMIUM - ${rel[1]} ${agent_id[4:].upper()} ${eo_date} \\d{4}\\w    true
+
+Calculate Cost
+    [Arguments]    ${country}=${EMPTY}
+    Get Total Selling Price
+    Get Commision Value
+    ${cost_price}=    Evaluate    ${total_selling_price} - ${commission}
+    Run Keyword If    "${country}"=="SG"    Convert To Float    ${cost_price}
+    Set Suite Variable    ${cost_price}
+
+[HK OS] Verify That Train Ticket Product Behaves Correctly In Other Services Panel And Written in PNR When FOP is Cash or Invoice
+    Retrieve PNR    ${current_pnr}
+    Click Other Services
+    Select Product    TRAIN TICKET
+    Select Vendor    EGL Tours Company Ltd
+    Click Continue In Other Svcs
+    Click Tab In Other Services Panel    Service Info
+    Select Form Of Payment (FOP)    Credit Card (CX)    VI    4444333322221111    12    2026
+    Set Vendor Contact    CWT Vendor
+    Set Nett Cost    300
+    Set Selling Price    500
+    Get Nett Cost In Other Services
+    Get Selling Price
+    Get Form Of Payment
+    Compute Other Services Fees    0    2    False    False    HK
+    Verify Commission Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Tick CWT Absorb Checkbox For Merchant Fee
+    Compute Other Services Fees    0    2    True    True    HK
+    Verify Commission Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Select Form Of Payment (FOP)    Cash or Invoice    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    Compute Other Services Fees    0    2    True    True    HK
+    Verify Commission Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Get Selling Price
+    Get Commission
+    Get Total Selling Price
+    Set Return Date    3/3/2019
+    Populate Departure Routing    ${EMPTY}    ${EMPTY}    Train Ride
+    Populate Return Routing    ${EMPTY}    ${EMPTY}    Train Ride
+    Set Passenger ID Value    ${EMPTY}
+    Get Routing Details
+    Get Passenger ID Value
+    Click Remarks Tab
+    Select Itinerary Remarks    ENTRY VISA CAN BE SECURED AT ARRIVAL
+    Click Finish PNR    [HK OS] Verify That Train Ticket Product Behaves Correctly In Other Services Panel And Written in PNR When FOP is Cash or Invoice    panel=Other Svcs
+
+Amend To Verify That Ferry Tickets Product Behaves Correctly In Other Services Panel And Written in PNR When FOP is CX
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Click Panel    Client Info
+    Manually Set Value In Form Of Payment    AX    378282246310005    1222
+    Populate All Panels (Except Given Panels If Any)    Air Fare    Delivery
+    Click Panel    Air Fare
+    Select Form Of Payment On Fare Quote Tab    Fare 1    Cash
+    Populate Fare Quote Tabs with Default Values
+    Click Panel    Delivery
+    Set Email Address in Delivery Panel
+    Select Delivery Method    Amadeus edited TKXL
+    Click Finish PNR    Amend To Verify That Ferry Tickets Product Behaves Correctly In Other Services Panel And Written in PNR When FOP is CX

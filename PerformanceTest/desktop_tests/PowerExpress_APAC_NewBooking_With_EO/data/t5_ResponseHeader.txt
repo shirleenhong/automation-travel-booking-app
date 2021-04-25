@@ -1,0 +1,13 @@
+HTTP/1.1 200 OK
+Cache-Control: no-cache, no-store
+Pragma: no-cache
+Content-Type: application/vnd.citrix.authenticateresponse-1+xml; charset=utf-8
+Content-Encoding: gzip
+Expires: -1
+Server: Microsoft-IIS/10.0
+X-Citrix-ExplicitAuthProtocol: ExplicitForms
+X-Powered-By: ASP.NET
+X-Citrix-Application: Receiver for Web
+Date: Tue, 22 Jan 2019 08:27:08 GMT
+Content-Length: 551
+

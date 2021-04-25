@@ -1,0 +1,68 @@
+*** Settings ***
+Resource          ../../resources/common/global_resources.txt
+Resource          ../database/database_verification.txt
+Resource          ../air_fare/air_fare_verification.txt
+Resource          ../apis_sfpd/apis_sfpd_verification.txt
+Resource          ../cust_refs/cust_refs_verification.txt
+
+*** Keywords ***
+Verify Air Segment Is Retained
+    [Arguments]    ${air_segment}
+    ${air_segment}    Replace String    ${city_route_${fare_tab_index}}    -    ${EMPTY}
+    Verify Specific Line Is Written In The PNR    ${air_segment}
+
+Verify Arranger Remains The Same After Clear All Same Booking New Traveller
+    Wait Until Control Object Is Visible    ${contact_details_group_header}
+    Verify Control Object Text Value Is Correct    ${contact_last_name}    ${arranger_lastname}
+    Verify Control Object Text Value Is Correct    ${contact_first_name}    ${arranger_firstname}
+    Verify Checkbox Is Ticked    ${checkbox_arranger}
+    Verify Checkbox Is Unticked    ${checkbox_traveller}
+    [Teardown]    Take Screenshot
+
+Verify Color Of "Booking File Created Successfully!" Message Is Green
+    Sleep    2
+    Verify Image Does Exists    booking_successful.png
+
+Verify Color Of "Booking File Updated Successfully!" Message Is Green
+    Sleep    2
+    Verify Image Does Exists    booking_updated.png
+
+Verify Color Of "Failed queue placement(s).." Error Is Red
+    Sleep    2
+    ${is_failed_queue_placement_error_message_visible}    Does Exist    ${sikuli_image_path}/failed_queue_placement_error_message.png
+    ${is_failed_queue_placement_error_message_visible_1}    Does Exist    ${sikuli_image_path}/failed_queue_placement_error_message_1.png
+    Should Be True    ${is_failed_queue_placement_error_message_visible} == True or ${is_failed_queue_placement_error_message_visible_1} == True    "Failed queue placement(s).." Error should be in Red text
+
+Verify Message Is Displayed In Summary
+    [Arguments]    ${expected_message}
+    Wait Until Control Object Is Visible    [NAME:lvwSummary]
+    ${summary_texts} =    Get Summary Texts
+    List Should Contain Value    ${summary_texts}    ${expected_message}
+    [Teardown]    Take Screenshot
+
+Verify Message Is Not Displayed In Summary
+    [Arguments]    ${expected_message}
+    Wait Until Control Object Is Visible    [NAME:lvwSummary]
+    ${summary_texts} =    Get Summary Texts
+    List Should Not Contain Value    ${summary_texts}    ${expected_message}
+    [Teardown]    Take Screenshot
+
+Verify PNR Is Successfully Cancelled
+    ${pnr}    Get Control Text Value    [NAME:ctxtLocator]    ${title_power_express}
+    ${message}    Get Control Text Value    [NAME:lblEndMessage]    ${title_power_express}
+    Should Match RegExp    ${pnr}    \\w{6}
+    Should Be Equal As Strings    ${message}    Requested Booking File Segments Cancelled!
+    [Teardown]    Take Screenshot
+
+Verify PNR Is Successfully Created
+    ${pnr}    Get Control Text Value    [NAME:ctxtLocator]    ${title_power_express}
+    ${message}    Get Control Text Value    [NAME:lblEndMessage]    ${title_power_express}
+    Run Keyword And Continue On Failure    Should Match RegExp    ${pnr}    ^[A-z0-9][A-z0-9][A-z0-9][A-z0-9][A-z0-9][A-z0-9]$
+    Run Keyword And Continue On Failure    Should Match    ${message}    Booking File Created Successfully!
+    [Teardown]    Take Screenshot
+
+Verify PNR Is Successfully Updated
+    ${pnr}    Get Control Text Value    [NAME:ctxtLocator]    ${title_power_express}
+    ${message}    Get Control Text Value    [NAME:lblEndMessage]    ${title_power_express}
+    Run Keyword And Continue On Failure    Should Match RegExp    ${pnr}    \\w{6}
+    Run Keyword And Continue On Failure    Should Match    ${message}    Booking File Updated Successfully!

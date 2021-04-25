@@ -1,0 +1,103 @@
+Citrix client replay version 14.12.0.18020 , record version 14.5.0.10018	[MsgId: MWAR0]
+Virtual User Script started at: 11/6/2018 2:09:21 PM	[MsgId: MMSG-15967]
+Starting action vuser_init.	[MsgId: MMSG-15919]
+vuser_init.c(14): web_cleanup_cookies started  	[MsgId: MMSG-26355]
+vuser_init.c(14): web_cleanup_cookies was successful  	[MsgId: MMSG-26392]
+vuser_init.c(15): web_set_max_html_param_len started  	[MsgId: MMSG-26355]
+vuser_init.c(15): web_set_max_html_param_len was successful  	[MsgId: MMSG-26392]
+vuser_init.c(16): web_set_sockets_option started  	[MsgId: MMSG-26355]
+vuser_init.c(16): web_set_sockets_option was successful  	[MsgId: MMSG-26392]
+vuser_init.c(18): web_url("PilotWeb") started  	[MsgId: MMSG-26355]
+vuser_init.c(18): Found resource "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/images/common/wspinner@2x_26FCB0A3548E30DC.gif" in HTML "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/"  	[MsgId: MMSG-26659]
+vuser_init.c(18): Found resource "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/external/jquery-1.12.4.min_618538B4AB9639D4.js" in HTML "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/"  	[MsgId: MMSG-26659]
+vuser_init.c(18): Found resource "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/external/jquery-ui-v1.11.4.min_17D0B6DEFA33B91A.js" in HTML "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/"  	[MsgId: MMSG-26659]
+vuser_init.c(18): Found resource "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/external/jquery.ui.touch-punch.min_94EA8262E7FD35F4.js" in HTML "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/"  	[MsgId: MMSG-26659]
+vuser_init.c(18): Found resource "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/external/hammer.v2.0.8.min_F699A1E56189259A.js" in HTML "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/"  	[MsgId: MMSG-26659]
+vuser_init.c(18): Found resource "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/external/jquery.dotdotdot.min_08EE54CBA886AD0A.js" in HTML "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/"  	[MsgId: MMSG-26659]
+vuser_init.c(18): Found resource "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/external/velocity.min_B218502A82F66680.js" in HTML "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/"  	[MsgId: MMSG-26659]
+vuser_init.c(18): Found resource "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/external/slick.min_FEB62CC230E2BA2A.js" in HTML "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/"  	[MsgId: MMSG-26659]
+vuser_init.c(18): Found resource "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/ctxs.core.min_33B1CC992A07D57E.js" in HTML "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/"  	[MsgId: MMSG-26659]
+vuser_init.c(18): Found resource "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/ctxs.webui.min_91463D1B79731411.js" in HTML "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/"  	[MsgId: MMSG-26659]
+vuser_init.c(18): web_url("PilotWeb") was successful, 235778 body bytes, 5044 header bytes  	[MsgId: MMSG-26386]
+vuser_init.c(28): web_add_auto_header("X-Citrix-IsUsingHTTPS") started  	[MsgId: MMSG-26355]
+vuser_init.c(28): web_add_auto_header("X-Citrix-IsUsingHTTPS") was successful  	[MsgId: MMSG-26392]
+vuser_init.c(31): web_add_auto_header("X-Requested-With") started  	[MsgId: MMSG-26355]
+vuser_init.c(31): web_add_auto_header("X-Requested-With") was successful  	[MsgId: MMSG-26392]
+vuser_init.c(34): web_reg_save_param_regexp started  	[MsgId: MMSG-26355]
+vuser_init.c(34): Registering web_reg_save_param_regexp was successful  	[MsgId: MMSG-26390]
+vuser_init.c(43): web_custom_request("Configuration") started  	[MsgId: MMSG-26355]
+vuser_init.c(43): Notify: Saving Parameter "CsrfToken = FE20A9ED0DFFEA904B74500F37634420".	[MsgId: MMSG-13798]
+vuser_init.c(43): web_custom_request("Configuration") was successful, 1359 body bytes, 475 header bytes  	[MsgId: MMSG-26386]
+vuser_init.c(56): web_add_auto_header("Csrf-Token") started  	[MsgId: MMSG-26355]
+vuser_init.c(56): Notify: Parameter Substitution: parameter "CsrfToken" =  "FE20A9ED0DFFEA904B74500F37634420"	[MsgId: MMSG-13992]
+vuser_init.c(56): web_add_auto_header("Csrf-Token") was successful  	[MsgId: MMSG-26392]
+vuser_init.c(59): Notify: Transaction "PRT_01_Citrix_LoginPage" started.	[MsgId: MMSG-16999]
+vuser_init.c(61): web_submit_data("List") started  	[MsgId: MMSG-26355]
+vuser_init.c(61): web_submit_data("List") was successful, 42 body bytes, 518 header bytes  	[MsgId: MMSG-26386]
+vuser_init.c(73): web_custom_request("GetAuthMethods") started  	[MsgId: MMSG-26355]
+vuser_init.c(73): web_custom_request("GetAuthMethods") was successful, 186 body bytes, 304 header bytes  	[MsgId: MMSG-26386]
+vuser_init.c(84): web_custom_request("Login") started  	[MsgId: MMSG-26355]
+vuser_init.c(84): web_custom_request("Login") was successful, 551 body bytes, 384 header bytes  	[MsgId: MMSG-26386]
+vuser_init.c(96): Error: Failed to end Transaction "Citrix_LoginPage" (by name). Please check that you made a call to start transaction operation.	[MsgId: MERR-16985]
+vuser_init.c(98): lr_think_time: 2.00 seconds (recorded think time was 1.00 seconds).	[MsgId: MMSG-15947]
+vuser_init.c(104): Notify: Transaction "Citrix_Login" started.	[MsgId: MMSG-16999]
+vuser_init.c(106): web_submit_data("LoginAttempt") started  	[MsgId: MMSG-26355]
+vuser_init.c(106): Notify: Parameter Substitution: parameter "CitrixLogin" =  "SvcSyExTest31"	[MsgId: MMSG-13992]
+vuser_init.c(106): web_submit_data("LoginAttempt") was successful, 184 body bytes, 403 header bytes  	[MsgId: MMSG-26386]
+vuser_init.c(123): web_submit_data("List_2") started  	[MsgId: MMSG-26355]
+vuser_init.c(123): web_submit_data("List_2") was successful, 500 body bytes, 290 header bytes  	[MsgId: MMSG-26386]
+vuser_init.c(135): web_custom_request("GetUserName") started  	[MsgId: MMSG-26355]
+vuser_init.c(135): HTML parsing not performed for Content-Type "text" ("ParseHtmlContentType" Run-Time Setting is "TEXT"). URL="https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/Authentication/GetUserName"  	[MsgId: MMSG-26548]
+vuser_init.c(135): web_custom_request("GetUserName") was successful, 33 body bytes, 292 header bytes  	[MsgId: MMSG-26386]
+vuser_init.c(145): web_custom_request("AllowSelfServiceAccountManagement") started  	[MsgId: MMSG-26355]
+vuser_init.c(145): web_custom_request("AllowSelfServiceAccountManagement") was successful, 172 body bytes, 304 header bytes  	[MsgId: MMSG-26386]
+vuser_init.c(156): lr_think_time: 2.00 seconds (recorded think time was 1.00 seconds).	[MsgId: MMSG-15947]
+vuser_init.c(158): Connecting via NFUSE portal "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/Resources/LaunchIca/RGVmYXVsdEFnZ3JlZ2F0aW9uR3JvdXAuXFNFQ08gUGVyZm9ybWFuY2UgVGVzdGluZw--.ica?CsrfToken={CsrfToken}&IsUsingHttps=Yes&displayNameDesktopTitle=SECOPerformance        0.000000e+00sting&launchId=1538580435734"	[MsgId: MMSG0]
+vuser_init.c(158): Notify: Parameter Substitution: parameter "CsrfToken" =  "FE20A9ED0DFFEA904B74500F37634420"	[MsgId: MMSG-13992]
+vuser_init.c(158): Setting connection option "ICAFILE" to "D:\LR_Scripts\PowerExpress_EMEA_CitrixClient\nfuse_2.ica"	[MsgId: MMSG0]
+06/11/2018 14:09:27 vuser_init.c(158): (12888:13296) - CitrixClientImpl.dll version: 12.55.911.0	[MsgId: MMSG0]
+06/11/2018 14:09:27 vuser_init.c(158): (12888:13296) - Number of currently used GDI handles on this machine = 3452	[MsgId: MMSG0]
+vuser_init.c(158): WARNING: There are Citrix processes running under another users, which may affect current session:
+	concentr.exe, pid 4984, GDI handles in use: 0, running under another user (svcAmerLoadrunnerQA)
+	receiver.exe, pid 5032, GDI handles in use: 0, running under another user (svcAmerLoadrunnerQA)
+	concentr.exe, pid 3448, GDI handles in use: 0, running under another user (adm_aphnava)
+	receiver.exe, pid 4912, GDI handles in use: 0, running under another user (adm_aphnava)
+	concentr.exe, pid 8012, GDI handles in use: 41
+	receiver.exe, pid 7672, GDI handles in use: 44
+	[MsgId: MWAR0]
+06/11/2018 14:09:27 vuser_init.c(158): (12888:13296) - Modifying ICA file with commands "ConnectionBar=0	TWIMode=Off": done with status 0 (SUCCESS).
+	[MsgId: MMSG0]
+06/11/2018 14:09:27 vuser_init.c(158): (12888:13296) - Citrix ClientName is "VWEDC1PL00269-2"	[MsgId: MMSG0]
+06/11/2018 14:09:27 vuser_init.c(158): (12888:13296) - WaitForEvent: Initializing wait event, time=180000, end time=596176468	[MsgId: MMSG0]
+06/11/2018 14:09:28 vuser_init.c(158): (12888:13296) - Got Connect event	[MsgId: MMSG0]
+06/11/2018 14:09:28 vuser_init.c(158): (12888:13296) - Number of currently used GDI handles on this machine = 3502	[MsgId: MMSG0]
+vuser_init.c(158): WARNING: There are Citrix processes running under another users, which may affect current session:
+	concentr.exe, pid 4984, GDI handles in use: 0, running under another user (svcAmerLoadrunnerQA)
+	receiver.exe, pid 5032, GDI handles in use: 0, running under another user (svcAmerLoadrunnerQA)
+	concentr.exe, pid 3448, GDI handles in use: 0, running under another user (adm_aphnava)
+	receiver.exe, pid 4912, GDI handles in use: 0, running under another user (adm_aphnava)
+	concentr.exe, pid 8012, GDI handles in use: 41
+	receiver.exe, pid 7672, GDI handles in use: 44
+	wfica32.exe, pid 12120, GDI handles in use: 29
+	[MsgId: MWAR0]
+06/11/2018 14:09:28 vuser_init.c(158): (12888:13296) - client resolution = 1364x768, client color depth = 32 bits
+	[MsgId: MMSG0]
+06/11/2018 14:09:28 vuser_init.c(158): (12888:13296) - Wake Up and check new event.	[MsgId: MMSG0]
+vuser_init.c(160): Notify: Transaction "Citrix_Login" ended with a "Pass" status (Duration: 3.6373 Think Time: 2.0005).	[MsgId: MMSG-16872]
+vuser_init.c(162): lr_think_time: 2.00 seconds (recorded think time was 1.00 seconds).	[MsgId: MMSG-15947]
+vuser_init.c(164): Setting the waiting time to 60 seconds	[MsgId: MMSG0]
+vuser_init.c(166): Waiting for logon	[MsgId: MMSG0]
+06/11/2018 14:09:30 vuser_init.c(166): (12888:13296) - WaitForEvent: Initializing wait event, time=60000, end time=596059500	[MsgId: MMSG0]
+06/11/2018 14:09:34 vuser_init.c(166): (12888:13296) - "Windows Logon" is not currently in map, adding it now	[MsgId: MMSG0]
+06/11/2018 14:09:34 vuser_init.c(166): (12888:13296) - Create window name="Windows Logon" flag=1 style=-1778384896 ext_style=0 ID=65568
+	[MsgId: MMSG0]
+06/11/2018 14:09:34 vuser_init.c(166): (12888:13296) - Created window: "Windows Logon"  at (0, 0)	[MsgId: MMSG0]
+06/11/2018 14:09:34 vuser_init.c(166): (12888:13296) - Foreground window = 65580
+	[MsgId: MMSG0]
+06/11/2018 14:09:35 vuser_init.c(166): (12888:13296) - Foreground window = 0
+	[MsgId: MMSG0]
+06/11/2018 14:09:36 vuser_init.c(166): (12888:13296) - Get Logon event	[MsgId: MMSG0]
+06/11/2018 14:09:36 vuser_init.c(166): (12888:13296) - Wake Up and check new event.	[MsgId: MMSG0]
+vuser_init.c(166): Logon succeeded	[MsgId: MMSG0]
+vuser_init.c(169): Notify: Transaction "Sellco Login" started.	[MsgId: MMSG-16999]
+vuser_init.c(171): lr_think_time: 10.00 seconds (recorded think time was 5.00 seconds).	[MsgId: MMSG-15947]

@@ -1,0 +1,951 @@
+*** Settings ***
+Resource          ../air_fare_verification.txt
+
+*** Test Cases ***
+[NB HK] Verify That Air Fare Restrictions Is Selected In Restriction Panel Under Fare Tab And Correct Remarks Are Written
+    [Tags]    us491    us297    hk
+    Open Power Express And Retrieve Profile    ${version}    Test    u004hxc    en-GB    hcuellar    APAC QA
+    ...    Amadeus
+    Set Client And Traveler    APAC SYN CORP ¦ HK POLICY    BEAR    JARED HK
+    Click New Booking
+    Update PNR for EN or GB
+    Book Flight X Months From Now    HKGMNL/APR    SS1Y1    FXP/S2    6    3
+    Book Flight X Months From Now    HKGSIN/ASQ    SS1Y1    FXP/S3    6    5
+    Book Amadeus Offer Retain Flight    S2    1
+    Book Amadeus Offer Retain Flight    S3    1
+    Click Read Booking
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Click Fare Tab    Fare 1
+    Select Air Fare Restrictions Radio Button    Fare 1
+    Verify Air Fare Restrictions Dropdown Values    Fare 1    FARE VALID ONLY ON <Airline>    IN CASE OF NO SHOW, TICKET IS NONREFUNDABLE AND NOT    NO SHOW PENALTY APPLIES
+    Select Air Fare Restrictions In Fare Quote    Fare 1    FARE VALID ONLY ON <Airline>    NO SHOW PENALTY APPLIES
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    Fare 1    FARE VALID ONLY ON <Airline>    NO SHOW PENALTY APPLIES
+    Select Air Fare Restrictions Radio Button    Alt Fare 1
+    Verify Air Fare Restrictions Dropdown Values    Alt Fare 1    FARE VALID ONLY ON <Airline>    IN CASE OF NO SHOW, TICKET IS NONREFUNDABLE AND NOT    NO SHOW PENALTY APPLIES
+    Select Air Fare Restrictions In Fare Quote    Alt Fare 1    FARE VALID ONLY ON <Airline>    NO SHOW PENALTY APPLIES
+    Add Customized Templates In Fare Quote Restriction Panel    Alt Fare 1    CUSTOM
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    Alt Fare 1    FARE VALID ONLY ON <Airline>    NO SHOW PENALTY APPLIES    CUSTOM
+    Click Fare Tab    Fare 2
+    Select Default Restricions in Fare Tab    Fare 2
+    Verfiy Default Restrictions Are Selected In Fare Tab    Fare 2
+    Verify Default UI Display In The Restrictions Tab    Fare 2
+    Select Default Restricions in Fare Tab    Alt Fare 2
+    Verfiy Default Restrictions Are Selected In Fare Tab    Alt Fare 2
+    Verify Default UI Display In The Restrictions Tab    Alt Fare 2
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus
+    Verify Air Fare Restriction Remarks on Amadeus    Fare 1    FARE VALID ONLY ON <Airline>    NO SHOW PENALTY APPLIES
+    Verify Air Fare Restriction Remarks on Amadeus    Alt Fare 1    FARE VALID ONLY ON <Airline>    NO SHOW PENALTY APPLIES    CUSTOM
+    Verify Default Restriction Remarks Are Written    1
+    Verify Default Alternate Restrictions Are Written In PNR
+
+[AB HK] Verify That Air Fare Restrictions Is Selected In Restriction Panel Under Fare Tab And Correct Remarks Are Written
+    [Tags]    us491    us297    hk
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Click Panel    Air Fare
+    Select Default Restricions in Fare Tab    Fare 1
+    Verfiy Default Restrictions Are Selected In Fare Tab    Fare 1
+    Verify Default UI Display In The Restrictions Tab    Fare 1
+    Select Default Restricions in Fare Tab    Alt Fare 1
+    Verfiy Default Restrictions Are Selected In Fare Tab    Alt Fare 1
+    Verify Default UI Display In The Restrictions Tab    Alt Fare 1
+    Select Air Fare Restrictions Radio Button    Fare 2
+    Verify Air Fare Restrictions Dropdown Values    Fare 2    FARE VALID ONLY ON <Airline>    IN CASE OF NO SHOW, TICKET IS NONREFUNDABLE AND NOT    NO SHOW PENALTY APPLIES
+    Select Air Fare Restrictions In Fare Quote    Fare 2    FARE VALID ONLY ON <Airline>    NO SHOW PENALTY APPLIES
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    Fare 2    FARE VALID ONLY ON <Airline>    NO SHOW PENALTY APPLIES
+    Select Air Fare Restrictions Radio Button    Alt Fare 2
+    Verify Air Fare Restrictions Dropdown Values    Alt Fare 2    FARE VALID ONLY ON <Airline>    IN CASE OF NO SHOW, TICKET IS NONREFUNDABLE AND NOT    NO SHOW PENALTY APPLIES
+    Select Air Fare Restrictions In Fare Quote    Alt Fare 2    FARE VALID ONLY ON <Airline>    NO SHOW PENALTY APPLIES
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    Alt Fare 2    FARE VALID ONLY ON <Airline>    NO SHOW PENALTY APPLIES
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR    Amend Booking For HK Verify That Changed Restrictions In Restrictions Panel Are Written In Remarks
+    Execute Simultaneous Change Handling    Amend Booking For HK Verify That Changed Restrictions In Restrictions Panel Are Written In Remarks
+    Retrieve PNR Details from Amadeus
+    Verify Air Fare Restriction Remarks on Amadeus    Fare 2    FARE VALID ONLY ON <Airline>    NO SHOW PENALTY APPLIES
+    Verify Air Fare Restriction Remarks on Amadeus    Alt Fare 2    FARE VALID ONLY ON <Airline>    NO SHOW PENALTY APPLIES
+    Verify Default Restriction Remarks Are Written    1
+    Verify Default Alternate Restrictions Are Written In PNR
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB SG] Verify That Air Fare Restrictions Is Selected In Restriction Panel Under Fare Tab And Correct Remarks Are Written
+    [Tags]    us491    us297    sg
+    Open Power Express And Retrieve Profile    ${version}    Test    u004hxc    en-GB    hcuellar    APAC QA
+    ...    Amadeus
+    Set Client And Traveler    APAC SYN CORP ¦ SG POLICY    BEAR    REN SG
+    Click New Booking
+    Update PNR for EN or GB
+    Book Flight X Months From Now    SINKUL/AMH    SS1Y1    FXP/S2    6    3
+    Book Amadeus Offer Retain Flight    S2    1
+    Click Read Booking
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Select Air Fare Restrictions Radio Button    Fare 1
+    Verify Air Fare Restrictions Dropdown Values    Fare 1    FARE VALID ONLY ON <Airline>    IN CASE OF NO SHOW, TICKET IS NONREFUNDABLE AND NOT    NO SHOW PENALTY APPLIES
+    Select Air Fare Restrictions In Fare Quote    Fare 1    FARE VALID ONLY ON <Airline>
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    Fare 1    FARE VALID ONLY ON <Airline>
+    Click Panel    Air Fare
+    Select Air Fare Restrictions Radio Button    Alt Fare 1
+    Verify Air Fare Restrictions Dropdown Values    Alt Fare 1    FARE VALID ONLY ON <Airline>    IN CASE OF NO SHOW, TICKET IS NONREFUNDABLE AND NOT    NO SHOW PENALTY APPLIES
+    Select Air Fare Restrictions In Fare Quote    Alt Fare 1    FARE VALID ONLY ON <Airline>    NO SHOW PENALTY APPLIES
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    Alt Fare 1    FARE VALID ONLY ON <Airline>    NO SHOW PENALTY APPLIES
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus
+    Verify Air Fare Restriction Remarks on Amadeus    Fare 1    FARE VALID ONLY ON <Airline>
+    Verify Air Fare Restriction Remarks on Amadeus    Alt Fare 1    FARE VALID ONLY ON <Airline>    NO SHOW PENALTY APPLIES
+
+[AB SG] Verify That Air Fare Restrictions Is Selected In Restriction Panel Under Fare Tab And Correct Remarks Are Written - When Additional Flight Segment Is Added
+    [Tags]    us491    us297    sg    de442
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Book Flight X Months From Now    SINMNL/APR    SS1Y1    FXP/S3    6    5
+    Book Amadeus Offer Retain Flight    S3    2
+    Click Read Booking
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Select Air Fare Restrictions Radio Button    Fare 1
+    Verify Air Fare Restrictions Dropdown Values    Fare 1    FARE VALID ONLY ON <Airline>    IN CASE OF NO SHOW, TICKET IS NONREFUNDABLE AND NOT    NO SHOW PENALTY APPLIES
+    Delete Air Fare Restrictions In Fare Quote Restriction Panel    Fare 1    FARE VALID ONLY ON <AIRLINE>
+    Select Air Fare Restrictions In Fare Quote    Fare 1    NO SHOW PENALTY APPLIES
+    Add Customized Templates In Fare Quote Restriction Panel    Fare 1    YELLOW FEVER    MALARIA FEVER
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    Fare 1    NO SHOW PENALTY APPLIES    YELLOW FEVER    MALARIA FEVER
+    Select Air Fare Restrictions Radio Button    Alt Fare 1
+    Verify Air Fare Restrictions Dropdown Values    Alt Fare 1    FARE VALID ONLY ON <Airline>    IN CASE OF NO SHOW, TICKET IS NONREFUNDABLE AND NOT    NO SHOW PENALTY APPLIES
+    Delete Air Fare Restrictions In Fare Quote Restriction Panel    Alt Fare 1    FARE VALID ONLY ON <AIRLINE>    NO SHOW PENALTY APPLIES
+    Add Customized Templates In Fare Quote Restriction Panel    Alt Fare 1    CITY PROHIBITED    AIRLINE ADVICE
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    Alt Fare 1    CITY PROHIBITED    AIRLINE ADVICE
+    Select Default Restricions in Fare Tab    Fare 2
+    Verfiy Default Restrictions Are Selected In Fare Tab    Fare 2
+    Verify Default UI Display In The Restrictions Tab    Fare 2
+    Select Air Fare Restrictions Radio Button    Alt Fare 2
+    Verify Air Fare Restrictions Dropdown Values    Alt Fare 2    FARE VALID ONLY ON <Airline>    IN CASE OF NO SHOW, TICKET IS NONREFUNDABLE AND NOT    NO SHOW PENALTY APPLIES
+    Add Customized Templates In Fare Quote Restriction Panel    Alt Fare 2    CUSTOM 1    CUSTOM 2
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    Alt Fare 2    CUSTOM 1    CUSTOM 2
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR    Amend Booking For SG Verify That Changed Restrictions In Restrictions Panel Are Written In Remarks
+    Execute Simultaneous Change Handling    Amend Booking For SG Verify That Changed Restrictions In Restrictions Panel Are Written In Remarks
+    Retrieve PNR Details from Amadeus
+    Verify Air Fare Restriction Remarks on Amadeus    Fare 1    NO SHOW PENALTY APPLIES    YELLOW FEVER    MALARIA FEVER
+    Verify Air Fare Restriction Remarks on Amadeus    Alt Fare 1    CITY PROHIBITED    AIRLINE ADVICE
+    Verify Air Fare Restriction Remarks on Amadeus    Alt Fare 2    CUSTOM 1    CUSTOM 2
+    Verify Default Restriction Remarks Are Written    1
+    Verify Default Alternate Restrictions Are Written In PNR
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB IN] Verify That Air Fare Restrictions Is Selected In Restriction Panel Under Fare Tab And Correct Remarks Are Written
+    [Tags]    us491    us297    in
+    Open Power Express And Retrieve Profile    ${version}    Test    u004hxc    en-GB    hcuellar    APAC QA
+    ...    Amadeus
+    Set Client And Traveler    APAC SYN CORP ¦ IN POLICY    BEAR    REN IN
+    Click New Booking
+    Update PNR for EN or GB
+    Book Flight X Months From Now    BOMSIN/ASQ    SS1Y1    FXP/S2    6    3
+    Book Flight X Months From Now    BLRBKK/ATG    SS1Y1    FXP/S3    6    4
+    Book Amadeus Offer Retain Flight    S2    1
+    Click Read Booking
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Select Air Fare Restrictions Radio Button    Fare 1
+    Verify Air Fare Restrictions Dropdown Values    Fare 1    FARE VALID ONLY ON <Airline>    IN CASE OF NO SHOW, TICKET IS NONREFUNDABLE AND NOT    NO SHOW PENALTY APPLIES
+    Select Air Fare Restrictions In Fare Quote    Fare 1    FARE VALID ONLY ON <Airline>    NO SHOW PENALTY APPLIES
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    Fare 1    FARE VALID ONLY ON <Airline>    NO SHOW PENALTY APPLIES
+    Select Air Fare Restrictions Radio Button    Alt Fare 1
+    Verify Air Fare Restrictions Dropdown Values    Alt Fare 1    FARE VALID ONLY ON <Airline>    IN CASE OF NO SHOW, TICKET IS NONREFUNDABLE AND NOT    NO SHOW PENALTY APPLIES
+    Add Customized Templates In Fare Quote Restriction Panel    Alt Fare 1    YELLOW FEVER    MALARIA FEVER
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    Alt Fare 1    YELLOW FEVER    MALARIA FEVER
+    Select Air Fare Restrictions Radio Button    Fare 2
+    Verify Air Fare Restrictions Dropdown Values    Fare 2    FARE VALID ONLY ON <Airline>    IN CASE OF NO SHOW, TICKET IS NONREFUNDABLE AND NOT    NO SHOW PENALTY APPLIES
+    Select Air Fare Restrictions In Fare Quote    Fare 2    FARE VALID ONLY ON <Airline>
+    Add Customized Templates In Fare Quote Restriction Panel    Fare 2    YELLOW FEVER
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    Fare 2    FARE VALID ONLY ON <Airline>    YELLOW FEVER
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus
+    Verify Air Fare Restriction Remarks on Amadeus    Fare 1    FARE VALID ONLY ON <Airline>    NO SHOW PENALTY APPLIES
+    Verify Air Fare Restriction Remarks on Amadeus    Alt Fare 1    YELLOW FEVER    MALARIA FEVER
+    Verify Air Fare Restriction Remarks on Amadeus    Fare 2    FARE VALID ONLY ON <Airline>    YELLOW FEVER
+
+[AB IN] Verify That Air Fare Restrictions Is Selected In Restriction Panel Under Fare Tab And Correct Remarks Are Written - When Removed A Flight Segment
+    [Tags]    us297    us491    in
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Delete Air Segment    3
+    Delete Amadeus Offer    XE1
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Delete Alternate Fare Tab    Alt Fare 1
+    Populate Fare Details And Fees Tab With Default Values
+    Select Air Fare Restrictions Radio Button    Fare 1
+    Delete Air Fare Restrictions In Fare Quote Restriction Panel    Fare 1    FARE VALID ONLY ON <AIRLINE>    NO SHOW PENALTY APPLIES
+    Verify Air Fare Restrictions Dropdown Values    Fare 1    FARE VALID ONLY ON <Airline>    IN CASE OF NO SHOW, TICKET IS NONREFUNDABLE AND NOT    NO SHOW PENALTY APPLIES
+    Select Air Fare Restrictions In Fare Quote    Fare 1    NO SHOW PENALTY APPLIES
+    Add Customized Templates In Fare Quote Restriction Panel    Fare 1    ARRIVAL NOTICE
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    Fare 1    NO SHOW PENALTY APPLIES    ARRIVAL NOTICE
+    Click Finish PNR    Amend Booking For IN Verify That Changed Restrictions In Restrictions Panel Are Written In Remarks
+    Execute Simultaneous Change Handling    Amend Booking For IN Verify That Changed Restrictions In Restrictions Panel Are Written In Remarks
+    Retrieve PNR Details from Amadeus
+    Verify Air Fare Restriction Remarks on Amadeus    Fare 1    NO SHOW PENALTY APPLIES    ARRIVAL NOTICE
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB HK] Verify That No Restrictions Is Pre-Populated In Restrictions Panel Under Fare Tab And No Remarks Are Written For No Restrictions Segments
+    [Tags]    hk    team_c    us1390
+    Open Power Express And Retrieve Profile    ${version}    Test    u004hxc    en-GB    hcuellar    APAC QA
+    ...    Amadeus
+    Set Client And Traveler    APAC SYN CORP ¦ APAC HK LCC AUTOMATION    BEAR    HKLCC
+    Click New Booking
+    Update PNR for EN or GB
+    ###BSP
+    Book Flight X Months From Now    MNLHKG/ACX    SS1Y1    FXP/S2    6    3
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC1    fare_total=100    taxes_total=78    servicefee_total=2    charge=20    grand_total=183
+    ...    booking_reference=A06PJTT    currency=PHP    country=HK
+    #LCC 1 Booking
+    Book Travel Fusion Air Segment    CEBUPACIFIC    5J    HKGMNL    7    S3    A06PJTT
+    Enter Travel Fusion Fare Remarks    LCC1    5J    S3    PHP    Airline
+    Enter Travel Fusion Other Remarks    LCC1    PHP    S3
+    ##BSP 2
+    Book Flight X Months From Now    MNLSIN/ASQ    SS1Y1    FXP/S4    7    10
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC2    fare_total=101    taxes_total=79    servicefee_total=2    charge=3    grand_total=183
+    ...    booking_reference=A06PJB    currency=INR    country=HK
+    #LCC 2 Booking
+    Book Travel Fusion Air Segment    NOKAIRLINES    DD    HKGDEL    8    S5    A06PJB
+    Enter Travel Fusion Fare Remarks    LCC2    DD    S5    INR    Travel Fusion
+    Enter Travel Fusion Other Remarks    LCC2    INR    S5
+    Book Amadeus Offer Retain Flight    S2    1
+    Book Amadeus Offer Retain Flight    S4    1
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Select Form Of Payment On Fare Quote Tab    Fare 1    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    No Restrictions
+    Select Air Fare Restrictions Radio Button    Fare 1    Template
+    Select Air Fare Restrictions In Fare Quote    Fare 1    FARE VALID ONLY ON <Airline>    NO SHOW PENALTY APPLIES
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    Fare 1    FARE VALID ONLY ON <Airline>    NO SHOW PENALTY APPLIES
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    LCC 1
+    Select Form Of Payment On Fare Quote Tab    LCC 1    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    No Restrictions
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Fare 2
+    Select Form Of Payment On Fare Quote Tab    Fare 2    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    No Restrictions
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    LCC 2
+    Select Form Of Payment On Fare Quote Tab    LCC 2    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    No Restrictions
+    Select Air Fare Restrictions Radio Button    LCC 2    Default
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Alt Fare 1
+    Select Form Of Payment On Fare Quote Tab    Alt Fare 1    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    No Restrictions
+    Populate Alternate Fare Quote Tabs With Default Values
+    Click Fare Tab    Alt Fare 2
+    Select Form Of Payment On Fare Quote Tab    Alt Fare 2    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    No Restrictions
+    Select Air Fare Restrictions Radio Button    Alt Fare 2    Default
+    Populate Alternate Fare Quote Tabs With Default Values
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus
+    Verify Air Fare Restriction Remarks on Amadeus    Fare 1    FARE VALID ONLY ON <Airline>    NO SHOW PENALTY APPLIES
+    Verify Default Restriction Remarks Are Written    1
+    Verify Default Alternate Restrictions Are Written In PNR
+    Verify Remarks Are Written In The PNR    false    false    TEMPLATE/T1    :RTYPE:NONE/TA06PJTT    RTYPE:NONE/T2    RTYPE:DEFAULT/TA06PJB
+    ...    RTYPE/NONE    RTYPE/DEFAULT
+
+[AB HK] Verify That No Restrictions Is Pre-Populated In Restrictions Panel Under Fare Tab And No Remarks Are Written For No Restrictions Segments
+    [Tags]    hk    team_c    us1390    de447
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Comment    Delete Air Segment    2
+    Comment    ###BSP
+    Comment    Book Flight X Months From Now    SINHKG/ACX    SS1Y1    FXP/S2    6    10
+    Book Amadeus Offer Retain Flight    S2    3
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC3    fare_total=110    taxes_total=89    servicefee_total=2    charge=3    grand_total=202
+    ...    booking_reference=A06PJU    currency=INR
+    #LCC 3 Booking
+    Book Travel Fusion Air Segment    NOKAIRLINES    DD    DELSIN    9    S6    A06PJU
+    Enter Travel Fusion Fare Remarks    LCC3    DD    S6    INR    Travel Fusion
+    Enter Travel Fusion Other Remarks    LCC3    INR    S6
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Select Form Of Payment On Fare Quote Tab    Fare 1    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    Template
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    Fare 1    FARE VALID ONLY ON <AIRLINE>    NO SHOW PENALTY APPLIES
+    Select Air Fare Restrictions Radio Button    Fare 1    No Restrictions
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    LCC 1
+    Select Form Of Payment On Fare Quote Tab    LCC 1    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    No Restrictions
+    Select Air Fare Restrictions Radio Button    LCC 1    Template
+    Select Air Fare Restrictions In Fare Quote    LCC 1    FARE VALID ONLY ON <Airline>
+    Add Customized Templates In Fare Quote Restriction Panel    LCC 1    CUSTOM RESTRICTIONS LCC 1
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    LCC 1    FARE VALID ONLY ON <Airline>    CUSTOM RESTRICTIONS LCC 1
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Fare 2
+    Select Form Of Payment On Fare Quote Tab    Fare 2    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    No Restrictions
+    Select Air Fare Restrictions Radio Button    Fare 2    Template
+    Comment    Select Air Fare Restrictions In Fare Quote    Fare 2    NO SHOW PENALTY APPLIES
+    Add Customized Templates In Fare Quote Restriction Panel    Fare 2    NO SHOW PENALTY APPLIES 2    CUSTOM RESTRICTIONS FARE 2
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    Fare 2    NO SHOW PENALTY APPLIES 2    CUSTOM RESTRICTIONS FARE 2
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    LCC 2
+    Select Form Of Payment On Fare Quote Tab    LCC 2    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    Default
+    Select Air Fare Restrictions Radio Button    LCC 2    No Restrictions
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    LCC 3
+    Select Form Of Payment On Fare Quote Tab    LCC 3    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    No Restrictions
+    Select Air Fare Restrictions Radio Button    LCC 3    Default
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Alt Fare 1
+    Select Form Of Payment On Fare Quote Tab    Alt Fare 1    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    No Restrictions
+    Select Air Fare Restrictions Radio Button    Alt Fare 1    Template
+    Select Air Fare Restrictions In Fare Quote    Alt Fare 1    IN CASE OF NO SHOW, TICKET IS NONREFUNDABLE AND NOT
+    Add Customized Templates In Fare Quote Restriction Panel    Alt Fare 1    CUSTOM RESTRICTIONS ALT 1    CUSTOM RESTRICTIONS ALT 2
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    Alt Fare 1    IN CASE OF NO SHOW, TICKET IS NONREFUNDABLE AND NOT    CUSTOM RESTRICTIONS ALT 1    CUSTOM RESTRICTIONS ALT 2
+    Populate Alternate Fare Quote Tabs With Default Values
+    Click Fare Tab    Alt Fare 2
+    Select Form Of Payment On Fare Quote Tab    Alt Fare 2    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    Default
+    Select Air Fare Restrictions Radio Button    Alt Fare 2    No Restrictions
+    Populate Alternate Fare Quote Tabs With Default Values
+    Click Fare Tab    Alt Fare 3
+    Select Form Of Payment On Fare Quote Tab    Alt Fare 3    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    No Restrictions
+    Select Air Fare Restrictions Radio Button    Alt Fare 3    Default
+    Populate Alternate Fare Quote Tabs With Default Values
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Finish PNR    Amend Booking For HK Verify That No Remarks Are Written For No Restrictions Segments
+    Execute Simultaneous Change Handling    Amend Booking For HK Verify That No Remarks Are Written For No Restrictions Segments
+    Retrieve PNR Details from Amadeus
+    Verify Air Fare Restriction Remarks on Amadeus    LCC 1    FARE VALID ONLY ON <Airline>    CUSTOM RESTRICTIONS LCC 1
+    Verify Air Fare Restriction Remarks on Amadeus    Fare 2    NO SHOW PENALTY APPLIES 2    CUSTOM RESTRICTIONS FARE 2
+    Verify Air Fare Restriction Remarks on Amadeus    Alt Fare 1    IN CASE OF NO SHOW, TICKET IS NONREFUNDABL    CUSTOM RESTRICTIONS ALT 1    CUSTOM RESTRICTIONS ALT 2
+    Verify Default Restriction Remarks Are Written    1
+    Verify Default Alternate Restrictions Are Written In PNR
+    Verify Remarks Are Written In The PNR    false    false    RTYPE:NONE/T1    :RTYPE:TEMPLATE/TA06PJTT    RTYPE:TEMPLATE/T2    RTYPE:NONE/TA06PJB
+    ...    RTYPE:DEFAULT/TA06PJU    RTYPE/TEMPLATE    RTYPE/NONE    RTYPE/DEFAULT
+    Verify Remarks Are Not Written In The PNR    false    false    TEMPLATE/T1    :RTYPE:NONE/TA06PJTT    RTYPE:NONE/T2    RTYPE:DEFAULT/TA06PJB
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB SG] Verify That No Restrictions Is Pre-Populated In Restrictions Panel Under Fare Tab And No Remarks Are Written For No Restrictions Segments
+    [Tags]    team_c    for_update    us1390    sg
+    Open Power Express And Retrieve Profile    ${version}    Test    u004hxc    en-GB    hcuellar    APAC QA
+    ...    Amadeus
+    Set Client And Traveler    APAC SYN CORP ¦ APAC SG LCC AUTOMATION    BEAR    SGLCC
+    Click New Booking
+    Update PNR for EN or GB
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC1    fare_total=100    taxes_total=78    servicefee_total=2    charge=20    grand_total=183
+    ...    booking_reference=A06PJT    currency=PHP    country=SG
+    #LCC 1 Booking
+    Book Travel Fusion Air Segment    CEBUPACIFIC    5J    MNLHKG    6    S2    A06PJT
+    Enter Travel Fusion Fare Remarks    LCC1    5J    S2    PHP    Airline
+    Enter Travel Fusion Other Remarks    LCC1    PHP    S2
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC2    fare_total=101    taxes_total=79    servicefee_total=2    charge=3    grand_total=183
+    ...    booking_reference=A06PJB    currency=INR    country=SG
+    #LCC 2 Booking
+    Book Travel Fusion Air Segment    NOKAIRLINES    DD    HKGDEL    7    S3    A06PJB
+    Enter Travel Fusion Fare Remarks    LCC2    DD    S3    INR    Travel Fusion
+    Enter Travel Fusion Other Remarks    LCC2    INR    S3
+    ##BSP 1
+    Book Flight X Months From Now    DELSIN/ASQ    SS1Y1    FXP/S4    7    15
+    Book Amadeus Offer Retain Flight    S4    1
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC3    fare_total=110    taxes_total=89    servicefee_total=2    charge=3    grand_total=202
+    ...    booking_reference=A06PJU    currency=JPY    country=SG
+    #LCC 3 Booking
+    Book Travel Fusion Air Segment    NOKAIRLINES    DD    SINNRT    9    S5    A06PJU
+    Enter Travel Fusion Fare Remarks    LCC3    DD    S5    JPY    Travel Fusion
+    Enter Travel Fusion Other Remarks    LCC3    JPY    S5
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    LCC 1
+    Select Form Of Payment On Fare Quote Tab    LCC 1    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    No Restrictions
+    Select Air Fare Restrictions Radio Button    LCC 1    Default
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    LCC 2
+    Select Form Of Payment On Fare Quote Tab    LCC 2    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    No Restrictions
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Fare 1
+    Select Form Of Payment On Fare Quote Tab    Fare 1    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    No Restrictions
+    Select Air Fare Restrictions Radio Button    Fare 1    Default
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    LCC 3
+    Select Form Of Payment On Fare Quote Tab    LCC 3    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    No Restrictions
+    Select Air Fare Restrictions Radio Button    LCC 3    Template
+    Select Air Fare Restrictions In Fare Quote    LCC 3    FARE VALID ONLY ON <Airline>    NO SHOW PENALTY APPLIES
+    Add Customized Templates In Fare Quote Restriction Panel    LCC 3    CUSTOM LCC 3
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    LCC 3    FARE VALID ONLY ON <Airline>    NO SHOW PENALTY APPLIES    CUSTOM LCC 3
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Alt Fare 1
+    Select Form Of Payment On Fare Quote Tab    Alt Fare 1    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    No Restrictions
+    Select Air Fare Restrictions Radio Button    Alt Fare 1    Default
+    Populate Alternate Fare Quote Tabs With Default Values
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus
+    Verify Air Fare Restriction Remarks on Amadeus    LCC 3    FARE VALID ONLY ON <Airline>    NO SHOW PENALTY APPLIES    CUSTOM LCC 3
+    Verify Default Restriction Remarks Are Written    2
+    Verify Default Alternate Restrictions Are Written In PNR
+    Verify Remarks Are Written In The PNR    false    false    RTYPE:DEFAULT/TA06PJT    :RTYPE:NONE/TA06PJB    RTYPE:DEFAULT/T1    :RTYPE:TEMPLATE/TA06PJU
+    ...    RTYPE/DEFAULT
+
+[AB SG] Verify That No Restrictions Is Pre-Populated In Restrictions Panel Under Fare Tab And No Remarks Are Written For No Restrictions Segments
+    [Tags]    team_c    us1390    sg    de447    de458    de459
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC4    fare_total=115    taxes_total=74    servicefee_total=2    charge=20    grand_total=209
+    ...    booking_reference=A06PJTC    currency=HKD    country=SG
+    #LCC 1 Booking
+    Book Travel Fusion Air Segment    CEBUPACIFIC    5J    CEBHKG    9    S6    A06PJTC
+    Enter Travel Fusion Fare Remarks    LCC4    5J    S6    HKD    Airline
+    Enter Travel Fusion Other Remarks    LCC4    HKD    S6
+    ###BSP
+    Book Flight X Months From Now    HKGMNL/APR    SS1Y1    FXP/S7    9    13
+    Book Amadeus Offer Retain Flight    S7    1
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    LCC 1
+    Select Form Of Payment On Fare Quote Tab    LCC 1    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    Default
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    LCC 2
+    Select Form Of Payment On Fare Quote Tab    LCC 2    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    No Restrictions
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Fare 1
+    Select Form Of Payment On Fare Quote Tab    Fare 1    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    Default
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    LCC 3
+    Select Form Of Payment On Fare Quote Tab    LCC 3    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    Template
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    LCC 3    FARE VALID ONLY ON <AIRLINE>    NO SHOW PENALTY APPLIES    CUSTOM LCC 3
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    LCC 4
+    Select Form Of Payment On Fare Quote Tab    LCC 4    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    No Restrictions
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Fare 2
+    Select Form Of Payment On Fare Quote Tab    Fare 2    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    No Restrictions
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Alt Fare 1
+    Select Form Of Payment On Fare Quote Tab    Alt Fare 1    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    Default
+    Populate Alternate Fare Quote Tabs With Default Values
+    Click Fare Tab    Alt Fare 2
+    Select Form Of Payment On Fare Quote Tab    Alt Fare 2    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    No Restrictions
+    Populate Alternate Fare Quote Tabs With Default Values
+    Select Air Fare Restrictions Radio Button    Alt Fare 2    Template
+    Select Air Fare Restrictions In Fare Quote    Alt Fare 2    IN CASE OF NO SHOW, TICKET IS NONREFUNDABLE AND NOT
+    Add Customized Templates In Fare Quote Restriction Panel    Alt Fare 2    CUSTOM RESTRICTIONS ALT 1
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    Alt Fare 2    IN CASE OF NO SHOW, TICKET IS NONREFUNDABLE AND NOT    CUSTOM RESTRICTIONS ALT 1
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Finish PNR    Amend Booking For SG Verify That No Remarks Are Written For No Restrictions Segments
+    Execute Simultaneous Change Handling    Amend Booking For SG Verify That No Remarks Are Written For No Restrictions Segments
+    Retrieve PNR Details from Amadeus
+    Verify Air Fare Restriction Remarks on Amadeus    LCC 3    FARE VALID ONLY ON <AIRLINE>    NO SHOW PENALTY APPLIES    CUSTOM LCC 3
+    Verify Air Fare Restriction Remarks on Amadeus    Alt Fare 2    IN CASE OF NO SHOW, TICKET IS NONREFUNDABLE AND NOT    CUSTOM RESTRICTIONS ALT 1
+    Verify Default Restriction Remarks Are Written    2
+    Verify Default Alternate Restrictions Are Written In PNR
+    Verify Remarks Are Written In The PNR    false    false    RTYPE:DEFAULT/TA06PJT    :RTYPE:NONE/TA06PJB    RTYPE:DEFAULT/T1    :RTYPE:TEMPLATE/TA06PJU
+    ...    RTYPE:NONE/T1    :RTYPE:NONE/TA06PJC    RTYPE/DEFAULT    RTYPE/TEMPLATE
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB HK] Verify That Default Restrictions Is Selected In Restrictions Panel Under Fare Tab And Remarks Are Written
+    [Tags]    hk    team_c    us1390
+    Open Power Express And Retrieve Profile    ${version}    Test    u004hxc    en-GB    hcuellar    APAC QA
+    ...    Amadeus
+    Set Client And Traveler    APAC SYN CORP ¦ APAC HK LCC AUTOMATION - RANGE PERCENT    BEAR    HKLCCBSP
+    Click New Booking
+    Update PNR for EN or GB
+    ###BSP
+    Book Flight X Months From Now    MNLHKG/ACX    SS1Y1    FXP/S2    6    3
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC1    fare_total=100    taxes_total=78    servicefee_total=2    charge=20    grand_total=183
+    ...    booking_reference=A06PJTT    currency=PHP    country=HK
+    #LCC 1 Booking
+    Book Travel Fusion Air Segment    CEBUPACIFIC    5J    HKGMNL    7    S3    A06PJT
+    Enter Travel Fusion Fare Remarks    LCC1    5J    S3    PHP    Airline
+    Enter Travel Fusion Other Remarks    LCC1    PHP    S3
+    ##BSP 2
+    Book Flight X Months From Now    MNLSIN/ASQ    SS1Y1    FXP/S4    7    10
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC2    fare_total=101    taxes_total=79    servicefee_total=2    charge=3    grand_total=183
+    ...    booking_reference=A06PJB    currency=INR    country=HK
+    #LCC 2 Booking
+    Book Travel Fusion Air Segment    NOKAIRLINES    DD    HKGDEL    8    S5    A06PJB
+    Enter Travel Fusion Fare Remarks    LCC2    DD    S5    INR    Travel Fusion
+    Enter Travel Fusion Other Remarks    LCC2    INR    S5
+    Book Amadeus Offer Retain Flight    S2    1
+    Book Amadeus Offer Retain Flight    S4    1
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Select Form Of Payment On Fare Quote Tab    Fare 1    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab
+    Select Air Fare Restrictions Radio Button    Fare 1    Template
+    Select Air Fare Restrictions In Fare Quote    Fare 1    FARE VALID ONLY ON <Airline>    NO SHOW PENALTY APPLIES
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    Fare 1    FARE VALID ONLY ON <Airline>    NO SHOW PENALTY APPLIES
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    LCC 1
+    Select Form Of Payment On Fare Quote Tab    LCC 1    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab
+    Select Air Fare Restrictions Radio Button    LCC 1    No Restrictions
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Fare 2
+    Select Form Of Payment On Fare Quote Tab    Fare 2    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab
+    Select Air Fare Restrictions Radio Button    Fare 2    No Restrictions
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    LCC 2
+    Select Form Of Payment On Fare Quote Tab    LCC 2    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab
+    Select Air Fare Restrictions Radio Button    LCC 2    Default
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Alt Fare 1
+    Select Form Of Payment On Fare Quote Tab    Alt Fare 1    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab
+    Select Air Fare Restrictions Radio Button    Alt Fare 1    No Restrictions
+    Populate Alternate Fare Quote Tabs With Default Values
+    Click Fare Tab    Alt Fare 2
+    Select Form Of Payment On Fare Quote Tab    Alt Fare 2    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab
+    Select Air Fare Restrictions Radio Button    Alt Fare 2    Default
+    Populate Alternate Fare Quote Tabs With Default Values
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus
+    Verify Air Fare Restriction Remarks on Amadeus    Fare 1    FARE VALID ONLY ON <Airline>    NO SHOW PENALTY APPLIES
+    Verify Default Restriction Remarks Are Written    1
+    Verify Default Alternate Restrictions Are Written In PNR
+    Verify Remarks Are Written In The PNR    false    false    TEMPLATE/T1    :RTYPE:NONE/TA06PJT    RTYPE:NONE/T2    RTYPE:DEFAULT/TA06PJB
+    ...    RTYPE/NONE    RTYPE/DEFAULT
+
+[AB HK] Verify That Default Restrictions Is Selected In Restrictions Panel Under Fare Tab And Remarks Are Written
+    [Tags]    hk    team_c    us1390    de447    valid_fail
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Comment    Delete Air Segment    2
+    ###BSP
+    Book Flight X Months From Now    DELHKG/ACX    SS1Y1    FXP/S6    8    16
+    Book Amadeus Offer Retain Flight    S6    1
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC3    fare_total=110    taxes_total=89    servicefee_total=2    charge=3    grand_total=202
+    ...    booking_reference=A06PJU    currency=INR
+    #LCC 3 Booking
+    Book Travel Fusion Air Segment    NOKAIRLINES    DD    BOMSIN    9    S7    A06PJU
+    Enter Travel Fusion Fare Remarks    LCC3    DD    S7    INR    Travel Fusion
+    Enter Travel Fusion Other Remarks    LCC3    INR    S7
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    Template
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    Fare 1    FARE VALID ONLY ON <AIRLINE>    NO SHOW PENALTY APPLIES
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    LCC 1
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    No Restrictions
+    Select Air Fare Restrictions Radio Button    LCC 1    Template
+    Add Customized Templates In Fare Quote Restriction Panel    LCC 1    CUSTOM RESTRICTIONS LCC 1    CUSTOM RESTRICTIONS LCC 11
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    LCC 1    CUSTOM RESTRICTIONS LCC 1    CUSTOM RESTRICTIONS LCC 11
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Fare 2
+    Select Form Of Payment On Fare Quote Tab    Fare 2    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    No Restrictions
+    Select Air Fare Restrictions Radio Button    Fare 2    Template
+    Select Air Fare Restrictions In Fare Quote    Fare 2    NO SHOW PENALTY APPLIES
+    Add Customized Templates In Fare Quote Restriction Panel    Fare 2    CUSTOM RESTRICTIONS FARE 2
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    Fare 2    NO SHOW PENALTY APPLIES    CUSTOM RESTRICTIONS FARE 2
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    LCC 2
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    Default
+    Select Air Fare Restrictions Radio Button    LCC 2    No Restrictions
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Fare 3
+    Select Form Of Payment On Fare Quote Tab    Fare 3    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab
+    Select Air Fare Restrictions Radio Button    Fare 3    No Restrictions
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    LCC 3
+    Select Form Of Payment On Fare Quote Tab    LCC 3    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab
+    Select Air Fare Restrictions Radio Button    LCC 3    Default
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Alt Fare 1
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    No Restrictions
+    Select Air Fare Restrictions Radio Button    Alt Fare 1    Template
+    Select Air Fare Restrictions In Fare Quote    Alt Fare 1    IN CASE OF NO SHOW, TICKET IS NONREFUNDABLE AND NOT
+    Add Customized Templates In Fare Quote Restriction Panel    Alt Fare 1    CUSTOM RESTRICTIONS ALT 1    CUSTOM RESTRICTIONS ALT 2
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    Alt Fare 1    IN CASE OF NO SHOW, TICKET IS NONREFUNDABLE AND NOT    CUSTOM RESTRICTIONS ALT 1    CUSTOM RESTRICTIONS ALT 2
+    Populate Alternate Fare Quote Tabs With Default Values
+    Click Fare Tab    Alt Fare 2
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    Default
+    Select Air Fare Restrictions Radio Button    Alt Fare 2    No Restrictions
+    Populate Alternate Fare Quote Tabs With Default Values
+    Click Fare Tab    Alt Fare 3
+    Select Form Of Payment On Fare Quote Tab    Alt Fare 3    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab
+    Select Air Fare Restrictions Radio Button    Alt Fare 3    Default
+    Populate Alternate Fare Quote Tabs With Default Values
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Finish PNR    Amend Booking For HK Verify That Remarks Are Written Accordingly For Restrictions
+    Execute Simultaneous Change Handling    Amend Booking For HK Verify That Remarks Are Written Accordingly For Restrictions
+    Retrieve PNR Details from Amadeus
+    Verify Air Fare Restriction Remarks on Amadeus    Fare 1    FARE VALID ONLY ON <Airline>
+    Verify Air Fare Restriction Remarks on Amadeus    LCC 1    CUSTOM RESTRICTIONS LCC 1    CUSTOM RESTRICTIONS LCC 11
+    Verify Air Fare Restriction Remarks on Amadeus    Fare 2    NO SHOW PENALTY APPLIES    CUSTOM RESTRICTIONS FARE 2
+    Verify Air Fare Restriction Remarks on Amadeus    Alt Fare 1    IN CASE OF NO SHOW, TICKET IS NONREFUNDABL    CUSTOM RESTRICTIONS ALT 1    CUSTOM RESTRICTIONS ALT 2
+    Verify Default Restriction Remarks Are Written    1
+    Verify Default Alternate Restrictions Are Written In PNR
+    Verify Remarks Are Written In The PNR    false    false    RTYPE:TEMPLATE/T1    :RTYPE:TEMPLATE/TA06PJT    RTYPE:TEMPLATE/T2    RTYPE:NONE/TA06PJB
+    ...    RTYPE:NONE/T3    RTYPE:DEFAULT/TA06PJU    RTYPE/TEMPLATE    RTYPE/NONE    RTYPE/DEFAULT
+    Verify Remarks Are Not Written In The PNR    false    false    :RTYPE:NONE/TA06PJT    RTYPE:NONE/T2    RTYPE:DEFAULT/TA06PJB
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Amend Booking For HK Verify That Changed Restrictions In Restrictions Panel Are Written In Remarks
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Click Panel    Air Fare
+    Select Default Restricions in Fare Tab    Fare 1
+    Verfiy Default Restrictions Are Selected In Fare Tab    Fare 1
+    Select Default Restricions in Fare Tab    Alt Fare 1
+    Verfiy Default Restrictions Are Selected In Fare Tab    Alt Fare 1
+    Select Air Fare Restrictions Radio Button    Fare 2
+    Verify Air Fare Restrictions Dropdown Values    Fare 2    FARE VALID ONLY ON <Airline>    IN CASE OF NO SHOW, TICKET IS NONREFUNDABLE AND NOT    NO SHOW PENALTY APPLIES
+    Select Air Fare Restrictions In Fare Quote    Fare 2    FARE VALID ONLY ON <Airline>    NO SHOW PENALTY APPLIES
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    Fare 2    FARE VALID ONLY ON <Airline>    NO SHOW PENALTY APPLIES
+    Select Air Fare Restrictions Radio Button    Alt Fare 2
+    Verify Air Fare Restrictions Dropdown Values    Alt Fare 2    FARE VALID ONLY ON <Airline>    IN CASE OF NO SHOW, TICKET IS NONREFUNDABLE AND NOT    NO SHOW PENALTY APPLIES
+    Select Air Fare Restrictions In Fare Quote    Alt Fare 2    FARE VALID ONLY ON <Airline>    NO SHOW PENALTY APPLIES
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    Alt Fare 2    FARE VALID ONLY ON <Airline>    NO SHOW PENALTY APPLIES
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR    Amend Booking For HK Verify That Changed Restrictions In Restrictions Panel Are Written In Remarks
+
+Amend Booking For SG Verify That Changed Restrictions In Restrictions Panel Are Written In Remarks
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Book Flight X Months From Now    SINMNL/APR    SS1Y1    FXP/S3    6    5
+    Book Amadeus Offer Retain Flight    S3    1
+    Click Read Booking
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Select Air Fare Restrictions Radio Button    Fare 1
+    Verify Air Fare Restrictions Dropdown Values    Fare 1    FARE VALID ONLY ON <Airline>    IN CASE OF NO SHOW, TICKET IS NONREFUNDABLE AND NOT    NO SHOW PENALTY APPLIES
+    Delete Air Fare Restrictions In Fare Quote Restriction Panel    Fare 1    FARE VALID ONLY ON <AIRLINE>
+    Select Air Fare Restrictions In Fare Quote    Fare 1    NO SHOW PENALTY APPLIES
+    Add Customized Templates In Fare Quote Restriction Panel    Fare 1    YELLOW FEVER    MALARIA FEVER
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    Fare 1    NO SHOW PENALTY APPLIES    YELLOW FEVER    MALARIA FEVER
+    Select Air Fare Restrictions Radio Button    Alt Fare 1
+    Verify Air Fare Restrictions Dropdown Values    Alt Fare 1    FARE VALID ONLY ON <Airline>    IN CASE OF NO SHOW, TICKET IS NONREFUNDABLE AND NOT    NO SHOW PENALTY APPLIES
+    Delete Air Fare Restrictions In Fare Quote Restriction Panel    Alt Fare 1    FARE VALID ONLY ON <AIRLINE>    NO SHOW PENALTY APPLIES
+    Add Customized Templates In Fare Quote Restriction Panel    Alt Fare 1    CITY PROHIBITED    AIRLINE ADVICE
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    Alt Fare 1    CITY PROHIBITED    AIRLINE ADVICE
+    Select Default Restricions in Fare Tab    Fare 2
+    Verfiy Default Restrictions Are Selected In Fare Tab    Fare 2
+    Select Air Fare Restrictions Radio Button    Alt Fare 2
+    Verify Air Fare Restrictions Dropdown Values    Alt Fare 2    FARE VALID ONLY ON <Airline>    IN CASE OF NO SHOW, TICKET IS NONREFUNDABLE AND NOT    NO SHOW PENALTY APPLIES
+    Add Customized Templates In Fare Quote Restriction Panel    Alt Fare 2    CUSTOM 1    CUSTOM 2
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    Alt Fare 2    CUSTOM 1    CUSTOM 2
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR    Amend Booking For SG Verify That Changed Restrictions In Restrictions Panel Are Written In Remarks
+
+Amend Booking For IN Verify That Changed Restrictions In Restrictions Panel Are Written In Remarks
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Delete Air Segment    3
+    Delete Amadeus Offer    XE1
+    Click Read Booking
+    Click Panel    Air Fare
+    Delete Alternate Fare Tab    Alt Fare 1
+    Populate Fare Details And Fees Tab With Default Values
+    Select Air Fare Restrictions Radio Button    Fare 1
+    Delete Air Fare Restrictions In Fare Quote Restriction Panel    Fare 1    FARE VALID ONLY ON <AIRLINE>    NO SHOW PENALTY APPLIES
+    Verify Air Fare Restrictions Dropdown Values    Fare 1    FARE VALID ONLY ON <Airline>    IN CASE OF NO SHOW, TICKET IS NONREFUNDABLE AND NOT    NO SHOW PENALTY APPLIES
+    Select Air Fare Restrictions In Fare Quote    Fare 1    NO SHOW PENALTY APPLIES
+    Add Customized Templates In Fare Quote Restriction Panel    Fare 1    ARRIVAL NOTICE
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    Fare 1    NO SHOW PENALTY APPLIES    ARRIVAL NOTICE
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR    Amend Booking For IN Verify That Changed Restrictions In Restrictions Panel Are Written In Remarks
+
+Amend Booking For HK Verify That No Remarks Are Written For No Restrictions Segments
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Comment    Delete Air Segment    2
+    Comment    ###BSP
+    Comment    Book Flight X Months From Now    SINHKG/ACX    SS1Y1    FXP/S2    6    10
+    Book Amadeus Offer Retain Flight    S2    3
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC3    fare_total=110    taxes_total=89    servicefee_total=2    charge=3    grand_total=202
+    ...    booking_reference=A06PJU    currency=INR
+    #LCC 3 Booking
+    Book Travel Fusion Air Segment    NOKAIRLINES    DD    DELSIN    9    S6    A06PJU
+    Enter Travel Fusion Fare Remarks    LCC3    DD    S6    INR    Travel Fusion
+    Enter Travel Fusion Other Remarks    LCC3    INR    S6
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Select Form Of Payment On Fare Quote Tab    Fare 1    PORTRAIT-A/AX***********0007/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    Template
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    Fare 1    FARE VALID ONLY ON <AIRLINE>    NO SHOW PENALTY APPLIES
+    Select Air Fare Restrictions Radio Button    Fare 1    No Restrictions
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    LCC 1
+    Select Form Of Payment On Fare Quote Tab    LCC 1    PORTRAIT-A/AX***********0007/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    No Restrictions
+    Select Air Fare Restrictions Radio Button    LCC 1    Template
+    Select Air Fare Restrictions In Fare Quote    LCC 1    FARE VALID ONLY ON <Airline>
+    Add Customized Templates In Fare Quote Restriction Panel    LCC 1    CUSTOM RESTRICTIONS LCC 1
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    LCC 1    FARE VALID ONLY ON <Airline>    CUSTOM RESTRICTIONS LCC 1
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Fare 2
+    Select Form Of Payment On Fare Quote Tab    Fare 2    PORTRAIT-A/AX***********0007/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    No Restrictions
+    Select Air Fare Restrictions Radio Button    Fare 2    Template
+    Comment    Select Air Fare Restrictions In Fare Quote    Fare 2    NO SHOW PENALTY APPLIES
+    Add Customized Templates In Fare Quote Restriction Panel    Fare 2    NO SHOW PENALTY APPLIES 2    CUSTOM RESTRICTIONS FARE 2
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    Fare 2    NO SHOW PENALTY APPLIES 2    CUSTOM RESTRICTIONS FARE 2
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    LCC 2
+    Select Form Of Payment On Fare Quote Tab    LCC 2    PORTRAIT-A/AX***********0007/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    Default
+    Select Air Fare Restrictions Radio Button    LCC 2    No Restrictions
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    LCC 3
+    Select Form Of Payment On Fare Quote Tab    LCC 3    PORTRAIT-A/AX***********0007/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    No Restrictions
+    Select Air Fare Restrictions Radio Button    LCC 3    Default
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Alt Fare 1
+    Select Form Of Payment On Fare Quote Tab    Alt Fare 1    PORTRAIT-A/AX***********0007/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    No Restrictions
+    Select Air Fare Restrictions Radio Button    Alt Fare 1    Template
+    Select Air Fare Restrictions In Fare Quote    Alt Fare 1    IN CASE OF NO SHOW, TICKET IS NONREFUNDABLE AND NOT
+    Add Customized Templates In Fare Quote Restriction Panel    Alt Fare 1    CUSTOM RESTRICTIONS ALT 1    CUSTOM RESTRICTIONS ALT 2
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    Alt Fare 1    IN CASE OF NO SHOW, TICKET IS NONREFUNDABLE AND NOT    CUSTOM RESTRICTIONS ALT 1    CUSTOM RESTRICTIONS ALT 2
+    Populate Alternate Fare Quote Tabs With Default Values
+    Click Fare Tab    Alt Fare 2
+    Select Form Of Payment On Fare Quote Tab    Alt Fare 2    PORTRAIT-A/AX***********0007/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    Default
+    Select Air Fare Restrictions Radio Button    Alt Fare 2    No Restrictions
+    Populate Alternate Fare Quote Tabs With Default Values
+    Click Fare Tab    Alt Fare 3
+    Select Form Of Payment On Fare Quote Tab    Alt Fare 3    PORTRAIT-A/AX***********0007/D0899-AX
+    Select Form Of Payment On Fare Quote Tab    Alt Fare 3    PORTRAIT-A/AX***********0007/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    No Restrictions
+    Select Air Fare Restrictions Radio Button    Alt Fare 3    Default
+    Populate Alternate Fare Quote Tabs With Default Values
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Finish PNR    Amend Booking For HK Verify That No Remarks Are Written For No Restrictions Segments
+
+Amend Booking For SG Verify That No Remarks Are Written For No Restrictions Segments
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC4    fare_total=115    taxes_total=74    servicefee_total=2    charge=20    grand_total=209
+    ...    booking_reference=A06PJTC    currency=HKD    country=SG
+    #LCC 1 Booking
+    Book Travel Fusion Air Segment    CEBUPACIFIC    5J    CEBHKG    9    S6    A06PJTC
+    Enter Travel Fusion Fare Remarks    LCC4    5J    S6    HKD    Airline
+    Enter Travel Fusion Other Remarks    LCC4    HKD    S6
+    ###BSP
+    Book Flight X Months From Now    HKGMNL/APR    SS1Y1    FXP/S7    9    13
+    Book Amadeus Offer Retain Flight    S7    1
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    LCC 1
+    Select Form Of Payment On Fare Quote Tab    LCC 1    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    Default
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    LCC 2
+    Select Form Of Payment On Fare Quote Tab    LCC 2    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    No Restrictions
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Fare 1
+    Select Form Of Payment On Fare Quote Tab    Fare 1    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    Default
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    LCC 3
+    Select Form Of Payment On Fare Quote Tab    LCC 3    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    Template
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    LCC 3    FARE VALID ONLY ON <AIRLINE>    NO SHOW PENALTY APPLIES    CUSTOM LCC 3
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    LCC 4
+    Select Form Of Payment On Fare Quote Tab    LCC 4    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    No Restrictions
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Fare 2
+    Select Form Of Payment On Fare Quote Tab    Fare 2    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    No Restrictions
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Alt Fare 1
+    Select Form Of Payment On Fare Quote Tab    Alt Fare 1    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    Default
+    Populate Alternate Fare Quote Tabs With Default Values
+    Click Fare Tab    Alt Fare 2
+    Select Form Of Payment On Fare Quote Tab    Alt Fare 2    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    No Restrictions
+    Populate Alternate Fare Quote Tabs With Default Values
+    Select Air Fare Restrictions Radio Button    Alt Fare 2    Template
+    Select Air Fare Restrictions In Fare Quote    Alt Fare 2    IN CASE OF NO SHOW, TICKET IS NONREFUNDABLE AND NOT
+    Add Customized Templates In Fare Quote Restriction Panel    Alt Fare 2    CUSTOM RESTRICTIONS ALT 1
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    Alt Fare 2    IN CASE OF NO SHOW, TICKET IS NONREFUNDABLE AND NOT    CUSTOM RESTRICTIONS ALT 1
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Finish PNR    Amend Booking For SG Verify That No Remarks Are Written For No Restrictions Segments
+
+Amend Booking For HK Verify That Remarks Are Written Accordingly For Restrictions
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Comment    Delete Air Segment    2
+    ###BSP
+    Book Flight X Months From Now    DELBOM/ACX    SS1Y1    FXP/S6    8    16
+    Book Amadeus Offer Retain Flight    S6    1
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC3    fare_total=110    taxes_total=89    servicefee_total=2    charge=3    grand_total=202
+    ...    booking_reference=A06PJU    currency=INR
+    #LCC 3 Booking
+    Book Travel Fusion Air Segment    NOKAIRLINES    DD    BOMSIN    9    S6    A06PJU
+    Enter Travel Fusion Fare Remarks    LCC3    DD    S6    INR    Travel Fusion
+    Enter Travel Fusion Other Remarks    LCC3    INR    S6
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    Template
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    Fare 1    FARE VALID ONLY ON <AIRLINE>    NO SHOW PENALTY APPLIES
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    LCC 1
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    No Restrictions
+    Select Air Fare Restrictions Radio Button    LCC 1    Template
+    Add Customized Templates In Fare Quote Restriction Panel    LCC 1    CUSTOM RESTRICTIONS LCC 1    CUSTOM RESTRICTIONS LCC 11
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    LCC 1    CUSTOM RESTRICTIONS LCC 1    CUSTOM RESTRICTIONS LCC 11
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Fare 2
+    Select Form Of Payment On Fare Quote Tab    Fare 2    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    No Restrictions
+    Select Air Fare Restrictions Radio Button    Fare 2    Template
+    Select Air Fare Restrictions In Fare Quote    Fare 2    NO SHOW PENALTY APPLIES
+    Add Customized Templates In Fare Quote Restriction Panel    Fare 2    CUSTOM RESTRICTIONS FARE 2
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    Fare 2    NO SHOW PENALTY APPLIES    CUSTOM RESTRICTIONS FARE 2
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    LCC 2
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    Default
+    Select Air Fare Restrictions Radio Button    LCC 2    No Restrictions
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Fare 3
+    Click Restriction Tab
+    Select Form Of Payment On Fare Quote Tab    Fare 3    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify Pre-Selected Option On Restrictions Tab
+    Select Air Fare Restrictions Radio Button    Fare 3    No Restrictions
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    LCC 3
+    Select Form Of Payment On Fare Quote Tab    LCC 3    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab
+    Select Air Fare Restrictions Radio Button    LCC 3    Default
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Alt Fare 1
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    No Restrictions
+    Select Air Fare Restrictions Radio Button    Alt Fare 1    Template
+    Select Air Fare Restrictions In Fare Quote    Alt Fare 1    IN CASE OF NO SHOW, TICKET IS NONREFUNDABLE AND NOT
+    Add Customized Templates In Fare Quote Restriction Panel    Alt Fare 1    CUSTOM RESTRICTIONS ALT 1    CUSTOM RESTRICTIONS ALT 2
+    Verify Air Fare Restrictions Present In Itinerary Remarks Panel    Alt Fare 1    IN CASE OF NO SHOW, TICKET IS NONREFUNDABLE AND NOT    CUSTOM RESTRICTIONS ALT 1    CUSTOM RESTRICTIONS ALT 2
+    Populate Alternate Fare Quote Tabs With Default Values
+    Click Fare Tab    Alt Fare 2
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab    Default
+    Select Air Fare Restrictions Radio Button    Alt Fare 2    No Restrictions
+    Populate Alternate Fare Quote Tabs With Default Values
+    Click Fare Tab    Alt Fare 3
+    Select Form Of Payment On Fare Quote Tab    Alt Fare 3    PORTRAIT-A/AX***********0002/D0899-AX
+    Click Restriction Tab
+    Verify Pre-Selected Option On Restrictions Tab
+    Select Air Fare Restrictions Radio Button    Alt Fare 3    Default
+    Populate Alternate Fare Quote Tabs With Default Values
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Finish PNR

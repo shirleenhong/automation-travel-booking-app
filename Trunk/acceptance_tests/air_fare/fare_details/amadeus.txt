@@ -1,0 +1,446 @@
+*** Settings ***
+Force Tags        amadeus    emea
+Resource          ../air_fare_verification.txt
+Resource          ../../rail/rail_verification.txt
+
+*** Test Cases ***
+[NB FR] Verify That Charged Fare Does Not Contain Rail Amount
+    [Tags]    us3683    rail_display
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    fr-FR    AutomationFR    FR QA Team Amadeus
+    Select GDS    Amadeus
+    Jump To Different PCC    PARWL210G
+    Create Shell PNR Without Retention Line    FR Amadeus - Mark ¦ OBT - KDS    KDS    Jane
+    Create One Way Rail Booking Using Amadeus Rail Display Thru Web    PARWL210G    FRLYS    FRPAR    E-ticket    SNCF
+    Book Segmented One Way Flight X Months From Now    CDGFRA    \    6
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare    Rail
+    Click Panel    Rail
+    Populate E-Ticket Delivery Method Single Fare Quote
+    Click Panel    Air Fare
+    Get High, Charged And Low Fare In Fare Tab    Fare 1
+    Verify Amount In Fare Tab    Fare 1    S3
+    Populate Fare Tab With Default Values    Fare 1
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify High Fare, Charged Fare And Low Fare Remarks Are Written    Fare 1
+    Verify RMO CP0 Line Include Amadeus Rail Display Amount    S2
+    Verify KDS Amadeus Rail Display Remarks    S2
+
+[AB FR] Verify That Charged Fare Does Not Contain Rail Amount
+    [Tags]    us3683    rail_display
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Book Amadeus Offer Retain Flight    S3
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Click Fare Tab    Alternate Fare 1
+    Verify Offer Amount    Alternate Fare 1
+    Verify Amount In Fare Tab    Fare 1    S3
+    Get High, Charged And Low Fare In Fare Tab    Fare 1
+    Populate Alternate Fare With Default Values    Alternate Fare 1
+    Click Finish PNR    Amend Booking Add Amadeus Offer
+    Re-Execute Amend Booking Add Amadeus Offer If Simultaneous Change Error Is Displayed
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify High Fare, Charged Fare And Low Fare Remarks Are Written    Fare 1
+    Verify RMO CP0 Line Include Amadeus Rail Display Amount    S2
+    Verify KDS Amadeus Rail Display Remarks    S2
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}    True
+
+[NB SE] Verify That Charged Fare Does Not Contain Rail Amount
+    [Tags]    us3683    rail_display
+    Open Power Express And Retrieve Profile    ${version}    Test    u003kxr    en-GB    kronquillouk    EMEA QA Test Team
+    Select GDS    Amadeus
+    Jump To Different PCC    STORA27CT
+    Create Shell PNR Without Retention Line    Power Express EMEA test ¦ SE-AMADEUS RAIL TEST    Carlson    Lena
+    Create Round Trip Rail Booking Using Amadeus Rail Display Thru Web    STORA27CT    Stockholm C    Göteborg C    Ticketless Email
+    Book Segmented One Way Flight X Months From Now    AMSCDG    S2    2
+    Book Segmented One Way Flight X Months From Now    CDGFRA    S5    6
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare    Rail
+    Click Panel    Air Fare
+    Verify Amount In Fare Tab    Fare 1    S2
+    Verify Amount In Fare Tab    Fare 2    S5
+    Populate Fare Tab With Default Values    Fare 1
+    Get High, Charged And Low Fare In Fare Tab    Fare 1
+    Populate Fare Tab With Default Values    Fare 2
+    Get High, Charged And Low Fare In Fare Tab    Fare 2
+    Click Panel    Rail
+    Verify Paper Ticket Delivery Method
+    Populate Paper Ticket Delivery Method Multiple Fare Quotes
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify High Fare, Charged Fare And Low Fare Remarks Are Written    Fare 1
+    Verify High Fare, Charged Fare And Low Fare Remarks Are Written    Fare 2
+
+[AB SE] Verify That Charged Fare Does Not Contain Rail Amount
+    [Tags]    us3683    rail_display
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Delete Air Segment    2
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare    Rail
+    Click Panel    Air Fare
+    Verify Amount In Fare Tab    Fare 1    S4
+    Populate Fare Tab With Default Values    Fare 1
+    Get High, Charged And Low Fare In Fare Tab    Fare 1
+    Click Panel    Rail
+    Verify Paper Ticket Delivery Method
+    Populate Paper Ticket Delivery Method Multiple Fare Quotes
+    Click Finish PNR    Amend Booking Delete Air
+    Re-Execute Amend Booking Delete Air If Simultaneous Change Error Is Displayed
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Click Panel    Air Fare
+    Verify High Fare, Charged Fare And Low Fare Remarks Are Written    Fare 1
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}    True
+
+[NB DK] Verify That Air Fare Panel Charged Fare Reflects Updated TST On Classic
+    [Tags]    us1641    tqt_needed    dk
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    da-DK    AutomationDK    DK AUTO AMADEUS
+    Select GDS    Amadeus
+    Create New Booking With Three Segments Using Default Values    Amadeus DK 16 - Auto ¦ US1641    AutoOneSixSeven    EmeaTrvlrFive    HELOSL/ASK    SS1Y1    FXB/S2
+    ...    OSLHEL/AAY    SS1Y1    FXB/S3    HELARN/ASK    SS1Y1    FXB/S4
+    ...    ${EMPTY}    AIR FARE
+    Populate Fare Tab With Default Values    Fare 1
+    Select Changes Dropdown Value    Tidsaendring tilladt uden omkostning    Fare 1
+    Select Cancellation Dropdown Value    Fuld refundering    Fare 1
+    Populate Fare Tab With Default Values    Fare 2
+    Select Changes Dropdown Value    Tidsaendring tilladt uden omkostning    Fare 2
+    Select Cancellation Dropdown Value    Fuld refundering    Fare 2
+    Populate Fare Tab With Default Values    Fare 3
+    Select Changes Dropdown Value    Tidsaendring tilladt uden omkostning    Fare 3
+    Select Cancellation Dropdown Value    Fuld refundering    Fare 3
+    Click Finish PNR
+
+[AB DK] Verify That Air Fare Panel Charged Fare Reflects Updated TST On Classic
+    [Tags]    us1641    tqt_needed    dk
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Change Tax Value For TST 1
+    Change Tax Value For TST 2
+    Change Tax Value For TST 3
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Populate Fare Tab With Default Values    Fare 1
+    Select Changes Dropdown Value    Tidsaendring tilladt uden omkostning    Fare 1
+    Select Cancellation Dropdown Value    Fuld refundering    Fare 1
+    Verify Amount In Fare Tab    Fare 1    T1
+    Get High, Charged And Low Fare In Fare Tab    Fare 1
+    Populate Fare Tab With Default Values    Fare 2
+    Select Changes Dropdown Value    Tidsaendring tilladt uden omkostning    Fare 2
+    Select Cancellation Dropdown Value    Fuld refundering    Fare 2
+    Verify Amount In Fare Tab    Fare 2    T2
+    Get High, Charged And Low Fare In Fare Tab    Fare 2
+    Populate Fare Tab With Default Values    Fare 3
+    Select Changes Dropdown Value    Tidsaendring tilladt uden omkostning    Fare 3
+    Select Cancellation Dropdown Value    Fuld refundering    Fare 3
+    Verify Amount In Fare Tab    Fare 3    T3
+    Get High, Charged And Low Fare In Fare Tab    Fare 3
+    Click Finish PNR    Amend Workflow For Charged Fare Reflects Updated TST On Classic
+    Execute Simultaneous Change Handling    Amend Workflow For Charged Fare Reflects Updated TST On Classic
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify High Fare, Charged Fare And Low Fare Remarks Are Written    Fare 1
+    Verify High Fare, Charged Fare And Low Fare Remarks Are Written    Fare 2
+    Verify High Fare, Charged Fare And Low Fare Remarks Are Written    Fare 3
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB UK] Verify That Air Fare Panel Charged Fare Reflects Updated TST On Traveldoo
+    [Tags]    us1641    tqt_needed    uk
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    en-GB    AutomationUK    UK AUTO AMADEUS
+    Select GDS    Amadeus
+    Create New Booking With One Way Flight Using Default Values    Amadeus UK 16 - Auto ¦ US1641    AutoOneSixSeven    EmeaTrvlrFour    LHRHEL/AAY    ${EMPTY}    Air Fare
+    Populate Fare Tab With Default Values    Fare 1
+    Click Finish PNR
+
+[AB UK] Verify That Air Fare Panel Charged Fare Reflects Updated TST On Traveldoo
+    [Tags]    us1641    tqt_needed    uk
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Add YQ Tax For TST 1
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Populate Fare Tab With Default Values    Fare 1
+    Get High, Charged And Low Fare In Fare Tab    Fare 1
+    Verify Amount In Fare Tab    Fare 1    T1
+    Click Finish PNR
+    Re-Execute Amend Workflow For Charged Fare Reflects Updated TST On Traveldoo If Simultaneous Change Error Is Displayed
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Click Panel    Air Fare
+    Verify High Fare, Charged Fare And Low Fare Remarks Are Written    Fare 1
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[1A EMEA][NB] Verify That In Air Fare Panel User Can Add Or Delete Fare Condition Per Line In Semi Flex During New Booking
+    [Tags]    US5328    fr
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    fr-FR    AutomationFR    FR AUTO AMADEUS
+    Select GDS    Amadeus
+    Emulate PCC    PARWL210G
+    Set Client And Traveler    Amadeus FR 15 - Auto ¦ UAT CLASSIC    AutoFifteenClassic    ${EMPTY}
+    Click New Booking
+    Book Flight X Months From Now    MSPORD/AUA    SS1Y1    FXP    6
+    Tick Not Known At Time Of Booking For Form Of Payment
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Add Changes Button    Fare 1
+    Set Low Fare Field (If blank) with Charged Fare
+    Set Changes Value    Non autorise    Fare 1
+    Set Changes Value    10 pour cent    Fare 1    2
+    Click Add Cancellation Button    Fare 1
+    Set Cancellation Value    moins 5% apres le depart    Fare 1
+    Set Cancellation Value    Sous reserve des conditions tarifaires    Fare 1    2
+    Populate Air Fare Savings Code    ABN - ABONNEMENT    CID - CLASSE IMPERATIVE DEMANDEE    YC - Tarif Client Classe Economique
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus
+    Verify Specific Remark Is Written In The PNR    NON AUTORISE
+    Verify Specific Remark Is Written In The PNR    10 POUR CENT
+    Verify Specific Remark Is Written In The PNR    MOINS 5% APRES LE DEPART
+    Verify Specific Remark Is Written In The PNR    SOUS RESERVE DES CONDITIONS TARIFAIRES
+
+[1A EMEA][AB] Verify That In Air Fare Panel User Can Add Or Delete Fare Condition Per Line In Semi Flex During New Booking
+    [Tags]    US5328    fr
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Click Panel    Air Fare
+    Set Changes Value    10 pour cent    Fare 1
+    Set Changes Value    Autorise    Fare 1    2
+    Set Cancellation Value    moins 15% apres le depart    Fare 1
+    Set Cancellation Value    Non remboursable    Fare 1    2
+    Populate Air Fare Savings Code    ABN - ABONNEMENT    CID - CLASSE IMPERATIVE DEMANDEE    YC - Tarif Client Classe Economique
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Finish PNR
+    Execute Simultaneous Change Handling    Amend Booking For Changes in Fare Conditions
+    Retrieve PNR Details From Amadeus
+    Verify Specific Remark Is Written In The PNR    10 POUR CENT
+    Verify Specific Remark Is Written In The PNR    AUTORISE
+    Verify Specific Remark Is Written In The PNR    MOINS 15% APRES LE DEPART
+    Verify Specific Remark Is Written In The PNR    NON REMBOURSABLE
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB AB] Verify That Default Classcode Is Not Added To BF Line Remark Of New Fare
+    [Tags]    US5077    DE7020    uk
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    en-GB    AutomationUK    UK AUTO AMADEUS
+    Select GDS    Amadeus
+    Create New Booking With One Way Flight And One Alternate Offer Using Default Values    Amadeus 16 - Auto ¦ Hidden Savings Code    Automason    Yuri    LHRCDG/AAF    SS1Y1    FXP
+    ...    ${EMPTY}    Air Fare
+    Click Panel    Air Fare
+    Verify Realised Saving Code Field Is Not Visible    Fare 1
+    Verify Missed Saving Code Field Is Not Visible    Fare 1
+    Verify Class Saving Code Field Is Not Visible    Fare 1
+    Select Fully Flexible
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Specific Line Is Written In The PNR    HC- LC- CL
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Enter GDS Command    RTOF    XE1
+    Book Flight X Months From Now    CDGLHR/AAF    SS1Y1    FXP/S3    6    10
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 2
+    Verify Realised Saving Code Field Is Not Visible    Fare 2
+    Verify Missed Saving Code Field Is Not Visible    Fare 2
+    Verify Class Saving Code Field Is Not Visible    Fare 2
+    Select Fully Flexible
+    Click Fare Tab    Fare 1
+    Select Fully Flexible
+    Populate All Panels (Except Given Panels If Any)    Air Fare    Delivery
+    Click Finish PNR    AB For Verify That Default Dlasscode Is Not Added to BF Line of New Fare and Back Office Remarks
+    Execute Simultaneous Change Handling    AB For Verify That Default Dlasscode Is Not Added to BF Line of New Fare and Back Office Remarks
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Specific Line Is Written In The PNR    HC- LC- CL
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB UK] Verify That The Correct DI Lines Total For Four Normal Fares W Amadeus Offer
+    [Tags]    de4368    uk
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    en-GB    AutomationUK    UK AUTO AMADEUS
+    Select GDS    Amadeus
+    Set Client And Traveler    Amadeus 16 - Auto ¦ DE4368    AutoOneSixTwo    EmeaTrvlrTwo
+    Click New Booking
+    Update PNR for EN or GB
+    Book Flight X Months From Now    CDGLHR/AAF    SS1Y1    FXP    5
+    Book Flight X Months From Now    LHRCDG/AAF    SS1Y1    FXP/S3    5    3
+    Book Flight X Months From Now    CDGLHR/AAF    SS1Y1    FXP/S4    6    6
+    Book Flight X Months From Now    LHRCDG/AAF    SS1Y1    FXP/S5    6    9
+    Click Read Booking
+    Click Panel    Air Fare
+    Verify Fare Tab Is Visible    Fare 1    Fare 2    Fare 3    Fare 4
+    Populate Fare Tab With Default Values    Fare 1
+    Get High, Charged And Low Fare In Fare Tab    Fare 1
+    Get Fees Fare Value    Fare 1
+    Populate Fare Tab With Default Values    Fare 2
+    Get High, Charged And Low Fare In Fare Tab    Fare 2
+    Get Fees Fare Value    Fare 2
+    Populate Fare Tab With Default Values    Fare 3
+    Get High, Charged And Low Fare In Fare Tab    Fare 3
+    Get Fees Fare Value    Fare 3
+    Populate Fare Tab With Default Values    Fare 4
+    Get High, Charged And Low Fare In Fare Tab    Fare 4
+    Get Fees Fare Value    Fare 4
+    Get Overall Total Fares    Fare 1    Fare 2    Fare 3    Fare 4
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Specific Line Is Written In The PNR    *9991*${charged_fare_total_fares}
+    Verify Specific Line Is Written In The PNR    *9992*${low_fare_total_fares}
+    Verify Specific Line Is Written In The PNR    *9994*${high_fare_total_fares}
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB FR] Verify That Air Fare Details With Airline Fee Are Written In PNR Remarks
+    [Tags]    fr
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    fr-FR    AutomationFR    FR AUTO AMADEUS
+    Select GDS    Amadeus
+    Emulate PCC    PARWL210G
+    Set Client And Traveler    Amadeus FR 15 - Auto ¦ UAT CLASSIC    AutoFifteenClassic    EmeaUatClassicOne
+    Click New Booking
+    Enter GDS Command    FPCCVI4444333322221111/1222
+    Book Flight X Months From Now    LHRMRS/ALH    SS1Y1    FXA    6
+    Click Read Booking
+    Populate Fare Tab With Default Values    Fare 1
+    Get Fare Details    Fare 1
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Air Savings Remarks Are Written    S2    Fare 1
+    Verify Air Trip Information Remarks Are Written    S2    Fare 1
+    Verify Fare Remarks Are Written    S2    Fare 1
+    Verify Itinerary Remarks Are Written    Fare 1
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}    True
+
+[NB UK] Verify That Air Fare Details With Airline Fee Are Written In PNR Remarks
+    [Tags]    uk    US6480
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    en-GB    AutomationUK    UK AUTO AMADEUS
+    Select GDS    Amadeus
+    Set Client And Traveler    Amadeus 16 - Auto ¦ DE4368    AutoOneSixTwo    EmeaTrvlrTwo
+    Click New Booking
+    Enter GDS Command    FPCCVI4444333322221111/1222
+    Book Flight X Months From Now    LHRMRS/ALH    SS1Y1    FXA    6
+    Update PNR for EN or GB
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Populate Fare Tab With Default Values    Fare 1
+    Get Fare Details    Fare 1
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Air Savings Remarks Are Written    S2    Fare 1
+    Verify Air Trip Information Remarks Are Written    S2    Fare 1
+    Verify Fare Remarks Are Written    S2    Fare 1
+    Verify Itinerary Remarks Are Written For UK    Fare 1
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}    True
+
+*** Keywords ***
+Amend Booking Add Amadeus Offer
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Book Amadeus Offer Retain Flight    S3
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Click Fare Tab    Alternate Fare 1
+    Verify Offer Amount    Alternate Fare 1
+    Verify Amount In Fare Tab    Fare 1    S3
+    Populate Alternate Fare With Default Values    Alternate Fare 1
+    Click Finish PNR    Amend Booking Add Amadeus Offer
+
+Amend Booking Delete Air
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Delete Air Segment    2
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare    Rail
+    Click Panel    Air Fare
+    Verify Amount In Fare Tab    Fare 1    S4
+    Populate Fare Tab With Default Values    Fare 1
+    Get High, Charged And Low Fare In Fare Tab    Fare 1
+    Click Panel    Rail
+    Verify Paper Ticket Delivery Method
+    Populate Paper Ticket Delivery Method Multiple Fare Quotes
+    Click Finish PNR    Amend Booking Delete Air
+
+Amend Workflow For Charged Fare Reflects Updated TST On Classic
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Change Tax Value For TST 1
+    Change Tax Value For TST 2
+    Change Tax Value For TST 3
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Populate Fare Tab With Default Values    Fare 1
+    Select Changes Dropdown Value    Tidsaendring tilladt uden omkostning    Fare 1
+    Select Cancellation Dropdown Value    Fuld refundering    Fare 1
+    Verify Amount In Fare Tab    Fare 1    T1
+    Get High, Charged And Low Fare In Fare Tab    Fare 1
+    Populate Fare Tab With Default Values    Fare 2
+    Select Changes Dropdown Value    Tidsaendring tilladt uden omkostning    Fare 2
+    Select Cancellation Dropdown Value    Fuld refundering    Fare 2
+    Verify Amount In Fare Tab    Fare 2    T2
+    Get High, Charged And Low Fare In Fare Tab    Fare 2
+    Populate Fare Tab With Default Values    Fare 3
+    Select Changes Dropdown Value    Tidsaendring tilladt uden omkostning    Fare 3
+    Select Cancellation Dropdown Value    Fuld refundering    Fare 3
+    Verify Amount In Fare Tab    Fare 3    T3
+    Get High, Charged And Low Fare In Fare Tab    Fare 3
+    Click Finish PNR    Amend Workflow For Charged Fare Reflects Updated TST On Classic
+
+Amend Workflow For Charged Fare Reflects Updated TST On Traveldoo
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Add YQ tax for TST 1
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Populate Fare Tab With Default Values    Fare 1
+    Get High, Charged And Low Fare In Fare Tab
+    Verify Amount In Fare Tab    Fare 1    T1
+    Click Finish PNR
+
+Amend Booking For Changes in Fare Conditions
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Click Panel    Air Fare
+    Set Changes Value    10 pour cent    Fare 1
+    Set Changes Value    Autorise    Fare 1    2
+    Set Cancellation Value    moins 15% apres le depart    Fare 1
+    Set Cancellation Value    Non remboursable    Fare 1    2
+    Populate Air Fare Savings Code    ABN - ABONNEMENT    CID - CLASSE IMPERATIVE DEMANDEE    YC - Tarif Client Classe Economique
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Finish PNR
+
+Verify Realised Saving Code Field Is Not Visible
+    [Arguments]    ${fare_tab}
+    ${fare_tab_index}    Fetch From Right    ${fare_tab}    ${SPACE}
+    Verify Control Object Is Not Visible    [NAME:ccboRealised_${fare_tab_index}]    ${title_power_express}
+    [Teardown]    Take Screenshot
+
+Verify Missed Saving Code Field Is Not Visible
+    [Arguments]    ${fare_tab}
+    ${fare_tab_index}    Fetch From Right    ${fare_tab}    ${SPACE}
+    Verify Control Object Is Not Visible    [NAME:ccboMissed_${fare_tab_index}]    ${title_power_express}
+    [Teardown]    Take Screenshot
+
+Verify Class Saving Code Field Is Not Visible
+    [Arguments]    ${fare_tab}
+    ${fare_tab_index}    Fetch From Right    ${fare_tab}    ${SPACE}
+    Verify Control Object Is Not Visible    [NAME:ccboClass_1${fare_tab_index}]    ${title_power_express}
+    [Teardown]    Take Screenshot
+
+AB For Verify That Default Dlasscode Is Not Added to BF Line of New Fare and Back Office Remarks
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Enter GDS Command    RTOF    XE1
+    Book Flight X Months From Now    CDGLHR/AAF    SS1C1    FXP/S3    6    10
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 2
+    Verify Realised Saving Code Field Is Not Visible    Fare 2
+    Verify Missed Saving Code Field Is Not Visible    Fare 2
+    Verify Class Saving Code Field Is Not Visible    Fare 2
+    Select Fully Flexible
+    Click Fare Tab    Fare 1
+    Select Fully Flexible
+    Populate All Panels (Except Given Panels If Any)    AirFare
+    Click Finish PNR    AB For Verify That Default Dlasscode Is Not Added to BF Line of New Fare and Back Office Remarks

@@ -1,0 +1,506 @@
+*** Settings ***
+Force Tags        amadeus    apac    transaction_fees
+Resource          ../air_fare_verification.txt
+Resource          ../../../../acceptance_tests/amend/amend_verification.txt
+
+*** Test Cases ***
+[NB SG] Verify That Transaction Fee Is Correct When Offline Flat Amount Is Used
+    [Tags]    us521    team_c    sg
+    Open Power Express And Retrieve Profile    ${version}    Test    u003axo    en-GB    aobsumsg    APAC QA
+    ...    Amadeus
+    Create New Booking With One Way Flight Using Default Values    XYZ Company PV2 ¦ AUTOMATION SG - US829    BEAR    SGEIGHTTWONINE    SINHKG/ASQ    \    Air Fare
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Select Form Of Payment Value On Fare Quote Tab    Fare 1    VI************1111/D1221
+    Select Merchant On Fare Quote Tab    Airline
+    Get Base Fare, Total Taxes And LFCC    Fare 1    S2
+    Get Nett Fare Value    Fare 1
+    Verify Transaction Fee Value Is Correct    Fare 1    SG    Offline    Flat    rounding_so=Up
+    Populate Fare Quote Tabs with Default Values
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus
+    Verify Transaction Fee Remark Per TST Are Correct    Fare 1    S2    02    VI************1111/D1221    SG
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB SG] Verify That Transaction Fee Is Correct When Offline Range Amount Is Used And Nett Fare Is Modified
+    [Tags]    us521    team_c    sg
+    Open Power Express And Retrieve Profile    ${version}    Test    u003axo    en-GB    aobsumsg    APAC QA
+    ...    Amadeus
+    Create New Booking With One Way Flight Using Default Values    APAC SYN CORP ¦ APAC SYN SG 3    BEAR    MONT    MNLSIN/ASQ    \    Air Fare
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Select Form Of Payment On Fare Quote Tab    Fare 1    Cash
+    Get Base Fare, Total Taxes And LFCC    Fare 1    S2
+    Get Nett Fare Value    Fare 1
+    Verify Transaction Fee Value Is Correct    Fare 1    SG    Offline    Range    Amount    rounding_so=Up
+    Set Nett Fare Field    Fare 1    10001.00
+    Verify Transaction Fee Value Is Correct    Fare 1    SG    Offline    Range    Amount    rounding_so=Up
+    Populate Fare Quote Tabs with Default Values
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus
+    Verify Transaction Fee Remark Per TST Are Correct    Fare 1    S2    02    Cash    SG
+    [Teardown]
+
+[AB SG] Verify That Transaction Fee Is Correct When Offline Range Amount Is Used Using CC VI As FOP ANd Nett Fare Is Present
+    [Tags]    us521    team_c    sg
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Select Form Of Payment    Cash
+    Book Flight X Months From Now    MNLLAX/APR    SS1Y1    FXP/S3    6    15
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Verify Transaction Fee Defaults To Previous Value    Fare 1
+    Click Fare Tab    Fare 2
+    Get Base Fare, Total Taxes And LFCC    Fare 2    S3
+    Get Nett Fare Value    Fare 2
+    Verify Transaction Fee Value Is Correct    Fare 2    SG    Offline    Range    Amount    rounding_so=Up
+    Set Nett Fare Field    Fare 2    30000.00
+    Verify Transaction Fee Value Is Correct    Fare 2    SG    Offline    Range    Amount    rounding_so=Up
+    Manually Set Form Of Payment - Card Details On Fare Quote Tab    Fare 2    VI    4111111111111111    1223
+    Select FOP Merchant On Fare Quote Tab    Fare 2    CWT
+    Populate Fare Quote Tabs with Default Values
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Transaction Fee Remark Per TST Are Correct    Fare 1    S2    02    Cash    SG
+    Verify Transaction Fee Remark Per TST Are Correct    Fare 2    S3    03    VI4111111111111111/D1223    SG
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB SG] Verify That Transaction Fee Is Correct When Offline Range Percentage Is Used
+    [Tags]    us521    sg    team_c
+    Open Power Express And Retrieve Profile    ${version}    Test    u003axo    en-GB    aobsumsg    APAC QA
+    ...    Amadeus
+    Set Client And Traveler    APAC SYN CORP ¦ APAC SYN SG 4    BEAR    KMB
+    Click New Booking
+    Update PNR for EN or GB
+    Book Flight X Months From Now    SINHKG/ASQ    SS1Y1    FXP    5
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Get Base Fare, Total Taxes And LFCC    Fare 1    S2
+    Get Nett Fare Value    Fare 1
+    Verify Transaction Fee Value Is Correct    Fare 1    SG    Offline    Range    Percentage    rounding_so=Up
+    Manually Set Form Of Payment - Card Details On Fare Quote Tab    Fare 1    AX    378282246310005    1220
+    Select Merchant On Fare Quote Tab    CWT
+    Populate Fare Quote Tabs with Default Values
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus
+    Verify Transaction Fee Remark Per TST Are Correct    Fare 1    S2    02    AX378282246310005/D1220    SG
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB SG] Verify That Transaction Fee Is Correct When Offline Range Fee Percentage With Cap Is Used
+    [Tags]    us521    sg    team_c
+    Open Power Express And Retrieve Profile    ${version}    Test    u003axo    en-GB    aobsumsg    APAC QA
+    ...    Amadeus
+    Set Client And Traveler    APAC SYN CORP ¦ APAC SYN SG 5    BEAR    HILTON
+    Click New Booking
+    Update PNR for EN or GB
+    Book Flight X Months From Now    SINLAX/ASQ    SS1T1    FXP    5
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Get Base Fare, Total Taxes And LFCC    Fare 1    S2
+    Get Nett Fare Value    Fare 1
+    Verify Transaction Fee Value Is Correct    Fare 1    SG    Offline    Range    Cap    rounding_so=Up
+    Select Form Of Payment And Merchant On Fare Quote Tab    Fare 1    TEST CARD/VI************0087/D0823/CVV***    Airline
+    Populate Fare Quote Tabs with Default Values
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus
+    Verify Transaction Fee Remark Per TST Are Correct    Fare 1    S2    02    TEST CARD/VI4900000000000087/D0823/CVV***    SG
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB HK] Verify That Transaction Fee Is Correct When Offline Flat Percentage Is Used
+    [Tags]    us521    team_c    hk
+    Open Power Express And Retrieve Profile    ${version}    Test    u003axo    en-GB    aobsumhk    APAC QA
+    ...    Amadeus
+    Create New Booking With One Way Flight Using Default Values    US826 HK Airline Setup ¦ HK US826 No Setup    BEAR    SOYBEAN    HKGSIN/ASQ    \    Air Fare
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Select Form Of Payment Value On Fare Quote Tab    Fare 1    Invoice
+    Get Base Fare, Total Taxes And LFCC    Fare 1    S2
+    Get Nett Fare Value    Fare 1
+    Verify Transaction Fee Value Is Correct    Fare 1    HK    Offline    Flat    Percentage    Up
+    Populate Fare Quote Tabs with Default Values
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus
+    Verify Transaction Fee Remark Per TST Are Correct    Fare 1    S2    02    Invoice    HK
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB HK] Verify That Transaction Fee Is Correct When Offline City Is Used
+    [Tags]    us521    team_c    hk    not_ready
+    Open Power Express And Retrieve Profile    ${version}    Test    u003axo    en-GB    aobsumhk    APAC QA
+    ...    Amadeus
+    Create New Booking With One Way Flight Using Default Values    APAC SYN CORP ¦ APAC SYN HK    BEAR    HONG    HKGSIN/ASQ    \    Air Fare
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Select Form Of Payment Value On Fare Quote Tab    Fare 1    Invoice
+    Get Base Fare, Total Taxes And LFCC    Fare 1    S2
+    Get Nett Fare Value    Fare 1
+    Verify Transaction Fee Value Is Correct    Fare 1    HK    Offline    Flat    Percentage    Up
+    Populate Fare Quote Tabs with Default Values
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus
+    Verify Transaction Fee Remark Per TST Are Correct    Fare 1    S2    02    Invoice    SG
+    Comment    Get Transaction Fee From DB (From City)    \    Offline    \    I    SIN
+    ...    to_city_code=HKG
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB IN] Verify That Transaction Fee Is Correct When Offline Flat Amount Is Used
+    [Tags]    us266    in    team_c
+    Open Power Express And Retrieve Profile    ${version}    Test    u003axo    en-GB    aobsumapac    APAC QA
+    ...    Amadeus
+    Create New Booking With One Way Flight Using Default Values    APAC SYN CORP ¦ APAC SYN IN    BEAR    INDI    DELSIN/ASQ    5030500473 ¦ CARLSON WAGONLIT TRAVEL ¦ APAC SYN IN    Air Fare
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Select FOP Merchant On Fare Quote Tab    Fare 1    CWT
+    Get Base Fare, Total Taxes And LFCC    Fare 1    S2
+    Get Nett Fare Value    Fare 1
+    Verify Transaction Fee Value Is Correct    Fare 1    IN    Offline    Flat    Amount
+    Populate Fare Quote Tabs with Default Values
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus
+    Verify Transaction Fee Remark Per TST Are Correct    Fare 1    S2    02    VI4111111111111111/D1221    IN
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB IN] Verify That Transaction Fee Is Correct When Offline Range Amount Is Used
+    [Tags]    us521    in    team_c
+    Open Power Express And Retrieve Profile    ${version}    Test    u003axo    en-GB    aobsumapac    APAC QA
+    ...    Amadeus
+    Set Client And Traveler    APAC SYN CORP ¦ APAC SYN IN 3    BEAR    NIYAK
+    Click New Booking
+    Click Panel    Client Info
+    Manually Set Value In Form Of Payment    VI    4484886075896240    1231
+    Update PNR for EN or GB
+    Book One Way Flight X Months From Now    DELSIN/ASQ    6
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Select FOP Merchant On Fare Quote Tab    Fare 1    Airline
+    Get Base Fare, Total Taxes And LFCC    Fare 1    S2
+    Get Nett Fare Value    Fare 1
+    Verify Transaction Fee Value Is Correct    Fare 1    IN    Offline    Range    Amount
+    Populate Fare Quote Tabs with Default Values
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus
+    Verify Transaction Fee Remark Per TST Are Correct    Fare 1    S2    02    VI4484886075896240/D1231    IN
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB IN] Verify That Transaction Fee Is Correct When Offline Range Percentage Is Used
+    [Tags]    us521    team_c    in
+    Open Power Express And Retrieve Profile    ${version}    Test    u003axo    en-GB    aobsumapac    APAC QA
+    ...    Amadeus
+    Set Client And Traveler    APAC SYN CORP ¦ APAC SYN IN 4    BEAR    ISTA
+    Click New Booking
+    Click Panel    Client Info
+    Manually Set Value In Form Of Payment    AX    378282246310005    D1220
+    Update PNR for EN or GB
+    Book One Way Flight X Months From Now    DELSIN/ASQ    6
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Select FOP Merchant On Fare Quote Tab    Fare 1    CWT
+    Get Base Fare, Total Taxes And LFCC    Fare 1    S2
+    Get Nett Fare Value    Fare 1
+    Verify Transaction Fee Value Is Correct    Fare 1    IN    Offline    Range    Percentage
+    Populate Fare Quote Tabs with Default Values
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus
+    Verify Transaction Fee Remark Per TST Are Correct    Fare 1    S2    02    AX378282246310005/D1220    IN
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB SG] Verify That Transaction Fee Is Correct When Offline Flat Amount Per PNR Is Used
+    [Tags]    team_c    sg    us487
+    Open Power Express And Retrieve Profile    ${version}    Test    u003axo    en-GB    aobsum    APAC QA
+    ...    Amadeus
+    Set Client And Traveler    US487 Per PNR ¦ SG Offline Fee Amt and Online Fee Amt    BEAR    BEAR, SGPERPNR
+    Click New Booking
+    Update PNR for EN or GB
+    Book Flight X Months From Now    SINMNL/APR    SS1Y1    FXP/S2    6    3
+    Book Flight X Months From Now    MNLSIN/APR    SS1Y1    FXP/S3    6    7
+    Click Panel    Client Info
+    Select Form Of Payment    Cash
+    Click Panel    Cust Refs
+    Tick Not Known At Time Of Booking
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Select Form Of Payment Value On Fare Quote Tab    Fare 1    Cash
+    Click Fare Tab    Fare 2
+    Select Form Of Payment Value On Fare Quote Tab    Fare 2    Cash
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Get Base Fare, Total Taxes And LFCC    Fare 1    S2
+    Get Nett Fare Value    Fare 1
+    Get Transaction Fee Value    Fare 1
+    Verify Transaction Fee Value And Description Are Correct    Fare 1    45.00SGD Offline Transaction Fee
+    Populate Air Fare Panel Using Default Values For APAC
+    Click Fare Tab    Fare 2
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Fare 2    SG
+    Populate Air Fare Panel Using Default Values For APAC
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus
+    Verify Transaction Fee Remark Per TST Are Correct    Fare 1    S2    02    Cash    SG
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB HK] Verify that Offline Fee % and Online Fee % Are Retrieved And Written In The Remarks
+    [Tags]    team_c    hk    us487
+    [Timeout]
+    Open Power Express And Retrieve Profile    ${version}    Test    u003axo    en-GB    aobsumsg    APAC QA
+    Select GDS    Amadeus
+    Activate Power Express Window
+    Set Client And Traveler    US487 Per PNR ¦ HK Offline Fee Pct and Online Fee Pct    BEAR    PCTPERPNR
+    Click New Booking
+    Click Panel    Client Info
+    Select Form Of Payment    Invoice
+    Populate All Panels (Except Given Panels If Any)    Client Info
+    Click Update PNR
+    Book Flight X Months From Now    HKGMNL/ACX    SS1Y1    FXP/S2    3    8
+    Book Amadeus Offer Retain Flight    S2
+    Book Flight X Months From Now    MNLHKG/ACX    SS1Y1    FXP/S3    3    12
+    Book Amadeus Offer Retain Flight    S3
+    Book Flight X Months From Now    HKGSIN/ACX    SS1Y1    FXP/S4    3    17
+    Book Amadeus Offer Retain Flight    S4
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Verify Transaction Fee Status    Fare 1    HK    HK_Offline_Fee_Pct_and_Online_Fee_Pct_001_CSU_MidOffTransFee    Standard    Offline    rounding_so=up
+    Click Fare Tab    Fare 2
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Fare 2    HK
+    Click Fare Tab    Fare 3
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Fare 3    HK
+    Click Fare Tab    Alt Fare 1
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Alt Fare 1    HK
+    Click Fare Tab    Alt Fare 2
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Alt Fare 2    HK
+    Click Fare Tab    Alt Fare 3
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Alt Fare 3    HK
+    Click Fare Tab    Fare 1
+    Populate Air Fare Panel Using Default Values For APAC
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus
+    Verify Transaction Fee Remark Per TST Are Correct    Fare 1    S2    02    Cash    HK
+
+[AB HK] Verify that Offline Fee % and Online Fee % Are Retrieved And Written In The Remarks
+    [Tags]    team_c    hk    us487
+    [Timeout]
+    Retrieve PNR    ${current_pnr}
+    Add OBT Remark    EBA
+    Update Remark FF VFF And Delete Segment Relate    FF34    2    EB    ${EMPTY}
+    Delete Remarks For FF And VFF    FF34    3
+    Delete Remarks For FF And VFF    FF34    4
+    Click Amend Booking
+    Click Read Booking
+    Verify Actual Panel Contains Expected Panel    Amend
+    Click Panel    Amend
+    Verify Touch Level Default Value    ${EMPTY}
+    Select Touch Level    Online Unassisted
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Verify Transaction Fee Status    Fare 1    HK    HK_Offline_Fee_Pct_and_Online_Fee_Pct_001_CSU_MidOffTransFee    Online    Online    rounding_so=up
+    Click Fare Tab    Fare 2
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Fare 2    HK
+    Click Fare Tab    Fare 3
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Fare 3    HK
+    Click Fare Tab    Alt Fare 1
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Alt Fare 1    HK
+    Click Fare Tab    Alt Fare 2
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Alt Fare 2    HK
+    Click Fare Tab    Alt Fare 3
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Alt Fare 3    HK
+    Click Panel    Amend
+    Select Touch Level    Offline
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Verify Transaction Fee Status    Fare 1    HK    HK_Offline_Fee_Pct_and_Online_Fee_Pct_001_CSU_MidOffTransFee    Standard    Offline    rounding_so=up
+    Click Fare Tab    Fare 2
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Fare 2    HK
+    Click Fare Tab    Fare 3
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Fare 3    HK
+    Click Fare Tab    Alt Fare 1
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Alt Fare 1    HK
+    Click Fare Tab    Alt Fare 2
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Alt Fare 2    HK
+    Click Fare Tab    Alt Fare 3
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Alt Fare 3    HK
+    Click Panel    Amend
+    Select Touch Level    Agent Assisted
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Verify Transaction Fee Status    Fare 1    HK    HK_Offline_Fee_Pct_and_Online_Fee_Pct_001_CSU_MidOffTransFee    Assist    Online    rounding_so=up
+    Click Fare Tab    Fare 2
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Fare 2    HK
+    Click Fare Tab    Fare 3
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Fare 3    HK
+    Click Fare Tab    Alt Fare 1
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Alt Fare 1    HK
+    Click Fare Tab    Alt Fare 2
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Alt Fare 2    HK
+    Click Fare Tab    Alt Fare 3
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Alt Fare 3    HK
+    Click Fare Tab    Fare 1
+    Populate Air Fare Panel Using Default Values For APAC
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR    Amend To Verify that Offline Fee % and Online Fee % Are Retrieved And Written In The Remarks
+    Execute Simultaneous Change Handling    Amend To Verify that Offline Fee % and Online Fee % Are Retrieved And Written In The Remarks
+    Retrieve PNR Details From Amadeus
+    Verify Transaction Fee Remark Per TST Are Correct    Fare 1    S2    02    Cash    HK    True
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Verify Transaction Fee Defaults To Previous Value
+    [Arguments]    ${fare_tab}
+    ${fare_tab_index}    Fetch From Right    ${fare_tab}    ${SPACE}
+    ${previous_transaction_fee}    Set Variable    ${transaction_fee_value_${fare_tab_index}}
+    ${current_value}    Get Transaction Fee Amount Value    ${fare_tab}
+    Verify Actual Value Matches Expected Value    ${previous_transaction_fee}    ${current_value}    Transaction fee should defaults to previous value
+    [Teardown]    Take Screenshot
+
+Amend Booking For Verify That Offline Range Fee Percentage Are Retrieved When Base Fare, Equivalent Fare, and Nett Fare Are Used When FOP Cash Is Used
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Panel    Client Info
+    Select Form Of Payment    Cash
+    Verify Merchant Fee Type Is Blank And Mandatory
+    Select Merchant Fee Type    Airline
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Get LFCC From FV Line In TST    Fare 1    S2
+    Verify Transaction Fee Value Is Correct    Fare 1    IN    Offline    Range    Percentage
+    Click Finish PNR    Amend Booking For Verify That Offline Range Fee Percentage Are Retrieved When Base Fare, Equivalent Fare, and Nett Fare Are Used When FOP Cash Is Used
+
+Amend Booking For Verify That Offline Range Fee Amount Are Retrieved When Base Fare, Equivalent Fare, and Nett Fare Are Used When FOP CC DC Is Used
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Verify Merchant Fee Type Is Blank And Mandatory
+    Select Merchant Fee Type    Airline
+    Get LFCC From FV Line In TST    Fare 1    S2
+    Verify Transaction Fee Value Is Correct    Fare 1    IN    Offline    Range
+    Click Finish PNR    Amend Booking For Verify That Offline Range Fee Amount Are Retrieved When Base Fare, Equivalent Fare, and Nett Fare Are Used When FOP CC DC Is Used
+
+Amend Booking For Verify That Updated Transaction Fee Amount Is Written In Itinerary And Accounting Remarks When Original Fee Is Overwritten And FOP Is CA [Percentage]
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Panel    Client Info
+    Manually Set Value In Form Of Payment    CA    5105105105105100    1220
+    Verify Merchant Fee Type Is Not Visible
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare    Delivery
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Get Base Fare, Nett Fare, and LFCC Values    Fare 1    S2
+    Verify Transaction Fee Value Is Correct    Fare 1    IN    Offline    Flat
+    Update Transaction Fee Value    7
+    Set MarkUp Percentage    Fare 1    3.35
+    Verify MarkUp Amount Value Is Correct    Fare 1    IN
+    Click Fare Tab    Fare 2
+    Get Base Fare, Nett Fare, and LFCC Values    Fare 2    S3
+    Verify Transaction Fee Value Is Correct    Fare 2    IN    Offline    Flat
+    Set MarkUp Percentage    Fare 2    3.35
+    Verify MarkUp Amount Value Is Correct    Fare 2    IN
+    Click Fare Tab    Fare 3
+    Manually Set Form Of Payment - Card Details On Fare Quote Tab    Fare 3    CA    5105105105105100    1220
+    Get Base Fare, Nett Fare, and LFCC Values    Fare 3    S4
+    Verify Transaction Fee Value Is Correct    Fare 3    IN    Offline    Flat
+    Set Nett Fare Field    Fare 3    1999
+    Set MarkUp Percentage    Fare 3    3.35
+    Verify MarkUp Amount Value Is Correct    Fare 3    IN
+    Click Panel    Delivery
+    Tick Receive Itinerary Checkbox
+    Select Delivery Method    Auto Cancel (TKXL)
+    Select On Hold Booking Reasons Using Default Value
+    Click Finish PNR    Amend Booking For Verify That Updated Transaction Fee Amount Is Written In Itinerary And Accounting Remarks When Original Fee Is Overwritten And FOP Is CA [Percentage]
+
+Verify Transaction Fee Status
+    [Arguments]    ${fare_tab}    ${country}    ${client_fee_group_name}    ${transaction_type_code}    ${booking_origination_code}    ${travel_indicator}=I
+    ...    ${from_global_flag}=True    ${to_global_flag}=True    ${is_percentage}=True    ${rounding_so}={EMPTY}
+    ${fare_tab_index}    Fetch From Right    ${fare_tab}    ${SPACE}
+    ${query_result}    Get Transaction Fee From DB (From Global)    ${client_fee_group_name}    ${transaction_type_code}    ${booking_origination_code}    ${travel_indicator}    from_global_flag=${from_global_flag}
+    ...    to_global_flag=${to_global_flag}    is_percentage=${is_percentage}
+    Get Base Fare From TST    Fare Quote ${fare_tab_index}    T${fare_tab_index}
+    Get Nett Fare Value    Fare Quote ${fare_tab_index}
+    ${query_result}    Run Keyword If    "${is_percentage}" == "False"    Set Variable    ${query_result}
+    ...    ELSE    Evaluate    ${query_result}/100
+    ${fee_amount_percent_cap}    Set Variable If    "${is_percentage}" == "True"    Percentage    Amount
+    ${transaction_fee_type}    Set Variable If    "${transaction_type_code}" == "Online"    Unassisted    "${transaction_type_code}" == "Assist"    Assisted    "${transaction_type_code}" == "Standard"
+    ...    Flat
+    Verify Transaction Fee Value Is Correct    Fare Quote ${fare_tab_index}    ${country}    ${booking_origination_code}    ${transaction_fee_type}    ${fee_amount_percent_cap}    ${rounding_so}
+    ...    ${query_result}
+
+Amend To Verify that Offline Fee % and Online Fee % Are Retrieved And Written In The Remarks
+    Retrieve PNR    ${current_pnr}
+    Add OBT Remark    EBA
+    Update Remark FF VFF And Delete Segment Relate    FF34    2    EB    ${EMPTY}
+    Delete Remarks For FF And VFF    FF34    3
+    Delete Remarks For FF And VFF    FF34    4
+    Click Amend Booking
+    Click Read Booking
+    Verify Actual Panel Contains Expected Panel    Amend
+    Click Panel    Amend
+    Verify Touch Level Default Value    ${EMPTY}
+    Select Touch Level    Online Unassisted
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Verify Transaction Fee Status    Fare 1    HK    HK_Offline_Fee_Pct_and_Online_Fee_Pct_001_CSU_MidOffTransFee    Online    Online    rounding_so=up
+    Click Fare Tab    Fare 2
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Fare 2    HK
+    Click Fare Tab    Fare 3
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Fare 3    HK
+    Click Fare Tab    Alt Fare 1
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Alt Fare 1    HK
+    Click Fare Tab    Alt Fare 2
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Alt Fare 2    HK
+    Click Fare Tab    Alt Fare 3
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Alt Fare 3    HK
+    Click Panel    Amend
+    Select Touch Level    Offline
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Verify Transaction Fee Status    Fare 1    HK    HK_Offline_Fee_Pct_and_Online_Fee_Pct_001_CSU_MidOffTransFee    Standard    Offline    rounding_so=up
+    Click Fare Tab    Fare 2
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Fare 2    HK
+    Click Fare Tab    Fare 3
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Fare 3    HK
+    Click Fare Tab    Alt Fare 1
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Alt Fare 1    HK
+    Click Fare Tab    Alt Fare 2
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Alt Fare 2    HK
+    Click Fare Tab    Alt Fare 3
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Alt Fare 3    HK
+    Click Panel    Amend
+    Select Touch Level    Agent Assisted
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Verify Transaction Fee Status    Fare 1    HK    HK_Offline_Fee_Pct_and_Online_Fee_Pct_001_CSU_MidOffTransFee    Assist    Online    rounding_so=up
+    Click Fare Tab    Fare 2
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Fare 2    HK
+    Click Fare Tab    Fare 3
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Fare 3    HK
+    Click Fare Tab    Alt Fare 1
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Alt Fare 1    HK
+    Click Fare Tab    Alt Fare 2
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Alt Fare 2    HK
+    Click Fare Tab    Alt Fare 3
+    Verify Transaction Fee Value Is Zero And Field Is Disabled    Alt Fare 3    HK
+    Click Fare Tab    Fare 1
+    Populate Air Fare Panel Using Default Values For APAC
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR    Amend To Verify that Offline Fee % and Online Fee % Are Retrieved And Written In The Remarks

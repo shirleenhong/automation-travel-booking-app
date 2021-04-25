@@ -1,0 +1,141 @@
+*** Settings ***
+Force Tags        amadeus    apac
+Resource          ../../../../resources/common/global_resources.txt
+Resource          ../../../../acceptance_tests/gds/gds_verification.txt
+Resource          ../../client_info/client_info_verification.txt
+Resource          ../../../../acceptance_tests/air_fare/air_fare_verification.txt
+Resource          ../delivery_verification.txt
+Resource          ../../../../resources/panels/rail.txt
+
+*** Test Cases ***
+[NB HK] Verify That Ticketing Time Limit Are Updated Base From The Ticketing Date in The Delivery Panel
+    [Tags]    us1530    hk    horton    not_ready
+    Create PNR Using Cash As FOP    HK    True    ticketing_rir_remark=RIR *TLXL**DDMMMYY*
+    Click Panel    Delivery
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Ticketing RIR Remarks    TLXL    True
+
+[AB HK] Verify That Ticketing Time Limit Are Updated Base From The Ticketing Date in The Delivery Panel
+    [Tags]    us1530    hk    horton    not_ready
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)
+    Click Panel    Delivery
+    Set Ticketing Date    6
+    Click Finish PNR    Amend Booking For Verify That Ticketing Time Limit Are Updated Base From The Ticketing Date in The Delivery Panel For HK
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Ticketing Time Limit Are Updated Base From The Ticketing Date in The Delivery Panel For HK
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Ticketing RIR Remarks    TLXL    True
+
+[NB SG] Verify That Ticketing Time Limit Are Updated Base From The Ticketing Date in The Delivery Panel
+    [Tags]    us1530    sg    horton    not_ready
+    Create PNR Using Cash As FOP    SG    True    ticketing_rir_remark=RIR *TLIS**DDMMMYY*
+    Click Panel    Delivery
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Ticketing RIR Remarks    TLIS    True
+
+[AB SG] Verify That Ticketing Time Limit Are Updated Base From The Ticketing Date in The Delivery Panel
+    [Tags]    us1530    sg    horton    not_ready
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)
+    Click Panel    Delivery
+    Set Ticketing Date    4
+    Get Ticketing Date
+    Click Finish PNR    Amend Booking For Verify That Ticketing Time Limit Are Updated Base From The Ticketing Date in The Delivery Panel For AB
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Ticketing Time Limit Are Updated Base From The Ticketing Date in The Delivery Panel For AB
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Ticketing RIR Remarks    TLIS    True
+
+[SI SG] Verify That Ticketing Time Limit Are Updated Base From The Ticketing Date in The Delivery Panel
+    [Documentation]    Ticketing Date will be Based On From Amend Booking
+    [Tags]    us1530    sg    horton    not_ready
+    Retrieve PNR    ${current_pnr}
+    Click Send Itinerary
+    Populate All Panels (Except Given Panels If Any)    Delivery
+    Click Finish PNR    Amend Booking For Verify That Ticketing Time Limit Are Updated Base From The Ticketing Date in The Delivery Panel For SI
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Ticketing Time Limit Are Updated Base From The Ticketing Date in The Delivery Panel For SI
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Ticketing RIR Remarks    TLIS    True    True
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB IN] Verify That Warning Is Displayed If Ticketing Date And Follow Up Date is Local Holiday
+    [Tags]    us587    in    howan
+    Open Power Express And Retrieve Profile    ${version}    Test    u004hxc    en-GB    hcuellar    APAC QA
+    Select GDS    Amadeus
+    Set Client And Traveler    APAC SYN CORP ¦ AUTOMATION IN - US587    BEAR    INFIVEEIGHTSEVEN
+    Click New Booking
+    Click Panel    Cust Refs
+    Update PNR for EN or GB
+    Book Flight X Months From Now    MNLSIN/APR    SS1Y1    FXP    10    5
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Populate Fare Details And Fees Tab With Default Values    Fare 1
+    Click Panel    Delivery
+    Select Delivery Method    Amadeus edited TKXL
+    Tick Awaiting Approval    Tick
+    Set Ticketing Date Using Actual Value    03/15/2019
+    Verify Ticketing Date Warning Tooltip Message Is Correct    This is a Holiday: IN Weekday Holiday
+    Set Ticketing Date Using Actual Value    03/30/2019
+    Verify Ticketing Date Error Tooltip Message Is Correct    Ticketing date cannot be on a weekend
+    Set Follow Up Date Using Actual Value    01/26/2019
+    Verify Follow up Date Warning Tooltip Message Is Correct    This is a Holiday: Republic Day
+    Click Panel    Delivery
+    Set Ticketing Date Using Actual Value    04/15/2019
+    Verify Ticketing Date Warning Tooltip Message Is Correct    This is a Holiday: THIS IS TO TEST LENGTH PUBLIC HOLODAY DESCRIPTIONs
+    Click Finish PNR
+    Verify PNR Is Successfully Created
+
+[AB IN] Verify That Warning Is Displayed If Ticketing Date And Follow Up Date is Local Holiday
+    [Tags]    us587    in    howan
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Delivery
+    Click Panel    Delivery
+    Select Delivery Method    Amadeus edited TKXL
+    Set Ticketing Date Using Actual Value    12/23/2018
+    Verify Ticketing Date Error Tooltip Message Is Correct    Ticketing date cannot be on a weekend
+    Set Ticketing Date Using Actual Value    12/30/2020
+    Verify Ticketing Date Error Tooltip Message Is Correct    Ticketing date cannot be after last ticketing date provided by the airline
+    Click Panel    Recap
+    Verify Panel is Red    Delivery
+    Click Panel    Delivery
+    Set Ticketing Date Using Actual Value    03/15/2019
+    Verify Ticketing Date Warning Tooltip Message Is Correct    This is a Holiday: IN Weekday Holiday
+    Click Finish PNR
+    Verify PNR Is Successfully Updated
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Amend Booking For Verify That Ticketing Time Limit Are Updated Base From The Ticketing Date in The Delivery Panel For AB
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)
+    Click Panel    Delivery
+    Set Ticketing Date X Months From Now    4
+    Click Finish PNR    Amend Booking For Verify That Ticketing Time Limit Are Updated Base From The Ticketing Date in The Delivery Panel For AB
+
+Amend Booking For Verify That Ticketing Time Limit Are Updated Base From The Ticketing Date in The Delivery Panel For SI
+    Retrieve PNR    ${current_pnr}
+    Click Send Itinerary
+    Populate All Panels (Except Given Panels If Any)
+    Click Panel    Delivery
+    Click Finish PNR    Amend Booking For Verify That Ticketing Time Limit Are Updated Base From The Ticketing Date in The Delivery Panel For SI
+
+Amend Booking For Verify That Ticketing Time Limit Are Updated Base From The Ticketing Date in The Delivery Panel For HK
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Delivery
+    Click Panel    Delivery
+    Set Ticketing Date X Months From Now    6
+    Click Finish PNR    Amend Booking For Verify That Ticketing Time Limit Are Updated Base From The Ticketing Date in The Delivery Panel For HK

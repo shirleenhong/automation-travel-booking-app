@@ -1,0 +1,37 @@
+*** Settings ***
+Resource          ../common/utilities.txt
+
+*** Keywords ***
+Click Car Tab
+    [Arguments]    ${car_tab}
+    Select Tab Control    ${car_tab}
+    ${car_index} =    Fetch From Right    ${car_tab}    ${SPACE}
+    Set Test Variable    ${car_index}
+    Sleep    2
+    [Teardown]    Take Screenshot
+
+Select Commissionable
+    [Arguments]    ${commissionable_value}
+    Select Value From Dropdown List    [NAME:cbCommissionable]    ${commissionable_value}
+
+Select Payment Type
+    [Arguments]    ${payment_type_value}
+    Select Value From Dropdown List    [NAME:cbPaymentType]    ${payment_type_value}
+
+Select VAT
+    [Arguments]    ${vat_value}
+    Select Value From Dropdown List    [NAME:cbVat]    ${vat_value}
+
+Set Car High Fare (If Blank) With Car Charged Fare
+    ${obj_charged_fare}    Determine Multiple Object Name Based On Active Tab    ctxtChargedFare
+    ${obj_high_fare}    Determine Multiple Object Name Based On Active Tab    ctxtHighFare
+    ${charged_fare}    Get Control Text Value    ${obj_charged_fare}
+    ${high_fare}    Get Control Text Value    ${obj_high_fare}
+    Run Keyword If    '${high_fare}' == '${EMPTY}' or '${high_fare}' < '${charged_fare}'    Set Control Text Value    ${obj_high_fare}    ${charged_fare}
+
+Set Car Low Fare (If Blank) With Car Charged Fare
+    ${obj_charged_fare}    Determine Multiple Object Name Based On Active Tab    ctxtChargedFare
+    ${obj_low_fare}    Determine Multiple Object Name Based On Active Tab    ctxtLowFare
+    ${charged_fare}    Get Control Text Value    ${obj_charged_fare}
+    ${low_fare}    Get Control Text Value    ${obj_low_fare}
+    Run Keyword If    '${low_fare}' == '${EMPTY}' or '${low_fare}' > '${charged_fare}'    Set Control Text Value    ${obj_low_fare}    ${charged_fare}

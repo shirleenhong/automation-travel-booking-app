@@ -1,0 +1,13 @@
+HTTP/1.1 200 OK
+Cache-Control: no-cache, no-store
+Pragma: no-cache
+Content-Type: application/xml; charset=utf-8
+Content-Encoding: gzip
+Expires: -1
+Server: Microsoft-IIS/10.0
+Set-Cookie: CtxsAuthId=A74F2D9E6E4F299D306DD9988E104CA0; path=/Citrix/InternalWeb/; secure; HttpOnly
+X-Powered-By: ASP.NET
+X-Citrix-Application: Receiver for Web
+Date: Tue, 22 Jan 2019 08:27:39 GMT
+Content-Length: 184
+

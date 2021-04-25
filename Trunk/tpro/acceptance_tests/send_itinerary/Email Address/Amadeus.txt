@@ -1,0 +1,246 @@
+*** Settings ***
+Force Tags        apac    amadeus
+Resource          ../../../../resources/common/common_library.txt
+Resource          ../../../../resources/common/core.txt
+Resource          ../../../../acceptance_tests/complete/complete_verification.txt
+Resource          ../../../../acceptance_tests/gds/gds_verification.txt
+Resource          ../../delivery/delivery_verification.txt
+Resource          ../../../../acceptance_tests/air_fare/air_fare_verification.txt
+
+*** Test Cases ***
+[NB SI HK] Verify That Email Address From Delivery Panel Is Reflected On PNR
+    [Tags]    US433    hk    howan    us1908
+    Open Power Express And Retrieve Profile    ${version}    Test    U001MKR    en-GB    mruizapac    APAC QA
+    Select GDS    Amadeus
+    Set Client And Traveler    XYZ Company PV2 ¦ AUTOMATION HK - US433    BEAR    HKFOURTHREETHREE
+    Click New Booking
+    Update PNR for EN or GB
+    Book Flight X Months From Now    SINNRT/AUA    SS1Y1    FXP/S2    5    5
+    #Temporarily Entered Manually Until Tour Code In Antigua Is Available
+    Enter Tour Code Remark    TESTCODE    S2
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Delivery
+    Click Panel    Delivery
+    Set Email Address In Delivery Panel    US433@cwt.com
+    Select Delivery Method    Auto Cancel Client Queue
+    Get Ticketing Date
+    Get Follow Up Date Value
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Tour Code Remark Per TST Is Written    TESTCODE    S2
+    Retrieve PNR    ${current_pnr}
+    Click Send Itinerary
+    Click Panel    Delivery
+    Tick Receive Invoice Checkbox
+    Verify That E-Mail Addresses Are Displayed On Delivery Panel    0    US433@CWT.COM    True    True
+    Verify Ticketing Date Field Value    ${ticketing_date}
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Email Address Remarks Are Written    US433@CWT.COM
+    Verify Tour Code Remark Per TST Is Written    TESTCODE    S2
+
+[AB SI HK] Verify That Email Address From Delivery Panel Is Reflected On PNR
+    [Tags]    US433    hk    howan    us1908
+    Retrieve PNR    ${current_pnr}
+    Update FT Remark    TESTCODE    AGENTCODE    S2
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Delivery
+    Click Panel    Delivery
+    Untick Receive Itinerary Checkbox    0
+    Untick Receive Invoice Checkbox    0
+    Add Email Address Receive Itinerary and Invoice On Deliver Panel    1    HK433@CWT.COM    True    True
+    Select Delivery Method    Auto Cancel Client Queue
+    Get Ticketing Date
+    Get Follow Up Date Value
+    Click Finish PNR    Amend Booking For Verify That Email Address From Delivery Panel Is Reflected On PNR For HK
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Email Address From Delivery Panel Is Reflected On PNR For HK
+    Verify Tour Code Remark Per TST Is Not Written    AGENTCODE    S2
+    Retrieve PNR    ${current_pnr}
+    Click Send Itinerary
+    Click Panel    Delivery
+    Tick Receive Invoice Checkbox
+    Verify That E-Mail Addresses Are Displayed On Delivery Panel    0    HK433@CWT.COM    True    True
+    Verify Ticketing Date Field Value    ${ticketing_date}
+    Verify Follow Up Date Field Value    ${follow_up_date}
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Email Address Remarks Are Written    HK433@CWT.COM
+    Verify Tour Code Remark Per TST Is Written    AGENTCODE    S2
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB SI IN] Verify That Email Address From Delivery Panel Is Reflected On PNR
+    [Tags]    US423    in    howan
+    Open Power Express And Retrieve Profile    ${version}    Test    U001MKR    en-GB    mruizapac    APAC QA
+    Select GDS    Amadeus
+    Set Client And Traveler    XYZ Company PV2 ¦ AUTOMATION IN - US433    BEAR    INFOURTHREETHREE
+    Click New Booking
+    Update PNR for EN or GB
+    Book Flight X Months From Now    SINNRT/AUA    SS1Y1    FXB    5    5
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Delivery
+    Click Panel    Delivery
+    Set Email Address In Delivery Panel    INFOURTHREETHREE@CWT.COM
+    Add Email Address Receive Itinerary and Invoice On Deliver Panel    1    BEAR@TEST.COM    True    True
+    Get Ticketing Date
+    Get Follow Up Date Value
+    Click Finish PNR
+    Retrieve PNR    ${current_pnr}
+    Click Send Itinerary
+    Click Panel    Delivery
+    Verify That E-Mail Addresses Are Displayed On Delivery Panel    0    INFOURTHREETHREE@CWT.COM    True    True
+    Verify That E-Mail Addresses Are Displayed On Delivery Panel    1    BEAR@TEST.COM    True    True
+    Verify Ticketing Date Field Value    ${ticketing_date}
+    Verify Follow Up Date Field Value    ${follow_up_date}
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Email Address Remarks Are Written    INFOURTHREETHREE@CWT.COM
+    Verify Email Address Remarks Are Written    BEAR@TEST.COM
+
+[AB SI IN] Verify That Email Address From Delivery Panel Is Reflected On PNR
+    [Tags]    US423    in    howan
+    Activate Power Express Window
+    Set Test Variable    ${locale}    en-GB
+    Select GDS    Amadeus
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Delivery
+    Click Panel    Delivery
+    Set Email Address In Delivery Panel    UPDATE@UPDATE.COM
+    Select Delivery Method    E-Ticket
+    Get Ticketing Date
+    Get Follow Up Date Value
+    Click Finish PNR
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Email Address From Delivery Panel Is Reflected On PNR For IN
+    Retrieve PNR    ${current_pnr}
+    Click Send Itinerary
+    Click Panel    Delivery
+    Verify That E-Mail Addresses Are Displayed On Delivery Panel    0    UPDATE@UPDATE.COM    True    True
+    Add Email Address Receive Itinerary and Invoice On Deliver Panel    2    EM&$L123@TEST.COM    True    True
+    Verify Ticketing Date Field Value    ${ticketing_date}
+    Verify Follow Up Date Field Value    ${follow_up_date}
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Email Address Remarks Are Written    UPDATE@UPDATE.COM
+    Verify Email Address Remarks Are Written    EM&$L123@TEST.COM
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB SI SG] Verify That Email Address From Delivery Panel Is Reflected On PNR
+    [Tags]    US423    sg    howan    us1908
+    Open Power Express And Retrieve Profile    ${version}    Test    U001MKR    en-GB    mruizapac    APAC QA
+    Select GDS    Amadeus
+    Set Client And Traveler    XYZ Company PV2 ¦ AUTOMATION SG - US433    BEAR    SGFOURTHREETHREE
+    Click New Booking
+    Update PNR for EN or GB
+    Book Flight X Months From Now    SINNRT/ASQ    SS1Y1    FXB    5    8
+    Enter Tour Code Remark    *A123    S2
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Delivery
+    Click Panel    Delivery
+    Set Email Address In Delivery Panel    INFOURTHREETHREE@CWT.COM
+    Add Email Address Receive Itinerary and Invoice On Deliver Panel    1    BEAR@TEST.COM    True    True
+    Add Email Address Receive Itinerary and Invoice On Deliver Panel    2    TESTER@PASSED.COM    True    True
+    Select On Hold Booking Reasons    Awaiting Approval
+    Select Delivery Method    Auto Cancel Client Queue
+    Get Ticketing Date
+    Get Follow Up Date Value
+    Click Panel    Recap
+    Click Finish PNR
+    Retrieve PNR    ${current_pnr}
+    Click Send Itinerary
+    Click Panel    Delivery
+    Verify That E-Mail Addresses Are Displayed On Delivery Panel    0    INFOURTHREETHREE@CWT.COM    True    True
+    Verify That E-Mail Addresses Are Displayed On Delivery Panel    1    BEAR@TEST.COM    True    True
+    Verify That E-Mail Addresses Are Displayed On Delivery Panel    2    TESTER@PASSED.COM    True    True
+    Verify Ticketing Date Field Value    ${ticketing_date}
+    Verify Follow Up Date Field Value    ${follow_up_date}
+    Click Panel    Recap
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Email Address Remarks Are Written    INFOURTHREETHREE@CWT.COM
+    Verify Email Address Remarks Are Written    BEAR@TEST.COM
+    Verify Email Address Remarks Are Written    TESTER@PASSED.COM
+    Verify Tour Code Remark Per TST Is Written    *A123    S2
+
+[AB SI SG] Verify That Email Address From Delivery Panel Is Reflected On PNR
+    [Tags]    US423    sg    howan    us1908    de621
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Update FT Remark    *A123    *A123AGENT    S2
+    Populate All Panels (Except Given Panels If Any)    Delivery
+    Click Panel    Delivery
+    Set Email Address In Delivery Panel    TEST123@CWT.COM
+    Untick Receive Itinerary Checkbox    1
+    Untick Receive Invoice Checkbox    1
+    Untick Receive Itinerary Checkbox    2
+    Untick Receive Invoice Checkbox    2
+    Tick Receive Itinerary Checkbox    3
+    Tick Receive Invoice Checkbox    3
+    Select Delivery Method    Auto Cancel Client Queue
+    Select On Hold Booking Reasons    Awaiting Approval
+    Get Ticketing Date
+    Get Follow Up Date Value
+    Click Finish PNR    Amend Booking For Verify That Email Address From Delivery Panel Is Reflected On PNR For SG
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Email Address From Delivery Panel Is Reflected On PNR For SG
+    ##Send Itin
+    Retrieve PNR    ${current_pnr}
+    Click Send Itinerary
+    Click Panel    Delivery
+    Verify That E-Mail Addresses Are Displayed On Delivery Panel    0    TEST123@CWT.COM    True    True
+    Verify That E-Mail Addresses Are Displayed On Delivery Panel    1    TEST@TEST.COM    True    True
+    Verify Ticketing Date Field Value    ${ticketing_date}
+    Verify Follow Up Date Field Value    ${follow_up_date}
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Email Address Remarks Are Written    TEST123@CWT.COM
+    Verify Email Address Remarks Are Written    TEST@TEST.COM
+    Verify Tour Code Remark Per TST Is Written    *A123AGENT    S2
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Amend Booking For Verify That Email Address From Delivery Panel Is Reflected On PNR For HK
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Delivery
+    Click Panel    Delivery
+    Untick Receive Itinerary Checkbox    0
+    Untick Receive Invoice Checkbox    0
+    Add Email Address Receive Itinerary and Invoice On Deliver Panel    1    HK433@CWT.COM    True    True
+    Select Delivery Method    Auto Cancel Client Queue
+    Get Ticketing Date
+    Get Follow Up Date Value
+    Click Finish PNR    Amend Booking For Verify That Email Address From Delivery Panel Is Reflected On PNR For HK
+
+Amend Booking For Verify That Email Address From Delivery Panel Is Reflected On PNR For IN
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Delivery
+    Click Panel    Delivery
+    Set Email Address In Delivery Panel    UPDATE@UPDATE.COM
+    Select Delivery Method    E-Ticket
+    Get Ticketing Date
+    Get Follow Up Date Value
+    Click Finish PNR
+
+Amend Booking For Verify That Email Address From Delivery Panel Is Reflected On PNR For SG
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Delivery
+    Click Panel    Delivery
+    Set Email Address In Delivery Panel    TEST123@CWT.COM
+    Untick Receive Itinerary Checkbox    1
+    Untick Receive Invoice Checkbox    1
+    Untick Receive Itinerary Checkbox    2
+    Untick Receive Invoice Checkbox    2
+    Tick Receive Itinerary Checkbox    3
+    Tick Receive Invoice Checkbox    3
+    Select Delivery Method    Auto Cancel Client Queue
+    Tick Awaiting Approval    tick
+    Get Ticketing Date
+    Get Follow Up Date Value
+    Click Finish PNR    Amend Booking For Verify That Email Address From Delivery Panel Is Reflected On PNR For SG

@@ -1,0 +1,404 @@
+Citrix client replay version 14.9.2000.21 , record version 14.5.0.10018
+Virtual User Script started at: 11/12/2018 6:39:40 PM
+Starting action vuser_init.
+vuser_init.c(14): web_cleanup_cookies started  	[MsgId: MMSG-26355]
+vuser_init.c(14): web_cleanup_cookies was successful  	[MsgId: MMSG-26392]
+vuser_init.c(15): web_set_max_html_param_len started  	[MsgId: MMSG-26355]
+vuser_init.c(15): web_set_max_html_param_len was successful  	[MsgId: MMSG-26392]
+vuser_init.c(16): web_set_sockets_option started  	[MsgId: MMSG-26355]
+vuser_init.c(16): web_set_sockets_option was successful  	[MsgId: MMSG-26392]
+vuser_init.c(18): web_url("PilotWeb") started  	[MsgId: MMSG-26355]
+vuser_init.c(18): Found resource "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/images/common/wspinner@2x_26FCB0A3548E30DC.gif" in HTML "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/"  	[MsgId: MMSG-26659]
+vuser_init.c(18): Found resource "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/external/jquery-1.12.4.min_618538B4AB9639D4.js" in HTML "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/"  	[MsgId: MMSG-26659]
+vuser_init.c(18): Found resource "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/external/jquery-ui-v1.11.4.min_17D0B6DEFA33B91A.js" in HTML "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/"  	[MsgId: MMSG-26659]
+vuser_init.c(18): Found resource "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/external/jquery.ui.touch-punch.min_94EA8262E7FD35F4.js" in HTML "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/"  	[MsgId: MMSG-26659]
+vuser_init.c(18): Found resource "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/external/hammer.v2.0.8.min_F699A1E56189259A.js" in HTML "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/"  	[MsgId: MMSG-26659]
+vuser_init.c(18): Found resource "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/external/jquery.dotdotdot.min_08EE54CBA886AD0A.js" in HTML "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/"  	[MsgId: MMSG-26659]
+vuser_init.c(18): Found resource "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/external/velocity.min_B218502A82F66680.js" in HTML "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/"  	[MsgId: MMSG-26659]
+vuser_init.c(18): Found resource "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/external/slick.min_FEB62CC230E2BA2A.js" in HTML "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/"  	[MsgId: MMSG-26659]
+vuser_init.c(18): Found resource "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/ctxs.core.min_33B1CC992A07D57E.js" in HTML "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/"  	[MsgId: MMSG-26659]
+vuser_init.c(18): Found resource "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/ctxs.webui.min_91463D1B79731411.js" in HTML "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/"  	[MsgId: MMSG-26659]
+vuser_init.c(18): web_url("PilotWeb") was successful, 235778 body bytes, 5043 header bytes  	[MsgId: MMSG-26386]
+vuser_init.c(28): web_add_auto_header("X-Citrix-IsUsingHTTPS") started  	[MsgId: MMSG-26355]
+vuser_init.c(28): web_add_auto_header("X-Citrix-IsUsingHTTPS") was successful  	[MsgId: MMSG-26392]
+vuser_init.c(31): web_add_auto_header("X-Requested-With") started  	[MsgId: MMSG-26355]
+vuser_init.c(31): web_add_auto_header("X-Requested-With") was successful  	[MsgId: MMSG-26392]
+vuser_init.c(34): web_reg_save_param_regexp started  	[MsgId: MMSG-26355]
+vuser_init.c(34): Registering web_reg_save_param_regexp was successful  	[MsgId: MMSG-26390]
+vuser_init.c(43): web_custom_request("Configuration") started  	[MsgId: MMSG-26355]
+vuser_init.c(43): Notify: Saving Parameter "CsrfToken = DEBD83A7061AAD8B2AE867C6C44CDF36".
+vuser_init.c(43): web_custom_request("Configuration") was successful, 1359 body bytes, 475 header bytes  	[MsgId: MMSG-26386]
+vuser_init.c(56): web_add_auto_header("Csrf-Token") started  	[MsgId: MMSG-26355]
+vuser_init.c(56): Notify: Parameter Substitution: parameter "CsrfToken" =  "DEBD83A7061AAD8B2AE867C6C44CDF36"
+vuser_init.c(56): web_add_auto_header("Csrf-Token") was successful  	[MsgId: MMSG-26392]
+vuser_init.c(59): Notify: Transaction "Citrix_LoginPage" started.
+vuser_init.c(61): web_submit_data("List") started  	[MsgId: MMSG-26355]
+vuser_init.c(61): web_submit_data("List") was successful, 42 body bytes, 518 header bytes  	[MsgId: MMSG-26386]
+vuser_init.c(73): web_custom_request("GetAuthMethods") started  	[MsgId: MMSG-26355]
+vuser_init.c(73): web_custom_request("GetAuthMethods") was successful, 186 body bytes, 304 header bytes  	[MsgId: MMSG-26386]
+vuser_init.c(84): web_custom_request("Login") started  	[MsgId: MMSG-26355]
+vuser_init.c(84): web_custom_request("Login") was successful, 551 body bytes, 384 header bytes  	[MsgId: MMSG-26386]
+vuser_init.c(96): Notify: Transaction "Citrix_LoginPage" ended with a "Pass" status (Duration: 0.8139 Wasted Time: 0.0377).
+vuser_init.c(103): Notify: Transaction "Citrix_Login" started.
+vuser_init.c(105): web_submit_data("LoginAttempt") started  	[MsgId: MMSG-26355]
+vuser_init.c(105): Notify: Parameter Substitution: parameter "CitrixLogin" =  "SvcSyExTest1"
+vuser_init.c(105): web_submit_data("LoginAttempt") was successful, 184 body bytes, 403 header bytes  	[MsgId: MMSG-26386]
+vuser_init.c(122): web_submit_data("List_2") started  	[MsgId: MMSG-26355]
+vuser_init.c(122): web_submit_data("List_2") was successful, 500 body bytes, 290 header bytes  	[MsgId: MMSG-26386]
+vuser_init.c(134): web_custom_request("GetUserName") started  	[MsgId: MMSG-26355]
+vuser_init.c(134): HTML parsing not performed for Content-Type "text" ("ParseHtmlContentType" Runtime Setting is "TEXT"). URL="https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/Authentication/GetUserName"  	[MsgId: MMSG-26548]
+vuser_init.c(134): web_custom_request("GetUserName") was successful, 32 body bytes, 292 header bytes  	[MsgId: MMSG-26386]
+vuser_init.c(144): web_custom_request("AllowSelfServiceAccountManagement") started  	[MsgId: MMSG-26355]
+vuser_init.c(144): web_custom_request("AllowSelfServiceAccountManagement") was successful, 172 body bytes, 304 header bytes  	[MsgId: MMSG-26386]
+vuser_init.c(155): lr_think_time: 1.00 seconds.
+vuser_init.c(157): Connecting via NFUSE portal "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/Resources/LaunchIca/RGVmYXVsdEFnZ3JlZ2F0aW9uR3JvdXAuXFNFQ08gUGVyZm9ybWFuY2UgVGVzdGluZw--.ica?CsrfToken={CsrfToken}&IsUsingHttps=Yes&displayNameDesktopTitle=SECOPerformance        0.000000e+00sting&launchId={LaunchID}"
+vuser_init.c(157): Notify: Parameter Substitution: parameter "CsrfToken" =  "DEBD83A7061AAD8B2AE867C6C44CDF36"
+vuser_init.c(157): Notify: Next row for parameter LaunchID = 1 [table  = LaunchID].
+vuser_init.c(157): Notify: Parameter Substitution: parameter "LaunchID" =  "1538580435721"
+vuser_init.c(157): Setting connection option "ICAFILE" to "C:\Users\U001JCP\Documents\VuGen\Scripts\PowerExpress_EMEA_CitrixClient33\PowerExpress_EMEA_SendItin\\nfuse_(null).ica"
+12/11/2018 18:39:48 vuser_init.c(157): (15136:17148) - CitrixClientImpl.dll version: 12.60.971.0
+12/11/2018 18:39:48 vuser_init.c(157): (15136:17148) - Number of currently used GDI handles on this machine = 5970
+12/11/2018 18:39:48 vuser_init.c(157): (15136:17148) - Running Citrix processes:
+	concentr.exe, pid 6360, GDI handles in use: 43
+	receiver.exe, pid 7924, GDI handles in use: 46
+12/11/2018 18:39:48 vuser_init.c(157): (15136:17148) - Modifying ICA file with commands "ConnectionBar=0	TWIMode=Off": done with status 0 (SUCCESS).
+12/11/2018 18:39:48 vuser_init.c(157): (15136:17148) - Citrix ClientName is "LWPHL1U001JCP-"
+12/11/2018 18:39:48 vuser_init.c(157): (15136:17148) - WaitForEvent: Initializing wait event, time=180000, end time=17370249
+12/11/2018 18:39:52 vuser_init.c(157): (15136:17148) - Got Connect event
+12/11/2018 18:39:52 vuser_init.c(157): (15136:17148) - Number of currently used GDI handles on this machine = 6002
+12/11/2018 18:39:52 vuser_init.c(157): (15136:17148) - Running Citrix processes:
+	concentr.exe, pid 6360, GDI handles in use: 43
+	receiver.exe, pid 7924, GDI handles in use: 46
+	wfica32.exe, pid 17932, GDI handles in use: 29
+12/11/2018 18:39:52 vuser_init.c(157): (15136:17148) - client resolution = 1440x900, client color depth = 32 bits
+12/11/2018 18:39:52 vuser_init.c(157): (15136:17148) - Wake Up and check new event.
+vuser_init.c(159): Notify: Transaction "Citrix_Login" ended with a "Pass" status (Duration: 6.3171 Think Time: 0.9997 Wasted Time: 0.0345).
+vuser_init.c(161): Setting the waiting time to 60 seconds
+vuser_init.c(163): lr_think_time: 45.00 seconds.
+12/11/2018 18:39:59 vuser_init.c(163): (15136:17148) - "Windows Logon" is not currently in map, adding it now
+12/11/2018 18:39:59 vuser_init.c(163): (15136:17148) - Create window name="Windows Logon" flag=1 style=-1778384896 ext_style=0 ID=65568
+12/11/2018 18:39:59 vuser_init.c(163): (15136:17148) - Created window: "Windows Logon"  at (0, 0)
+12/11/2018 18:39:59 vuser_init.c(163): (15136:17148) - Foreground window = 65580
+12/11/2018 18:39:59 vuser_init.c(163): (15136:17148) - Get Logon event
+12/11/2018 18:39:59 vuser_init.c(163): (15136:17148) - Foreground window = 65580
+12/11/2018 18:40:00 vuser_init.c(163): (15136:17148) - Foreground window = 0
+12/11/2018 18:40:02 vuser_init.c(163): (15136:17148) - Get Logon event
+vuser_init.c(165): Waiting for logon
+12/11/2018 18:40:37 vuser_init.c(165): (15136:17148) - WaitForEvent: Initializing wait event, time=60000, end time=17298547
+vuser_init.c(165): Logon succeeded
+vuser_init.c(168): Notify: Transaction "Sellco Login" started.
+vuser_init.c(170): Executing ctrl key ("ESC_KEY")
+12/11/2018 18:40:37 vuser_init.c(170): (15136:17148) - KeyDown 17 0
+12/11/2018 18:40:37 vuser_init.c(170): (15136:17148) - Send ping: mod_2
+12/11/2018 18:40:37 vuser_init.c(170): (15136:17148) - KeyDown 27 2
+12/11/2018 18:40:37 vuser_init.c(170): (15136:17148) - KeyUp 27 2
+12/11/2018 18:40:37 vuser_init.c(170): (15136:17148) - KeyUp 17 0
+12/11/2018 18:40:37 vuser_init.c(172): (15136:17148) - Get ping ack: mod_2
+vuser_init.c(172): Executing ctrl key ("NO_KEY")
+12/11/2018 18:40:37 vuser_init.c(172): (15136:17148) - KeyDown 17 0
+12/11/2018 18:40:37 vuser_init.c(172): (15136:17148) - Send ping: mod_2
+12/11/2018 18:40:37 vuser_init.c(172): (15136:17148) - KeyUp 17 0
+vuser_init.c(174): lr_think_time: 5.00 seconds.
+12/11/2018 18:40:37 vuser_init.c(174): (15136:17148) - Get ping ack: mod_2
+vuser_init.c(176): Executing type ("run")
+12/11/2018 18:40:42 vuser_init.c(176): (15136:17148) - KeyDown 82 0
+12/11/2018 18:40:42 vuser_init.c(176): (15136:17148) - KeyUp 82 0
+12/11/2018 18:40:42 vuser_init.c(176): (15136:17148) - KeyDown 85 0
+12/11/2018 18:40:43 vuser_init.c(176): (15136:17148) - KeyUp 85 0
+12/11/2018 18:40:43 vuser_init.c(176): (15136:17148) - KeyDown 78 0
+12/11/2018 18:40:43 vuser_init.c(176): (15136:17148) - KeyUp 78 0
+vuser_init.c(178): lr_think_time: 2.00 seconds.
+vuser_init.c(180): Executing key ("ENTER_KEY")
+12/11/2018 18:40:45 vuser_init.c(180): (15136:17148) - KeyDown 13 0
+12/11/2018 18:40:45 vuser_init.c(180): (15136:17148) - KeyUp 13 0
+vuser_init.c(182): lr_think_time: 5.00 seconds.
+vuser_init.c(184): Executing type ("chrome https://acceptance.custom.sellingplatformconnect.amadeus.com")
+12/11/2018 18:40:50 vuser_init.c(184): (15136:17148) - KeyDown 67 0
+12/11/2018 18:40:50 vuser_init.c(184): (15136:17148) - KeyUp 67 0
+12/11/2018 18:40:50 vuser_init.c(184): (15136:17148) - KeyDown 72 0
+12/11/2018 18:40:50 vuser_init.c(184): (15136:17148) - KeyUp 72 0
+12/11/2018 18:40:50 vuser_init.c(184): (15136:17148) - KeyDown 82 0
+12/11/2018 18:40:50 vuser_init.c(184): (15136:17148) - KeyUp 82 0
+12/11/2018 18:40:50 vuser_init.c(184): (15136:17148) - KeyDown 79 0
+12/11/2018 18:40:51 vuser_init.c(184): (15136:17148) - KeyUp 79 0
+12/11/2018 18:40:51 vuser_init.c(184): (15136:17148) - KeyDown 77 0
+12/11/2018 18:40:51 vuser_init.c(184): (15136:17148) - KeyUp 77 0
+12/11/2018 18:40:51 vuser_init.c(184): (15136:17148) - KeyDown 69 0
+12/11/2018 18:40:51 vuser_init.c(184): (15136:17148) - KeyUp 69 0
+12/11/2018 18:40:51 vuser_init.c(184): (15136:17148) - KeyDown 32 0
+12/11/2018 18:40:51 vuser_init.c(184): (15136:17148) - KeyUp 32 0
+12/11/2018 18:40:51 vuser_init.c(184): (15136:17148) - KeyDown 72 0
+12/11/2018 18:40:51 vuser_init.c(184): (15136:17148) - KeyUp 72 0
+12/11/2018 18:40:51 vuser_init.c(184): (15136:17148) - KeyDown 84 0
+12/11/2018 18:40:51 vuser_init.c(184): (15136:17148) - KeyUp 84 0
+12/11/2018 18:40:51 vuser_init.c(184): (15136:17148) - KeyDown 84 0
+12/11/2018 18:40:51 vuser_init.c(184): (15136:17148) - KeyUp 84 0
+12/11/2018 18:40:52 vuser_init.c(184): (15136:17148) - KeyDown 80 0
+12/11/2018 18:40:52 vuser_init.c(184): (15136:17148) - KeyUp 80 0
+12/11/2018 18:40:52 vuser_init.c(184): (15136:17148) - KeyDown 83 0
+12/11/2018 18:40:52 vuser_init.c(184): (15136:17148) - KeyUp 83 0
+12/11/2018 18:40:52 vuser_init.c(184): (15136:17148) - KeyDown 16 0
+12/11/2018 18:40:52 vuser_init.c(184): (15136:17148) - Send ping: mod_1
+12/11/2018 18:40:52 vuser_init.c(184): (15136:17148) - KeyDown 186 1
+12/11/2018 18:40:52 vuser_init.c(184): (15136:17148) - KeyUp 186 1
+12/11/2018 18:40:52 vuser_init.c(184): (15136:17148) - KeyUp 16 0
+12/11/2018 18:40:52 vuser_init.c(184): (15136:17148) - Get ping ack: mod_1
+12/11/2018 18:40:52 vuser_init.c(184): (15136:17148) - KeyDown 191 0
+12/11/2018 18:40:52 vuser_init.c(184): (15136:17148) - KeyUp 191 0
+12/11/2018 18:40:52 vuser_init.c(184): (15136:17148) - KeyDown 191 0
+12/11/2018 18:40:52 vuser_init.c(184): (15136:17148) - KeyUp 191 0
+12/11/2018 18:40:52 vuser_init.c(184): (15136:17148) - KeyDown 65 0
+12/11/2018 18:40:53 vuser_init.c(184): (15136:17148) - KeyUp 65 0
+12/11/2018 18:40:53 vuser_init.c(184): (15136:17148) - KeyDown 67 0
+12/11/2018 18:40:53 vuser_init.c(184): (15136:17148) - KeyUp 67 0
+12/11/2018 18:40:53 vuser_init.c(184): (15136:17148) - KeyDown 67 0
+12/11/2018 18:40:53 vuser_init.c(184): (15136:17148) - KeyUp 67 0
+12/11/2018 18:40:53 vuser_init.c(184): (15136:17148) - KeyDown 69 0
+12/11/2018 18:40:53 vuser_init.c(184): (15136:17148) - KeyUp 69 0
+12/11/2018 18:40:53 vuser_init.c(184): (15136:17148) - KeyDown 80 0
+12/11/2018 18:40:53 vuser_init.c(184): (15136:17148) - KeyUp 80 0
+12/11/2018 18:40:53 vuser_init.c(184): (15136:17148) - KeyDown 84 0
+12/11/2018 18:40:53 vuser_init.c(184): (15136:17148) - KeyUp 84 0
+12/11/2018 18:40:53 vuser_init.c(184): (15136:17148) - KeyDown 65 0
+12/11/2018 18:40:53 vuser_init.c(184): (15136:17148) - KeyUp 65 0
+12/11/2018 18:40:54 vuser_init.c(184): (15136:17148) - KeyDown 78 0
+12/11/2018 18:40:54 vuser_init.c(184): (15136:17148) - KeyUp 78 0
+12/11/2018 18:40:54 vuser_init.c(184): (15136:17148) - KeyDown 67 0
+12/11/2018 18:40:54 vuser_init.c(184): (15136:17148) - KeyUp 67 0
+12/11/2018 18:40:54 vuser_init.c(184): (15136:17148) - KeyDown 69 0
+12/11/2018 18:40:54 vuser_init.c(184): (15136:17148) - KeyUp 69 0
+12/11/2018 18:40:54 vuser_init.c(184): (15136:17148) - KeyDown 190 0
+12/11/2018 18:40:54 vuser_init.c(184): (15136:17148) - KeyUp 190 0
+12/11/2018 18:40:54 vuser_init.c(184): (15136:17148) - KeyDown 67 0
+12/11/2018 18:40:54 vuser_init.c(184): (15136:17148) - KeyUp 67 0
+12/11/2018 18:40:54 vuser_init.c(184): (15136:17148) - KeyDown 85 0
+12/11/2018 18:40:54 vuser_init.c(184): (15136:17148) - KeyUp 85 0
+12/11/2018 18:40:54 vuser_init.c(184): (15136:17148) - KeyDown 83 0
+12/11/2018 18:40:55 vuser_init.c(184): (15136:17148) - KeyUp 83 0
+12/11/2018 18:40:55 vuser_init.c(184): (15136:17148) - KeyDown 84 0
+12/11/2018 18:40:55 vuser_init.c(184): (15136:17148) - KeyUp 84 0
+12/11/2018 18:40:55 vuser_init.c(184): (15136:17148) - KeyDown 79 0
+12/11/2018 18:40:55 vuser_init.c(184): (15136:17148) - KeyUp 79 0
+12/11/2018 18:40:55 vuser_init.c(184): (15136:17148) - KeyDown 77 0
+12/11/2018 18:40:55 vuser_init.c(184): (15136:17148) - KeyUp 77 0
+12/11/2018 18:40:55 vuser_init.c(184): (15136:17148) - KeyDown 190 0
+12/11/2018 18:40:55 vuser_init.c(184): (15136:17148) - KeyUp 190 0
+12/11/2018 18:40:55 vuser_init.c(184): (15136:17148) - KeyDown 83 0
+12/11/2018 18:40:55 vuser_init.c(184): (15136:17148) - KeyUp 83 0
+12/11/2018 18:40:55 vuser_init.c(184): (15136:17148) - KeyDown 69 0
+12/11/2018 18:40:56 vuser_init.c(184): (15136:17148) - KeyUp 69 0
+12/11/2018 18:40:56 vuser_init.c(184): (15136:17148) - KeyDown 76 0
+12/11/2018 18:40:56 vuser_init.c(184): (15136:17148) - KeyUp 76 0
+12/11/2018 18:40:56 vuser_init.c(184): (15136:17148) - KeyDown 76 0
+12/11/2018 18:40:56 vuser_init.c(184): (15136:17148) - KeyUp 76 0
+12/11/2018 18:40:56 vuser_init.c(184): (15136:17148) - KeyDown 73 0
+12/11/2018 18:40:56 vuser_init.c(184): (15136:17148) - KeyUp 73 0
+12/11/2018 18:40:56 vuser_init.c(184): (15136:17148) - KeyDown 78 0
+12/11/2018 18:40:56 vuser_init.c(184): (15136:17148) - KeyUp 78 0
+12/11/2018 18:40:56 vuser_init.c(184): (15136:17148) - KeyDown 71 0
+12/11/2018 18:40:56 vuser_init.c(184): (15136:17148) - KeyUp 71 0
+12/11/2018 18:40:56 vuser_init.c(184): (15136:17148) - KeyDown 80 0
+12/11/2018 18:40:56 vuser_init.c(184): (15136:17148) - KeyUp 80 0
+12/11/2018 18:40:57 vuser_init.c(184): (15136:17148) - KeyDown 76 0
+12/11/2018 18:40:57 vuser_init.c(184): (15136:17148) - KeyUp 76 0
+12/11/2018 18:40:57 vuser_init.c(184): (15136:17148) - KeyDown 65 0
+12/11/2018 18:40:57 vuser_init.c(184): (15136:17148) - KeyUp 65 0
+12/11/2018 18:40:57 vuser_init.c(184): (15136:17148) - KeyDown 84 0
+12/11/2018 18:40:57 vuser_init.c(184): (15136:17148) - KeyUp 84 0
+12/11/2018 18:40:57 vuser_init.c(184): (15136:17148) - KeyDown 70 0
+12/11/2018 18:40:57 vuser_init.c(184): (15136:17148) - KeyUp 70 0
+12/11/2018 18:40:57 vuser_init.c(184): (15136:17148) - KeyDown 79 0
+12/11/2018 18:40:57 vuser_init.c(184): (15136:17148) - KeyUp 79 0
+12/11/2018 18:40:57 vuser_init.c(184): (15136:17148) - KeyDown 82 0
+12/11/2018 18:40:57 vuser_init.c(184): (15136:17148) - KeyUp 82 0
+12/11/2018 18:40:57 vuser_init.c(184): (15136:17148) - KeyDown 77 0
+12/11/2018 18:40:58 vuser_init.c(184): (15136:17148) - KeyUp 77 0
+12/11/2018 18:40:58 vuser_init.c(184): (15136:17148) - KeyDown 67 0
+12/11/2018 18:40:58 vuser_init.c(184): (15136:17148) - KeyUp 67 0
+12/11/2018 18:40:58 vuser_init.c(184): (15136:17148) - KeyDown 79 0
+12/11/2018 18:40:58 vuser_init.c(184): (15136:17148) - KeyUp 79 0
+12/11/2018 18:40:58 vuser_init.c(184): (15136:17148) - KeyDown 78 0
+12/11/2018 18:40:58 vuser_init.c(184): (15136:17148) - KeyUp 78 0
+12/11/2018 18:40:58 vuser_init.c(184): (15136:17148) - KeyDown 78 0
+12/11/2018 18:40:58 vuser_init.c(184): (15136:17148) - KeyUp 78 0
+12/11/2018 18:40:58 vuser_init.c(184): (15136:17148) - KeyDown 69 0
+12/11/2018 18:40:58 vuser_init.c(184): (15136:17148) - KeyUp 69 0
+12/11/2018 18:40:58 vuser_init.c(184): (15136:17148) - KeyDown 67 0
+12/11/2018 18:40:58 vuser_init.c(184): (15136:17148) - KeyUp 67 0
+12/11/2018 18:40:59 vuser_init.c(184): (15136:17148) - KeyDown 84 0
+12/11/2018 18:40:59 vuser_init.c(184): (15136:17148) - KeyUp 84 0
+12/11/2018 18:40:59 vuser_init.c(184): (15136:17148) - KeyDown 190 0
+12/11/2018 18:40:59 vuser_init.c(184): (15136:17148) - KeyUp 190 0
+12/11/2018 18:40:59 vuser_init.c(184): (15136:17148) - KeyDown 65 0
+12/11/2018 18:40:59 vuser_init.c(184): (15136:17148) - KeyUp 65 0
+12/11/2018 18:40:59 vuser_init.c(184): (15136:17148) - KeyDown 77 0
+12/11/2018 18:40:59 vuser_init.c(184): (15136:17148) - KeyUp 77 0
+12/11/2018 18:40:59 vuser_init.c(184): (15136:17148) - KeyDown 65 0
+12/11/2018 18:40:59 vuser_init.c(184): (15136:17148) - KeyUp 65 0
+12/11/2018 18:40:59 vuser_init.c(184): (15136:17148) - KeyDown 68 0
+12/11/2018 18:40:59 vuser_init.c(184): (15136:17148) - KeyUp 68 0
+12/11/2018 18:40:59 vuser_init.c(184): (15136:17148) - KeyDown 69 0
+12/11/2018 18:41:00 vuser_init.c(184): (15136:17148) - KeyUp 69 0
+12/11/2018 18:41:00 vuser_init.c(184): (15136:17148) - KeyDown 85 0
+12/11/2018 18:41:00 vuser_init.c(184): (15136:17148) - KeyUp 85 0
+12/11/2018 18:41:00 vuser_init.c(184): (15136:17148) - KeyDown 83 0
+12/11/2018 18:41:00 vuser_init.c(184): (15136:17148) - KeyUp 83 0
+12/11/2018 18:41:00 vuser_init.c(184): (15136:17148) - KeyDown 190 0
+12/11/2018 18:41:00 vuser_init.c(184): (15136:17148) - KeyUp 190 0
+12/11/2018 18:41:00 vuser_init.c(184): (15136:17148) - KeyDown 67 0
+12/11/2018 18:41:00 vuser_init.c(184): (15136:17148) - KeyUp 67 0
+12/11/2018 18:41:00 vuser_init.c(184): (15136:17148) - KeyDown 79 0
+12/11/2018 18:41:00 vuser_init.c(184): (15136:17148) - KeyUp 79 0
+12/11/2018 18:41:00 vuser_init.c(184): (15136:17148) - KeyDown 77 0
+12/11/2018 18:41:00 vuser_init.c(184): (15136:17148) - KeyUp 77 0
+vuser_init.c(186): lr_think_time: 2.00 seconds.
+vuser_init.c(188): Executing key ("ENTER_KEY")
+12/11/2018 18:41:03 vuser_init.c(188): (15136:17148) - KeyDown 13 0
+12/11/2018 18:41:03 vuser_init.c(188): (15136:17148) - KeyUp 13 0
+vuser_init.c(190): lr_think_time: 5.00 seconds.
+vuser_init.c(192): Executing ctrl key ("a")
+12/11/2018 18:41:08 vuser_init.c(192): (15136:17148) - KeyDown 17 0
+12/11/2018 18:41:08 vuser_init.c(192): (15136:17148) - Send ping: mod_2
+12/11/2018 18:41:08 vuser_init.c(192): (15136:17148) - KeyDown 65 2
+12/11/2018 18:41:08 vuser_init.c(192): (15136:17148) - KeyUp 65 2
+12/11/2018 18:41:08 vuser_init.c(192): (15136:17148) - KeyUp 17 0
+12/11/2018 18:41:08 vuser_init.c(194): (15136:17148) - Get ping ack: mod_2
+vuser_init.c(194): Executing ctrl key ("NO_KEY")
+12/11/2018 18:41:08 vuser_init.c(194): (15136:17148) - KeyDown 17 0
+12/11/2018 18:41:08 vuser_init.c(194): (15136:17148) - Send ping: mod_2
+12/11/2018 18:41:08 vuser_init.c(194): (15136:17148) - KeyUp 17 0
+vuser_init.c(196): Executing key ("BACKSPACE_KEY")
+12/11/2018 18:41:08 vuser_init.c(196): (15136:17148) - KeyDown 8 0
+12/11/2018 18:41:08 vuser_init.c(196): (15136:17148) - KeyUp 8 0
+12/11/2018 18:41:08 vuser_init.c(198): (15136:17148) - Get ping ack: mod_2
+vuser_init.c(198): lr_think_time: 2.00 seconds.
+vuser_init.c(200): Notify: Next row for parameter GDSLogin = 1 [table  = GDSLogin].
+vuser_init.c(200): Notify: Parameter Substitution: parameter "GDSLogin" =  "TEST1"
+vuser_init.c(200): Executing type ("{GDSLogin}")
+12/11/2018 18:41:10 vuser_init.c(200): (15136:17148) - KeyDown 16 0
+12/11/2018 18:41:10 vuser_init.c(200): (15136:17148) - Send ping: mod_1
+12/11/2018 18:41:10 vuser_init.c(200): (15136:17148) - KeyDown 84 1
+12/11/2018 18:41:11 vuser_init.c(200): (15136:17148) - KeyUp 84 1
+12/11/2018 18:41:11 vuser_init.c(200): (15136:17148) - KeyUp 16 0
+12/11/2018 18:41:11 vuser_init.c(200): (15136:17148) - Get ping ack: mod_1
+12/11/2018 18:41:11 vuser_init.c(200): (15136:17148) - KeyDown 16 0
+12/11/2018 18:41:11 vuser_init.c(200): (15136:17148) - Send ping: mod_1
+12/11/2018 18:41:11 vuser_init.c(200): (15136:17148) - KeyDown 69 1
+12/11/2018 18:41:11 vuser_init.c(200): (15136:17148) - KeyUp 69 1
+12/11/2018 18:41:11 vuser_init.c(200): (15136:17148) - KeyUp 16 0
+12/11/2018 18:41:11 vuser_init.c(200): (15136:17148) - Get ping ack: mod_1
+12/11/2018 18:41:11 vuser_init.c(200): (15136:17148) - KeyDown 16 0
+12/11/2018 18:41:11 vuser_init.c(200): (15136:17148) - Send ping: mod_1
+12/11/2018 18:41:11 vuser_init.c(200): (15136:17148) - KeyDown 83 1
+12/11/2018 18:41:11 vuser_init.c(200): (15136:17148) - KeyUp 83 1
+12/11/2018 18:41:11 vuser_init.c(200): (15136:17148) - KeyUp 16 0
+12/11/2018 18:41:11 vuser_init.c(200): (15136:17148) - Get ping ack: mod_1
+12/11/2018 18:41:11 vuser_init.c(200): (15136:17148) - KeyDown 16 0
+12/11/2018 18:41:11 vuser_init.c(200): (15136:17148) - Send ping: mod_1
+12/11/2018 18:41:11 vuser_init.c(200): (15136:17148) - KeyDown 84 1
+12/11/2018 18:41:11 vuser_init.c(200): (15136:17148) - KeyUp 84 1
+12/11/2018 18:41:12 vuser_init.c(200): (15136:17148) - KeyUp 16 0
+12/11/2018 18:41:12 vuser_init.c(200): (15136:17148) - Get ping ack: mod_1
+12/11/2018 18:41:12 vuser_init.c(200): (15136:17148) - KeyDown 49 0
+12/11/2018 18:41:12 vuser_init.c(200): (15136:17148) - KeyUp 49 0
+vuser_init.c(202): Executing key ("TAB_KEY")
+12/11/2018 18:41:12 vuser_init.c(202): (15136:17148) - KeyDown 9 0
+12/11/2018 18:41:12 vuser_init.c(202): (15136:17148) - KeyUp 9 0
+vuser_init.c(204): lr_think_time: 2.00 seconds.
+vuser_init.c(206): Executing type ("SU")
+12/11/2018 18:41:14 vuser_init.c(206): (15136:17148) - KeyDown 16 0
+12/11/2018 18:41:14 vuser_init.c(206): (15136:17148) - Send ping: mod_1
+12/11/2018 18:41:14 vuser_init.c(206): (15136:17148) - KeyDown 83 1
+12/11/2018 18:41:14 vuser_init.c(206): (15136:17148) - KeyUp 83 1
+12/11/2018 18:41:14 vuser_init.c(206): (15136:17148) - KeyUp 16 0
+12/11/2018 18:41:14 vuser_init.c(206): (15136:17148) - Get ping ack: mod_1
+12/11/2018 18:41:14 vuser_init.c(206): (15136:17148) - KeyDown 16 0
+12/11/2018 18:41:14 vuser_init.c(206): (15136:17148) - Send ping: mod_1
+12/11/2018 18:41:14 vuser_init.c(206): (15136:17148) - KeyDown 85 1
+12/11/2018 18:41:14 vuser_init.c(206): (15136:17148) - KeyUp 85 1
+12/11/2018 18:41:15 vuser_init.c(206): (15136:17148) - KeyUp 16 0
+12/11/2018 18:41:15 vuser_init.c(208): (15136:17148) - Get ping ack: mod_1
+vuser_init.c(208): Executing key ("TAB_KEY")
+12/11/2018 18:41:15 vuser_init.c(208): (15136:17148) - KeyDown 9 0
+12/11/2018 18:41:15 vuser_init.c(208): (15136:17148) - KeyUp 9 0
+vuser_init.c(210): lr_think_time: 2.00 seconds.
+vuser_init.c(212): Executing type ("HKGWL2102")
+12/11/2018 18:41:17 vuser_init.c(212): (15136:17148) - KeyDown 16 0
+12/11/2018 18:41:17 vuser_init.c(212): (15136:17148) - Send ping: mod_1
+12/11/2018 18:41:17 vuser_init.c(212): (15136:17148) - KeyDown 72 1
+12/11/2018 18:41:17 vuser_init.c(212): (15136:17148) - KeyUp 72 1
+12/11/2018 18:41:17 vuser_init.c(212): (15136:17148) - KeyUp 16 0
+12/11/2018 18:41:17 vuser_init.c(212): (15136:17148) - Get ping ack: mod_1
+12/11/2018 18:41:17 vuser_init.c(212): (15136:17148) - KeyDown 16 0
+12/11/2018 18:41:17 vuser_init.c(212): (15136:17148) - Send ping: mod_1
+12/11/2018 18:41:17 vuser_init.c(212): (15136:17148) - KeyDown 75 1
+12/11/2018 18:41:17 vuser_init.c(212): (15136:17148) - KeyUp 75 1
+12/11/2018 18:41:17 vuser_init.c(212): (15136:17148) - KeyUp 16 0
+12/11/2018 18:41:17 vuser_init.c(212): (15136:17148) - Get ping ack: mod_1
+12/11/2018 18:41:17 vuser_init.c(212): (15136:17148) - KeyDown 16 0
+12/11/2018 18:41:17 vuser_init.c(212): (15136:17148) - Send ping: mod_1
+12/11/2018 18:41:17 vuser_init.c(212): (15136:17148) - KeyDown 71 1
+12/11/2018 18:41:18 vuser_init.c(212): (15136:17148) - KeyUp 71 1
+12/11/2018 18:41:18 vuser_init.c(212): (15136:17148) - KeyUp 16 0
+12/11/2018 18:41:18 vuser_init.c(212): (15136:17148) - Get ping ack: mod_1
+12/11/2018 18:41:18 vuser_init.c(212): (15136:17148) - KeyDown 16 0
+12/11/2018 18:41:18 vuser_init.c(212): (15136:17148) - Send ping: mod_1
+12/11/2018 18:41:18 vuser_init.c(212): (15136:17148) - KeyDown 87 1
+12/11/2018 18:41:18 vuser_init.c(212): (15136:17148) - KeyUp 87 1
+12/11/2018 18:41:18 vuser_init.c(212): (15136:17148) - KeyUp 16 0
+12/11/2018 18:41:18 vuser_init.c(212): (15136:17148) - Get ping ack: mod_1
+12/11/2018 18:41:18 vuser_init.c(212): (15136:17148) - KeyDown 16 0
+12/11/2018 18:41:18 vuser_init.c(212): (15136:17148) - Send ping: mod_1
+12/11/2018 18:41:18 vuser_init.c(212): (15136:17148) - KeyDown 76 1
+12/11/2018 18:41:18 vuser_init.c(212): (15136:17148) - KeyUp 76 1
+12/11/2018 18:41:18 vuser_init.c(212): (15136:17148) - KeyUp 16 0
+12/11/2018 18:41:18 vuser_init.c(212): (15136:17148) - Get ping ack: mod_1
+12/11/2018 18:41:18 vuser_init.c(212): (15136:17148) - KeyDown 50 0
+12/11/2018 18:41:18 vuser_init.c(212): (15136:17148) - KeyUp 50 0
+12/11/2018 18:41:18 vuser_init.c(212): (15136:17148) - KeyDown 49 0
+12/11/2018 18:41:19 vuser_init.c(212): (15136:17148) - KeyUp 49 0
+12/11/2018 18:41:19 vuser_init.c(212): (15136:17148) - KeyDown 48 0
+12/11/2018 18:41:19 vuser_init.c(212): (15136:17148) - KeyUp 48 0
+12/11/2018 18:41:19 vuser_init.c(212): (15136:17148) - KeyDown 50 0
+12/11/2018 18:41:19 vuser_init.c(212): (15136:17148) - KeyUp 50 0
+vuser_init.c(214): Executing key ("TAB_KEY")
+12/11/2018 18:41:19 vuser_init.c(214): (15136:17148) - KeyDown 9 0
+12/11/2018 18:41:19 vuser_init.c(214): (15136:17148) - KeyUp 9 0
+vuser_init.c(216): lr_think_time: 2.00 seconds.
+vuser_init.c(218): Notify: Next row for parameter GDSPassword = 1 [table  = GDSPassword].
+vuser_init.c(218): Notify: Parameter Substitution: parameter "GDSPassword" =  "Antigu@123"
+vuser_init.c(218): Executing type ("{GDSPassword}")
+12/11/2018 18:41:21 vuser_init.c(218): (15136:17148) - KeyDown 16 0
+12/11/2018 18:41:21 vuser_init.c(218): (15136:17148) - Send ping: mod_1
+12/11/2018 18:41:21 vuser_init.c(218): (15136:17148) - KeyDown 65 1
+12/11/2018 18:41:21 vuser_init.c(218): (15136:17148) - KeyUp 65 1
+12/11/2018 18:41:21 vuser_init.c(218): (15136:17148) - KeyUp 16 0
+12/11/2018 18:41:21 vuser_init.c(218): (15136:17148) - Get ping ack: mod_1
+12/11/2018 18:41:21 vuser_init.c(218): (15136:17148) - KeyDown 78 0
+12/11/2018 18:41:22 vuser_init.c(218): (15136:17148) - KeyUp 78 0
+12/11/2018 18:41:22 vuser_init.c(218): (15136:17148) - KeyDown 84 0
+12/11/2018 18:41:22 vuser_init.c(218): (15136:17148) - KeyUp 84 0
+12/11/2018 18:41:22 vuser_init.c(218): (15136:17148) - KeyDown 73 0
+12/11/2018 18:41:22 vuser_init.c(218): (15136:17148) - KeyUp 73 0
+12/11/2018 18:41:22 vuser_init.c(218): (15136:17148) - KeyDown 71 0
+12/11/2018 18:41:22 vuser_init.c(218): (15136:17148) - KeyUp 71 0
+12/11/2018 18:41:22 vuser_init.c(218): (15136:17148) - KeyDown 85 0
+12/11/2018 18:41:22 vuser_init.c(218): (15136:17148) - KeyUp 85 0
+12/11/2018 18:41:22 vuser_init.c(218): (15136:17148) - KeyDown 16 0
+12/11/2018 18:41:22 vuser_init.c(218): (15136:17148) - Send ping: mod_1
+12/11/2018 18:41:22 vuser_init.c(218): (15136:17148) - KeyDown 50 1
+12/11/2018 18:41:22 vuser_init.c(218): (15136:17148) - KeyUp 50 1
+12/11/2018 18:41:22 vuser_init.c(218): (15136:17148) - KeyUp 16 0
+12/11/2018 18:41:22 vuser_init.c(218): (15136:17148) - Get ping ack: mod_1
+12/11/2018 18:41:23 vuser_init.c(218): (15136:17148) - KeyDown 49 0
+12/11/2018 18:41:23 vuser_init.c(218): (15136:17148) - KeyUp 49 0
+12/11/2018 18:41:23 vuser_init.c(218): (15136:17148) - KeyDown 50 0
+12/11/2018 18:41:23 vuser_init.c(218): (15136:17148) - KeyUp 50 0
+12/11/2018 18:41:23 vuser_init.c(218): (15136:17148) - KeyDown 51 0
+12/11/2018 18:41:23 vuser_init.c(218): (15136:17148) - KeyUp 51 0
+vuser_init.c(220): Executing key ("ENTER_KEY")
+12/11/2018 18:41:23 vuser_init.c(220): (15136:17148) - KeyDown 13 0
+12/11/2018 18:41:23 vuser_init.c(220): (15136:17148) - KeyUp 13 0
+vuser_init.c(222): lr_think_time: 15.00 seconds.
+vuser_init.c(222): Notify: Transaction "Sellco Login" ended with a "Stop" status (Duration: 61.3053 Think Time: 27.0946).
+Abort was called from an action.

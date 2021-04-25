@@ -1,0 +1,76 @@
+*** Settings ***
+Force Tags        sabre    noram
+Resource          ../policy_check_verification.txt
+Resource          ../../business_rules/business_rules_verification.txt
+
+*** Test Cases ***
+[NB] Verify That Policy Advise Is Shown For Policy Name Air Cabin
+    [Tags]    us4629
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    en-GB    AutomationUS    US AUTO SABRE
+    Select GDS    Sabre
+    Set Client And Traveler    Sabre 16 - Auto ¦ US4072    AutoSeventeenTwo    NoramTvlrThree
+    Click New Booking
+    Click Panel    Client Info
+    Manually Set Value In Form Of Payment    VI    4444333322221111    1221
+    Click Panel    Cust Refs
+    Tick Not Known At Time Of Booking
+    Click Update PNR
+    Book Flight X Months From Now    MNLTPE    01J1    WPRQ    8
+    Click Read Booking
+    Click Panel    Policy Check
+    Verify Policy Advice Is Displayed    Air Cabin    Business Class out of policy    US4072 Test    True
+    Populate All Panels (Except Given Panels If Any)    Policy Check
+    Click Panel    Policy Check
+    Select Policy Status    Business Class out of policy    AA - Awaiting Approval
+    Click Finish PNR
+
+[QA] Verify That Policy Advise Is Shown For Policy Name Air Cabin
+    [Tags]    us4629
+    Retrieve PNR    ${current_pnr}
+    Click Quick Amend
+    Click Panel    Policy Check
+    Verify Policy Advice Is Displayed    Air Cabin    Business Class out of policy    US4072 Test    True
+    Populate Delivery Panel Without On Hold Reason
+    Click Panel    Policy Check
+    Select Policy Status    Business Class out of policy    TA - Traveller/Booker Advised
+    Click Finish PNR
+    Execute Simultaneous Change Handling    Quick Amend
+
+[AB] Verify That Policy Advise Is Shown For Policy Name Air Cabin
+    [Tags]    us4629
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Enter GDS Command    XI    PQD-ALL
+    Book Flight X Months From Now    FRALHR    01J1    WPRQ‡S2    8    5
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Policy Check
+    Click Panel    Policy Check
+    Verify Policy Advice Is Displayed    Air Cabin    Business Class out of policy    US4072 Test    True
+    Verify Out of Policy Is Shown    Air Cabin    Business Class out of policy
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Execute Simultaneous Change Handling    Amend Booking
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Quick Amend
+    Retrieve PNR    ${current_pnr}
+    Click Quick Amend
+    Click Panel    Policy Check
+    Verify Policy Advice Is Displayed    Air Cabin    Business Class out of policy    US4072 Test    True
+    Populate Delivery Panel Without On Hold Reason
+    Click Panel    Policy Check
+    Select Policy Status    Business Class out of policy    TA - Traveller/Booker Advised
+    Click Finish PNR
+
+Amend Booking
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Enter GDS Command    XI    PQD-ALL
+    Book Flight X Months From Now    FRALHR    01J1    WPRQ‡S2    8    5
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Policy Check
+    Click Panel    Policy Check
+    Verify Policy Advice Is Displayed    Air Cabin    Business Class out of policy    US4072 Test    True
+    Verify Out of Policy Is Shown    Air Cabin    Business Class out of policy
+    Click Finish PNR

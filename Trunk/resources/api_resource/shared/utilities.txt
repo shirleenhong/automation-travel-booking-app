@@ -1,0 +1,115 @@
+*** Settings ***
+Documentation     common utility keywords for all API services
+Resource          libraries.txt
+
+*** Keywords ***
+Check If Parameter Is A Number
+    [Arguments]    ${parameter}
+    ${is_number}    Run Keyword And Return Status    Should Match RegExp    ${parameter}    ^[0-9]+$
+    [Return]    ${is_number}
+
+Convert Data To JSON Format
+    [Arguments]    ${qualifier}=:    @{data}
+    @{converted_data}    Create List
+    : FOR    ${d}    IN    @{data}
+    \    ${node}    Split String    ${d}    ${qualifier}
+    \    ${json_node}    Set Variable If    "${node[1].upper()}" == "NULL"    "${node[0]}":${node[1]}    "${node[0]}":"${node[1]}"
+    \    Append To List    ${converted_data}    ${json_node}
+    [Return]    ${converted_data}
+
+Convert Wire Mock Response To JSON Format
+    [Arguments]    ${response}
+    ${response}    Replace String    ${response.content}    \\"    "
+    ${response}    Replace String    ${response}    \"{    {
+    ${response}    Replace String    ${response}    }\"    }
+    Set Test Variable    ${test_response.content}    ${response}
+
+Delete Stubs
+    Create Session    ins    ${sandbox_base_url}    verify=True
+    : FOR    ${stubs}    IN    @{stub_list}
+    \    ${response}    Delete Request    ins    /__admin/mappings/${stubs}
+    \    Log    ${response.content}
+    Set Suite Variable    @{stub_list}    ${EMPTY}
+    Remove From List    ${stub_list}    0
+
+Generate Request Headers
+    [Arguments]    @{headers}
+    [Documentation]    Input: Content-Type=application/json
+    Comment    ${generated_headers}    Create Dictionary
+    Comment    :FOR    ${item}    IN    @{headers}
+    Comment    \    ${key}    ${value}    Split String    ${item}    =
+    Comment    \    Set To Dictionary    ${generated_headers}    ${key}    ${value}
+    Comment
+    Comment    ${header_items}    Create Dictionary
+    Comment    ${session_token}=    Request Token
+    Comment    \    Create Dictionary    Authorisation=${session_token}
+    ${json_object1}    To Json    {"Content-Type":"application/json"}
+    ${token}=    Request Token
+    ${json_object2}    To Json    {"Authorisation":"${token}"}
+    ${json_object1}    Add Object To Json    ${json_object1}    $    ${json_object2}
+    Comment    Comment    Set To Dictionary    ${header_items}    Authorisation=${session_token}
+    Comment    Comment    Comment    ${header_json}    Add Object To Json    ${header_json}    $.
+    ...    ${header_items}
+    Comment    Comment    Set Suite Variable    ${header_items}
+    Comment
+    Comment    JSONLibrary.Add Object To Json
+
+Generate Stub List
+    @{stub_list}    Create List
+    Set Suite Variable    @{stub_list}
+
+Generate UUID
+    ${uuid}    Evaluate    uuid.uuid4()    uuid
+    ${uuid}    Convert To String    ${uuid}
+    [Return]    ${uuid}
+
+Get JSON Array Length
+    [Arguments]    ${json_pointer}
+    [Documentation]    Returns and logs the length of the given item as an integer
+    ...
+    ...    Given:
+    ...
+    ...    {
+    ...
+    ...    "remarks": ["X/-FF30/231", "X/-FF31/1111"]
+    ...
+    ...    }
+    ...
+    ...    Example:
+    ...
+    ...    ${length} \ \ \ | \ \ \ Get JSON Array Length \ \ \ | \ \ \ /remarks
+    ...
+    ...    Output: 2
+    ${json_content}    Get Json Value    ${test_response.content}    ${json_pointer}
+    ${parsed_content}    Parse Json    ${json_content}
+    ${length}    Get Length    ${parsed_content}
+    [Return]    ${length}
+
+Get Stub ID And Append To Stub List
+    ${stub_id}    Get Json Value    ${test_response.content}    /id
+    ${stub_id}    Remove String    ${stub_id}    "
+    Append To List    ${stub_list}    ${stub_id}
+
+Request Token
+    ${header_json}    To Json    {"Content-Type":"application/json"}
+    Create Session    requestToken    ${${env}_base_url}${token_path}
+    ${data}    Create Dictionary    clientId=PowerExpress    clientSecret=Passsword
+    ${data}    To Json    {"clientId":"PowerExpress","clientSecret":"Passsword"}
+    ${response}    Post Request    requestToken    \    data=${data}    headers=${header_json}
+    Should Be Equal As Strings    ${response.status_code}    200
+    Set Suite Variable    ${token}    ${response.json()}
+    Comment    ${token}=    Set Variable    ${response.json()}
+    [Return]    ${token}
+
+Generate Header With Token
+    [Arguments]    @{json_items}
+    ${headers}    To Json    {}
+    :FOR    ${each_item}    IN    @{json_items}
+    \    ${each_item}    To Json    ${each_item}
+    \    ${headers}    Add Object To Json    ${headers}    $    ${each_item}
+    Set Suite Variable    ${headers}
+    ${token}=    Request Token
+    ${auth_token}=    To Json    {"Authorization":"Bearer ${token}"}
+    ${headers}    Add Object To Json    ${headers}    $    ${auth_token}
+    Log    ${headers}
+    Set Suite Variable    ${generated_headers}    ${headers}

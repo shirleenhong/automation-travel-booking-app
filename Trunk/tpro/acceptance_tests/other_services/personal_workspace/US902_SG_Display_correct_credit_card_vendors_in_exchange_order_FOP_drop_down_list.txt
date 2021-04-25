@@ -1,0 +1,28 @@
+*** Settings ***
+Force Tags        form_of_payment
+Resource          ../../../../resources/common/global_resources.txt
+Resource          ../other_services_verification.txt
+Resource          ../../client_info/client_info_verification.txt
+Resource          ../../../../resources/panels/other_svcs.txt
+Resource          ../../../../resources/api_resource/remarks_core.txt
+Resource          ../other_services_form_of_payment_control.txt
+
+*** Test Cases ***
+Workspace
+    Comment    ${expected_arrival_items}    Get Air Segments From GDS
+    Comment    ${ui_arrival_flights_items}    Get Dropdown Values    [NAME:ArrivalFlightComboBox]
+    Comment    ${ui_arrival_flights_items}    Remove Empty Value From List    ${ui_arrival_flights_items}
+    Comment    Log    Expected Arrival Segments: \n${expected_arrival_items}
+    Comment    Log    Actual Arrival Segments: \n${ui_arrival_flights_items}
+    Comment    Lists Should Be Equal    ${ui_arrival_flights_items}    ${expected_arrival_items}
+    Verify Card Vendor Types Are Correct    AX    DC    MC    CA    VI    TP
+    ...    JC
+
+*** Keywords ***
+Verify Card Vendor Types Are Correct
+    [Arguments]    @{card_vendor_types}
+    ${ui_card_vendor_types}    Get Dropdown Values    [NAME:FopVendorComboBox]
+    ${ui_card_vendor_types}    Remove Empty Value From List    ${ui_card_vendor_types}
+    Log    Expected card vendor types: \n${card_vendor_types}
+    Log    Actual card vendor types: \n${ui_card_vendor_types}
+    Run Keyword And Continue On Failure    Lists Should Be Equal    ${ui_card_vendor_types}    ${card_vendor_types}

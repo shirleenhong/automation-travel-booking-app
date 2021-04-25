@@ -1,0 +1,490 @@
+*** Settings ***
+Suite Setup
+Force Tags        gst
+Resource          ../other_services.txt
+
+*** Test Cases ***
+[NB OS] Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Cash Or Invoice And BTA Description Is Not Blank
+    [Tags]    us456    us723    us960    us686    us624    us668
+    ...    us1162    us1456    us1816    team_chiu
+    [Setup]
+    Create PNR Using Cash As FOP    air_segment=True
+    Click Panel    Other Svcs
+    Select Product And Vendor    Meet And Greet    Carlson Wagonlit GST
+    #us1620
+    Verify Form Of Payment Details Are Correct    Cash
+    #us1620
+    Populate Service Info Cost Details    Vendor Contact    22222    32333
+    Comment    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Cash
+    Get Other Services Form Of Payment Details
+    Verify Service Info Fields    Cash    True    SG
+    Set BTA Description    Desc 1
+    Set Date    10/29/2018
+    Verify Error Icon Is Displayed For Additional Information Date
+    Set Date    10/30/2019
+    Verify No Error Icon Is Displayed For Additional Information Date
+    Get Other Services Cost Details
+    Get Other Services Additional Information Details
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    Meet And Greet
+    Click Finish PNR
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+    Click Panel    Other Svcs
+    Verify EO Status For Third Party Vendor    Completed    1
+    Retrieve PNR Details From Amadeus    command=RTY
+    Verify Other Services With GST Accounting General Remarks    Meet And Greet    Carlson Wagonlit GST    Cash
+    Verify Other Services Cash Or Invoice Fees Accounting Remarks Are Written    SG
+    Verify EO Number Is Generated    SG
+    Verify BA And TA Remarks    ${uid}
+
+[AB OS] Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Credit Card Is CC And BTA Description Is Not Blank
+    [Tags]    us456    us723    us960    us1162    us1462    us1816
+    ...    team_chiu
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Client Info
+    Select Form Of Payment    TEST CARD/AX***********0009/D0822/CVV****
+    Populate All Panels (Except Given Panels If Any)
+    Click Panel    Other Svcs
+    Select Product And Vendor    Despatch Charge    DESPATCH DEPARTMENT
+    Populate Service Info Cost Details    Vendor Contact    222    323
+    Verify Form Of Payment Details Are Correct    TEST CARD/AX***********0009/D0822/CVV****
+    Select FOP Type    Credit Card (CC)
+    Get Other Services Form Of Payment Details
+    Set BTA Description    Sample Description
+    Set Date    10/29/2018
+    Verify Error Icon Is Displayed For Additional Information Date
+    Set Date    10/30/2019
+    Verify No Error Icon Is Displayed For Additional Information Date
+    Get Other Services Cost Details
+    Get Other Services Additional Information Details
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    EARLY CHECKIN IS ALLOWED    NO SMOKING
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Booking For Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Credit Card Is CC And BTA Description Is Not Blank For OS
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Credit Card Is CC And BTA Description Is Not Blank For OS
+    Click Panel    Other Svcs
+    Get Exchange Order Number    identifier=despatch
+    Generate Data For Specific Product    FALSE    P1    8    Despatch Charge    MS    24000
+    ...    ${EMPTY}    New
+    Retrieve PNR Details From Amadeus    command=RTY
+    Verify Other Services With GST Accounting General Remarks    Despatch Charge    DESPATCH DEPARTMENT    Credit Card (CC)
+    Verify Other Services Credit Card Fees Accounting Remarks Are Written    375000000000009    AX    08    2022    Credit Card (CC)    SG
+
+[AB AOS] Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Credit Card Is CC And BTA Description Is Not Blank
+    [Tags]    us832    us1291    us1462    us1620    us1816    team_chiu
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Other Svcs
+    Click Amend EO    ${eo_number_despatch}
+    Click Service Info Tab
+    Verify Form Of Payment Details Are Correct    TEST CARD/AX***********0009/D0822/CVV****    Credit Card (CC)
+    Get Other Services Cost Details
+    Verify Vendor Contact Value Is Correct    Vendor Contact
+    Verify Nett Cost Value Is Correct    222.00
+    Verify Selling Price Value Is Correct    323.00
+    Verify Commission Fee Value Is Correct    101.00
+    Verify GST Value Is Correct    22.61
+    Verify Merchant Fee Value Is Correct    0.00
+    Verify Total Selling Price Value Is Correct    323.00
+    Verify Description Value From Additional Information Is Correct    Despatch Charge
+    Verify BTA Description Value Is Correct    Sample Description
+    Verify Date Value Is Correct    10/30/2019
+    Verify Exchange Order Number    ${eo_number_despatch}
+    Get Other Services Form Of Payment Details
+    Get Other Services Additional Information Details
+    Click Vendor Info Tab
+    Verify Vendor Value Is Correct    DESPATCH DEPARTMENT
+    Verify Address 1 Value Is Correct    C/O CARLSON WAGONLIT TRAVEL
+    Verify Address 2 Value Is Correct    PTE LTD
+    Verify City Value Is Correct    SINGAPORE
+    Verify Country Value Is Correct    SINGAPORE
+    Verify Email Value Is Correct    automationtest@cwt.com
+    Verify Contact No Value Is Correct
+    Verify Fax No Value Is Correct    1111
+    Verify Credit Terms Values Is Correct    0
+    Verify Support Email Value Is Correct    automationtest@cwt.com
+    Click Remarks Tab
+    Verify Exchange Order Remarks Are Correct    EARLY CHECKIN IS ALLOWED    NO SMOKING
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Booking For Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Credit Card Is CC And BTA Description Is Not Blank For AOS
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Credit Card Is CC And BTA Description Is Not Blank For AOS
+    Generate Data For Specific Product    False    P1    08    Despatch Charge    MS    024000
+    ...    ${EMPTY}    Completed
+    Click Panel    Other Svcs
+    Verify EO Status For Third Party Vendor    Completed    1
+    Verify Exchange Order Number Is Retained    ${eo_number_despatch}
+    Retrieve PNR Details From Amadeus    command=RTY
+    Verify Other Services With GST Accounting General Remarks    Despatch Charge    DESPATCH DEPARTMENT    Credit Card (CC)
+    Verify Other Services Credit Card Fees Accounting Remarks Are Written    375000000000009    AX    08    2022    Credit Card (CC)    SG
+    Click Panel    Other Svcs
+    Verify Exchange Order Record Is Displayed In The EO Grid    P1
+    [Teardown]
+
+[AB OS] Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Credit Card Is CX (DC) And BTA Description Is Not Blank
+    [Tags]    us456    us723    us857    us960    us1462    us1816
+    ...    team_chiu
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Client Info
+    Select Form Of Payment    BTA DC/DC**********2207/D0823/CVV***
+    Populate All Panels (Except Given Panels If Any)
+    Click Panel    Other Svcs
+    Select Product And Vendor    Despatch Charge    DESPATCH DEPARTMENT
+    Populate Service Info Cost Details    Vendor Contact    344.23    566.00
+    Verify Form Of Payment Details Are Correct    BTA DC/DC**********2207/D0823/CVV***
+    Select FOP Type    Credit Card (CX)
+    Get Other Services Form Of Payment Details
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Get Other Services Additional Information Details
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Booking For Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Credit Card Is CX (DC) And BTA Description Is Not Blank
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Credit Card Is CX (DC) And BTA Description Is Not Blank
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details From Amadeus    command=RTY
+    Verify Other Services With GST Accounting General Remarks    Despatch Charge    DESPATCH DEPARTMENT    Credit Card (CX)
+    Verify Other Services Credit Card Fees Accounting Remarks Are Written    30569101582207    DC    08    2023    Credit Card (CX)    SG
+    [Teardown]
+
+[AB OS] Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Credit Card Is CC (JC) And BTA Description Is Not Blank
+    [Documentation]    [OS] Verify That Accounting Lines For Other Services Without GST Are Written
+    [Tags]    us456    us723    us902    us1162    us1462    us1816
+    ...    team_chiu
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Other Svcs
+    Select Product And Vendor    24 Hours Emergency Svcs    Carlson Wagonlit GST
+    Populate Service Info Cost Details    Vendor Contact    222    323
+    Verify Form Of Payment Details Are Correct    BTA CTCL VI/VI************7710/D0823
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CC)    JC    371449635398431    12    2027
+    Set Description    Additional Description
+    Set BTA Description    Sample Description
+    #Set Date > than Current
+    Set Date    10/20/2019
+    Verify No Error Icon Is Displayed For Additional Information Date
+    #Set Backdated Date
+    Set Date    10/20/2018
+    Verify No Error Icon Is Displayed For Additional Information Date
+    Get Other Services Form Of Payment Details
+    Get Other Services Cost Details
+    Get Other Services Additional Information Details
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Booking For Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Credit Card Is CC (JC) And BTA Description Is Not Blank
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Credit Card Is CC (JC) And BTA Description Is Not Blank
+    Click Panel    Other Svcs
+    Verify EO Status For Third Party Vendor    Completed    1
+    Verify EO Status For Third Party Vendor    Completed    1
+    Get Exchange Order Number
+    Retrieve PNR Details From Amadeus    command=RTY
+    Verify Other Services With GST Accounting General Remarks    24 Hours Emergency Svcs    Carlson Wagonlit GST    Credit Card (CC)
+    Verify Other Services Credit Card Fees Accounting Remarks Are Written    371449635398431    JC    12    2027    Credit Card (CC)    SG
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB OS] Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Cash Or Invoice And BTA Description Is Blank
+    [Tags]    us456    us723    us863    us720    us453    us1456
+    ...    us1816    team_chiu    us1462
+    Create PNR Using Credit Card As FOP    air_segment=True    fop_dropdown_value=Invoice
+    Click Panel    Other Svcs
+    Select Product And Vendor    Despatch Charge    DESPATCH DEPARTMENT
+    #us1620
+    Verify Form Of Payment Details Are Correct    Invoice
+    #us1620
+    Populate Service Info Cost Details    Vendor Contact    400.5    500.5
+    Set BTA Description    ${EMPTY}
+    Click Tab In Other Services Panel    Remarks
+    Select Exchange Order Remarks    NO SMOKING
+    Add Remarks In Exchange Order    Test EO remark 1    Test EO remark 2    Test EO remark 3    Test EO remark 4    Test EO remark 5
+    Select Itinerary Remarks    AATEST REMARK    ATEST REMARK
+    Add Remarks In Itinerary    Test Itinerary Remark 1    Test Itinerary Remark 2    Test Itinerary Remark 3    Test Itinerary Remark 4    Test Itinerary Remark 5
+    @{exchange_order_remarks_list}    Get All Remarks From EO Grid
+    Click Service Info Tab
+    Get Other Services Cost Details
+    Get Other Services Additional Information Details
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    Despatch Charge
+    Click Finish PNR
+    Click Panel    Other Svcs
+    Verify EO Status For Third Party Vendor    Completed    1
+    Get Exchange Order Number
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Other Services With GST Accounting General Remarks    Despatch Charge    DESPATCH DEPARTMENT    Invoice
+    Verify Other Services Cash Or Invoice Fees Accounting Remarks Are Written    SG
+    Verify Itinerary Remarks Are Re-Written In The RIR Lines    1    AATEST REMARK    ATEST REMARK    Test Itinerary Remark 1    Test Itinerary Remark 2    Test Itinerary Remark 3
+    ...    Test Itinerary Remark 4    Test Itinerary Remark 5
+    Verify Exchange Order Remarks Are Not Written In The RIR Lines    @{exchange_order_remarks_list}
+
+[AB OS] Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Credit Card Is CC And BTA Description Is Blank
+    [Tags]    us456    us723    US863    US720    US453    us1462
+    ...    us1816    team_chiu
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Client Info
+    Select Form Of Payment    TEST CARD/AX***********0009/D0822/CVV****
+    Populate All Panels (Except Given Panels If Any)
+    Click Panel    Other Svcs
+    Select Product And Vendor    Despatch Charge    DESPATCH DEPARTMENT
+    Populate Service Info Cost Details    Vendor Contact    600.0    700.0
+    Verify Form Of Payment Details Are Correct    TEST CARD/AX***********0009/D0822/CVV****
+    Select FOP Type    Credit Card (CC)
+    Set BTA Description    ${EMPTY}
+    Get Other Services Form Of Payment Details
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Get Other Services Additional Information Details
+    Click Tab In Other Services Panel    Remarks
+    Select Exchange Order Remarks    NO SMOKING
+    Add Remarks In Exchange Order    Test EO remark 1    Test EO remark 2    Test EO remark 3    Test EO remark 4    Test EO remark 5
+    Select Itinerary Remarks    AATEST REMARK    ATEST REMARK
+    Add Remarks In Itinerary    Test Itinerary Remark 1    Test Itinerary Remark 2    Test Itinerary Remark 3    Test Itinerary Remark 4    Test Itinerary Remark 5
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Booking For Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Credit Card Is CC And BTA Description Is Blank
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Credit Card Is CC And BTA Description Is Blank
+    Click Panel    Other Svcs
+    Get Exchange Order Number Using Product    Despatch Charge
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Other Services With GST Accounting General Remarks    Despatch Charge    DESPATCH DEPARTMENT    Credit Card (CC)
+    Verify Other Services Credit Card Fees Accounting Remarks Are Written    375000000000009    AX    08    2022    Credit Card (CC)    SG
+    Verify Itinerary Remarks Are Re-Written In The RIR Lines    2    AATEST REMARK    ATEST REMARK    Test Itinerary Remark 1    Test Itinerary Remark 2    Test Itinerary Remark 3
+    ...    Test Itinerary Remark 4    Test Itinerary Remark 5
+    Verify Exchange Order Remarks Are Not Written In The RIR Lines
+
+[AB OS] Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Credit Card Is CX (TP) And BTA Description Is Blank
+    [Tags]    us456    us723    us857    us1462    us1816    team_chiu
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Other Svcs
+    Select Product And Vendor    Management Fee    Carlson Wagonlit GST
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CX)    BTA TP CARD/TP***********4198/D0825/CVV***
+    Set BTA Description    ${EMPTY}
+    Get Other Services Form Of Payment Details
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Get Other Services Additional Information Details
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Booking For Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Credit Card Is CX (TP) And BTA Description Is Blank
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Credit Card Is CX (TP) And BTA Description Is Blank
+    Click Panel    Other Svcs
+    Get Exchange Order Number Using Product    Management Fee
+    Retrieve PNR Details From Amadeus    command=RTY
+    Verify Other Services With GST Accounting General Remarks    Management Fee    Carlson Wagonlit GST    Credit Card (CX)
+    Verify Other Services Credit Card Fees Accounting Remarks Are Written    5555000044440000    TP    08    2025    Credit Card (CX)    SG
+    ...    False
+    [Teardown]
+
+[SG AB CEO] Verify That Accounting Lines For Without GST Products Are Not Written When Cancelled
+    [Tags]    us1570
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Other Svcs
+    Cancel EO    ${eo_number_Management Fee}    Service Info    SG
+    Click Finish PNR    Amend Booking For Verify That Accounting Lines For Without GST Products Are Not Written When Cancelled
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Accounting Lines For Without GST Products Are Not Written When Cancelled
+    Verify PNR Is Successfully Created    false    1 Exchange Order(s) Successfully Cancelled!
+    Retrieve PNR Details From Amadeus    ${current_pnr}    \    False
+    Click Panel    Other Svcs
+    Verify Exchange Order Record Details Are Correct    SG    Management Fee    Carlson Wagonlit GST    MS    ${EMPTY}    Cancelled
+    ...    is_new_eo=False
+    Verify Other Services With GST Accounting General Remarks Are Not Written
+
+[AB OS] Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Credit Card Is CX (JC) And BTA Description Is Blank
+    [Documentation]    [OS] Verify That Accounting Lines For Other Services Without GST Are Written
+    [Tags]    us456    us723    us857    US902    US453    US720
+    ...    us1462    us1462    us1462    us1816    team_chiu    us1911
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Other Svcs
+    Select Product And Vendor    CWT Refund Admin Fee    Carlson Wagonlit GST
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    JC    5555000044440000    12    2026
+    Set BTA Description    ${EMPTY}
+    Get Other Services Form Of Payment Details
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Get Other Services Additional Information Details
+    Verify Exchange And Itinerary Order Remarks Fields Are working Correctly
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Booking For Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Credit Card Is CX (JC) And BTA Description Is Blank
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Credit Card Is CX (JC) And BTA Description Is Blank
+    Click Panel    Other Svcs
+    Verify EO Status For Third Party Vendor    Completed    1
+    Get Exchange Order Number
+    Retrieve PNR Details From Amadeus    command=RTY
+    Verify Other Services With GST Accounting General Remarks    CWT Refund Admin Fee    Carlson Wagonlit GST    Credit Card (CX)
+    Verify Other Services Credit Card Fees Accounting Remarks Are Written    5555000044440000    JC    12    2026    Credit Card (CX)    SG
+    ...    False
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Verify Service Info Fields Are Displayed
+    @{service_info_fields}    Create List    [NAME:VendorContactTextBox]    [NAME:NetCostTextBox]    [NAME:SellingPriceTextBox]    [NAME:CommisionTextBox]    [NAME:MerchantFeeTextBox]
+    ...    [NAME:MerchantFeeAbsorbCheckBox]    [NAME:FormOfPaymentComboBox]    [NAME:FopVendorComboBox]    [NAME:CardNumberMaskedTextBox]    [NAME:ExpiryMonthComboBox]    [NAME:ExpiryYearComboBox]
+    ...    [NAME:DescriptionTextBox]    [NAME:BtaDescriptionTextBox]    [NAME:dtpDate]    [NAME:ExhangeOrderNumberTextBox]    [NAME:CancelButton]
+    @{service_info_info_cost_fields}    Create List
+    @{service_info_addtl_info_fields}    Create List    [NAME:BtaDescriptionTextBox]    [NAME:dtpDate]    [NAME:dtpDate]    [NAME:ExhangeOrderNumberTextBox]
+    @{service_info_fop_fields}    Create List    [NAME:MaskContentButton]    [NAME:ValueMaskedTextBox]    [NAME:ExpiryMonthComboBox]    [NAME:ExpiryYearComboBox]    [NAME:FormOfPaymentComboBox]
+    ...    [NAME:FopVendorComboBox]    [NAME:FopVendorComboBox]
+    @{service_info_exchange_order_fields}    Create List    [NAME:ExhangeOrderNumberTextBox]    [NAME:CancelButton]
+    : FOR    ${field}    IN    @{service_info_fop_fields}
+    \    Verify Control Object Is Visible    ${field}
+
+Create PNR Using Fop As Credit Card CC
+    [Arguments]    ${country}
+    Open Power Express And Retrieve Profile    ${version}    Test    uexr493    en-GB    erepolidoru    APAC QA
+    ...    Amadeus
+    ${country}    Convert To Uppercase    ${country}
+    Create New Booking With One Way Flight Using Default Values    APAC SYN CORP ¦ APAC ${country} OS AUTOMATION    BEAR    ${country}OTHERS    SINMNL/APR    ${EMPTY}    Client Info
+    Click Panel    Client Info
+    Manually Set Value In Form Of Payment    AX    371449635390002    1222
+    Click Finish PNR
+
+Amend Booking For Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Credit Card Is CX (DC) And BTA Description Is Not Blank
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Client Info
+    Select Form Of Payment    BTA DC/DC**********2207/D0823/CVV***
+    Click Panel    Other Svcs
+    Select Product And Vendor    Despatch Charge    DESPATCH DEPARTMENT
+    Populate Service Info Cost Details    Vendor Contact    344.23    566.00
+    Verify Form Of Payment Details Are Correct    BTA DC/DC**********2207/D0823/CVV***
+    Select FOP Type    Credit Card (CX)
+    Get Other Services Form Of Payment Details
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Get Other Services Additional Information Details
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Booking For Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Credit Card Is CX (DC) And BTA Description Is Not Blank
+
+Amend Booking For Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Credit Card Is CC And BTA Description Is Not Blank For OS
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Client Info
+    Select Form Of Payment    TEST CARD/AX***********0009/D0822/CVV****
+    Click Panel    Other Svcs
+    Select Product And Vendor    Despatch Charge    DESPATCH DEPARTMENT
+    Populate Service Info Cost Details    Vendor Contact    222    323
+    Verify Form Of Payment Details Are Correct    TEST CARD/AX***********0009/D0822/CVV****
+    Select FOP Type    Credit Card (CC)
+    Get Other Services Form Of Payment Details
+    Set BTA Description    Sample Description
+    Set Date    10/29/2018
+    Verify Error Icon Is Displayed For Additional Information Date
+    Set Date    10/30/2019
+    Verify No Error Icon Is Displayed For Additional Information Date
+    Get Other Services Cost Details
+    Get Other Services Additional Information Details
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    EARLY CHECKIN IS ALLOWED    NO SMOKING
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Booking For Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Credit Card Is CC And BTA Description Is Not Blank For OS
+
+Amend Booking For Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Credit Card Is CC And BTA Description Is Not Blank For AOS
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Other Svcs
+    Click Amend EO    ${eo_number_despatch}
+    Click Service Info Tab
+    Verify Form Of Payment Details Are Correct    TEST CARD/AX***********0009/D0822/CVV****    Credit Card (CC)
+    Get Other Services Cost Details
+    Verify Vendor Contact Value Is Correct    Vendor Contact
+    Verify Nett Cost Value Is Correct    222.00
+    Verify Selling Price Value Is Correct    323.00
+    Verify Commission Fee Value Is Correct    101.00
+    Verify GST Value Is Correct    22.61
+    Verify Merchant Fee Value Is Correct    0.00
+    Verify Total Selling Price Value Is Correct    323.00
+    Verify Description Value From Additional Information Is Correct    Despatch Charge
+    Verify BTA Description Value Is Correct    Sample Description
+    Verify Date Value Is Correct    10/30/2019
+    Verify Exchange Order Number    ${eo_number_despatch}
+    Get Other Services Form Of Payment Details
+    Get Other Services Additional Information Details
+    Click Vendor Info Tab
+    Verify Vendor Value Is Correct    DESPATCH DEPARTMENT
+    Verify Address 1 Value Is Correct    C/O CARLSON WAGONLIT TRAVEL
+    Verify Address 2 Value Is Correct    PTE LTD
+    Verify City Value Is Correct    SINGAPORE
+    Verify Country Value Is Correct    SINGAPORE
+    Verify Email Value Is Correct    automationtest@cwt.com
+    Verify Contact No Value Is Correct
+    Verify Fax No Value Is Correct    1111
+    Verify Credit Terms Values Is Correct    0
+    Verify Support Email Value Is Correct    automationtest@cwt.com
+    Click Remarks Tab
+    Verify Exchange Order Remarks Are Correct    EARLY CHECKIN IS ALLOWED    NO SMOKING
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Booking For Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Credit Card Is CC And BTA Description Is Not Blank For AOS
+
+Amend Booking For Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Credit Card Is CC (JC) And BTA Description Is Not Blank
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Other Svcs
+    Select Product And Vendor    24 Hours Emergency Svcs    Carlson Wagonlit GST
+    Populate Service Info Cost Details    Vendor Contact    222    323
+    Verify Form Of Payment Details Are Correct    BTA CTCL VI/VI************7710/D0823
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CC)    JC    371449635398431    12    2027
+    Set Description    Additional Description
+    Set BTA Description    Sample Description
+    #Set Date > than Current
+    Set Date    10/20/2019
+    Verify No Error Icon Is Displayed For Additional Information Date
+    #Set Backdated Date
+    Set Date    10/20/2018
+    Verify No Error Icon Is Displayed For Additional Information Date
+    Get Other Services Form Of Payment Details
+    Get Other Services Cost Details
+    Get Other Services Additional Information Details
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Booking For Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Credit Card Is CC (JC) And BTA Description Is Not Blank
+
+Amend Booking For Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Credit Card Is CC And BTA Description Is Blank
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Client Info
+    Select Form Of Payment    TEST CARD/AX***********0009/D0822/CVV****
+    Click Panel    Other Svcs
+    Select Product And Vendor    Despatch Charge    DESPATCH DEPARTMENT
+    Populate Service Info Cost Details    Vendor Contact    600.0    700.0
+    Verify Form Of Payment Details Are Correct    TEST CARD/AX***********0009/D0822/CVV****
+    Select FOP Type    Credit Card (CC)
+    Set BTA Description    ${EMPTY}
+    Get Other Services Form Of Payment Details
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Get Other Services Additional Information Details
+    Click Tab In Other Services Panel    Remarks
+    Select Exchange Order Remarks    NO SMOKING
+    Add Remarks In Exchange Order    Test EO remark 1    Test EO remark 2    Test EO remark 3    Test EO remark 4    Test EO remark 5
+    Select Itinerary Remarks    AATEST REMARK    ATEST REMARK
+    Add Remarks In Itinerary    Test Itinerary Remark 1    Test Itinerary Remark 2    Test Itinerary Remark 3    Test Itinerary Remark 4    Test Itinerary Remark 5
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Booking For Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Credit Card Is CC And BTA Description Is Blank
+
+Amend Booking For Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Credit Card Is CX (TP) And BTA Description Is Blank
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Other Svcs
+    Select Product And Vendor    Management Fee    Carlson Wagonlit GST
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CX)    BTA TP CARD/TP***********4198/D0825/CVV***
+    Set BTA Description    ${EMPTY}
+    Get Other Services Form Of Payment Details
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Get Other Services Additional Information Details
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Booking For Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Credit Card Is CX (TP) And BTA Description Is Blank
+
+Amend Booking For Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Credit Card Is CX (JC) And BTA Description Is Blank
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Other Svcs
+    Select Product And Vendor    CWT Refund Admin Fee    Carlson Wagonlit GST
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    JC    5555000044440000    12    2026
+    Set BTA Description    ${EMPTY}
+    Get Other Services Form Of Payment Details
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Get Other Services Additional Information Details
+    Verify Exchange And Itinerary Order Remarks Fields Are working Correctly
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Booking For Verify That Accounting Lines For Other Services With GST Are Written When FOP Is Credit Card Is CX (JC) And BTA Description Is Blank
+
+Amend Booking For Verify That Accounting Lines For Without GST Products Are Not Written When Cancelled
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Other Svcs
+    Cancel EO    ${eo_number_Management Fee}    Service Info    SG
+    Click Finish PNR    Amend Booking For Verify That Accounting Lines For Without GST Products Are Not Written When Cancelled

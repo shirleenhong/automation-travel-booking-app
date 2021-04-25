@@ -1,0 +1,7 @@
+*** Settings ***
+Force Tags        amadeus    apac
+Resource          ../../../../acceptance_tests/client_info/client_info_verification.txt
+Resource          ../../../../resources/panels/client_info.txt
+Resource          ../client_info_verification.txt
+
+*** Test Cases ***

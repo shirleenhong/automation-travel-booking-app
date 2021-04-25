@@ -1,0 +1,11 @@
+[t6]
+FileName1=t6.xml
+URL1=https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/ExplicitAuth/LoginAttempt
+Total=1
+RequestHeaderFile=t6_RequestHeader.txt
+RequestBodyFile=t6_RequestBody.txt
+ResponseHeaderFile=t6_ResponseHeader.txt
+ContentType=application/xml
+SnapshotXmlFile=snapshot_6.xml
+[ProtocolInfo]
+ProtocolId=QTWeb

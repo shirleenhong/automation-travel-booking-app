@@ -1,0 +1,466 @@
+*** Settings ***
+Suite Setup
+Force Tags        train_and_ferry
+Resource          ../other_services_verification.txt
+Resource          ../other_services.txt
+
+*** Test Cases ***
+[SG NB OS] Verify That Train Tickets Product Behaves Correctly In Other Services Panel And Written in PNR When FOP is CX
+    [Documentation]    Expected to fail due to Masking/Unmasking of Credit Card
+    [Tags]    horton    sg    US461    us764    de202    us1322
+    ...    us1620    us1456
+    Create PNR Using Cash As FOP    SG    air_segment=True
+    Click Panel    Other Svcs
+    Select Product And Vendor    Train Tickets    DINERS WORLD TRAVEL PTE LTD
+    Click Service Info Tab
+    Verify Form Of Payment Details Are Correct    Cash
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CX)    TEST CARD/VI************0087/D0823/CVV***
+    Verify Nett Cost Value Is Correct    0.00
+    Verify Selling Price Value Is Correct    0.00
+    Verify Commission Fee Value Is Correct    0.00
+    Verify Merchant Fee Value Is Correct    0.00
+    Verify Total Selling Price Value Is Correct    0.00
+    Verify Default Value For Departure Fields Are Correct
+    Verify Default Value For Return Fields Are Correct
+    Populate Departure Routing    Singapore    Philippines    Train Ride
+    Populate Return Routing    Philippines    Singapore    Train Ride
+    Set Passenger ID Value    AA
+    Populate Service Info Cost Details    Vendor Contact    344.23    566.00
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Get Passenger ID Value
+    Get Routing Details
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Itinerary Remarks    ENTRY VISA CAN BE SECURED AT ARRIVAL
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    Train Tickets
+    Click Finish PNR    Handle Booking Parallel Process For Verify That Train Tickets Product Behaves Correctly In Other Services Panel And Written in PNR When FOP is CX
+    Click Panel    Other Svcs
+    Get Exchange Order Number    identifier=train
+    Generate Data For Specific Product    False    P1    15    Train Tickets    TR    021014
+    ...    ${EMPTY}    New
+    Verify Pdf Button Opens The Pdf    1
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify That Train And Ferry Remarks Are Written In PNR When FOP Is Credit Card    Train Tickets    15    021014
+    Verify Specific Remark Is Written In The PNR    RIR ENTRY VISA CAN BE SECURED AT ARRIVAL
+    Verify Other Services General Notepad Remarks    Train Tickets
+    Verify BA And TA Remarks    ${uid}
+    [Teardown]
+
+[SG AB AOS] Verify That Train Tickets Product Behaves Correctly In Other Services Panel And Written in PNR When FOP is CX
+    [Tags]    sg    horton    us832    us1340    de202    us1462
+    ...    us1620
+    Retrieve PNR And Populate Amend Workflow    fop_dropdown_value=Cash
+    Click Panel    Other Svcs
+    Click Amend EO    ${eo_number_train}
+    Get Other Services Cost Details
+    Verify Vendor Contact Value Is Correct    Vendor Contact
+    Verify Nett Cost Value Is Correct    344.23
+    Verify Selling Price Value Is Correct    566.00
+    Verify Commission Fee Value Is Correct    233.77
+    Verify Merchant Fee Value Is Correct    12.00
+    Verify Total Selling Price Value Is Correct    578.00
+    Verify Form Of Payment Details Are Correct    TEST CARD/VI************0087/D0823/CVV***    Credit Card (CX)
+    Verify Departure Routing Details Are Correct    Singapore    Philippines    Train Ride
+    Verify Return Routing Details Are Correct    Philippines    Singapore    Train Ride
+    Verify Exchange Order Number    ${eo_number_train}
+    Populate Service Info Cost Details    Vendor Contact Test    500.00    1500.00
+    Populate Departure Routing    Philippines    Singapore    Train Ride 2y
+    Populate Return Routing    Singapore    Philippines    Train Ride 2x
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details    #us1322
+    Get Routing Details
+    Click Vendor Info Tab
+    Verify Vendor Value Is Correct    DINERS WORLD TRAVEL PTE LTD
+    Verify Address 1 Value Is Correct    7500E BEACH ROAD
+    Verify Address 2 Value Is Correct    \#02-201 THE PLAZA
+    Verify City Value Is Correct    SINGAPORE
+    Verify Country Value Is Correct    SINGAPORE
+    Verify Email Value Is Correct    automationtest@cwt.com
+    Verify Contact No Value Is Correct
+    Verify Fax No Value Is Correct    1111
+    Verify Credit Terms Values Is Correct    0
+    Verify Support Email Value Is Correct    automationtest@cwt.com
+    Click Update Button In EO Panel    Service Info
+    Click Finish PNR    Amend Booking For Verify That Train Tickets Product Behaves Correctly In Other Services Panel And Written in PNR When FOP is CX
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Train Tickets Product Behaves Correctly In Other Services Panel And Written in PNR When FOP is CX
+    Verify PNR Is Successfully Created    False    Exchange Order(s) Transaction Successfully Saved!
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+    Generate Data For Specific Product    False    P1    15    Train Tickets    TR    021014
+    ...    ${EMPTY}    New
+    Verify Exchange Order Number Is Retained    ${eo_number_train}
+    Retrieve PNR Details From Amadeus
+    Verify That Train And Ferry Remarks Are Written In PNR When FOP Is Credit Card    Train Tickets    15    021014    #us1322
+    Verify Specific Remark Is Written In The PNR    RIR ENTRY VISA CAN BE SECURED AT ARRIVAL
+    Click Panel    Other Svcs
+    Verify Exchange Order Record Is Displayed In The EO Grid    P1
+
+[SG AB OS] Verify That Ferry Tickets Product Behaves Correctly In Other Services Panel And Written in PNR When FOP is CX
+    [Documentation]    Expected to fail due to Masking/Unmasking of Credit Card
+    [Tags]    horton    sg    US461    us764    de202    us1322
+    ...    us1462    us1620    de486
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Click Panel    Client Info
+    Select Form Of Payment    TEST CARD/AX***********0009/D0822/CVV****
+    Populate All Panels (Except Given Panels If Any)    Air Fare    Delivery
+    Click Panel    Air Fare
+    Select Form Of Payment On Fare Quote Tab    Fare 1    Cash
+    Populate Fare Quote Tabs with Default Values
+    Click Panel    Delivery
+    Set Email Address in Delivery Panel
+    Select Delivery Method    Auto Cancel Client Queue
+    Click Panel    Other Svcs
+    Select Product And Vendor    FERRY    Batam Fast Ferry Pte Ltd
+    Verify Form Of Payment Details Are Correct    TEST CARD/AX***********0009/D0822/CVV****    Credit Card (CX)
+    Verify Nett Cost Value Is Correct    0.00
+    Verify Selling Price Value Is Correct    0.00
+    Verify Commission Fee Value Is Correct    0.00
+    Verify Merchant Fee Value Is Correct    0.00
+    Verify Total Selling Price Value Is Correct    0.00
+    Set Nett Cost    350.25
+    Set Selling Price    680.23
+    Verify Default Value For Departure Fields Are Correct
+    Verify Default Value For Return Fields Are Correct
+    Populate Departure Routing    ${EMPTY}    Philippines    Ferry Ride
+    Populate Return Routing    Philippines    Singapore    Ferry Ride
+    Set Passenger ID Value    ${EMPTY}
+    Unmask Credit Card Number
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Get Passenger ID Value
+    Get Routing Details
+    Click Remarks Tab
+    Select Itinerary Remarks    ENTRY VISA CAN BE SECURED AT ARRIVAL
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    FERRY
+    Click Finish PNR    Amend Booking For Verify That Ferry Tickets Product Behaves Correctly In Other Services Panel And Written in PNR When FOP is CX
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Ferry Tickets Product Behaves Correctly In Other Services Panel And Written in PNR When FOP is CX
+    Verify PNR Is Successfully Created    False    2 Exchange Order(s) Transaction Successfully Saved!
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+    Verify Pdf Button Opens The Pdf    1
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify That Train And Ferry Remarks Are Written In PNR When FOP Is Credit Card    FERRY    14    021006
+    Verify Specific Remark Is Written In The PNR    RIR ENTRY VISA CAN BE SECURED AT ARRIVAL
+    Verify Other Services General Notepad Remarks    FERRY
+    [Teardown]
+
+[SG AB OS] Verify That Train Tickets Product Behaves Correctly In Other Services Panel And Written in PNR When FOP is Cash or Invoice
+    [Tags]    horton    sg    US461    de202    us1340    us1462
+    ...    us1620    de407
+    Retrieve PNR And Populate Amend Workflow    fop_dropdown_value=Cash
+    Click Panel    Other Svcs
+    Select Product And Vendor    Train Tickets    CARLSON WAGONLIT TRAVEL
+    Click Tab In Other Services Panel    Service Info
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    VI    4444333322221111    12    2026
+    Set Vendor Contact    CWT Vendor
+    Set Nett Cost    350.25
+    Set Selling Price    680.23
+    Get Nett Cost In Other Services
+    Get Selling Price
+    Get Other Services Form Of Payment Details    #us1322
+    Compute Other Services Fees    0    2
+    Verify Commission Fee Value Is Correct    343.98
+    Verify Merchant Fee Value Is Correct    14.00
+    Verify Total Selling Price Value Is Correct    694.23
+    Tick CWT Absorb Checkbox For Merchant Fee
+    Compute Other Services Fees    0    2    True    True
+    Verify Commission Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Cash
+    Compute Other Services Fees    0    2    True    True
+    Verify Commission Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Get Selling Price
+    Get Commission
+    Get Total Selling Price
+    Populate Departure Routing    Singapore    Philippines    Train Ride
+    Populate Return Routing    Philippines    Singapore    Train Ride
+    Set Passenger ID Value    AA
+    Get Routing Details
+    Get Passenger ID Value
+    Click Remarks Tab
+    Select Itinerary Remarks    ENTRY VISA CAN BE SECURED AT ARRIVAL
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    Train Tickets
+    Click Finish PNR    Amend Booking For Verify That Train Tickets Product Behaves Correctly In Other Services Panel And Written in PNR When FOP is Cash or Invoice
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Train Tickets Product Behaves Correctly In Other Services Panel And Written in PNR When FOP is Cash or Invoice
+    Verify PNR Is Successfully Created    False    3 Exchange Order(s) Transaction Successfully Saved!
+    Click Panel    Other Svcs
+    Verify EO Status For Third Party Vendor    Completed    1
+    Get Exchange Order Number    identifier=train
+    Verify Pdf Button Opens The Pdf    1
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify That Train And Ferry Remarks Are Written In PNR When FOP Is Cash Or Invoice    Train Tickets    15    021007
+    Verify Specific Remark Is Written In The PNR    RIR ENTRY VISA CAN BE SECURED AT ARRIVAL
+
+[SG AB OS 2nd] Verify That Ferry Tickets Product Behaves Correctly In Other Services Panel And Written in PNR When FOP is Cash or Invoice
+    [Tags]    horton    sg    US461    de202    us1340    us1462
+    ...    us1620
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Client Info
+    Select Form Of Payment    Invoice
+    Click Panel    Other Svcs
+    Select Product And Vendor    FERRY    CARLSON WAGONLIT TRAVEL
+    Click Tab In Other Services Panel    Service Info
+    Verify Form Of Payment Details Are Correct    Invoice
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    AX    378282246310005    12    2026
+    Set Vendor Contact    CWT Vendor
+    Set Nett Cost    350.25
+    Set Selling Price    680.23
+    Get Nett Cost In Other Services
+    Get Selling Price
+    Get Other Services Form Of Payment Details
+    Compute Other Services Fees    0    2
+    Verify Commission Fee Value Is Correct    343.98
+    Verify Merchant Fee Value Is Correct    14.00
+    Verify Total Selling Price Value Is Correct    694.23
+    Tick CWT Absorb Checkbox For Merchant Fee
+    Compute Other Services Fees    0    2    True    True
+    Verify Commission Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Invoice
+    Compute Other Services Fees    0    2    True    True
+    Verify Commission Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Get Selling Price
+    Get Commission
+    Get Total Selling Price
+    Set Return Date One Day Ahead
+    Populate Departure Routing    ${EMPTY}    ${EMPTY}    Ferry Ride
+    Populate Return Routing    ${EMPTY}    ${EMPTY}    Ferry Ride
+    Set Passenger ID Value    AA
+    Get Routing Details
+    Get Passenger ID Value
+    Click Remarks Tab
+    Select Itinerary Remarks    ENTRY VISA CAN BE SECURED AT ARRIVAL
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Booking 2nd For Verify That Ferry Tickets Product Behaves Correctly In Other Services Panel And Written in PNR When FOP is Cash or Invoice
+    Execute Simultaneous Change Handling    Amend Booking 2nd For Verify That Ferry Tickets Product Behaves Correctly In Other Services Panel And Written in PNR When FOP is Cash or Invoice
+    Verify PNR Is Successfully Created    False    4 Exchange Order(s) Transaction Successfully Saved!
+    Click Panel    Other Svcs
+    Verify EO Status For Third Party Vendor    Completed    1
+    Get Exchange Order Number    identifier=ferry
+    Verify Pdf Button Opens The Pdf    1
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify That Train And Ferry Remarks Are Written In PNR When FOP Is Cash Or Invoice    FERRY    14    021007    #us1322
+    Verify Specific Remark Is Written In The PNR    RIR ENTRY VISA CAN BE SECURED AT ARRIVAL
+
+[SG AB CEO] Verify That Ferry Ticket Accounting Remarks Are Not Written In PNR When EO Product Is Cancelled
+    [Tags]    US1570    team_chiu
+    Retrieve PNR And Populate Amend Workflow    SG
+    Click Panel    Other Svcs
+    Cancel EO    ${eo_number_ferry}    Service Info    SG
+    Click Finish PNR    Amend Booking For Verify That Ferry Ticket Accouting Remarks Are Not Written In PNR When EO Product Is Cancelled
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Ferry Ticket Accouting Remarks Are Not Written In PNR When EO Product Is Cancelled
+    Verify PNR Is Successfully Created    False    1 Exchange Order(s) Successfully Cancelled!
+    Click Panel    Other Svcs
+    Verify Exchange Order Is Cancelled In EO Grid    ${eo_number_ferry}
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Train and Ferry Remarks Are Not Written In PNR    FERRY    Invoice
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Amend Booking For Verify That Train Tickets Product Behaves Correctly In Other Services Panel And Written in PNR When FOP is CX
+    Retrieve PNR And Populate Amend Workflow    fop_dropdown_value=Cash
+    Click Panel    Other Svcs
+    Click Amend EO    ${eo_number_train}
+    Get Other Services Cost Details
+    Verify Vendor Contact Value Is Correct    Vendor Contact
+    Verify Nett Cost Value Is Correct    344.23
+    Verify Selling Price Value Is Correct    566.00
+    Verify Commission Fee Value Is Correct    233.77
+    Verify Merchant Fee Value Is Correct    12.00
+    Verify Total Selling Price Value Is Correct    578.00
+    Comment    Verify Form Of Payment Details Are Correct    Credit Card (CX)    VI    ************1111    12    2026
+    ...    #us1322 Prepopulated FOP will be cash as per RMK
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    VI    4444333322221111    12    2026    #us1322
+    Verify Departure Routing Details Are Correct    Singapore    Philippines    Train Ride
+    Verify Return Routing Details Are Correct    Philippines    Singapore    Train Ride
+    Verify Exchange Order Number    ${eo_number_train}
+    Populate Service Info Cost Details    Vendor Contact Test    500.00    1500.00
+    Populate Departure Routing    Philippines    Singapore    Train Ride 2y
+    Populate Return Routing    Singapore    Philippines    Train Ride 2x
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details    #us1322
+    Get Routing Details
+    Click Vendor Info Tab
+    Verify Vendor Value Is Correct    DINERS WORLD TRAVEL PTE LTD
+    Verify Address 1 Value Is Correct    7500E BEACH ROAD
+    Verify Address 2 Value Is Correct    \#02-201 THE PLAZA
+    Verify City Value Is Correct    SINGAPORE
+    Verify Country Value Is Correct    SINGAPORE
+    Verify Email Value Is Correct    automationtest@cwt.com
+    Verify Contact No Value Is Correct
+    Verify Fax No Value Is Correct    1111
+    Verify Credit Terms Values Is Correct    0
+    Verify Support Email Value Is Correct    automationtest@cwt.com
+    Click Update Button In EO Panel    Service Info
+    Click Finish PNR    Amend Booking For Verify That Train Tickets Product Behaves Correctly In Other Services Panel And Written in PNR When FOP is CX
+
+Amend Booking For Verify That Ferry Tickets Product Behaves Correctly In Other Services Panel And Written in PNR When FOP is CX
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Click Panel    Client Info
+    Select Form Of Payment    TEST CARD/AX***********0009/D0822/CVV****
+    Populate All Panels (Except Given Panels If Any)    Air Fare    Delivery
+    Click Panel    Air Fare
+    Select Form Of Payment On Fare Quote Tab    Fare 1    Cash
+    Populate Fare Quote Tabs with Default Values
+    Click Panel    Delivery
+    Set Email Address in Delivery Panel
+    Select Delivery Method    Amadeus edited TKXL
+    Click Panel    Other Svcs
+    Select Product And Vendor    FERRY    Batam Fast Ferry Pte Ltd
+    Verify Form Of Payment Details Are Correct    TEST CARD/AX***********0009/D0822/CVV****    Credit Card (CX)
+    Verify Nett Cost Value Is Correct    0.00
+    Verify Selling Price Value Is Correct    0.00
+    Verify Commission Fee Value Is Correct    0.00
+    Verify Merchant Fee Value Is Correct    0.00
+    Verify Total Selling Price Value Is Correct    0.00
+    Set Nett Cost    350.25
+    Set Selling Price    680.23
+    Verify Default Value For Departure Fields Are Correct
+    Verify Default Value For Return Fields Are Correct
+    Populate Departure Routing    ${EMPTY}    Philippines    Ferry Ride
+    Populate Return Routing    Philippines    Singapore    Ferry Ride
+    Set Passenger ID Value    ${EMPTY}
+    Unmask Credit Card Number
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details    #us1322
+    Get Passenger ID Value
+    Get Routing Details
+    Click Remarks Tab
+    Select Itinerary Remarks    ENTRY VISA CAN BE SECURED AT ARRIVAL
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    FERRY
+    Click Finish PNR    Amend Booking For Verify That Ferry Tickets Product Behaves Correctly In Other Services Panel And Written in PNR When FOP is CX
+
+Amend Booking For Verify That Train Tickets Product Behaves Correctly In Other Services Panel And Written in PNR When FOP is Cash or Invoice
+    Retrieve PNR And Populate Amend Workflow    fop_dropdown_value=Cash
+    Click Panel    Other Svcs
+    Select Product And Vendor    Train Tickets    CARLSON WAGONLIT TRAVEL
+    Click Tab In Other Services Panel    Service Info
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    VI    4444333322221111    12    2026    #us1322
+    Set Vendor Contact    CWT Vendor
+    Set Nett Cost    350.25
+    Set Selling Price    680.23
+    Get Nett Cost In Other Services
+    Get Selling Price
+    Get Other Services Form Of Payment Details    #us1322
+    Compute Other Services Fees    0    2
+    Verify Commission Fee Value Is Correct    343.98
+    Verify Merchant Fee Value Is Correct    14.00
+    Verify Total Selling Price Value Is Correct    694.23
+    Tick CWT Absorb Checkbox For Merchant Fee
+    Compute Other Services Fees    0    2    True    True
+    Verify Commission Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Cash    #us1322
+    Compute Other Services Fees    0    2    True    True
+    Verify Commission Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Get Selling Price
+    Get Commission
+    Get Total Selling Price
+    Populate Departure Routing    Singapore    Philippines    Train Ride
+    Populate Return Routing    Philippines    Singapore    Train Ride
+    Set Passenger ID Value    AA
+    Get Routing Details
+    Get Passenger ID Value
+    Click Remarks Tab
+    Select Itinerary Remarks    ENTRY VISA CAN BE SECURED AT ARRIVAL
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    Train Tickets
+    Click Finish PNR    Amend Booking For Verify That Train Tickets Product Behaves Correctly In Other Services Panel And Written in PNR When FOP is Cash or Invoice
+
+Amend Booking 2nd For Verify That Ferry Tickets Product Behaves Correctly In Other Services Panel And Written in PNR When FOP is Cash or Invoice
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Client Info
+    Select Form Of Payment    Invoice
+    Click Panel    Other Svcs
+    Select Product And Vendor    FERRY    CARLSON WAGONLIT TRAVEL
+    Click Tab In Other Services Panel    Service Info
+    Verify Form Of Payment Details Are Correct    Invoice
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    AX    378282246310005    12    2026
+    Set Vendor Contact    CWT Vendor
+    Set Nett Cost    350.25
+    Set Selling Price    680.23
+    Get Nett Cost In Other Services
+    Get Selling Price
+    Get Other Services Form Of Payment Details
+    Compute Other Services Fees    0    2
+    Verify Commission Fee Value Is Correct    343.98
+    Verify Merchant Fee Value Is Correct    14.00
+    Verify Total Selling Price Value Is Correct    694.23
+    Tick CWT Absorb Checkbox For Merchant Fee
+    Compute Other Services Fees    0    2    True    True
+    Verify Commission Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Invoice
+    Compute Other Services Fees    0    2    True    True
+    Verify Commission Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Get Selling Price
+    Get Commission
+    Get Total Selling Price
+    Set Return Date One Day Ahead
+    Populate Departure Routing    ${EMPTY}    ${EMPTY}    Ferry Ride
+    Populate Return Routing    ${EMPTY}    ${EMPTY}    Ferry Ride
+    Set Passenger ID Value    AA
+    Get Routing Details
+    Get Passenger ID Value
+    Click Remarks Tab
+    Select Itinerary Remarks    ENTRY VISA CAN BE SECURED AT ARRIVAL
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Booking 2nd For Verify That Ferry Tickets Product Behaves Correctly In Other Services Panel And Written in PNR When FOP is Cash or Invoice
+
+Handle Booking Parallel Process For Verify That Train Tickets Product Behaves Correctly In Other Services Panel And Written in PNR When FOP is CX
+    Create PNR Using Cash As FOP    SG    air_segment=True
+    Click Panel    Other Svcs
+    Select Product And Vendor    Train Tickets    DINERS WORLD TRAVEL PTE LTD
+    Click Service Info Tab
+    Verify Form Of Payment Details Are Correct    Cash
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CX)    TEST CARD/VI************0087/D0823/CVV***
+    Verify Nett Cost Value Is Correct    0.00
+    Verify Selling Price Value Is Correct    0.00
+    Verify Commission Fee Value Is Correct    0.00
+    Verify Merchant Fee Value Is Correct    0.00
+    Verify Total Selling Price Value Is Correct    0.00
+    Verify Default Value For Departure Fields Are Correct
+    Verify Default Value For Return Fields Are Correct
+    Populate Departure Routing    Singapore    Philippines    Train Ride
+    Populate Return Routing    Philippines    Singapore    Train Ride
+    Set Passenger ID Value    AA
+    Populate Service Info Cost Details    Vendor Contact    344.23    566.00
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Get Passenger ID Value
+    Get Routing Details
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Itinerary Remarks    ENTRY VISA CAN BE SECURED AT ARRIVAL
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    Train Tickets
+    Click Finish PNR    Handle Booking Parallel Process For Verify That Train Tickets Product Behaves Correctly In Other Services Panel And Written in PNR When FOP is CX
+
+Amend Booking For Verify That Ferry Ticket Accouting Remarks Are Not Written In PNR When EO Product Is Cancelled
+    Retrieve PNR And Populate Amend Workflow    HK
+    Click Panel    Other Svcs
+    Cancel EO    ${eo_number_ferry}    Service Info    HK
+    Click Finish PNR    Amend Booking For Verify That Ferry Ticket Accouting Remarks Are Not Written In PNR When EO Product Is Cancelled

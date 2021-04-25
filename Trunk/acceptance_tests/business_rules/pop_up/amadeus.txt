@@ -1,0 +1,39 @@
+*** Settings ***
+Force Tags        amadeus
+Resource          ../business_rules_verification.txt
+
+*** Test Cases ***
+[NB] Verify That Pop Up Choice Will Write Itinerary And Invoice Remarks In The PNR
+    [Tags]    us6133    uk
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    en-GB    AutomationUK    UK AUTO AMADEUS
+    Select GDS    Amadeus
+    Set Client And Traveler    UK Amadeus 1 - SyEx ¦ US6133    Rules    EmeaTest
+    Click New Booking
+    Click Panel    Cust Refs
+    Set CDR Value    DEPTNAME    ABC
+    Set CDR Value    TRVLCOST    12345
+    Click Update PNR
+    Book Flight X Months From Now    CDGLHR/AAF    SS1Y1    FXP
+    Click Read Booking
+    Verify Window Exists    21 days travel
+    Set Value In Pop Up    21 days travel    Yes
+    Populate All Panels (Except Given Panels If Any)    Cust Refs
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Specific Line Is Written In The PNR    *1234*YES
+    Verify Specific Line Is Written In The PNR    ITINERARY REMARKS FROM BUSINESS RULE
+
+[AB] Verify That Pop Up Choice Will Delete Itinerary And Invoice Remarks In The PNR
+    [Tags]    us6133    uk
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Verify Window Exists    21 days travel
+    Set Value In Pop Up    21 days travel    No
+    Populate All Panels (Except Given Panels If Any)    Cust Refs
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Specific Line Is Not Written In The PNR    THIS IS A SAMPLE ITINERARY REMARK
+    Verify Specific Line Is Not Written In The PNR    ITINERARY REMARK FROM BUSINESS RULE
+    Verify Specific Line Is Not Written In The PNR    *1001*THIS IS A SAMPLE WINGS REMARK
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}    True

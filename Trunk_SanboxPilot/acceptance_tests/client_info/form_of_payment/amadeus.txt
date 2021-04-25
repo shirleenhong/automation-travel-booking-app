@@ -1,0 +1,106 @@
+*** Settings ***
+Force Tags        amadeus    emea
+Resource          ../client_info_verification.txt
+
+*** Test Cases ***
+[NB] Verify That PNR Will Not Be Updated With Selected FOP Upon Dropdown Change With Success/Failure Status Message
+    [Tags]    us4072
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    de-DE    AutomationDE
+    Select GDS    Amadeus
+    Set Client And Traveler    Amadeus DE 17 - Auto ¦ US4072    AutoSeventeenTwo    EmeaTvlrOne
+    Click New Booking
+    Book Flight X Months From Now    LHRFRA    SS1Y1    FXB    8
+    Tick Not Known At Time Of Booking For Form Of Payment
+    Click Read Booking
+    Click Panel    Client Info
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus    \    RTF
+    Verify Specific Line Is Not Written In The PNR    FP
+
+[AB] Verify That PNR Will Not Be Updated With Selected FOP Upon Dropdown Change With Success/Failure Status Message
+    [Tags]    us4072
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Verify Update FOP button Is Not Displayed
+    Retrieve PNR Details From Amadeus    \    RTF    False
+    Verify Specific Line Is Not Written In The PNR    FP
+    Manually Set Value In Form Of Payment    AX    373002888516585    1221
+    Verify Successful Form Of Payment Update Message
+    Retrieve PNR Details From Amadeus    \    RTF    False
+    Verify Specific Line Is Written In The PNR    CCAX373002888516585/1221
+    Select Form Of Payment    Cash
+    Verify Successful Form Of Payment Update Message
+    Retrieve PNR Details From Amadeus    \    RTF    False
+    Verify Specific Line Is Written In The PNR    CASH
+    Select Form Of Payment    PORTRAIT/AX***********0002/D1216-US4072 PORTRAIT
+    Verify Failed Form Of Payment Update Message
+    Retrieve PNR Details From Amadeus    \    RTF    False
+    Verify Specific Line Is Written In The PNR    CASH
+    Select Form Of Payment    BTA/VI************1112/D1215
+    Verify Failed Form Of Payment Update Message
+    Retrieve PNR Details From Amadeus    \    RTF    False
+    Verify Specific Line Is Written In The PNR    CASH
+    Tick Not Known At Time Of Booking For Form Of Payment
+    Verify Successful Form Of Payment Update Message
+    Retrieve PNR Details From Amadeus    \    RTF    False
+    Verify Specific Line Is Not Written In The PNR    CASH
+    Untick Not Known At Time Of Booking For Form Of Payment
+    Select Form Of Payment    NonRef
+    Verify Successful Form Of Payment Update Message
+    Retrieve PNR Details From Amadeus    \    RTF    False
+    Verify Specific Line Is Written In The PNR    NONREF
+    Click Read Booking
+    Click Panel    Client Info
+    Select Form Of Payment    Cash
+    Verify No Form Of Payment Update Message Was Displayed
+    Retrieve PNR Details From Amadeus    \    RTF    False
+    Verify Specific Line Is Written In The PNR    NONREF
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR    Amend Booking Workflow For Amadeus FOP Update
+    Re-Execute Amend Booking Workflow For Amadeus FOP Update If Simultaneous Change Error Is Displayed
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTF
+    Verify Specific Line Is Written In The PNR    CASH
+    Tick Not Known At Time Of Booking For Form Of Payment
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Amend Booking Workflow For Amadeus FOP Update
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Verify Update FOP button Is Not Displayed
+    Retrieve PNR Details From Amadeus    \    RTF    False
+    Verify Specific Line Is Not Written In The PNR    FP
+    Manually Set Value In Form Of Payment    AX    373002888516585    1221
+    Verify Successful Form Of Payment Update Message
+    Retrieve PNR Details From Amadeus    \    RTF    False
+    Verify Specific Line Is Written In The PNR    CCAX373002888516585/1221
+    Select Form Of Payment    Cash
+    Verify Successful Form Of Payment Update Message
+    Retrieve PNR Details From Amadeus    \    RTF    False
+    Verify Specific Line Is Written In The PNR    CASH
+    Select Form Of Payment    PORTRAIT/AX***********0002/D1216-US4072 PORTRAIT
+    Verify Failed Form Of Payment Update Message
+    Retrieve PNR Details From Amadeus    \    RTF    False
+    Verify Specific Line Is Written In The PNR    CASH
+    Select Form Of Payment    BTA/VI************1112/D1215
+    Verify Failed Form Of Payment Update Message
+    Retrieve PNR Details From Amadeus    \    RTF    False
+    Verify Specific Line Is Written In The PNR    CASH
+    Tick Not Known At Time Of Booking For Form Of Payment
+    Verify Successful Form Of Payment Update Message
+    Retrieve PNR Details From Amadeus    \    RTF    False
+    Verify Specific Line Is Not Written In The PNR    CASH
+    Untick Not Known At Time Of Booking For Form Of Payment
+    Select Form Of Payment    NonRef
+    Verify Successful Form Of Payment Update Message
+    Retrieve PNR Details From Amadeus    \    RTF    False
+    Verify Specific Line Is Written In The PNR    NONREF
+    Click Read Booking
+    Click Panel    Client Info
+    Select Form Of Payment    Cash
+    Verify No Form Of Payment Update Message Was Displayed
+    Retrieve PNR Details From Amadeus    \    RTF    False
+    Verify Specific Line Is Written In The PNR    NONREF
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR    Amend Booking Workflow For Amadeus FOP Update

@@ -1,0 +1,183 @@
+*** Settings ***
+Force Tags        form_of_payment
+Resource          ../../../../resources/common/global_resources.txt
+Resource          ../other_services_verification.txt
+Resource          ../../client_info/client_info_verification.txt
+Resource          ../../../../resources/panels/other_svcs.txt
+Resource          ../../../../resources/api_resource/remarks_core.txt
+Resource          ../other_services_form_of_payment_control.txt
+
+*** Test Cases ***
+[HK][NB][OS] Verify That FOP Details Are Pre-populated When FOP is DC (WITHOUT GST)
+    [Tags]    us875    hk
+    Open Power Express And Retrieve Profile    ${version}    Test    uexr493    en-GB    erepolidoru    APAC QA
+    Handle Generic Window Popup
+    Select GDS    Amadeus
+    Create New Booking With One Way Flight Using Default Values    APAC SYN CORP ¦ APAC HK OS AUTOMATION    BEAR    HKOTHERS    SINMNL/ASQ    ${EMPTY}    Air Fare
+    Populate All Panels (Except Given Panels If Any)    Client Info
+    Click Panel    Client Info
+    Manually Set Value In Form Of Payment    DC    30569309025904    12/25
+    Comment    Click Panel    Air Fare
+    Comment    Populate Fare Tab With Default Values    Fare Quote 1    fare_restriction_default=true
+    Click Finish PNR
+    Click Other Services
+    #Add Other Service (HK)    #    #Other Service (Non GST)    #Other Service (Visa Processing)    #Other Service (Insurance)
+    Select Product    24 EMERGENCY SERVICE FEE    #24 EMERGENCY SERVICE FEE    #VISA PROCESSING    #INSURANCE
+    Select Vendor    CWT    #CWT    #CWT VISA    #CWT
+    Click Continue In Other Svcs
+    Verify FOP Details Are Correct    Credit Card (CC)    DC    ************5904    12    2025
+    Unmask Credit Card Number
+    Verify FOP Details Are Correct    Credit Card (CC)    DC    XXXXXXXXXX5904    12    2025
+    Select Form Of Payment (FOP)    Credit Card (CC)    VI    135412345678911    09    2024
+    Click Finish PNR    panel=Other Svcs
+
+[HK][AB][OS] Verify That FOP Details Are Pre-populated When FOP is TP (VISA PROCESSING)
+    [Tags]    us875    hk
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Client Info
+    Click Panel    Client Info
+    Manually Set Value In Form Of Payment    TP    135412345678911    11/24
+    Comment    Click Panel    Air Fare
+    Comment    Populate Fare Tab With Default Values    Fare Quote 1    fare_restriction_default=true
+    Comment    Populate Air Fare Panel Using Default Values For APAC
+    Click Finish PNR
+    Click Other Services
+    #Add Other Service    #    #Other Service (Non GST)    #Other Service (Visa Processing)    #Other Service (Insurance)
+    Select Product    VISA PROCESSING    #24 EMERGENCY SERVICE FEE    #VISA PROCESSING    #INSURANCE
+    Select Vendor    CWT VISA    #CWT    #CWT VISA    #CWT
+    Click Continue In Other Svcs
+    Populate Visa Processing Panel Details    VISA VENDOR    VISA COUNTRY    Other    Single    Days    15
+    ...    Express    15    ${EMPTY}
+    Verify FOP Details Are Correct    Credit Card (CX)    TP    ************8911    11    2024
+    Unmask Credit Card Number
+    Verify FOP Details Are Correct    Credit Card (CX)    TP    XXXXXXXXXXX8911    11    2024
+    Select Form Of Payment (FOP)    Credit Card (CC)    AX    378282246310005    11    2023
+    Click Finish PNR    panel=Other Svcs
+
+[HK][AB][OS][1st] Verify That FOP Details Are Pre-populated When FOP is AX (INSURANCE)
+    [Tags]    us875    hk
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Client Info    Air Fare
+    Click Panel    Client Info
+    Manually Set Value In Form Of Payment    AX    378282246310005    10/23
+    Click Panel    Air Fare
+    Populate Fare Tab With Default Values    Fare Quote 1    fare_restriction_default=true
+    Click Finish PNR
+    Click Other Services
+    #Add Other Service    #    #Other Service (Non GST)    #Other Service (Visa Processing)    #Other Service (Insurance)
+    Select Product    INSURANCE    #24 EMERGENCY SERVICE FEE    #VISA PROCESSING    #INSURANCE
+    Select Vendor    CWT    #CWT    #CWT VISA    #CWT
+    Click Continue In Other Svcs
+    Verify FOP Details Are Correct    Credit Card (CC)    AX    ************0005    10    2023
+    Unmask Credit Card Number
+    Verify FOP Details Are Correct    Credit Card (CC)    AX    XXXXXXXXXXX0005    10    2023
+    Select Form Of Payment (FOP)    Credit Card (CC)    TP    371449635398431    09    2022
+    Click Tab In Other Services Panel    Insurance
+    Select Plan Selected    Family Budget Plan
+    Click Finish PNR    panel=Other Svcs
+
+[HK][OS][2nd] Verify That FOP Details Are Pre-populated When FOP is AX (WITHOUT GST)
+    [Tags]    us875    hk
+    Click Other Services
+    #Add Other Service    #    #Other Service (Non GST)    #Other Service (Visa Processing)    #Other Service (Insurance)
+    Select Product    24 EMERGENCY SERVICE FEE    #24 EMERGENCY SERVICE FEE    #VISA PROCESSING    #INSURANCE
+    Select Vendor    CWT    #CWT    #CWT VISA    #CWT
+    Click Continue In Other Svcs
+    Verify FOP Details Are Correct    Credit Card (CC)    AX    ************0005    10    2023
+    Unmask Credit Card Number
+    Verify FOP Details Are Correct    Credit Card (CC)    AX    XXXXXXXXXXX0005    10    2023
+    Select Form Of Payment (FOP)    Credit Card (CC)    VI    4444333322221111    08    2020
+    Click Finish PNR    panel=Other Svcs
+
+[SG][NB][OS] Verify That FOP Details Are Pre-populated When FOP is VI (GST)
+    [Tags]    us875    sg
+    Open Power Express And Retrieve Profile    ${version}    Test    uexr493    en-GB    erepolidoru    APAC QA
+    Handle Generic Window Popup
+    Select GDS    Amadeus
+    Create New Booking With One Way Flight Using Default Values    APAC SYN CORP ¦ APAC SG OS AUTOMATION    BEAR    SGOTHERS    SINMNL/ASQ    ${EMPTY}    Air Fare
+    Populate All Panels (Except Given Panels If Any)    Air Fare    Client Info
+    Click Panel    Client Info
+    Manually Set Value In Form Of Payment    VI    4111111111111111    12/25
+    Click Panel    Air Fare
+    Populate Fare Tab With Default Values    Fare Quote 1    fare_restriction_default=true
+    Populate Air Fare Panel Using Default Values For APAC
+    Click Finish PNR
+    Click Other Services
+    #Add Other Service (SG)    #    #GST    #W/O GST    #VISA COST    #VISA HANDLING
+    Select Product    Despatch Charge    #Despatch Charge    #Air Penalty Fee    Visa Cost    Visa Handling Fee
+    Select Vendor    DESPATCH DEPARTMENT    #DESPATCH DEPARTMENT    #CARLSON WAGONLIT TRAVEL    VISA DEPARTMENT    Carlson Wagonlit GST
+    Click Continue In Other Svcs
+    Verify FOP Details Are Correct    Credit Card (CC)    VI    ************1111    12    2025
+    Unmask Credit Card Number
+    Verify FOP Details Are Correct    Credit Card (CC)    VI    XXXXXXXXXXXX1111    12    2025
+    Select Form Of Payment (FOP)    Credit Card (CC)    DC    5424000000000010    12    2024
+    Click Finish PNR    panel=Other Svcs
+
+[SG][AB][OS] Verify That FOP Details Are Pre-populated When FOP is CA (WITHOUT GST)
+    [Tags]    us875    sg
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Client Info    Air Fare
+    Click Panel    Client Info
+    Manually Set Value In Form Of Payment    CA    5499830000000015    11/24
+    Click Panel    Air Fare
+    Populate Fare Tab With Default Values    Fare Quote 1    fare_restriction_default=true
+    Populate Air Fare Panel Using Default Values For APAC
+    Click Finish PNR
+    Click Other Services
+    #Add Other Service (SG)    #    #GST    #W/O GST    #VISA COST    #VISA HANDLING
+    Select Product    Airline Penalty Fee    #Despatch Charge    #Air Penalty Fee    Visa Cost    Visa Handling Fee
+    Select Vendor    CARLSON WAGONLIT TRAVEL    #DESPATCH DEPARTMENT    #CARLSON WAGONLIT TRAVEL    VISA DEPARTMENT    Carlson Wagonlit GST
+    Click Continue In Other Svcs
+    Verify FOP Details Are Correct    Credit Card (CC)    CA    ************0015    11    2024
+    Unmask Credit Card Number
+    Verify FOP Details Are Correct    Credit Card (CC)    CA    XXXXXXXXXXXX0015    11    2024
+    Select Form Of Payment (FOP)    Credit Card (CC)    DC    135412345678911    11    2023
+    Click Finish PNR    panel=Other Svcs
+
+[SG][AB][OS][1st] Verify That FOP Details Are Pre-populated When FOP is AX (VISA COST)
+    [Tags]    us875    sg
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Client Info    Air Fare
+    Click Panel    Client Info
+    Manually Set Value In Form Of Payment    AX    378282246310005    10/23
+    Click Panel    Air Fare
+    Populate Fare Tab With Default Values    Fare Quote 1    fare_restriction_default=true
+    Populate Air Fare Panel Using Default Values For APAC
+    Click Finish PNR
+    Click Other Services
+    #Add Other Service (SG)    #    #GST    #W/O GST    #VISA COST    #VISA HANDLING
+    Select Product    Visa Cost    #Despatch Charge    #Air Penalty Fee    Visa Cost    Visa Handling Fee
+    Select Vendor    VISA DEPARTMENT    #DESPATCH DEPARTMENT    #CARLSON WAGONLIT TRAVEL    VISA DEPARTMENT    Carlson Wagonlit GST
+    Click Continue In Other Svcs
+    Verify FOP Details Are Correct    Credit Card (CC)    AX    ************0005    11    2023
+    Unmask Credit Card Number
+    Verify FOP Details Are Correct    Credit Card (CC)    AX    XXXXXXXXXXX0015    11    2023
+    Select Form Of Payment (FOP)    Credit Card (CX)    VI    4444333322221111    10    2022
+    Populate Visa Processing Panel Details    VISA VENDOR    VISA COUNTRY    Other    Single    Day(s)    15
+    ...    Express    15    ${EMPTY}
+    Click Finish PNR    panel=Other Svcs
+
+[SG][OS][2nd] Verify That FOP Details Are Pre-populated When FOP is AX (VISA HANDLING)
+    [Tags]    us875    sg
+    Click Other Services
+    #Add Other Service (SG)    #    #GST    #W/O GST    #VISA COST    #VISA HANDLING
+    Select Product    Visa Handling Fee    #Despatch Charge    #Air Penalty Fee    #Visa Cost    #Visa Handling Fee
+    Select Vendor    Carlson Wagonlit GST    #DESPATCH DEPARTMENT    #CARLSON WAGONLIT TRAVEL    #ISA DEPARTMENT    #Carlson Wagonlit GST
+    Click Continue In Other Svcs
+    Verify FOP Details Are Correct    Credit Card (CX)    AX    ************0005    11    2023
+    Unmask Credit Card Number
+    Verify FOP Details Are Correct    Credit Card (CX)    AX    XXXXXXXXXXX0005    11    2023
+    Select Form Of Payment (FOP)    Credit Card (CC)    VI    4444333322221111    09    2022
+    Populate Visa Processing Panel Details    VISA VENDOR    VISA COUNTRY    Other    Single    Day(s)    15
+    ...    Express    15    ${EMPTY}
+    Click Finish PNR    panel=Other Svcs
+
+*** Keywords ***

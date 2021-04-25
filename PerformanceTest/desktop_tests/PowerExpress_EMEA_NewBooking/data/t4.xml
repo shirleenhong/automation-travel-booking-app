@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<authMethods xmlns="http://citrix.com/delivery-services/webAPI/2-6/authMethods">
+
+    <method name="ExplicitForms" url="ExplicitAuth/Login"/>
+
+    <method name="CitrixAuth" url="CitrixAuth/Login"/>
+
+</authMethods>

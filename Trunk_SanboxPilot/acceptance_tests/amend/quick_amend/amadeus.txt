@@ -1,0 +1,67 @@
+*** Settings ***
+Force Tags        amadeus    emea
+Resource          ../amend_verification.txt
+Resource          ../../delivery/delivery_verification.txt
+
+*** Test Cases ***
+[NB DE] Verify that quick amend workflow is available for PNRs with CC declined ticketing remark
+    [Tags]    us4073
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    de-DE    AutomationDE    # DE AUTO AMADEUS
+    Select GDS    Amadeus
+    Create New Booking With Round Trip Air Flight Using Default Values    Amadeus DE 15 - Auto ¦ US2447    AutoOneFiveOneTwo    OptimizeTrvlrFive    LHRCDG/AAF    SS1Y1    ${EMPTY}
+    ...    CDGLHR/AAF    SS1Y1    FXB    ${EMPTY}    Air Fare    Cust Refs
+    ...    Delivery    Client Info
+    Click Panel    Client Info
+    Untick Not Known At Time Of Booking For Form Of Payment
+    Manually Set Value In Form Of Payment    VI    4111111111111111    1221
+    Click Panel    Air Fare
+    Populate Fare Tab With Default Values    Fare 1
+    Click Panel    Delivery
+    Populate Delivery Panel Without On Hold Reason
+    Verify On Hold Booking Reasons Are All Unchecked
+    Click Finish PNR    ${EMPTY}    60
+    Enter Specific Command On Native GDS    RT${current_pnr}    RML TKT- TICKETING UNABLE - CC DECLINED OR NEED MANUAL APPROVAL    RFCWTPTEST    ER
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTR    3
+    Verify Specific Line Is Written In The PNR    TKT- TICKETING UNABLE - CC DECLINED OR NEED MANUAL
+
+[QA DE] Verify that quick amend workflow is available for PNRs with CC declined ticketing remark
+    [Tags]    us4073
+    Retrieve PNR via Existing Bookings Tab    Amadeus DE 15 - Auto ¦ US2447    AutoOneFiveOneTwo    OptimizeTrvlrFive    ${current_pnr}
+    Verify Quick Amend Is Visible
+    Verify Quick Amend Spiel Is Visible    Auf Grund einer fehlenden Kreditkarte, könnte diese Buchung nicht abgeschlossen werden. Sparen sie Zeit und benutzen sie den ‚Quick-Amend‘ Knopf um fehlende Daten einzugeben und die Buchung abzuschließen!
+    Delete Current Specific Log File    SyExPerfLog
+    Click Quick Amend With Timestamp
+    Verify Actual Panel Equals To Expected Panel    CLIENT INFO    CUST REFS    DELIVERY    RECAP
+    Click Panel    Client Info
+    Verify Cust Refs Not Known Checkbox Is Unticked And Disabled
+    Comment    Verify Default Form Of Payment    Cash
+    Manually Set Value In Form Of Payment    VI    4111111111111111    1221
+    Click Panel    Cust Refs
+    Verify Cust Refs Not Known Checkbox Is Unticked And Disabled
+    Click Panel    Delivery
+    Verify Reasons For Placing Booking On Hold Section In Delivery Panel Is Disabled
+    Populate Delivery Panel Without On Hold Reason
+    Click Finish PNR    Quick Amend
+    Re-Execute Quick Amend If Simultaneous Change Error Is Displayed
+    Verify Entry Is Present In Perf Log File    BusinessFunctionMetric.AmendBookingAddNewFOP
+    Verify Entry Is Present In Application Usage DB    AmendBookingAddNewFOP    ${exp_OverallTransactionStartTime}
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Quick Amend
+    Retrieve PNR via Existing Bookings Tab    Amadeus DE 15 - Auto ¦ US2447    AutoOneFiveOneTwo    OptimizeTrvlrFive    ${current_pnr}
+    Verify Quick Amend Is Visible
+    Verify Quick Amend Spiel Is Visible    Auf Grund einer fehlenden Kreditkarte, könnte diese Buchung nicht abgeschlossen werden. Sparen sie Zeit und benutzen sie den ‚Quick-Amend‘ Knopf um fehlende Daten einzugeben und die Buchung abzuschließen!
+    Delete Current Specific Log File    SyExPerfLog
+    Click Quick Amend With Timestamp
+    Verify Actual Panel Equals To Expected Panel    CLIENT INFO    CUST REFS    DELIVERY    RECAP
+    Click Panel    Client Info
+    Verify Cust Refs Not Known Checkbox Is Unticked And Disabled
+    Verify Default Form Of Payment    Cash
+    Manually Set Value In Form Of Payment    VI    4111111111111111    1221
+    Click Panel    Cust Refs
+    Verify Cust Refs Not Known Checkbox Is Unticked And Disabled
+    Click Panel    Delivery
+    Verify Reasons For Placing Booking On Hold Section In Delivery Panel Is Disabled
+    Populate Delivery Panel Without On Hold Reason
+    Click Finish PNR    Quick Amend

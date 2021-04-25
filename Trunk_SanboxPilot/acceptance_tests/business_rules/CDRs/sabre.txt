@@ -1,0 +1,56 @@
+*** Settings ***
+Force Tags        sabre
+Resource          ../business_rules_verification.txt
+
+*** Test Cases ***
+[NB] Verify That Static And Transactional CDRs Are Enabled Or Disabled Based On Rules
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    en-US    AutomationUS    US AUTO SABRE
+    Select GDS    Sabre
+    Set Client And Traveler    Sabre Legacy - Auto ¦ US508    RULER    FREE
+    Click New Booking
+    Click Panel    Cust Refs
+    Tick Show All Client Defined References
+    Verify CDR Is Enabled And Text Value is Correct    Matrix DP Code    N123
+    Verify CDR Is Disabled And Text Value Is Correct    SU-Department Name    DEP
+    Click Panel    Client Info
+    Populate Client Info Panel With Default Values
+    Click Update PNR
+    Book Flight X Months From Now    MSPORD‡AA    01Y1    WPRQ‡S1    6    1
+    Click Read Booking
+    Click Panel    Cust Refs
+    Tick Show All Client Defined References
+    Verify CDR Is Enabled And Text Value is Correct    Matrix DP Code    N123
+    Verify CDR Is Disabled And Text Value Is Correct    SU-Department Name    DEP
+    Populate All Panels (Except Given Panels If Any)    Cust Refs
+    Click Finish PNR
+    Retrieve PNR Details From Sabre Red    ${current_pnr}
+    Verify Specific Line Is Written In The PNR    X/-DP/N123
+    Verify Specific Line Is Written In The PNR    X/-SDN/DEP
+
+[AB] Verify That Static And Transactional CDRs Are Enabled Or Disabled Based On Rules
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Click Panel    Cust Refs
+    Tick Show All Client Defined References
+    Verify CDR Is Disabled And Text Value Is Correct    Matrix DP Code    N123
+    Verify CDR Is Enabled And Text Value is Correct    SU-Department Name    AMEND
+    Populate All Panels (Except Given Panels If Any)    Cust Refs
+    Click Finish PNR
+    Re-Execute Amend Static And Transactional CDRs If Simultaneous Change Error Is Displayed
+    Retrieve PNR Details From Sabre Red    ${current_pnr}    *X/
+    Verify Specific Line Is Written In The PNR    X/-DP/N123
+    Verify Specific Line Is Written In The PNR    X/-SDN/AMEND
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Amend Static And Transactional CDRs
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Click Panel    Cust Refs
+    Tick Show All Client Defined References
+    Verify CDR Is Disabled And Text Value Is Correct    Matrix DP Code    N123
+    Verify CDR Is Enabled And Text Value is Correct    SU-Department Name    AMEND
+    Populate All Panels (Except Given Panels If Any)    Cust Refs
+    Click Finish PNR

@@ -1,0 +1,43 @@
+*** Settings ***
+Force Tags        sabre
+Resource          ../complete_verification.txt
+
+*** Test Cases ***
+[NB] Verify That Contact Is Retained After Clear All Same Booking New Traveller If Contact Is Traveller With Arranger
+    [Tags]    us1426    noram
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    en-US    AutomationUS    US AUTO SABRE
+    Select GDS    Sabre
+    Set Client And Traveler    Sabre 15 - Auto ¦ US1426    AutoArrangerOneFifteenEight    NoramArrangerFive
+    Untick Traveller Checkbox
+    Get Arranger Details
+    Set Client And Traveler    Sabre 15 - Auto ¦ US1426    AutoOneFiveEight    NoramTrvlrFour
+    Click New Booking
+    Update PNR for EN or GB
+    Book Flight X Months From Now    LAXDEN‡AA    01Y1    WPRQ    6
+    Click Read Booking
+    Click Panel    Air Fare
+    Get Routing Value    Fare 1
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Click Clear All Same Booking New Traveller
+    Verify Arranger Remains The Same After Clear All Same Booking New Traveller
+    Set Client And Traveler    Sabre 15 - Auto ¦ US1426    AutoOneFiveEight    NoramTrvlrFour
+    Click New Booking
+    Retrieve PNR Details From Sabre Red    ${EMPTY}    *I    0
+    Verify Air Segment Is Retained    LAXDEN
+    Click Clear All
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Get Arranger Details
+    ${arranger_lastname} =    Get Control Text Value    ${contact_last_name}
+    ${arranger_firstname} =    Get Control Text Value    ${contact_first_name}
+    Set Test Variable    ${arranger_lastname}
+    Set Test Variable    ${arranger_firstname}
+
+Click Clear All Same Booking New Traveller
+    Click Control Button    ${btn_clearAll}    ${title_power_express}
+    Wait Until Control Object Is Visible    ${same_booking_new_traveller}    ${clear_all}
+    Click Control Button    ${same_booking_new_traveller}    ${clear_all}
+    Click Control Button    [NAME:btnOKButton]    ${clear_all}
+    Wait Until Progress Info is Completed

@@ -1,0 +1,9 @@
+GET /Citrix/PilotWeb/ HTTP/1.1
+Accept: text/html, application/xhtml+xml, */*
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko
+Accept-Encoding: gzip, deflate
+DNT: 1
+Host: emea.cwtdesktop.pilot.int.carlsonwagonlit.com
+Connection: Keep-Alive
+Accept-Language: en-US
+

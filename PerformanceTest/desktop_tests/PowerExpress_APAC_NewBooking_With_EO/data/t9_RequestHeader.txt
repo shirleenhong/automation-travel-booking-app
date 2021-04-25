@@ -1,0 +1,15 @@
+POST /Citrix/InternalWeb/ExplicitAuth/AllowSelfServiceAccountManagement HTTP/1.1
+Csrf-Token: 9D80BF732A2A03FDA92A705B86EE7FEE
+Accept: application/xml, text/xml, */*; q=0.01
+X-Citrix-IsUsingHTTPS: Yes
+X-Requested-With: XMLHttpRequest
+Referer: https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/
+Accept-Language: en-US
+Accept-Encoding: gzip, deflate
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko
+Host: apac.cwtdesktop.uat.int.carlsonwagonlit.com
+Content-Length: 0
+Connection: Keep-Alive
+Cache-Control: no-cache
+Cookie: CsrfToken=9D80BF732A2A03FDA92A705B86EE7FEE; CtxsPluginAssistantState=Done; CtxsDeviceId=WR_ffKxo62rt83L55RYt; CtxsAuthId=A74F2D9E6E4F299D306DD9988E104CA0; ASP.NET_SessionId=i4o4yxu1tapv0kggw43g5jwe
+

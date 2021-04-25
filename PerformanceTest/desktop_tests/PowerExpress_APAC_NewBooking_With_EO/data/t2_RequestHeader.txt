@@ -1,0 +1,13 @@
+POST /Citrix/InternalWeb/Home/Configuration HTTP/1.1
+X-Citrix-IsUsingHTTPS: Yes
+Accept: application/xml, text/xml, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+Referer: https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/
+Accept-Language: en-US
+Accept-Encoding: gzip, deflate
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko
+Host: apac.cwtdesktop.uat.int.carlsonwagonlit.com
+Content-Length: 0
+Connection: Keep-Alive
+Cache-Control: no-cache
+

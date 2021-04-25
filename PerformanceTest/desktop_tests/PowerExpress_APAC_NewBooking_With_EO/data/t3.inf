@@ -1,0 +1,11 @@
+[t3]
+FileName1=t3.txt
+URL1=https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/Resources/List
+Total=1
+RequestHeaderFile=t3_RequestHeader.txt
+RequestBodyFile=t3_RequestBody.txt
+ResponseHeaderFile=t3_ResponseHeader.txt
+ContentType=text/plain
+SnapshotXmlFile=snapshot_3.xml
+[ProtocolInfo]
+ProtocolId=QTWeb

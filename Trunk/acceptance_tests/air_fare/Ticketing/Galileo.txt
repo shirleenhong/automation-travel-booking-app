@@ -1,0 +1,283 @@
+*** Settings ***
+Resource          ../air_fare_verification.txt
+Resource          ../../pspt_and_visa/pspt_and_visa_verification.txt
+Resource          ../../../resources/panels/pspt_and_visa.txt
+
+*** Test Cases ***
+Test 1
+    [Documentation]    7TL9GI > 1255942429220
+    Comment    Set Suite Variable    ${current_pnr}    APPKNO
+    Comment    Open Power Express And Retrieve Profile    ${version}    ${syex_env}    U003WXR    en-GB    AutomationUK
+    ...    UK Head Office Test Team
+    Select GDS    Galileo
+    Set Client And Traveler    UK STAFF TEST ¦ UK-STAFF TEST    Brignell    Katherine
+    Select PCC/CompanyProfile/TravellerProfile    1G/UT8/TEST/BRIGNELL KATH76899930
+    Set Client And Traveler    UK STAFF TEST ¦ UK-STAFF TEST    Brignell    Iain
+    Select PCC/CompanyProfile/TravellerProfile    1G/YW9/STAFF/BRIGNELL IAIN71485053
+    Click Tab In Contact Details    Contact
+    Select Client Account Value    208154 ¦ CWT BUSINESS STAFF ACCOUNT ¦ UK-STAFF TEST
+    Click New Booking
+    Book Flight X Months From Now    LHRMRS/BA    01N1    \    4    1
+    Book Flight X Months From Now    MRSLHR/BA    01N1    FQ    4    2
+    Click Panel    Cust Refs
+    Populate Cust Refs Panel With Default Values
+    Click Panel    Client Info
+    Select Form Of Payment    NonRef
+    Click Update PNR
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Client Info    Delivery
+    Click Panel    Client Fees
+    Select Fee From Dropdown    Oceaneering product type    UK Requisition number AIR ONLY
+    Click Panel    Recap
+    Click Finish PNR
+    Click Clear All
+    Retrieve PNR    ${current_pnr}
+    Issue Ticket
+    Get Ticket Information    Ticket Number    \    ${current_pnr}
+    Click Amend Booking
+    Change Booked Air Class Of Specfied Segment    ALL    K
+    Click Travelport Menu Item    Tools    Rapid Reprice
+    Wait Until Rapid Reprice Window Title Is    Rapid Reprice Exchange
+    Select Rapid Reprice Option    Price as booked
+    Click Rapid Reprice Button    Continue
+    Wait Until Rapid Reprice Window Title Is    Rapid Reprice Results All Passengers
+    Enter Text In Rapid Reprice Textbox    CWTPTEST
+    Click Rapid Reprice Button    Continue
+    Wait Until Rapid Reprice Dialog Box Exist    Exchange Issue Confirmation
+    Click Rapid Reprice Button    Issue Now
+    Comment    Win Wait    Rapid Reprice Exchange    \    10
+    Comment    Win Activate    Rapid Reprice Exchange
+    Comment    Win Wait Active    Rapid Reprice Exchange    \    10
+    Comment    Control Click    Rapid Reprice Exchange    ${EMPTY}    [CLASS:Button; INSTANCE:12]
+    Comment    Click Rapid Price Button    Continue
+    Comment    Win Wait    Rapid Reprice Results    \    60
+    Comment    Win Activate    Rapid Reprice Results
+    Comment    Win Wait Active    Rapid Reprice Results
+    Comment    Control Set Text    Rapid Reprice Results    ${EMPTY}    [CLASS:Edit; INSTANCE:1]    cwtptest
+    Comment    Click Rapid Price Button    Continue
+    Comment    Comment    Control Click    Rapid Reprice Results    ${EMPTY}    [CLASS:Button; INSTANCE:1]
+    Comment    Comment    Click Rapid Price Button    Continue
+    Comment    Comment    Comment    Click Rapid Price Button    Cancel
+    Comment    Comment    Comment    Comment    Populate All Panels (Except Given Panels If Any)    Client Info    Air Fare
+    ...    APIS/SFPD    Recap    Client Fees
+    Comment    Comment    Comment    Comment    Click Panel    Client Fees
+    Comment    Comment    Comment    Comment    Select Fee From Dropdown    UK Virtual Card Payment Fee    No Virtual Card Payment
+    Comment    Comment    Comment    Comment    Select Fee From Dropdown    Oceaneering product type    UK Requisition number AIR ONLY
+    Comment    Comment    Comment    Comment    Click Finish PNR
+    [Teardown]
+
+Workspace
+    Comment    Set Suite Variable    ${gds_switch}    galileo
+    Comment    Set Suite Variable    ${locale}    en-GB
+    Open Power Express And Retrieve Profile    ${version}    ${syex_env}    U003WXR    en-GB    AutomationUK    UK Head Office Test Team
+    Select GDS    Galileo
+    Set Client And Traveler    UK STAFF TEST ¦ UK-STAFF TEST    Brignell    Iain
+    Select PCC/CompanyProfile/TravellerProfile    1G/YW9/STAFF/BRIGNELL IAIN71485053
+    Select Client Account Value    100249 ¦ TRAVEL ACCOUNT ¦ UK-STAFF TEST
+    Click New Booking
+    Book Flight X Months From Now    LHRCDG/BA    01Y1    \    4    6
+    Book Flight X Months From Now    CDGLHR/BA    01Y1    FQ    4    7
+    Click Panel    Cust Refs
+    Populate Cust Refs Panel With Default Values
+    Click Panel    Client Info
+    Select Form Of Payment    NonRef
+    Click Update PNR
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Client Info    Delivery    Pspt and Visa    Pspt and Visa
+    Click Panel    Pspt and Visa
+    Select Is Doc Valid    Yes    0
+    Select Is Doc Valid    Yes    1
+    Tick Use Document    1
+    Tick Use Document    2
+    Select Visa Requirement    Not Required    0
+    Select Visa Requirement    Not Required    1
+    Click Panel    Recap
+    Click Finish PNR
+    Retrieve PNR Details From Travelport
+    Click Clear All
+    Retrieve PNR    ${current_pnr}
+    Issue Ticket
+    Get Ticket Information    Ticket Number    \    ${current_pnr}
+    Void A Ticket Number    ${ticket_info}
+    Get Ticket Information    Status    ${ticket_info}    ${current_pnr}
+    Retrieve PNR Details From Travelport
+
+Test 2
+    Comment    Set Suite Variable    ${gds_switch}    galileo
+    Comment    Set Suite Variable    ${locale}    en-GB
+    Open Power Express And Retrieve Profile    ${version}    ${syex_env}    U003WXR    en-GB    AutomationUK    UK Head Office Test Team
+    Select GDS    Galileo
+    Set Client And Traveler    UK STAFF TEST ¦ UK-STAFF TEST    Brignell    Iain
+    Select PCC/CompanyProfile/TravellerProfile    1G/YW9/STAFF/BRIGNELL IAIN71485053
+    Select Client Account Value    100249 ¦ TRAVEL ACCOUNT ¦ UK-STAFF TEST
+    Click New Booking
+    Book Flight X Months From Now    LHRCDG/BA    01Y1    \    4    6
+    Book Flight X Months From Now    CDGLHR/BA    01Y1    FQ    4    7
+    Click Panel    Cust Refs
+    Populate Cust Refs Panel With Default Values
+    Click Panel    Client Info
+    Select Form Of Payment    NonRef
+    Click Update PNR
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Client Info    Delivery    Pspt and Visa    Pspt and Visa
+    Click Panel    Pspt and Visa
+    Select Is Doc Valid    Yes    0
+    Select Is Doc Valid    Yes    1
+    Tick Use Document    1
+    Tick Use Document    2
+    Select Visa Requirement    Not Required    0
+    Select Visa Requirement    Not Required    1
+    Click Panel    Recap
+    Click Finish PNR
+    Retrieve PNR Details From Travelport
+    Click Clear All
+    Retrieve PNR    ${current_pnr}
+    Issue Ticket
+    Get Ticket Information    Ticket Number    \    ${current_pnr}
+    Void A Ticket Number    ${ticket_info}
+    Get Ticket Information    Status    ${ticket_info}    ${current_pnr}
+    Retrieve PNR Details From Travelport
+
+Test 3
+    Comment    Set Suite Variable    ${gds_switch}    galileo
+    Comment    Set Suite Variable    ${locale}    en-GB
+    Open Power Express And Retrieve Profile    ${version}    ${syex_env}    U003WXR    en-GB    AutomationUK    UK Head Office Test Team
+    Select GDS    Galileo
+    Set Client And Traveler    UK STAFF TEST ¦ UK-STAFF TEST    Brignell    Iain
+    Select PCC/CompanyProfile/TravellerProfile    1G/YW9/STAFF/BRIGNELL IAIN71485053
+    Select Client Account Value    100249 ¦ TRAVEL ACCOUNT ¦ UK-STAFF TEST
+    Click New Booking
+    Book Flight X Months From Now    LHRCDG/BA    01Y1    \    4    6
+    Book Flight X Months From Now    CDGLHR/BA    01Y1    FQ    4    7
+    Click Panel    Cust Refs
+    Populate Cust Refs Panel With Default Values
+    Click Panel    Client Info
+    Select Form Of Payment    NonRef
+    Click Update PNR
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Client Info    Delivery    Pspt and Visa    Pspt and Visa
+    Click Panel    Pspt and Visa
+    Select Is Doc Valid    Yes    0
+    Select Is Doc Valid    Yes    1
+    Tick Use Document    1
+    Tick Use Document    2
+    Select Visa Requirement    Not Required    0
+    Select Visa Requirement    Not Required    1
+    Click Panel    Recap
+    Click Finish PNR
+    Retrieve PNR Details From Travelport
+    Click Clear All
+    Retrieve PNR    ${current_pnr}
+    Issue Ticket
+    Get Ticket Information    Ticket Number    \    ${current_pnr}
+    Void A Ticket Number    ${ticket_info}
+    Get Ticket Information    Status    ${ticket_info}    ${current_pnr}
+    Retrieve PNR Details From Travelport
+
+2 tickets
+    Set Suite Variable    ${gds_switch}    galileo
+    Set Suite Variable    ${locale}    en-GB
+    Comment    Set Suite Variable    ${current_pnr}    7TL9GI
+    Comment    Open Power Express And Retrieve Profile    ${version}    ${syex_env}    U003WXR    en-GB    AutomationUK
+    ...    UK Head Office Test Team
+    Comment    Select GDS    Galileo
+    Comment    Set Client And Traveler    UK STAFF TEST ¦ UK-STAFF TEST    Brignell    Katherine
+    Comment    Select PCC/CompanyProfile/TravellerProfile    1G/UT8/TEST/BRIGNELL KATH76899930
+    Comment    Set Client And Traveler    UK STAFF TEST ¦ UK-STAFF TEST    Brignell    Iain
+    Comment    Select PCC/CompanyProfile/TravellerProfile    1G/YW9/STAFF/BRIGNELL IAIN71485053
+    Comment    Click Tab In Contact Details    Contact
+    Comment    Select Client Account Value    208154 ¦ CWT BUSINESS STAFF ACCOUNT ¦ UK-STAFF TEST
+    Comment    Click New Booking
+    Comment    Book Flight X Months From Now    LHRMRS/BA    01N1    FQ    4    1
+    Comment    Book Flight X Months From Now    MRSLHR/BA    01N1    FQ    4    2
+    Click Panel    Cust Refs
+    Populate Cust Refs Panel With Default Values
+    Click Panel    Client Info
+    Select Form Of Payment    NonRef
+    Click Update PNR
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Client Info    Delivery
+    Click Panel    Client Fees
+    Select Fee From Dropdown    Oceaneering product type    UK Requisition number AIR ONLY
+    Click Panel    Recap
+    Click Finish PNR
+    Click Clear All
+    Retrieve PNR    ${current_pnr}
+    Issue Ticket
+    Comment    Get Ticket Information    Ticket Number    \    ${current_pnr}
+    Comment    Click Amend Booking
+    Comment    Change Booked Air Class Of Specfied Segment    ALL    K
+    Comment    Activate Travelport Terminal Window
+    Comment    Click Control
+
+*** Keywords ***
+Get Ticket Number
+    Get Data From GDS Screen    *HTE    True
+    Should Not Contain    ${gds_screen_data}    TICKETING RECORD NOT FOUND    UNABLE TO PROCESS ELECTRONIC TICKET DISPLAY
+    ${raw_ticket_number}=    Get String Between Strings    ${gds_screen_data}    TKT:    NAME:
+    ${raw_ticket_number}=    Replace String    ${raw_ticket_number}    ${SPACE}    ${EMPTY}
+    ${ticket_number}=    Set Variable    ${raw_ticket_number}
+    Set Test Variable    ${ticket_number}
+    Log    ${ticket_number}
+    [Return]    ${ticket_number}
+
+Issue Ticket
+    [Documentation]    LINKAGE/OPTIONS CHANGED - UPDATE SDPT
+    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Select GDS    Galileo
+    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Enter GDS Command    R.CWTPTEST
+    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Enter GDS Command    TKPDTDAD
+    ${screen_data}=    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Get Data From GDS Screen    \    True
+    ${error_msg_line}=    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Get Lines Containing String    ${screen_data}    ERROR 3088 - REQUESTED FILED FARE EXPIRED
+    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Should Not Be Equal    ${error_msg_line}    ERROR 3088 - REQUESTED FILED FARE EXPIRED    msg=Unable to issue ticket. Filed fare is not valid anymore.
+    ${error_msg_line}=    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Get Lines Containing String    ${screen_data}    ERROR 4366 - FORM OF PAYMENT REQUIRED
+    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Should Not Be Equal    ${error_msg_line}    ERROR 4366 - FORM OF PAYMENT REQUIRED    msg=Unable to issue ticket. FoP is required.
+    ${error_msg_line}=    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Get Lines Containing String    ${screen_data}    LINKAGE/OPTIONS CHANGED - UPDATE SDPT
+    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Should Not Be Equal    ${error_msg_line}    LINKAGE/OPTIONS CHANGED - UPDATE SDPT    msg=Unable to issue ticket. FoP is required.
+
+Get Ticket Information
+    [Arguments]    ${info_to_get}    ${ticket_number}=${EMPTY}    ${pnr}=${EMPTY}
+    Run Keyword If    '${pnr}' != "${EMPTY}"    Run Keywords    Retrieve PNR    ${pnr}
+    ...    AND    Select GDS    Galileo
+    Comment    KWs when Status is needed
+    Run Keyword If    '${info_to_get.lower()}'=='status'    Should Not Be True    '${ticket_number}'=='${EMPTY}'    msg=Ticket number is required when Status info is needed
+    ${screen_data}=    Run Keyword If    '${info_to_get.lower()}'=='status'    Get Data From GDS Screen    *HTI    True
+    ${return_value}=    Run Keyword If    '${info_to_get.lower()}'=='status'    Get Lines Containing String    ${screen_data}    ${ticket_number}
+    ${return_value}=    Run Keyword If    '${info_to_get.lower()}'=='status'    Fetch From Right    ${return_value}    /
+    ${return_value}=    Run Keyword If    '${info_to_get.lower()}'=='status'    Set Variable If    '${return_value}'!='VOID'    Active    Voided
+    Run Keyword If    '${info_to_get.lower()}'=='status'    Set Suite Variable    ${ticket_info}    ${return_value}
+    Comment    KWs when Ticket Number is needed
+    ${return_value}=    Run Keyword If    '${info_to_get.lower()}'=='ticket number'    Get Ticket Number
+    Run Keyword If    '${info_to_get.lower()}'=='ticket number'    Set Suite Variable    ${ticket_info}    ${return_value}
+    Comment    '${info_to_get.lower()}'=='ticket number' OR '${info_to_get.lower()}'=='ticket' OR '${info_to_get.lower()}'=='number'
+    Log    ${ticket_info}
+    [Return]    ${ticket_info}
+
+Void A Ticket Number
+    [Arguments]    ${ticket_number}
+    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Select GDS    Galileo
+    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Enter GDS Command    R.CWTPTEST
+    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Enter GDS Command    TRV/${ticket_number}
+    ${screen_data}=    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Get Data From GDS Screen    \    True
+    ${confirmation_line}=    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Get Lines Containing String    ${screen_data}    TICKET NO.${ticket_number}CHANGED TO VOID STATUS
+    ${ticket_voided}=    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Run Keyword And Return Status    Should Be Equal    ${confirmation_line}    TICKET NO.${ticket_number}CHANGED TO VOID STATUS
+    ...    msg=Ticket ${ticket_number} of ${current_pnr} has been voided.
+    Log    ${ticket_voided}
+    [Return]    ${ticket_voided}
+
+Confirm Valid Travel Documents
+    [Arguments]    ${use_travel_doc_index}=1
+    Select Is Doc Valid    Yes    0
+    Tick Use Document    1
+
+Select Visa Requirements
+    Select Visa Requirement    Not Required    0
+    Select Visa Requirement    Not Required    1
+
+Change Booked Air Class Of Specfied Segment
+    [Arguments]    ${target_segment}    ${new_class}
+    Run Keyword If    '${target_segment.lower()}'=='all'    Set Test Variable    ${target_segment}    A
+    Get Data From GDS Screen    @${target_segment}/${new_class}    True
+
+Verify 0106 Line Is Written In The PNR
+    ${line_to_search}=    Evaluate    'FREE TEXT-*0106*%07d' % ${client_account_number}
+    Verify Specific Line Is Written In The PNR    ${line_to_search}

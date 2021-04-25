@@ -1,0 +1,69 @@
+{
+  "hierarchy": {
+    "global": null,
+    "globalRegion": "APAC",
+    "country": "IN",
+    "team": "93",
+    "clientTopUnit": "14:2B60",
+    "clientSubUnit": "A:86BB0",
+    "clientAccount": "519"
+  },
+  "gdsCode": "1A",
+  "accounting": {
+    "serviceFees": [
+      {
+        "productDescription": "string",
+        "productCode": "string",
+        "vendorCode": "string",
+        "eoNumber": "string",
+        "passengerNumber": "string",
+        "gstAmount": "string",
+        "type": "string",
+        "entries": "string",
+        "processing": "string",
+        "country": "string",
+        "totalSellingPriceAmount": "string",
+        "totalSellingPriceWithGstAmount": "string",
+        "commissionAmount": "string",
+        "btaDescription": "string",
+        "additionalInformationDate": "string",
+        "bookingAction": "string",
+        "bookingType": "string",
+        "costAmount": "string",
+        "grossSellAmount": "string",
+        "productGstAmount": "string",
+        "productComputedGst": "string",
+        "productOth1": "string",
+        "productComputedOth1": "string",
+        "productOth2": "string",
+        "productComputedOth2": "string",
+        "merchantFeeAmount": "string",
+        "merchantFeeGstAmount": "string",
+        "merchantFeeComputedGst": "string",
+        "merchantFeeOth1": "string",
+        "merchantFeeComputedOth1": "string",
+        "merchantFeeOth2": "string",
+        "merchantFeeComputedOth2": "string",
+        "totalComputedMerchantFeeGst": "string",
+        "departOrigin": "string",
+        "departDestination": "string",
+        "departDate": "string",
+        "returnDate": "string",
+        "po": "string",
+        "gsa": "string",
+        "userID": "string",
+        "transactionDateTime": "string",
+        "formOfPayment": {
+          "type": "BTC",
+          "code": "CX4",
+          "creditCardVendorCode": "VI",
+          "creditCardNumber": "4444333322221111",
+          "creditCardExpirationDate": "1220",
+          "feeCode": "CX4"
+        }
+      }
+    ]
+  },
+  "applicationContext": "4",
+  "formOfPayment": {}
+}

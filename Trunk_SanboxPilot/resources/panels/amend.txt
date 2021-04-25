@@ -1,0 +1,33 @@
+*** Settings ***
+Resource          ../common/utilities.txt
+
+*** Keywords ***
+Populate Amend Panel With Default Values
+    Click Control Button    ${cbo_touch_type}    ${title_power_express}
+    Control Set Text    ${title_power_express}    ${EMPTY}    ${cbo_touch_type}    ${touch_type}
+    Sleep    1
+    Control Click    ${title_power_express}    ${EMPTY}    ${cbo_touch_reason}
+    Sleep    2
+    Control Set Text    ${title_power_express}    ${EMPTY}    ${cbo_touch_reason}    ${touch_reason}
+    Sleep    1
+    [Teardown]    Take Screenshot
+
+Select Touch Level
+    [Arguments]    ${touch_level}
+    Select Value From Dropdown List    [NAME:ccboTouchLevel]    ${touch_level}
+    [Teardown]    Take Screenshot
+
+Select Touch Reason
+    [Arguments]    ${touch_reason}
+    Select Value From Combobox    [NAME:ccboTouchReason]    ${touch_reason}
+
+Tick Notes Checkbox In Amend Panel
+    ${checkbox_status}    Get checkbox status    [NAME:cchkTouchReasonNotes]
+    Run Keyword If    '${checkbox_status}' == 'False'    Tick Checkbox    [NAME:cchkTouchReasonNotes]
+    ...    ELSE    Log    Notes Checkbox Already Ticked Upon Load
+    [Teardown]    Take Screenshot
+
+UnTick Notes Checkbox In Amend Panel
+    ${checkbox_status}    Get checkbox status    [NAME:cchkTouchReasonNotes]
+    Run Keyword If    '${checkbox_status}' == 'True'    Tick Checkbox    [NAME:cchkTouchReasonNotes]
+    [Teardown]    Take Screenshot

@@ -1,0 +1,7 @@
+"Method","Name","# requests","# failures","Median response time","Average response time","Min response time","Max response time","Average Content Size","Requests/s"
+"POST","/api/v1/OtherServices/build/?clientId=PowerExpress",109,109,270,414,203,2927,0,1.84
+"POST","/api/v1/OtherServices/parse/?clientId=PowerExpress",87,87,260,354,207,1884,0,1.47
+"POST","/api/v1/Remarks/build/?clientId=PowerExpress",104,0,430,644,362,2649,56,1.76
+"POST","/api/v1/Remarks/parse/?clientId=PowerExpress",105,0,380,570,311,2831,260,1.77
+"POST","/connect/token?clientId=PowerExpress",412,0,270,404,198,8004,123,6.96
+"None","Total",817,196,320,452,198,8004,102,13.80

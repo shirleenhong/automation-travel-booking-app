@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- created for Citrix Active Screen Viewer , this comment is only for the Tulip viewer  -->
+<?xml-stylesheet type="text/xsl" href="../../CitrixExt1.xsl"?>
+<ASXMLStore>
+	<Step>snapshot89</Step>
+	<ASObject>
+		<Id>1</Id>
+		<Top>14</Top>
+		<Left>14</Left>
+		<Height>705</Height>
+		<Width>1051</Width>
+	</ASObject>
+</ASXMLStore>

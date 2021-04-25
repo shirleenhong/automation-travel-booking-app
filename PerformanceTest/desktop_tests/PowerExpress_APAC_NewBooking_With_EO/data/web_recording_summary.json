@@ -1,0 +1,582 @@
+{
+  "FilterHeaders": [
+    {
+      "Header": "x-requested-with",
+      "IncludeInScript": true
+    },
+    {
+      "Header": "x-citrix-isusinghttps",
+      "IncludeInScript": true
+    },
+    {
+      "Header": "x-citrix-am-labeltypes",
+      "IncludeInScript": true
+    },
+    {
+      "Header": "x-citrix-am-credentialtypes",
+      "IncludeInScript": true
+    },
+    {
+      "Header": "user-agent",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "ua-cpu",
+      "IncludeInScript": true
+    },
+    {
+      "Header": "csrf-token",
+      "IncludeInScript": true
+    },
+    {
+      "Header": "cache-control",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "accept-language",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "accept-encoding",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "accept",
+      "IncludeInScript": false
+    }
+  ],
+  "FilterResources": [
+    {
+      "IsNonResource": true,
+      "type": "text/xml"
+    },
+    {
+      "IsNonResource": false,
+      "type": "text/plain"
+    },
+    {
+      "IsNonResource": false,
+      "type": "text/javascript"
+    },
+    {
+      "IsNonResource": true,
+      "type": "text/html"
+    },
+    {
+      "IsNonResource": false,
+      "type": "text/css"
+    },
+    {
+      "IsNonResource": false,
+      "type": "text"
+    },
+    {
+      "IsNonResource": false,
+      "type": "image/x-icon"
+    },
+    {
+      "IsNonResource": false,
+      "type": "image/png"
+    },
+    {
+      "IsNonResource": false,
+      "type": "image/jpeg"
+    },
+    {
+      "IsNonResource": false,
+      "type": "image/gif"
+    },
+    {
+      "IsNonResource": false,
+      "type": "application/xml"
+    },
+    {
+      "IsNonResource": false,
+      "type": "application/vnd.citrix.authenticateresponse-1+xml"
+    },
+    {
+      "IsNonResource": false,
+      "type": "application/octet-stream"
+    },
+    {
+      "IsNonResource": true,
+      "type": "application/json"
+    }
+  ],
+  "GeneralInfo": {
+    "BrowserVersion": "",
+    "MaxUsedConnections": 9,
+    "RecordedBrowser": "Internet Explorer",
+    "RecordingDate": "Jan-22-2019",
+    "RecordingDuration": 136766,
+    "RecordingTimeStamp": 1548145608,
+    "TotalBytesReceived": 911597,
+    "TotalBytesSent": 23683,
+    "TotalRequests": 44
+  },
+  "HostInfo": [
+    {
+      "DomainName": "microsoft.com",
+      "Domains": [
+        {
+          "HTTPVersion": "HTTP/1.1",
+          "IP": "204.79.197.200",
+          "IncludeInScript": true,
+          "Name": "ieonline.microsoft.com",
+          "Port": 443,
+          "Requests": [
+            {
+              "CompressionType": "",
+              "DataType": "application/octet-stream",
+              "DownloadTime": 62,
+              "EventId": 499,
+              "HttpStatus": 200,
+              "Size": 18176,
+              "URL": "https://ieonline.microsoft.com/iedomainsuggestions/ie11/suggestions.en-US"
+            }
+          ],
+          "SSLCipher": "ECDHE-RSA-AES256-SHA",
+          "SSLVersion": "TLS1.1"
+        },
+        {
+          "HTTPVersion": "HTTP/1.1",
+          "IP": "152.199.19.161",
+          "IncludeInScript": true,
+          "Name": "iecvlist.microsoft.com",
+          "Port": 443,
+          "Requests": [
+            {
+              "CompressionType": "gzip",
+              "DataType": "text/xml",
+              "DownloadTime": 31,
+              "EventId": 414,
+              "HttpStatus": 200,
+              "Size": 33476,
+              "URL": "https://iecvlist.microsoft.com/IE11/1479242656000/iecompatviewlist.xml"
+            }
+          ],
+          "SSLCipher": "ECDHE-RSA-AES256-SHA",
+          "SSLVersion": "TLS1.1"
+        }
+      ],
+      "IncludeInScript": true
+    },
+    {
+      "DomainName": "carlsonwagonlit.com",
+      "Domains": [
+        {
+          "HTTPVersion": "HTTP/1.1",
+          "IP": "10.180.119.5",
+          "IncludeInScript": true,
+          "Name": "apac.cwtdesktop.uat.int.carlsonwagonlit.com",
+          "Port": 443,
+          "Requests": [
+            {
+              "CompressionType": "gzip",
+              "DataType": "text/plain",
+              "DownloadTime": 187,
+              "EventId": 523,
+              "HttpStatus": 200,
+              "Size": 0,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/Authentication/Logoff"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/png",
+              "DownloadTime": 1188,
+              "EventId": 444,
+              "HttpStatus": 200,
+              "Size": 488,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/receiver/images/1x/ico_desktop_ready_482FD91B201F2A55.png"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/png",
+              "DownloadTime": 688,
+              "EventId": 439,
+              "HttpStatus": 200,
+              "Size": 8212,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/Resources/Icon/L0NpdHJpeC9JbnRlcm5hbC9yZXNvdXJjZXMvdjIvTTNkT01VZE5Sa1YwVDBkMGEwTnJZVEkzY2xoMGJrTjJRMWRTVDFsU2RUaFdTVlZCVFdaU1ZsUmlkejAtL2ltYWdl?size=128"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "application/xml",
+              "DownloadTime": 219,
+              "EventId": 437,
+              "HttpStatus": 200,
+              "Size": 172,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/ExplicitAuth/AllowSelfServiceAccountManagement"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/png",
+              "DownloadTime": 187,
+              "EventId": 435,
+              "HttpStatus": 200,
+              "Size": 568,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/receiver/images/1x/ico_search_E84E3D63D821F80D.png"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/png",
+              "DownloadTime": 203,
+              "EventId": 433,
+              "HttpStatus": 200,
+              "Size": 2029,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/receiver/images/1x/spinner_5CF0D1C8A76AAC8E.png"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "text",
+              "DownloadTime": 219,
+              "EventId": 431,
+              "HttpStatus": 200,
+              "Size": 33,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/Authentication/GetUserName"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/png",
+              "DownloadTime": 204,
+              "EventId": 429,
+              "HttpStatus": 200,
+              "Size": 454,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/receiver/images/1x/search_close_BC5A22358E58905F.png"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/png",
+              "DownloadTime": 204,
+              "EventId": 427,
+              "HttpStatus": 200,
+              "Size": 4076,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/receiver/images/1x/CitrixReceiverLogo_Home_5C24BCEC5A182425.png"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/png",
+              "DownloadTime": 203,
+              "EventId": 425,
+              "HttpStatus": 200,
+              "Size": 244,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/receiver/images/common/icon_loading_9A0623127A028FEB.png"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "application/json",
+              "DownloadTime": 500,
+              "EventId": 423,
+              "HttpStatus": 200,
+              "Size": 597,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/Resources/List"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "application/xml",
+              "DownloadTime": 1578,
+              "EventId": 421,
+              "HttpStatus": 200,
+              "Size": 184,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/ExplicitAuth/LoginAttempt"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/gif",
+              "DownloadTime": 187,
+              "EventId": 419,
+              "HttpStatus": 200,
+              "Size": 2070,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/receiver/images/1x/spinner_white_auth_button_53FD5A337A529DA7.gif"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/png",
+              "DownloadTime": 172,
+              "EventId": 362,
+              "HttpStatus": 200,
+              "Size": 5793,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/receiver/images/1x/CitrixStoreFront_auth_14B96BFF2B0A6FF8.png"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/gif",
+              "DownloadTime": 172,
+              "EventId": 360,
+              "HttpStatus": 200,
+              "Size": 954,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/receiver/images/common/authspinner_B0BCD339560CA593.gif"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "application/vnd.citrix.authenticateresponse-1+xml",
+              "DownloadTime": 188,
+              "EventId": 358,
+              "HttpStatus": 200,
+              "Size": 551,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/ExplicitAuth/Login"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "application/xml",
+              "DownloadTime": 188,
+              "EventId": 356,
+              "HttpStatus": 200,
+              "Size": 186,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/Authentication/GetAuthMethods"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "text/plain",
+              "DownloadTime": 360,
+              "EventId": 354,
+              "HttpStatus": 200,
+              "Size": 42,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/Resources/List"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/x-icon",
+              "DownloadTime": 171,
+              "EventId": 344,
+              "HttpStatus": 200,
+              "Size": 34494,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/receiver/images/common/favicon_9B19689CB70C681E.ico"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "application/xml",
+              "DownloadTime": 188,
+              "EventId": 342,
+              "HttpStatus": 200,
+              "Size": 1356,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/Home/Configuration"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/png",
+              "DownloadTime": 188,
+              "EventId": 340,
+              "HttpStatus": 200,
+              "Size": 3167,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/receiver/images/1x/viewSprite_B2F322BDCB824FAF.png"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "text/javascript",
+              "DownloadTime": 203,
+              "EventId": 338,
+              "HttpStatus": 200,
+              "Size": 172,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/custom/strings.en.js"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "text/javascript",
+              "DownloadTime": 187,
+              "EventId": 336,
+              "HttpStatus": 200,
+              "Size": 952,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/custom/script.js"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "text/javascript",
+              "DownloadTime": 172,
+              "EventId": 309,
+              "HttpStatus": 200,
+              "Size": 6780,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/receiver/js/external/jquery.dotdotdot.min_08EE54CBA886AD0A.js"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "text/javascript",
+              "DownloadTime": 188,
+              "EventId": 285,
+              "HttpStatus": 200,
+              "Size": 20771,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/receiver/js/external/hammer.v2.0.8.min_F699A1E56189259A.js"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "text/javascript",
+              "DownloadTime": 187,
+              "EventId": 270,
+              "HttpStatus": 200,
+              "Size": 280665,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/receiver/js/ctxs.webui.min_91463D1B79731411.js"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "text/javascript",
+              "DownloadTime": 188,
+              "EventId": 263,
+              "HttpStatus": 200,
+              "Size": 91345,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/receiver/js/ctxs.core.min_33B1CC992A07D57E.js"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "text/javascript",
+              "DownloadTime": 187,
+              "EventId": 261,
+              "HttpStatus": 200,
+              "Size": 1301,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/receiver/js/external/jquery.ui.touch-punch.min_94EA8262E7FD35F4.js"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "text/javascript",
+              "DownloadTime": 188,
+              "EventId": 248,
+              "HttpStatus": 200,
+              "Size": 36946,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/receiver/js/external/slick.min_FEB62CC230E2BA2A.js"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/jpeg",
+              "DownloadTime": 188,
+              "EventId": 243,
+              "HttpStatus": 200,
+              "Size": 50806,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/receiver/images/common/ReceiverFullScreenBackground_46E559C0E6B5A27B.jpg"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/png",
+              "DownloadTime": 187,
+              "EventId": 226,
+              "HttpStatus": 200,
+              "Size": 3476,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/receiver/images/1x/CitrixReceiver_WebScreen_CBE548FB8FEE049E.png"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "text/javascript",
+              "DownloadTime": 218,
+              "EventId": 216,
+              "HttpStatus": 200,
+              "Size": 37938,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/receiver/js/external/jquery-ui-v1.11.4.min_17D0B6DEFA33B91A.js"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/png",
+              "DownloadTime": 218,
+              "EventId": 214,
+              "HttpStatus": 200,
+              "Size": 432,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/receiver/images/1x/folder_template_C13BB96DEBC9F30F.png"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "text/javascript",
+              "DownloadTime": 219,
+              "EventId": 211,
+              "HttpStatus": 200,
+              "Size": 97168,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/receiver/js/external/jquery-1.12.4.min_618538B4AB9639D4.js"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/png",
+              "DownloadTime": 188,
+              "EventId": 209,
+              "HttpStatus": 200,
+              "Size": 2394,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/receiver/images/1x/actionSprite_531B7A6FF85CA98E.png"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "text/css",
+              "DownloadTime": 203,
+              "EventId": 205,
+              "HttpStatus": 200,
+              "Size": 755,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/custom/style.css"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "text/css",
+              "DownloadTime": 187,
+              "EventId": 184,
+              "HttpStatus": 200,
+              "Size": 68011,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/receiver/css/ctxs.large-ui.min_62D11B01D15101DA.css"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "text/javascript",
+              "DownloadTime": 188,
+              "EventId": 149,
+              "HttpStatus": 200,
+              "Size": 35055,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/receiver/js/external/velocity.min_B218502A82F66680.js"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/gif",
+              "DownloadTime": 187,
+              "EventId": 135,
+              "HttpStatus": 200,
+              "Size": 2223,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/receiver/images/common/wspinner@2x_26FCB0A3548E30DC.gif"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "text/html",
+              "DownloadTime": 250,
+              "EventId": 120,
+              "HttpStatus": 200,
+              "Size": 56611,
+              "URL": "https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/"
+            }
+          ],
+          "SSLCipher": "AES256-SHA",
+          "SSLVersion": "TLS"
+        }
+      ],
+      "IncludeInScript": true
+    },
+    {
+      "DomainName": "bing.com",
+      "Domains": [
+        {
+          "HTTPVersion": "HTTP/1.1",
+          "IP": "13.107.21.200",
+          "IncludeInScript": true,
+          "Name": "www.bing.com",
+          "Port": 443,
+          "Requests": [
+            {
+              "CompressionType": "",
+              "DataType": "image/x-icon",
+              "DownloadTime": 47,
+              "EventId": 307,
+              "HttpStatus": 200,
+              "Size": 237,
+              "URL": "https://www.bing.com/favicon.ico"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/x-icon",
+              "DownloadTime": 47,
+              "EventId": 223,
+              "HttpStatus": 200,
+              "Size": 237,
+              "URL": "https://www.bing.com/favicon.ico"
+            }
+          ],
+          "SSLCipher": "AES256-SHA",
+          "SSLVersion": "TLS"
+        }
+      ],
+      "IncludeInScript": false
+    }
+  ],
+  "WebSocket": {
+    "IncludeInScript": false,
+    "IsScriptIncludeWebSocket": false
+  },
+  "NumberOfCorrelations": 2
+}

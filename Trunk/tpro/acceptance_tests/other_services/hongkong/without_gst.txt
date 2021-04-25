@@ -1,0 +1,516 @@
+*** Settings ***
+Force Tags        without_gst
+Resource          ../other_services.txt
+
+*** Test Cases ***
+[NB OS] Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card CX (MC) And BTA Description Is Not Blank
+    [Tags]    us457    us724    us857    us960    us480    us686
+    ...    us624    US1182    US1196    US1162    us1456    us1620
+    Create PNR Using Credit Card As FOP    HK    True
+    Click Panel    Other Svcs
+    Select Product And Vendor    24 EMERGENCY SERVICE FEE    CWT
+    Click Service Info Tab
+    Populate Service Info Cost Details    Vendor Contact    700    800
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CX)    KBTEST/MC************4445/D0526
+    #Set Date > than Current
+    Set Date    10/20/2019
+    Verify No Error Icon Is Displayed For Additional Information Date
+    #Set Backdated Date
+    Set Date    10/20/2018
+    Verify No Error Icon Is Displayed For Additional Information Date
+    Set Description    OTHER
+    Set BTA Description    BTA description 3
+    Click Service Info Tab
+    Get Other Services Form Of Payment Details
+    Get Other Services Cost Details
+    Get Other Services Additional Information Details
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    24 EMERGENCY SERVICE FEE
+    Click Finish PNR    Handle Booking Parallel Process For Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card CX (MC) And BTA Description Is Not Blank
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details From Amadeus
+    Verify Other Services Without GST Service Accounting General Remarks    24 Emergency Service Fee    CWT    Credit Card (CX)    HK
+    Verify Other Services Credit Card Fees Accounting Remarks Are Written    1111222233334445    MC    05    2026    Credit Card (CX)    HK
+    ...    False    24 Emergency Service Fee
+    Verify BA And TA Remarks    ${uid}
+    [Teardown]
+
+[AB OS] Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card (CC) And BTA Description Is Not Blank
+    [Documentation]    Changed from Doc bank Fee to Meeting and Events product as Doc Bank Fee is covered in Doc Bank Suite
+    [Tags]    us457    us724    us960    US1196    US1162    us1462
+    ...    us1620    us1541
+    Retrieve PNR And Populate Amend Workflow    HK
+    Click Panel    Other Svcs
+    Verify Exchange Order Record Details Are Correct    HK    24 EMERGENCY SERVICE FEE    CWT    MS    ${EMPTY}    New
+    ...    is_completed_date=False
+    Select Product And Vendor    MEETING AND EVENTS    DIETHELM EVENTS
+    Populate Service Info Cost Details    DIETHELM EVENTS    344    566
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CC)    TEST CARD/VI************0087/D0823/CVV***
+    Set Description    Description 1
+    Set BTA Description    BTA description 2
+    Set Date    10/30/2019
+    Verify No Error Icon Is Displayed For Additional Information Date
+    Get Other Services Form Of Payment Details
+    Get Other Services Cost Details
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    CANCELLATION IS NOT ALLOWED    INFANT INCLUDED
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card (CC) And BTA Description Is Not Blank
+    Execute Simultaneous Change Handling    Amend Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card (CC) And BTA Description Is Not Blank
+    Click Panel    Other Svcs
+    Get Exchange Order Number    identifier=wgst
+    Generate Exchange Order Creation Date    P1
+    Retrieve PNR Details From Amadeus
+    Verify Other Services Without GST Service Accounting General Remarks    MEETING AND EVENTS    DIETHELM EVENTS    Credit Card (CC)    HK
+    Verify Other Services Credit Card Fees Accounting Remarks Are Written    4900000000000087    VI    08    2023    Credit Card (CC)    HK
+    ...    False    MEETING AND EVENTS
+    [Teardown]
+
+[AB AOS] Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card Is CX (DC) And BTA Description Is Not Blank
+    [Tags]    hk    us832    horton    us1291    us1462    us1620
+    ...    us1541
+    Retrieve PNR And Populate Amend Workflow    HK
+    Click Panel    Other Svcs
+    Click Amend EO    ${eo_number_1}
+    Get Other Services Cost Details
+    Verify Vendor Contact Value Is Correct    DIETHELM EVENTS
+    Verify Nett Cost Value Is Correct    344
+    Verify Selling Price Value Is Correct    566
+    Verify Commission Fee Value Is Correct    222
+    Verify Merchant Fee Value Is Correct    0
+    Verify Total Selling Price Value Is Correct    566
+    Verify Description Value From Additional Information Is Correct    Description 1
+    Verify BTA Description Value Is Correct    BTA description 2
+    Verify Form Of Payment Details Are Correct    TEST CARD/VI************0087/D0823/CVV***    Credit Card (CC)
+    Populate Service Info Cost Details    Vendor Contact    630    730
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CX)    BTA DC/DC**********2207/D0823/CVV***
+    Get Other Services Form Of Payment Details
+    Get Other Services Cost Details
+    Get Other Services Additional Information Details
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Verify Vendor Value Is Correct    DIETHELM EVENTS
+    Verify Address 1 Value Is Correct    KIAN GWAN II BLDG, 12/F,
+    Verify Address 2 Value Is Correct    140/1 WIRELESS ROAD, 10330
+    Verify City Value Is Correct    BANGKOK
+    Verify Country Value Is Correct    THAILAND
+    Verify Email Value Is Correct    automationtest@cwt.com
+    Verify Contact No Value Is Correct    6622560230
+    Verify Fax No Value Is Correct    1111
+    Verify Credit Terms Values Is Correct    0
+    Verify Support Email Value Is Correct    automationtest@cwt.com
+    Click Remarks Tab
+    Verify Exchange Order Remarks Are Correct    CANCELLATION IS NOT ALLOWED    INFANT INCLUDED
+    Click Update Button In EO Panel    Service Info
+    Click Finish PNR    Amend Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card Is CX (DC) And BTA Description Is Not Blank
+    Execute Simultaneous Change Handling    Amend Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card Is CX (DC) And BTA Description Is Not Blank
+    Click Panel    Other Svcs
+    Verify Exchange Order Number Is Retained    ${eo_number_wgst}
+    Retrieve PNR Details From Amadeus
+    Verify Other Services Without GST Service Accounting General Remarks    MEETING AND EVENTS    DIETHELM EVENTS    Credit Card (CX)    HK
+    Verify Previous Accounting Remarks For Other Services Without GST Are Deleted When FOP is CX And BTA Is Not Blank
+    Verify Other Services Credit Card Fees Accounting Remarks Are Written    30569101582207    DC    08    2023    Credit Card (CX)    HK
+    ...    False    MEETING AND EVENTS
+    Click Panel    Other Svcs
+    Verify Exchange Order Record Details Are Correct    HK    MEETING AND EVENTS    DIETHELM EVENTS    MS    ${EMPTY}    New
+    ...    is_new_eo=False    is_completed_date=False
+
+[AB OS] Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Cash or Invoice And BTA Description Is Not Blank
+    [Tags]    us457    us724    US1182    US1162    us1462    us1620
+    Retrieve PNR And Populate Amend Workflow    HK    fop_dropdown_value=Cash
+    Click Panel    Other Svcs
+    Select Product And Vendor    AEL Ticket    STYLE HOLIDAYS
+    Populate Service Info Cost Details    AIR FRANCE    500    600
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Cash
+    Set Description    Description 1
+    Set BTA Description    bta description 1
+    #Set Date > than Current
+    Set Date    10/20/2019
+    Verify No Error Icon Is Displayed For Additional Information Date
+    #Set Backdated Date
+    Set Date    10/20/2018
+    Verify No Error Icon Is Displayed For Additional Information Date
+    Get Other Services Cost Details
+    Get Other Services Additional Information Details    AEL Ticket
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Cash or Invoice And BTA Description Is Not Blank
+    Execute Simultaneous Change Handling    Amend Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Cash or Invoice And BTA Description Is Not Blank
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details From Amadeus
+    Verify Other Services Without GST Service Accounting General Remarks    AEL Ticket    STYLE HOLIDAYS    Cash    HK    AEL Ticket
+    Verify Other Services Cash Or Invoice Fees Accounting Remarks Are Written    HK
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB OS] Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card CX (TP) And BTA Description Is Blank
+    [Tags]    us457    us724    us857    us1456    us1620
+    Create PNR Using Cash As FOP    HK    True    False    False
+    Click Panel    Other Svcs
+    Select Product And Vendor    MEET AND GREET SERVICE    MEET AND GREET SERVICES
+    Populate Service Info Cost Details    Vendor Contact    630    730
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CX)    BTA TP CARD/TP***********4198/D0825/CVV***
+    Set BTA Description    ${EMPTY}
+    Get Other Services Form Of Payment Details
+    Get Other Services Cost Details
+    Get Other Services Additional Information Details
+    Click Remarks Tab
+    Select Exchange Order Remarks    EXCHANGE ORDER PREDEFINED REMARK
+    Select Itinerary Remarks    EARLY CHECKIN IS ALLOWED
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    MEET AND GREET SERVICE
+    Click Finish PNR    Handle Booking Parallel Process For Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card CX (TP) And BTA Description Is Blank
+    Click Panel    Other Svcs
+    Get Exchange Order Number    wgst
+    Retrieve PNR Details From Amadeus    command=RTY
+    Verify Other Services Without GST Service Accounting General Remarks    MEET AND GREET SERVICE    MEET AND GREET SERVICES    Credit Card (CX)    HK
+    Verify Other Services Credit Card Fees Accounting Remarks Are Written    120298264454198    TP    08    2025    Credit Card (CX)    HK
+    Verify BA And TA Remarks    ${uid}
+    [Teardown]
+
+[AB AOS] Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card CX (TP) And BTA Description Is Blank
+    [Tags]    hk    us832    horton    us1462    us1620
+    Retrieve PNR And Populate Amend Workflow    HK
+    Click Panel    Other Svcs
+    Verify Exchange Order Record Details Are Correct    HK    MEET AND GREET SERVICE    MEET AND GREET SERVICES    MS    ${EMPTY}    New
+    ...    is_completed_date=False
+    Click Amend EO    ${eo_number_wgst}
+    Verify Form Of Payment Details Are Correct    BTA TP CARD/TP***********4198/D0825/CVV***    Credit Card (CX)
+    Get Other Services Cost Details
+    Verify Vendor Contact Value Is Correct    Vendor Contact
+    Verify Nett Cost Value Is Correct    630
+    Verify Selling Price Value Is Correct    730
+    Verify Commission Fee Value Is Correct    115
+    Verify Merchant Fee Value Is Correct    15
+    Verify Total Selling Price Value Is Correct    745
+    Verify Description Value From Additional Information Is Correct    MEET AND GREET SERVICE
+    Verify BTA Description Value Is Correct    ${EMPTY}
+    Verify Exchange Order Number    ${eo_number_wgst}
+    Populate Service Info Cost Details    Test Vendor Contact    720    820
+    Get Other Services Form Of Payment Details
+    Get Other Services Cost Details
+    Get Other Services Additional Information Details
+    Click Vendor Info Tab
+    Verify Vendor Value Is Correct    MEET AND GREET SERVICES
+    Verify Address 1 Value Is Correct
+    Verify Address 2 Value Is Correct
+    Verify City Value Is Correct
+    Verify Country Value Is Correct
+    Verify Email Value Is Correct
+    Verify Contact No Value Is Correct
+    Verify Fax No Value Is Correct
+    Verify Credit Terms Values Is Correct    0
+    Verify Support Email Value Is Correct    sgtest@test.com
+    Click Remarks Tab
+    Verify Exchange Order Remarks Are Correct    EXCHANGE ORDER PREDEFINED REMARK
+    Click Update Button In EO Panel    Service Info
+    Click Finish PNR    Amend Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card CX (TP) And BTA Description Is Blank
+    Execute Simultaneous Change Handling    Amend Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card CX (TP) And BTA Description Is Blank
+    Generate Data For Specific Product    False    P1    12    MEET AND GREET SERVICE    MS    000610
+    ...    ${EMPTY}    New
+    Verify Exchange Order Number Is Retained    ${eo_number_wgst}
+    Retrieve PNR Details From Amadeus    command=RTY
+    Verify Other Services Without GST Service Accounting General Remarks    MEET AND GREET SERVICE    MEET AND GREET SERVICES    Credit Card (CX)    HK
+    Verify Previous Accounting Remarks For Other Services Without GST Are Deleted When FOP is CX And BTA Is Blank
+    Verify Other Services Credit Card Fees Accounting Remarks Are Written    120298264454198    TP    08    2025    Credit Card (CX)    HK
+    [Teardown]
+
+[AB][CEO][HK] Verify That Accounting Lines For Without GST Products Are Not Written When Cancelled
+    [Tags]    us1570
+    Retrieve PNR And Populate Amend Workflow    HK
+    Click Panel    Other Svcs
+    Cancel EO    ${eo_number_wgst}    Service Info    HK
+    Click Finish PNR    Amend Verify That Accounting Lines For Without GST Products Are Not Written When Cancelled
+    Execute Simultaneous Change Handling    Amend Verify That Accounting Lines For Without GST Products Are Not Written When Cancelled
+    Click Panel    Other Svcs
+    Verify Exchange Order Is Cancelled In EO Grid    ${eo_number_wgst}
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Other Services Credit Card Fees Accounting Remarks Are Not Written
+    Verify Other Services Without GST Service Accounting General Remarks Are Not Written
+
+[AB OS] Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card (CC) And BTA Description Is Blank
+    [Tags]    us457    us724    us960    us1462    us1620
+    Retrieve PNR And Populate Amend Workflow    HK
+    Click Panel    Other Svcs
+    Select Product And Vendor    CRUISE    CHARMING HOLIDAYS LTD
+    Populate Service Info Cost Details    UNITED AIRLINES    604.0    704.0
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CC)    TEST CARD/AX***********0009/D0822/CVV****
+    Set Description    Description 1
+    Set BTA Description    ${EMPTY}
+    Get Other Services Cost Details
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card (CC) And BTA Description Is Blank
+    Execute Simultaneous Change Handling    Amend Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card (CC) And BTA Description Is Blank
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details From Amadeus
+    Verify Other Services Without GST Service Accounting General Remarks    CRUISE    CHARMING HOLIDAYS LTD    Credit Card (CC)    HK
+    Verify Other Services Credit Card Fees Accounting Remarks Are Written    375000000000009    AX    08    2022    Credit Card (CC)    HK
+    [Teardown]
+
+[AB OS] Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Cash or Invoice And BTA Description Is Blank
+    [Tags]    us457    us724    US720    US453    US1196    US1182
+    ...    us1462    us1620    us1911
+    Retrieve PNR And Populate Amend Workflow    HK    fop_dropdown_value=Cash
+    Click Panel    Other Svcs
+    Select Product And Vendor    HANDLING FEE    CWT
+    Populate Service Info Cost Details    AIR FRANCE    470.6    570.1
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Cash
+    Set Description    Description 1
+    Set BTA Description    ${EMPTY}
+    Get Other Services Cost Details
+    Get Other Services Additional Information Details
+    Verify Exchange And Itinerary Order Remarks Fields Are working Correctly
+    Select Exchange Order Remarks    SPECIAL REQUESTS BY CUSTOMER
+    Add Remarks In Exchange Order    Test EO remark 1    Test EO remark 2    Test EO remark 3    Test EO remark 4    Test EO remark 5
+    Select Itinerary Remarks    OTHER REQUESTS    SMOKING IS BAD FOR YOUR HEALTH
+    Add Remarks In Itinerary    Test Itinerary Remark 1    Test Itinerary Remark 2    Test Itinerary Remark 3    Test Itinerary Remark 4    Test Itinerary Remark 5
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Cash or Invoice And BTA Description Is Blank
+    Execute Simultaneous Change Handling    Amend Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Cash or Invoice And BTA Description Is Blank
+    Get Exchange Order Number
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Other Services Without GST Service Accounting General Remarks    HANDLING FEE    CWT    Cash    HK
+    Verify Other Services Cash Or Invoice Fees Accounting Remarks Are Written    HK    HANDLING FEE
+    Verify Itinerary Remarks Are Re-Written In The RIR Lines    1    OTHER REQUESTS    SMOKING IS BAD FOR YOUR HEALTH    Test Itinerary Remark 1    Test Itinerary Remark 2    Test Itinerary Remark 3
+    ...    Test Itinerary Remark 4    Test Itinerary Remark 5
+    [Teardown]
+
+[AB OS] Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card CX (CA) And BTA Description Is Blank
+    [Tags]    us457    us724    us857    US453    US720    US1196
+    ...    us1462    us1620
+    Retrieve PNR And Populate Amend Workflow    HK    fop_dropdown_value=Cash
+    Click Panel    Client Info
+    Select Form Of Payment    Cash
+    Click Panel    Other Svcs
+    Select Product And Vendor    C2G HOTEL FEE    CWT
+    Populate Service Info Cost Details    Vendor Contact    700    800
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CX)    BTA CARD/CA************1114/D0828/CVV****
+    Set BTA Description    ${EMPTY}
+    Get Other Services Cost Details
+    Click Remarks Tab
+    Select Exchange Order Remarks    SPECIAL REQUESTS BY CUSTOMER
+    Add Remarks In Exchange Order    Test EO remark 1    Test EO remark 2    Test EO remark 3    Test EO remark 4    Test EO remark 5
+    Select Itinerary Remarks    OTHER REQUESTS    SMOKING IS BAD FOR YOUR HEALTH
+    Add Remarks In Itinerary    Test Itinerary Remark 1    Test Itinerary Remark 2    Test Itinerary Remark 3    Test Itinerary Remark 4    Test Itinerary Remark 5
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card CX (CA) And BTA Description Is Blank
+    Execute Simultaneous Change Handling    Amend Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card CX (CA) And BTA Description Is Blank
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Other Services Without GST Service Accounting General Remarks    C2G HOTEL FEE    CWT    Credit Card (CX)    HK
+    Verify Other Services Credit Card Fees Accounting Remarks Are Written    2222420000001114    CA    08    2028    Credit Card (CX)    HK
+    ...    product_name=C2G HOTEL FEE
+    Verify Itinerary Remarks Are Re-Written In The RIR Lines    2    OTHER REQUESTS    SMOKING IS BAD FOR YOUR HEALTH    Test Itinerary Remark 1    Test Itinerary Remark 2    Test Itinerary Remark 3
+    ...    Test Itinerary Remark 4    Test Itinerary Remark 5
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Amend Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card (CC) And BTA Description Is Not Blank
+    Retrieve PNR And Populate Amend Workflow    HK
+    Click Panel    Other Svcs
+    Verify Exchange Order Record Details Are Correct    HK    24 EMERGENCY SERVICE FEE    CWT    MS    ${EMPTY}    New
+    ...    is_completed_date=False
+    Select Product And Vendor    MEETING AND EVENTS    DIETHELM EVENTS
+    Populate Service Info Cost Details    DIETHELM EVENTS    344    566
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CC)    TEST CARD/VI************0087/D0823/CVV***
+    Set Description    Description 1
+    Set BTA Description    BTA description 2
+    Set Date    10/30/2019
+    Verify No Error Icon Is Displayed For Additional Information Date
+    Get Other Services Form Of Payment Details
+    Get Other Services Cost Details
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    CANCELLATION IS NOT ALLOWED    INFANT INCLUDED
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card (CC) And BTA Description Is Not Blank
+
+Amend Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card Is CX (DC) And BTA Description Is Not Blank
+    Retrieve PNR And Populate Amend Workflow    HK
+    Click Panel    Other Svcs
+    Click Amend EO    ${eo_number_1}
+    Get Other Services Cost Details
+    Verify Vendor Contact Value Is Correct    DIETHELM EVENTS
+    Verify Nett Cost Value Is Correct    344
+    Verify Selling Price Value Is Correct    566
+    Verify Commission Fee Value Is Correct    222
+    Verify Merchant Fee Value Is Correct    0
+    Verify Total Selling Price Value Is Correct    566
+    Verify Description Value From Additional Information Is Correct    Description 1
+    Verify BTA Description Value Is Correct    BTA description 2
+    Verify Form Of Payment Details Are Correct    TEST CARD/VI************0087/D0823/CVV***    Credit Card (CC)
+    Populate Service Info Cost Details    Vendor Contact    630    730
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CX)    BTA DC/DC**********2207/D0823/CVV***
+    Get Other Services Form Of Payment Details
+    Get Other Services Cost Details
+    Get Other Services Additional Information Details
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Verify Vendor Value Is Correct    DIETHELM EVENTS
+    Verify Address 1 Value Is Correct    KIAN GWAN II BLDG, 12/F,
+    Verify Address 2 Value Is Correct    140/1 WIRELESS ROAD, 10330
+    Verify City Value Is Correct    BANGKOK
+    Verify Country Value Is Correct    THAILAND
+    Verify Email Value Is Correct    automationtest@cwt.com
+    Verify Contact No Value Is Correct    6622560230
+    Verify Fax No Value Is Correct    1111
+    Verify Credit Terms Values Is Correct    0
+    Verify Support Email Value Is Correct    automationtest@cwt.com
+    Click Remarks Tab
+    Verify Exchange Order Remarks Are Correct    CANCELLATION IS NOT ALLOWED    INFANT INCLUDED
+    Click Update Button In EO Panel    Service Info
+    Click Finish PNR    Amend Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card Is CX (DC) And BTA Description Is Not Blank
+
+Amend Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Cash or Invoice And BTA Description Is Not Blank
+    Retrieve PNR And Populate Amend Workflow    HK    fop_dropdown_value=Cash
+    Click Panel    Other Svcs
+    Select Product And Vendor    AEL Ticket    STYLE HOLIDAYS
+    Populate Service Info Cost Details    AIR FRANCE    500    600
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Cash
+    Set Description    Description 1
+    Set BTA Description    bta description 1
+    #Set Date > than Current
+    Set Date    10/20/2019
+    Verify No Error Icon Is Displayed For Additional Information Date
+    #Set Backdated Date
+    Set Date    10/20/2018
+    Verify No Error Icon Is Displayed For Additional Information Date
+    Get Other Services Cost Details
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Cash or Invoice And BTA Description Is Not Blank
+
+Amend Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card CX (TP) And BTA Description Is Blank
+    [Tags]    hk    us832    horton    us1462
+    Retrieve PNR And Populate Amend Workflow    HK
+    Click Panel    Other Svcs
+    Verify Exchange Order Record Details Are Correct    HK    MEET AND GREET SERVICE    MEET AND GREET SERVICES    MS    ${EMPTY}    New
+    ...    is_completed_date=False
+    Click Amend EO    ${eo_number_wgst}
+    Verify Form Of Payment Details Are Correct    BTA TP CARD/TP***********4198/D0825/CVV***    Credit Card (CX)
+    Get Other Services Cost Details
+    Verify Vendor Contact Value Is Correct    Vendor Contact
+    Verify Nett Cost Value Is Correct    630
+    Verify Selling Price Value Is Correct    730
+    Verify Commission Fee Value Is Correct    115
+    Verify Merchant Fee Value Is Correct    15
+    Verify Total Selling Price Value Is Correct    745
+    Verify Description Value From Additional Information Is Correct    MEET AND GREET SERVICE
+    Verify BTA Description Value Is Correct    ${EMPTY}
+    Verify Exchange Order Number    ${eo_number_wgst}
+    Populate Service Info Cost Details    Test Vendor Contact    720    820
+    Get Other Services Form Of Payment Details
+    Get Other Services Cost Details
+    Get Other Services Additional Information Details
+    Click Vendor Info Tab
+    Verify Vendor Value Is Correct    MEET AND GREET SERVICES
+    Verify Address 1 Value Is Correct
+    Verify Address 2 Value Is Correct
+    Verify City Value Is Correct
+    Verify Country Value Is Correct
+    Verify Email Value Is Correct
+    Verify Contact No Value Is Correct
+    Verify Fax No Value Is Correct
+    Verify Credit Terms Values Is Correct    0
+    Verify Support Email Value Is Correct    sgtest@test.com
+    Click Remarks Tab
+    Verify Exchange Order Remarks Are Correct    EXCHANGE ORDER PREDEFINED REMARK
+    Click Update Button In EO Panel    Service Info
+    Click Finish PNR    Amend Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card CX (TP) And BTA Description Is Blank
+
+Amend Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card (CC) And BTA Description Is Blank
+    Retrieve PNR And Populate Amend Workflow    HK
+    Click Panel    Other Svcs
+    Select Product And Vendor    CRUISE    CHARMING HOLIDAYS LTD
+    Populate Service Info Cost Details    UNITED AIRLINES    604.0    704.0
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CC)    TEST CARD/AX***********0009/D0822/CVV****
+    Set Description    Description 1
+    Set BTA Description    ${EMPTY}
+    Get Other Services Cost Details
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card (CC) And BTA Description Is Blank
+
+Amend Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Cash or Invoice And BTA Description Is Blank
+    Retrieve PNR And Populate Amend Workflow    HK    fop_dropdown_value=Cash
+    Click Panel    Other Svcs
+    Select Product And Vendor    HANDLING FEE    CWT
+    Populate Service Info Cost Details    AIR FRANCE    470.6    570.1
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Cash
+    Set Description    Description 1
+    Set BTA Description    ${EMPTY}
+    Get Other Services Cost Details
+    Verify Exchange And Itinerary Order Remarks Fields Are working Correctly
+    Select Exchange Order Remarks    SPECIAL REQUESTS BY CUSTOMER
+    Add Remarks In Exchange Order    Test EO remark 1    Test EO remark 2    Test EO remark 3    Test EO remark 4    Test EO remark 5
+    Select Itinerary Remarks    OTHER REQUESTS    SMOKING IS BAD FOR YOUR HEALTH
+    Add Remarks In Itinerary    Test Itinerary Remark 1    Test Itinerary Remark 2    Test Itinerary Remark 3    Test Itinerary Remark 4    Test Itinerary Remark 5
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Cash or Invoice And BTA Description Is Blank
+
+Amend Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card CX (CA) And BTA Description Is Blank
+    Retrieve PNR And Populate Amend Workflow    HK    fop_dropdown_value=Cash
+    Click Panel    Client Info
+    Select Form Of Payment    Cash
+    Click Panel    Other Svcs
+    Select Product And Vendor    C2G HOTEL FEE    CWT
+    Populate Service Info Cost Details    Vendor Contact    700    800
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CX)    BTA CARD/CA************1114/D0828/CVV****
+    Set BTA Description    ${EMPTY}
+    Get Other Services Cost Details
+    Click Remarks Tab
+    Select Exchange Order Remarks    SPECIAL REQUESTS BY CUSTOMER
+    Add Remarks In Exchange Order    Test EO remark 1    Test EO remark 2    Test EO remark 3    Test EO remark 4    Test EO remark 5
+    Select Itinerary Remarks    OTHER REQUESTS    SMOKING IS BAD FOR YOUR HEALTH
+    Add Remarks In Itinerary    Test Itinerary Remark 1    Test Itinerary Remark 2    Test Itinerary Remark 3    Test Itinerary Remark 4    Test Itinerary Remark 5
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card CX (CA) And BTA Description Is Blank
+
+Handle Booking Parallel Process For Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card CX (MC) And BTA Description Is Not Blank
+    Create PNR Using Credit Card As FOP    HK    True
+    Click Panel    Other Svcs
+    Select Product And Vendor    24 EMERGENCY SERVICE FEE    CWT
+    Click Service Info Tab
+    Populate Service Info Cost Details    Vendor Contact    700    800
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CX)    KBTEST/MC************4445/D0526
+    #Set Date > than Current
+    Set Date    10/20/2019
+    Verify No Error Icon Is Displayed For Additional Information Date
+    #Set Backdated Date
+    Set Date    10/20/2018
+    Verify No Error Icon Is Displayed For Additional Information Date
+    Set Description    OTHER
+    Set BTA Description    BTA description 3
+    Click Service Info Tab
+    Get Other Services Form Of Payment Details
+    Get Other Services Cost Details
+    Get Other Services Additional Information Details
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    24 EMERGENCY SERVICE FEE
+    Click Finish PNR    Handle Booking Parallel Process For Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card CX (MC) And BTA Description Is Not Blank
+
+Handle Booking Parallel Process For Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card CX (TP) And BTA Description Is Blank
+    Create PNR Using Cash As FOP    HK    True    False    False
+    Click Panel    Other Svcs
+    Select Product And Vendor    MEET AND GREET SERVICE    MEET AND GREET SERVICES
+    Populate Service Info Cost Details    Vendor Contact    630    730
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CX)    BTA TP CARD/TP***********4198/D0825/CVV***
+    Set BTA Description    ${EMPTY}
+    Get Other Services Form Of Payment Details
+    Get Other Services Cost Details
+    Get Other Services Additional Information Details
+    Click Remarks Tab
+    Select Exchange Order Remarks    EXCHANGE ORDER PREDEFINED REMARK
+    Select Itinerary Remarks    EARLY CHECKIN IS ALLOWED
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    MEET AND GREET SERVICE
+    Click Finish PNR    Handle Booking Parallel Process For Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card CX (TP) And BTA Description Is Blank
+
+Amend Verify That Accounting Lines For Without GST Products Are Not Written When Cancelled
+    Retrieve PNR And Populate Amend Workflow    HK
+    Click Panel    Other Svcs
+    Cancel EO    ${eo_number_1}    Service Info    HK
+    Click Finish PNR    Amend Verify That Accounting Lines For Without GST Products Are Not Written When Cancelled

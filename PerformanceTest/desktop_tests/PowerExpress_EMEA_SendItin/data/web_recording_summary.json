@@ -1,0 +1,532 @@
+{
+  "FilterHeaders": [
+    {
+      "Header": "x-requested-with",
+      "IncludeInScript": true
+    },
+    {
+      "Header": "x-citrix-isusinghttps",
+      "IncludeInScript": true
+    },
+    {
+      "Header": "x-citrix-am-labeltypes",
+      "IncludeInScript": true
+    },
+    {
+      "Header": "x-citrix-am-credentialtypes",
+      "IncludeInScript": true
+    },
+    {
+      "Header": "user-agent",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "ua-cpu",
+      "IncludeInScript": true
+    },
+    {
+      "Header": "dnt",
+      "IncludeInScript": true
+    },
+    {
+      "Header": "csrf-token",
+      "IncludeInScript": true
+    },
+    {
+      "Header": "cache-control",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "accept-language",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "accept-encoding",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "accept",
+      "IncludeInScript": false
+    }
+  ],
+  "FilterResources": [
+    {
+      "IsNonResource": false,
+      "type": "text/plain"
+    },
+    {
+      "IsNonResource": false,
+      "type": "text/javascript"
+    },
+    {
+      "IsNonResource": true,
+      "type": "text/html"
+    },
+    {
+      "IsNonResource": false,
+      "type": "text/css"
+    },
+    {
+      "IsNonResource": false,
+      "type": "text"
+    },
+    {
+      "IsNonResource": false,
+      "type": "image/x-icon"
+    },
+    {
+      "IsNonResource": false,
+      "type": "image/png"
+    },
+    {
+      "IsNonResource": false,
+      "type": "image/jpeg"
+    },
+    {
+      "IsNonResource": false,
+      "type": "image/gif"
+    },
+    {
+      "IsNonResource": false,
+      "type": "application/xml"
+    },
+    {
+      "IsNonResource": false,
+      "type": "application/vnd.citrix.authenticateresponse-1+xml"
+    },
+    {
+      "IsNonResource": true,
+      "type": "application/json"
+    }
+  ],
+  "GeneralInfo": {
+    "BrowserVersion": "",
+    "MaxUsedConnections": 7,
+    "RecordedBrowser": "Internet Explorer",
+    "RecordingDate": "Oct-03-2018",
+    "RecordingDuration": 669026,
+    "RecordingTimeStamp": 1538590160,
+    "TotalBytesReceived": 377163,
+    "TotalBytesSent": 23239,
+    "TotalRequests": 42
+  },
+  "HostInfo": [
+    {
+      "DomainName": "carlsonwagonlit.com",
+      "Domains": [
+        {
+          "HTTPVersion": "HTTP/1.1",
+          "IP": "10.200.188.1",
+          "IncludeInScript": true,
+          "Name": "emea.cwtdesktop.pilot.int.carlsonwagonlit.com",
+          "Port": 443,
+          "Requests": [
+            {
+              "CompressionType": "gzip",
+              "DataType": "text/plain",
+              "DownloadTime": 172,
+              "EventId": 720,
+              "HttpStatus": 200,
+              "Size": 0,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/Authentication/Logoff"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/png",
+              "DownloadTime": 156,
+              "EventId": 216,
+              "HttpStatus": 200,
+              "Size": 488,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/images/1x/ico_desktop_ready_482FD91B201F2A55.png"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/png",
+              "DownloadTime": 671,
+              "EventId": 213,
+              "HttpStatus": 200,
+              "Size": 8212,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/Resources/Icon/L0NpdHJpeC9QaWxvdC9yZXNvdXJjZXMvdjIvTTNkT01VZE5Sa1YwVDBkMGEwTnJZVEkzY2xoMGJrTjJRMWRTVDFsU2RUaFdTVlZCVFdaU1ZsUmlkejAtL2ltYWdl?size=128"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "application/xml",
+              "DownloadTime": 172,
+              "EventId": 211,
+              "HttpStatus": 200,
+              "Size": 172,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/ExplicitAuth/AllowSelfServiceAccountManagement"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/png",
+              "DownloadTime": 156,
+              "EventId": 209,
+              "HttpStatus": 200,
+              "Size": 568,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/images/1x/ico_search_E84E3D63D821F80D.png"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/png",
+              "DownloadTime": 171,
+              "EventId": 207,
+              "HttpStatus": 200,
+              "Size": 2029,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/images/1x/spinner_5CF0D1C8A76AAC8E.png"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/png",
+              "DownloadTime": 171,
+              "EventId": 205,
+              "HttpStatus": 200,
+              "Size": 3438,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/custom/Citrix_HalfHeaderLogo.png"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/png",
+              "DownloadTime": 156,
+              "EventId": 203,
+              "HttpStatus": 200,
+              "Size": 454,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/images/1x/search_close_BC5A22358E58905F.png"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "text",
+              "DownloadTime": 187,
+              "EventId": 201,
+              "HttpStatus": 200,
+              "Size": 33,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/Authentication/GetUserName"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/png",
+              "DownloadTime": 156,
+              "EventId": 199,
+              "HttpStatus": 200,
+              "Size": 244,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/images/common/icon_loading_9A0623127A028FEB.png"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "application/json",
+              "DownloadTime": 421,
+              "EventId": 197,
+              "HttpStatus": 200,
+              "Size": 500,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/Resources/List"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "application/xml",
+              "DownloadTime": 499,
+              "EventId": 195,
+              "HttpStatus": 200,
+              "Size": 184,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/ExplicitAuth/LoginAttempt"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/gif",
+              "DownloadTime": 156,
+              "EventId": 193,
+              "HttpStatus": 200,
+              "Size": 2070,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/images/1x/spinner_white_auth_button_53FD5A337A529DA7.gif"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/png",
+              "DownloadTime": 172,
+              "EventId": 191,
+              "HttpStatus": 200,
+              "Size": 4770,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/custom/Citrix_HalfLogonLogo.png"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/gif",
+              "DownloadTime": 172,
+              "EventId": 189,
+              "HttpStatus": 200,
+              "Size": 954,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/images/common/authspinner_B0BCD339560CA593.gif"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "application/vnd.citrix.authenticateresponse-1+xml",
+              "DownloadTime": 171,
+              "EventId": 187,
+              "HttpStatus": 200,
+              "Size": 551,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/ExplicitAuth/Login"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "application/xml",
+              "DownloadTime": 172,
+              "EventId": 185,
+              "HttpStatus": 200,
+              "Size": 186,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/Authentication/GetAuthMethods"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "text/plain",
+              "DownloadTime": 312,
+              "EventId": 183,
+              "HttpStatus": 200,
+              "Size": 42,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/Resources/List"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/x-icon",
+              "DownloadTime": 171,
+              "EventId": 175,
+              "HttpStatus": 200,
+              "Size": 34494,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/images/common/favicon_9B19689CB70C681E.ico"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "application/xml",
+              "DownloadTime": 172,
+              "EventId": 173,
+              "HttpStatus": 200,
+              "Size": 1359,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/Home/Configuration"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/png",
+              "DownloadTime": 156,
+              "EventId": 169,
+              "HttpStatus": 200,
+              "Size": 3167,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/images/1x/viewSprite_B2F322BDCB824FAF.png"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "text/javascript",
+              "DownloadTime": 172,
+              "EventId": 167,
+              "HttpStatus": 200,
+              "Size": 228,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/custom/strings.en.js"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "text/javascript",
+              "DownloadTime": 156,
+              "EventId": 165,
+              "HttpStatus": 200,
+              "Size": 538,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/custom/script.js"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "text/javascript",
+              "DownloadTime": 172,
+              "EventId": 151,
+              "HttpStatus": 200,
+              "Size": 13623,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/external/jquery-ui-v1.11.4.min_17D0B6DEFA33B91A.js"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "text/javascript",
+              "DownloadTime": 156,
+              "EventId": 149,
+              "HttpStatus": 200,
+              "Size": 43312,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/external/jquery-1.12.4.min_618538B4AB9639D4.js"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "text/javascript",
+              "DownloadTime": 297,
+              "EventId": 129,
+              "HttpStatus": 200,
+              "Size": 754,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/external/jquery.ui.touch-punch.min_94EA8262E7FD35F4.js"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/jpeg",
+              "DownloadTime": 156,
+              "EventId": 124,
+              "HttpStatus": 200,
+              "Size": 50806,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/images/common/ReceiverFullScreenBackground_46E559C0E6B5A27B.jpg"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/png",
+              "DownloadTime": 172,
+              "EventId": 113,
+              "HttpStatus": 200,
+              "Size": 3476,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/images/1x/CitrixReceiver_WebScreen_CBE548FB8FEE049E.png"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/png",
+              "DownloadTime": 218,
+              "EventId": 111,
+              "HttpStatus": 200,
+              "Size": 432,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/images/1x/folder_template_C13BB96DEBC9F30F.png"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "text/javascript",
+              "DownloadTime": 203,
+              "EventId": 105,
+              "HttpStatus": 200,
+              "Size": 90135,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/ctxs.webui.min_91463D1B79731411.js"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/png",
+              "DownloadTime": 172,
+              "EventId": 103,
+              "HttpStatus": 200,
+              "Size": 2394,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/images/1x/actionSprite_531B7A6FF85CA98E.png"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "text/css",
+              "DownloadTime": 156,
+              "EventId": 101,
+              "HttpStatus": 200,
+              "Size": 777,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/custom/style.css"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "text/javascript",
+              "DownloadTime": 312,
+              "EventId": 94,
+              "HttpStatus": 200,
+              "Size": 34044,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/ctxs.core.min_33B1CC992A07D57E.js"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "text/javascript",
+              "DownloadTime": 156,
+              "EventId": 91,
+              "HttpStatus": 200,
+              "Size": 12173,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/external/slick.min_FEB62CC230E2BA2A.js"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "text/javascript",
+              "DownloadTime": 156,
+              "EventId": 85,
+              "HttpStatus": 200,
+              "Size": 15309,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/external/velocity.min_B218502A82F66680.js"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/gif",
+              "DownloadTime": 156,
+              "EventId": 83,
+              "HttpStatus": 200,
+              "Size": 2223,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/images/common/wspinner@2x_26FCB0A3548E30DC.gif"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "text/javascript",
+              "DownloadTime": 156,
+              "EventId": 81,
+              "HttpStatus": 200,
+              "Size": 3238,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/external/jquery.dotdotdot.min_08EE54CBA886AD0A.js"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "text/javascript",
+              "DownloadTime": 156,
+              "EventId": 76,
+              "HttpStatus": 200,
+              "Size": 9015,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/external/hammer.v2.0.8.min_F699A1E56189259A.js"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "text/css",
+              "DownloadTime": 171,
+              "EventId": 68,
+              "HttpStatus": 200,
+              "Size": 18345,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/css/ctxs.large-ui.min_62D11B01D15101DA.css"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "text/html",
+              "DownloadTime": 187,
+              "EventId": 52,
+              "HttpStatus": 200,
+              "Size": 11952,
+              "URL": "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/"
+            }
+          ],
+          "SSLCipher": "ECDHE-RSA-AES256-SHA384",
+          "SSLVersion": "TLS1.2"
+        }
+      ],
+      "IncludeInScript": true
+    },
+    {
+      "DomainName": "bing.com",
+      "Domains": [
+        {
+          "HTTPVersion": "HTTP/1.1",
+          "IP": "13.107.21.200",
+          "IncludeInScript": true,
+          "Name": "www.bing.com",
+          "Port": 443,
+          "Requests": [
+            {
+              "CompressionType": "",
+              "DataType": "image/x-icon",
+              "DownloadTime": 15,
+              "EventId": 181,
+              "HttpStatus": 200,
+              "Size": 237,
+              "URL": "https://www.bing.com/favicon.ico"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "image/x-icon",
+              "DownloadTime": 15,
+              "EventId": 147,
+              "HttpStatus": 200,
+              "Size": 237,
+              "URL": "https://www.bing.com/favicon.ico"
+            }
+          ],
+          "SSLCipher": "ECDHE-RSA-AES128-SHA256",
+          "SSLVersion": "TLS1.2"
+        }
+      ],
+      "IncludeInScript": false
+    }
+  ],
+  "WebSocket": {
+    "IncludeInScript": false,
+    "IsScriptIncludeWebSocket": false
+  },
+  "NumberOfCorrelations": 2
+}

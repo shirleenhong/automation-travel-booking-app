@@ -1,0 +1,439 @@
+*** Settings ***
+Force Tags        without_gst
+Resource          ../other_services.txt
+
+*** Test Cases ***
+[NB OS] Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Cash Or Invoice And BTA Description Is Not Blank
+    [Tags]    us723    us457    us480    us1162    us1322    us1456
+    ...    us1462
+    [Setup]
+    Create PNR Using Credit Card As FOP    air_segment=True    fop_dropdown_value=Cash
+    Click Panel    Other Svcs
+    Select Product And Vendor    Airline Penalty Fee    CARLSON WAGONLIT TRAVEL
+    #us1620
+    Verify Form Of Payment Details Are Correct    Cash
+    #us1620
+    Verify Service Info Fields    Cash    False    SG
+    Set Date    10/29/2018
+    Verify Error Icon Is Displayed For Additional Information Date
+    Set Date    10/30/2019
+    Verify No Error Icon Is Displayed For Additional Information Date
+    Click Vendor Info Tab
+    Verify Vendor Info Fields
+    Click Service Info Tab
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Cash
+    Set BTA Description    Desc 1
+    Get Other Services Cost Details
+    Get Other Services Additional Information Details
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    Airline Penalty Fee
+    Click Finish PNR
+    Click Panel    Other Svcs
+    Verify EO Status For Third Party Vendor    Completed    1
+    Get Exchange Order Number
+    Retrieve PNR Details From Amadeus    command=RTY
+    Verify Other Services Without GST Service Accounting General Remarks    Airline Penalty Fee    CARLSON WAGONLIT TRAVEL    Cash    SG
+    Verify Other Services Cash Or Invoice Fees Accounting Remarks Are Written    SG
+    Verify BA And TA Remarks    ${uid}
+
+[OS] Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card Is CC And BTA Description Is Not Blank
+    [Tags]    us723    us457    us480    us1162    us1322    us1462
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Client Info
+    Select Form Of Payment    TEST CARD/VI************0087/D0823/CVV***
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Click Panel    Other Svcs
+    Select Product And Vendor    Deposit    CARLSON WAGONLIT TRAVEL
+    #us1620
+    Verify Form Of Payment Details Are Correct    TEST CARD/VI************0087/D0823/CVV***
+    #us1620
+    Populate Service Info Cost Details    Vendor Contact    123.45    678.90
+    Select FOP Type    Credit Card (CC)
+    Verify Commission Fee Value Is Correct    555.45
+    Tick CWT Absorb Checkbox For Merchant Fee
+    Set BTA Description    Sample Description
+    Set Date    10/29/2018
+    Verify Error Icon Is Displayed For Additional Information Date
+    Set Date    10/30/2019
+    Verify No Error Icon Is Displayed For Additional Information Date
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Get Other Services Additional Information Details
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    Deposit
+    Click Finish PNR    Amend Booking For Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card Is CC And BTA Description Is Not Blank
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card Is CC And BTA Description Is Not Blank
+    Click Panel    Other Svcs
+    Verify EO Status For Third Party Vendor    Completed    1
+    Get Exchange Order Number
+    Retrieve PNR Details From Amadeus    command=RTY
+    Verify Other Services Without GST Service Accounting General Remarks    Deposit    CARLSON WAGONLIT TRAVEL    Credit Card (CC)    SG
+    Verify Other Services Credit Card Fees Accounting Remarks Are Written    4900000000000087    VI    08    2023    Credit Card (CC)    SG
+
+[AB OS] Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card Is CX (VI) And BTA Description Is Not Blank
+    [Tags]    us457    us723    us857    us686    us624    us1322
+    ...    us1462
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Client Info
+    Manually Set Value In Form Of Payment    DC    378282246310005    1226
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Click Panel    Other Svcs
+    Select Product And Vendor    Deposit    CARLSON WAGONLIT TRAVEL
+    #us1620
+    Verify Form Of Payment Details Are Correct    DC***********0005/D1226
+    #us1620
+    Populate Service Info Cost Details    Vendor Contact    344.23    566.00
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    AX    371449635398431    12    2027
+    Verify Commission Fee Value Is Correct    233.77
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Get Other Services Additional Information Details
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    EARLY CHECKIN IS ALLOWED    NO SMOKING
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    Deposit
+    Click Finish PNR    Amend Booking For Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card Is CX (VI) And BTA Description Is Not Blank
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card Is CX (VI) And BTA Description Is Not Blank
+    Click Panel    Other Svcs
+    Verify EO Status For Third Party Vendor    Completed    1
+    Get Exchange Order Number    identifier=deposit
+    Generate Exchange Order Creation Date    P1
+    Retrieve PNR Details From Amadeus    command=RTY
+    Verify Other Services Without GST Service Accounting General Remarks    Deposit    CARLSON WAGONLIT TRAVEL    Credit Card (CX)    SG
+    Verify Other Services Credit Card Fees Accounting Remarks Are Written    371449635398431    AX    12    2027    Credit Card (CX)    SG
+
+[AOS] Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card Is CX (VI) And BTA Description Is Not Blank
+    [Tags]    us832    us1322    us1462    de403
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Update PNR for EN or GB
+    Click Read Booking
+    Click Panel    Other Svcs
+    Click Amend EO    ${eo_number_deposit}
+    #us1620
+    Verify Form Of Payment Details Are Correct    ${EMPTY}    Credit Card (CX)
+    #us1620
+    Get Other Services Cost Details
+    Verify Vendor Contact Value Is Correct    Vendor Contact
+    Verify Nett Cost Value Is Correct    344.23
+    Verify Selling Price Value Is Correct    566.00
+    Verify Commission Fee Value Is Correct    233.77
+    Verify Merchant Fee Value Is Correct    12.00
+    Verify Total Selling Price Value Is Correct    578.00
+    Verify Description Value From Additional Information Is Correct    Deposit
+    Verify BTA Description Value Is Correct    Deposit
+    Verify Date Value Is Correct
+    Verify Exchange Order Number    ${eo_number_deposit}
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CX)    TEST CARD/VI************0087/D0823/CVV***
+    Get Other Services Form Of Payment Details
+    Get Other Services Additional Information Details
+    Click Vendor Info Tab
+    Verify Vendor Value Is Correct    CARLSON WAGONLIT TRAVEL
+    Verify Address 1 Value Is Correct    INTERCOMPANY-TRADE
+    Verify Address 2 Value Is Correct
+    Verify City Value Is Correct    SINGAPORE
+    Verify Country Value Is Correct    SINGAPORE
+    Verify Email Value Is Correct    automationtest@cwt.com
+    Verify Contact No Value Is Correct
+    Verify Fax No Value Is Correct    1111
+    Verify Credit Terms Values Is Correct    0
+    Verify Support Email Value Is Correct    automationtest@cwt.com
+    Click Remarks Tab
+    Verify Exchange Order Remarks Are Correct    EARLY CHECKIN IS ALLOWED    NO SMOKING
+    Click Update Button In EO Panel    Service Info
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR    Amend Booking For [AOS] Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card Is CX (VI) And BTA Description Is Not Blank
+    Execute Simultaneous Change Handling    Amend Booking For [AOS] Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card Is CX (VI) And BTA Description Is Not Blank
+    Generate Data For Specific Product    False    P1    80    Deposit    MS    021007
+    ...    ${EMPTY}    New
+    Verify Exchange Order Number Is Retained    ${eo_number_deposit}
+    Retrieve PNR Details From Amadeus    command=RTY
+    Verify Other Services Without GST Service Accounting General Remarks    Deposit    CARLSON WAGONLIT TRAVEL    Credit Card (CX)    SG
+    Verify Other Services Credit Card Fees Accounting Remarks Are Written    4900000000000087    VI    08    2023    Credit Card (CX)    SG
+    Verify EO Product Added On EO Grid    Deposit
+
+[OS] Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Cash Or Invoice And BTA Description Is Blank
+    [Tags]    us457    us723    us1322    us1462
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Client Info
+    Select Form Of Payment    TEST CARD/AX***********0009/D0822/CVV****
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Click Panel    Other Svcs
+    Select Product And Vendor    Tour Package    CITI NETWORK PTE LTD
+    #us1620
+    Verify Form Of Payment Details Are Correct    TEST CARD/AX***********0009/D0822/CVV****
+    #us1620
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Cash
+    Populate Service Info Cost Details    Vendor Contact    400.5    500.5
+    Verify Commission Fee Value Is Correct    100.00
+    Set BTA Description    ${EMPTY}
+    Get Other Services Cost Details
+    Get Other Services Additional Information Details
+    Get Other Services Form Of Payment Details
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    Tour Package
+    Click Finish PNR    Amend Booking For Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Cash Or Invoice And BTA Description Is Blank
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Cash Or Invoice And BTA Description Is Blank
+    Get Exchange Order Number
+    Retrieve PNR Details From Amadeus    command=RTY
+    Comment    Verify Other Services Without GST Service Accounting General Remarks    Tour Package    CITI NETWORK PTE LTD    Cash or Invoice    SG
+    Verify Other Services Without GST Service Accounting General Remarks    Tour Package    CITI NETWORK PTE LTD    Cash    SG
+    Verify Other Services Cash Or Invoice Fees Accounting Remarks Are Written    SG
+
+[OS] Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card Is CX (AX) And BTA Description Is Blank
+    [Tags]    us457    us723    us857    us1322    us1462
+    Retrieve PNR And Populate Amend Workflow    fop_dropdown_value=KBTEST/MC************4445/D0526
+    Click Panel    Client Info
+    Manually Set Value In Form Of Payment    TP    4012888888881881    1226
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Click Panel    Other Svcs
+    Select Product And Vendor    CWT TO GO HOTEL FEE    CARLSON WAGONLIT TRAVEL
+    #us1620
+    Verify Form Of Payment Details Are Correct    TP************1881/D1226
+    #us1620
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    AX    378282246310005    12    2026
+    Set BTA Description    ${EMPTY}
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Get Other Services Additional Information Details    CWT TO GO HOTEL FEE
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    CWT TO GO HOTEL FEE
+    Click Finish PNR    Amend Booking For Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card Is CX (AX) And BTA Description Is Blank
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card Is CX (AX) And BTA Description Is Blank
+    Click Panel    Other Svcs
+    Verify EO Status For Third Party Vendor    Completed    1
+    Get Exchange Order Number    last_eo
+    Retrieve PNR Details From Amadeus    command=RTY
+    Verify Other Services Without GST Service Accounting General Remarks    CWT TO GO HOTEL FEE    CARLSON WAGONLIT TRAVEL    Credit Card (CX)    SG
+    Verify Other Services Credit Card Fees Accounting Remarks Are Written    378282246310005    AX    12    2026    Credit Card (CX)    SG
+    [Teardown]
+
+[AB][CEO][SG] Verify That Accounting Lines For Without GST Products Are Not Written When Cancelled
+    [Tags]    us1570    team_chiu
+    Retrieve PNR And Populate Amend Workflow    SG
+    Click Panel    Other Svcs
+    Cancel EO    ${eo_number_last_eo}    Service Info    SG
+    Click Finish PNR    Amend Verify That Accounting Lines For Without GST Products Are Not Written When Cancelled
+    Execute Simultaneous Change Handling    Amend Verify That Accounting Lines For Without GST Products Are Not Written When Cancelled
+    Verify PNR Is Successfully Created    False    1 Exchange Order(s) Successfully Cancelled!
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Click Panel    Other Svcs
+    Verify Exchange Order Record Details Are Correct    SG    CWT TO GO HOTEL FEE    CARLSON WAGONLIT TRAVEL    MS    ${EMPTY}    Cancelled
+    ...    is_new_eo=False
+    Verify Exchange Order Is Cancelled In EO Grid    ${eo_number_last_eo}
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Other Services Credit Card Fees Accounting Remarks Are Not Written
+    Verify Other Services Without GST Service Accounting General Remarks Are Not Written
+    [Teardown]
+
+[OS] Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card Is CC And BTA Description Is Blank
+    [Tags]    us457    us723    us1322    us1462
+    Retrieve PNR And Populate Amend Workflow    fop_dropdown_value=Invoice
+    Click Panel    Client Info
+    Select Form Of Payment    TEST CARD/AX***********0009/D0822/CVV****
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Click Panel    Other Svcs
+    Select Product And Vendor    Hotel - Overseas Booking Fee    CARLSON WAGONLIT TRAVEL
+    #us1620
+    Verify Form Of Payment Details Are Correct    TEST CARD/AX***********0009/D0822/CVV****
+    #us1620
+    Populate Service Info Cost Details    Vendor Contact    600.0    700.0
+    Select FOP Type    Credit Card (CC)
+    Set BTA Description    ${EMPTY}
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Get Other Services Additional Information Details
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    Hotel - Overseas Booking Fee
+    Click Finish PNR    Amend Booking For Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card Is CC And BTA Description Is Blank
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card Is CC And BTA Description Is Blank
+    Get Exchange Order Number
+    Retrieve PNR Details From Amadeus    command=RTY
+    Verify Other Services Without GST Service Accounting General Remarks    Hotel - Overseas Booking Fee    CARLSON WAGONLIT TRAVEL    Credit Card (CC)    SG
+    Verify Other Services Credit Card Fees Accounting Remarks Are Written    375000000000009    AX    08    2022    Credit Card (CC)    SG
+    ...    True    Hotel - Overseas Booking Fee
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Verify Ticket Type Value Is Correct
+    [Arguments]    ${exp_value}
+    Get Ticket Type
+    Verify Actual Value Matches Expected Value    ${ticket_type}    ${exp_value}
+
+Verify Fare No Value Is Correct
+    [Arguments]    ${exp_value}
+    Get Fare Number
+    Verify Actual Value Matches Expected Value    ${fare_number_text}    ${exp_value}
+
+Amend Booking For Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card Is CX (VI) And BTA Description Is Not Blank
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Client Info
+    Manually Set Value In Form Of Payment    DC    378282246310005    1226
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Click Panel    Other Svcs
+    Select Product And Vendor    Deposit    CARLSON WAGONLIT TRAVEL
+    #us1620
+    Verify Form Of Payment Details Are Correct    DC***********0005/D1226
+    #us1620
+    Populate Service Info Cost Details    Vendor Contact    344.23    566.00
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    AX    371449635398431    12    2027
+    Verify Commission Fee Value Is Correct    233.77
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Get Other Services Additional Information Details
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    EARLY CHECKIN IS ALLOWED    NO SMOKING
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    Deposit
+    Click Finish PNR    Amend Booking For Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card Is CX (VI) And BTA Description Is Not Blank
+
+Amend Booking For Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card Is CC And BTA Description Is Not Blank
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Client Info
+    Select Form Of Payment    TEST CARD/VI************0087/D0823/CVV***
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Click Panel    Other Svcs
+    Select Product And Vendor    Deposit    CARLSON WAGONLIT TRAVEL
+    #us1620
+    Verify Form Of Payment Details Are Correct    TEST CARD/VI************0087/D0823/CVV***
+    #us1620
+    Populate Service Info Cost Details    Vendor Contact    123.45    678.90
+    Select FOP Type    Credit Card (CC)
+    Verify Commission Fee Value Is Correct    555.45
+    Tick CWT Absorb Checkbox For Merchant Fee
+    Set BTA Description    Sample Description
+    Set Date    10/29/2018
+    Verify Error Icon Is Displayed For Additional Information Date
+    Set Date    10/30/2019
+    Verify No Error Icon Is Displayed For Additional Information Date
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Get Other Services Additional Information Details
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    Deposit
+    Click Finish PNR    Amend Booking For Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card Is CC And BTA Description Is Not Blank
+
+Amend Booking For [AOS]Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card Is CX (VI) And BTA Description Is Not Blank
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Update PNR for EN or GB
+    Click Read Booking
+    Click Panel    Other Svcs
+    Click Amend EO    ${eo_number_deposit}
+    #us1620
+    Verify Form Of Payment Details Are Correct    ${EMPTY}    Credit Card (CX)
+    #us1620
+    Get Other Services Cost Details
+    Verify Vendor Contact Value Is Correct    Vendor Contact
+    Verify Nett Cost Value Is Correct    344.23
+    Verify Selling Price Value Is Correct    566.00
+    Verify Commission Fee Value Is Correct    233.77
+    Verify Merchant Fee Value Is Correct    12.00
+    Verify Total Selling Price Value Is Correct    578.00
+    Verify Description Value From Additional Information Is Correct    Deposit
+    Verify BTA Description Value Is Correct    Deposit
+    Verify Date Value Is Correct
+    Verify Exchange Order Number    ${eo_number_deposit}
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CX)    TEST CARD/VI************0087/D0823/CVV***
+    Get Other Services Form Of Payment Details
+    Get Other Services Additional Information Details
+    Click Vendor Info Tab
+    Verify Vendor Value Is Correct    CARLSON WAGONLIT TRAVEL
+    Verify Address 1 Value Is Correct    INTERCOMPANY-TRADE
+    Verify Address 2 Value Is Correct
+    Verify City Value Is Correct    SINGAPORE
+    Verify Country Value Is Correct    SINGAPORE
+    Verify Email Value Is Correct    automationtest@cwt.com
+    Verify Contact No Value Is Correct
+    Verify Fax No Value Is Correct    1111
+    Verify Credit Terms Values Is Correct    0
+    Verify Support Email Value Is Correct    automationtest@cwt.com
+    Click Remarks Tab
+    Verify Exchange Order Remarks Are Correct    EARLY CHECKIN IS ALLOWED    NO SMOKING
+    Click Update Button In EO Panel    Service Info
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR    Amend Booking For [AOS] Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card Is CX (VI) And BTA Description Is Not Blank
+
+Amend Booking For Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Cash Or Invoice And BTA Description Is Blank
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Client Info
+    Select Form Of Payment    TEST CARD/AX***********0009/D0822/CVV****
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Click Panel    Other Svcs
+    Select Product And Vendor    Tour Package    CITI NETWORK PTE LTD
+    #us1620
+    Verify Form Of Payment Details Are Correct    TEST CARD/AX***********0009/D0822/CVV****
+    #us1620
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Cash
+    Populate Service Info Cost Details    Vendor Contact    400.5    500.5
+    Verify Commission Fee Value Is Correct    100.00
+    Set BTA Description    ${EMPTY}
+    Get Other Services Cost Details
+    Get Other Services Additional Information Details
+    Get Other Services Form Of Payment Details
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    Tour Package
+    Click Finish PNR    Amend Booking For Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Cash Or Invoice And BTA Description Is Blank
+
+Amend Booking For Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card Is CC And BTA Description Is Blank
+    Retrieve PNR And Populate Amend Workflow    fop_dropdown_value=Invoice
+    Click Panel    Client Info
+    Select Form Of Payment    TEST CARD/AX***********0009/D0822/CVV****
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Click Panel    Other Svcs
+    Select Product And Vendor    CWT TO GO HOTEL FEE    CARLSON WAGONLIT TRAVEL
+    #us1620
+    Verify Form Of Payment Details Are Correct    TEST CARD/AX***********0009/D0822/CVV****
+    #us1620
+    Populate Service Info Cost Details    Vendor Contact    600.0    700.0
+    Select FOP Type    Credit Card (CC)
+    Set BTA Description    ${EMPTY}
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Get Other Services Additional Information Details
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    CWT TO GO HOTEL FEE
+    Click Finish PNR    Amend Booking For Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card Is CC And BTA Description Is Blank
+
+Amend Booking For Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card Is CX (AX) And BTA Description Is Blank
+    Retrieve PNR And Populate Amend Workflow    fop_dropdown_value=KBTEST/MC************4445/D0526
+    Click Panel    Client Info
+    Manually Set Value In Form Of Payment    TP    4012888888881881    1226
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Click Panel    Other Svcs
+    Select Product And Vendor    CWT TO GO HOTEL FEE    CARLSON WAGONLIT TRAVEL
+    #us1620
+    Verify Form Of Payment Details Are Correct    TP************1881/D1226
+    #us1620
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    AX    378282246310005    12    2026
+    Set BTA Description    ${EMPTY}
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Get Other Services Additional Information Details
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    CWT TO GO HOTEL FEE
+    Click Finish PNR    Amend Booking For Verify That Accounting Lines For Other Services Without GST Are Written When FOP Is Credit Card Is CX (AX) And BTA Description Is Blank
+
+Amend Verify That Accounting Lines For Without GST Products Are Not Written When Cancelled
+    Retrieve PNR And Populate Amend Workflow    SG
+    Click Panel    Other Svcs
+    Cancel EO    ${eo_number_last_eo}    Service Info    SG
+    Click Finish PNR    Amend Verify That Accounting Lines For Without GST Products Are Not Written When Cancelled

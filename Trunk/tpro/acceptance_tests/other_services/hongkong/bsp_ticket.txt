@@ -1,0 +1,819 @@
+*** Settings ***
+Force Tags        bsp_ticket
+Resource          ../other_services.txt
+
+*** Test Cases ***
+[NB OS] Verify That BSP Air Ticket Computes The Correct Fees
+    [Tags]    us467    horton    US1322    us1456    us1620    de486
+    Create PNR Using Credit Card As FOP    HK    True    fop_dropdown_value=KBTEST/MC************4445/D0526
+    Click Panel    Other Svcs
+    Select Product And Vendor    BSP AIR TICKET    BSP
+    Click Tab In Other Services Panel    Ticket Info
+    #us1620
+    Verify Form Of Payment Details Are Correct    KBTEST/MC************4445/D0526    Credit Card (CX)
+    #us1620
+    #Apply Formula Is Ticked
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    VI    4444333322221111    12    2020    #Changed
+    Select Consolidator Ticket Client Type    DU
+    Set Nett Fare    500
+    Set Tax 1    10
+    Set Tranx/Service Fee Value    500
+    Set Fuel Surcharge Fee    30
+    Set Commission Value    50
+    Set Discount Value    20
+    Compute Consolidator And LCC Fees For Other Services    HK    2
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Gross Fare Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    #Scenario 2 With Commission Percentage
+    Compute Consolidator And LCC Fees For Other Services    HK    2    is_commission_percent=true
+    Verify Gross Fare Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    #Scenario 3 With Discount Percentage
+    Set Discount Value    20
+    Compute Consolidator And LCC Fees For Other Services    HK    2    is_discount_percent=true
+    Verify Gross Fare Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    #Scenario 4 Tick UATP
+    Tick UATP Checkbox
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    VI    4444333322221111    12    2020    #Changed
+    Compute Consolidator And LCC Fees For Other Services    HK    2
+    Verify Gross Fare Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    #Client_type == DB
+    Select Consolidator Ticket Client Type    DB
+    Set Commission Value    50
+    Set Discount Value    20
+    Compute Consolidator And LCC Fees For Other Services    HK    2
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Gross Fare Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    #Scenario 2 With Commission Percentage
+    Compute Consolidator And LCC Fees For Other Services    HK    2    is_commission_percent=true
+    Verify Gross Fare Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    #Scenario 3 With Discount Percentage
+    Set Discount Value    20
+    Compute Consolidator And LCC Fees For Other Services    HK    2    is_discount_percent=true
+    Verify Gross Fare Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    #Scenario 4 CWT Merchant Absorb
+    Tick Merchant Fee CWT Absorb
+    Compute Consolidator And LCC Fees For Other Services    HK    2
+    Verify Gross Fare Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct    500
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    #Scenario 5 FOP Is Cash
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Cash
+    Compute Consolidator And LCC Fees For Other Services    HK    2
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Gross Fare Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    #Client_type == MN
+    Select Consolidator Ticket Client Type    MN
+    Set Commission Value    50
+    Compute Consolidator And LCC Fees For Other Services    HK    2
+    Verify Gross Fare Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Discount Fee Value Is Correct    0
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    #Scenario 2 With Commission Percentage
+    Compute Consolidator And LCC Fees For Other Services    HK    2    is_commission_percent=true
+    Verify Gross Fare Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct
+    Verify Discount Fee Value Is Correct    0
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    #Apply Formula Is Not Ticked
+    Select Consolidator Ticket Client Type    DU
+    Tick Apply Formula Checkbox    Untick
+    Set Nett Fare    250
+    Set Tax 1    25
+    Set Commission Value    500
+    Set Discount Value    500
+    Set Tranx/Service Fee Value    0
+    Set Fuel Surcharge Fee    0
+    Compute Consolidator And LCC Fees For Other Services    HK    2
+    Verify Nett Cost In EO Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Merchant Fee Value Is Correct    0
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Tick Select All Segments    Tick
+    Populate Airline Code And Ticket Number    111    1234567890
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    QF
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    F - PASSENGER REQUESTED SPECIFIC CLASS
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    BSP AIR TICKET
+    Click Finish PNR
+    Verify PNR Is Successfully Created    False    Exchange Order(s) Transaction Successfully Saved!
+    [Teardown]
+
+[AB OS] Verify That Additional BSP Air Computes The Correct Fees
+    [Tags]    us467    horton    US1322    US1462
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Client Info
+    Select Form Of Payment    Invoice
+    Click Panel    Other Svcs
+    Select Product And Vendor    ADDITIONAL BSP AIR    AIR FRANCE
+    Click Tab In Other Services Panel    Ticket Info
+    #us1620
+    Verify Form Of Payment Details Are Correct    Invoice
+    #us1620
+    #Apply Formula Is Ticked
+    Select Consolidator Ticket Client Type    TF
+    Set Nett Fare    500
+    Set Tax 1    10
+    Set Tranx/Service Fee Value    500
+    Set Fuel Surcharge Fee    30
+    Set Commission Value    50
+    Set Discount Value    275
+    Compute Consolidator And LCC Fees For Other Services    HK    2
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Gross Fare Value Is Correct
+    Verify Discount Fee Value Is Correct    0
+    Verify Merchant Fee Value Is Correct
+    #Scenario 2 With Commission Percentage
+    Compute Consolidator And LCC Fees For Other Services    HK    2    is_commission_percent=true
+    Verify Gross Fare Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct
+    Verify Discount Fee Value Is Correct    0
+    Verify Merchant Fee Value Is Correct
+    #Scenario 3 With Discount Percentage
+    Set Discount Value    50
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Cash
+    Compute Consolidator And LCC Fees For Other Services    HK    2    is_discount_percent=true
+    Verify Gross Fare Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct    500
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    #Client_type == MG
+    Select Consolidator Ticket Client Type    MG
+    Set Commission Value    50
+    Set Discount Value    275
+    Compute Consolidator And LCC Fees For Other Services    HK    2
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Gross Fare Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    #Scenario 2 With Commission Percentage
+    Compute Consolidator And LCC Fees For Other Services    HK    2    is_commission_percent=true
+    Verify Gross Fare Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct
+    Verify Discount Fee Value Is Correct    275
+    Verify Merchant Fee Value Is Correct
+    #Scenario 3 With Discount Percentage
+    Set Discount Value    50
+    Compute Consolidator And LCC Fees For Other Services    HK    2    is_discount_percent=true
+    Verify Gross Fare Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct    500
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    #Scenario 4 CWT Merchant Absorb
+    Tick Merchant Fee CWT Absorb
+    Compute Consolidator And LCC Fees For Other Services    HK    2
+    Verify Gross Fare Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct    500
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    #Client_type == TP
+    Select Consolidator Ticket Client Type    TP
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    DC    378282246310005    12    2026    #Changed
+    Set Commission Value    50
+    Set Discount Value    275
+    Compute Consolidator And LCC Fees For Other Services    HK    2
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    #Scenario 2 With Commission Percentage
+    Compute Consolidator And LCC Fees For Other Services    HK    2    is_commission_percent=true
+    Verify Gross Fare Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct    0
+    Verify Discount Fee Value Is Correct    275
+    Verify Merchant Fee Value Is Correct
+    #Apply Formula Is Not Ticked
+    Select Consolidator Ticket Client Type    DU
+    Tick Apply Formula Checkbox    Untick
+    Set Nett Fare    250
+    Set Tax 1    25
+    Set Commission Value    500
+    Set Discount Value    500
+    Set Tranx/Service Fee Value    0
+    Set Fuel Surcharge Fee    0
+    Compute Consolidator And LCC Fees For Other Services    HK    2
+    Verify Nett Cost In EO Value Is Correct
+    Verify Merchant Fee Value Is Correct    0
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Tick Select All Segments    Tick
+    Populate Airline Code And Ticket Number    111    1234567890
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    QF
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    B - PASSENGER REQUESTED SPECIFIC AIRLINE
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Click Add Button In EO Panel    Ticket Info
+    Click Finish PNR    Amend Booking For Verify That Additional BSP Air Computes The Correct Fees
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Additional BSP Air Computes The Correct Fees
+    Verify PNR Is Successfully Created    False    2 Exchange Order(s) Transaction Successfully Saved!
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB OS] Verify That BSP Air Ticket, Fuel Surcharge, Transaction Fee, Merchant Fee And Discount Remarks Are Written For Published Fare
+    [Tags]    us467    horton    us1167    US1322    us1456    us1338
+    ...    us1700
+    Create PNR Using Cash As FOP    HK    True
+    Click Panel    Other Svcs
+    Select Product And Vendor    BSP AIR TICKET    BSP
+    Click Tab In Other Services Panel    Ticket Info
+    #us1620
+    Select Consolidator Ticket Client Type    DU
+    Verify Form Of Payment Details Are Correct    Cash
+    #us1620
+    Select Bill Fare    Published Fare
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Set Tranx/Service Fee Value    500
+    Set Fuel Surcharge Fee    30
+    Set Commission Value    20
+    Set Discount Value    25
+    Tick Select All Segments    TICK
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    DC    378282246310005    12    2026    #Changed
+    Get Merchant Fee In Other Services
+    Set Issue In Exchange For    1234567890
+    Populate Airline Code And Ticket Number    111    6505554448
+    Set Conjunction Number    33
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Low Fare    950    #DE516 fix
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    QF
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    F - PASSENGER REQUESTED SPECIFIC CLASS
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    BSP AIR TICKET
+    Click Finish PNR
+    Verify PNR Is Successfully Created    False    Exchange Order(s) Transaction Successfully Saved!
+    Click Panel    Other Svcs
+    Verify EO Status For Third Party Vendor    New    1
+    Get Exchange Order Number    first
+    Retrieve PNR Details from Amadeus    command=RTY
+    Verify BSP Ticket Accounting Remarks Are Written    BSP AIR TICKET    BSP    HK
+    Verify Merchant Fee Remarks Are Written    HK
+    Verify BSP Ticket Fuel Surcharge Accounting Remarks Are Written    HK
+    Verify BSP Ticket Transaction Fee Accounting Remarks Are Written    HK
+    Verify BSP Ticket Discount Accounting Remarks Are Written    HK
+    Verify BA And TA Remarks    ${uid}
+    [Teardown]
+
+[AB][CEO] Verify That Accounting Lines For BSP Ticket Product Is Not Written When Cancelled
+    [Tags]    us1570    team_chiu
+    Retrieve PNR And Populate Amend Workflow    fop_dropdown_value=Invoice
+    Click Panel    Other Svcs
+    Cancel EO    ${eo_number_first}    Ticket Info    HK
+    Click Finish PNR    Amend Booking Verify That Accounting Lines For BSP Ticket Product Is Not Written When Cancelled
+    Execute Simultaneous Change Handling    Amend Booking Verify That Accounting Lines For BSP Ticket Product Is Not Written When Cancelled
+    Verify PNR Is Successfully Created    False    1 Exchange Order(s) Successfully Cancelled!
+    Retrieve PNR Details From Amadeus
+    Click Panel    Other Svcs
+    Verify Exchange Order Record Details Are Correct    HK    BSP AIR TICKET    BSP    BT    ${EMPTY}    Cancelled
+    ...    is_new_eo=False    is_completed_date=False
+    #Not Written
+    Verify BSP Ticket Accounting Remarks Are Written Not Written
+    Verify BSP Ticket Fuel Surcharge Accounting Remarks Are Not Written
+    Verify BSP Ticket Transaction Fee Accounting Remarks Are Not Written
+    Verify BSP Ticket Discount Accounting Remarks Are Not Written
+
+[AB OS] Verify That BSP Air Ticket, Fuel Surcharge, Transaction Fee, Merchant Fee And Discount Remarks Are Written For Marked Up Nett Fare
+    [Tags]    us467    horton    us1167    us1322    us1338    us1462
+    ...    us1700
+    Retrieve PNR And Populate Amend Workflow    fop_dropdown_value=Cash
+    Click Panel    Client Info
+    Select Form Of Payment    Invoice
+    Click Panel    Other Svcs
+    Select Product And Vendor    BSP AIR TICKET    BSP
+    Click Tab In Other Services Panel    Ticket Info
+    Select Consolidator Ticket Client Type    DU
+    Select Bill Fare    Marked Up Nett Fare
+    Populate Ticket Info Fees    HK    1000    0    HK    0    SQ
+    Set Tranx/Service Fee Value    500
+    Set Fuel Surcharge Fee    30
+    Set Commission Value    20
+    Set Discount Value    25
+    Tick Select All Segments    TICK
+    #us1620
+    Verify Form Of Payment Details Are Correct    Invoice
+    #us1620
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CX)    TEST CARD/AX***********0009/D0822/CVV****    #Changed
+    Get Merchant Fee In Other Services
+    Set Issue In Exchange For    1234567899
+    Populate Airline Code And Ticket Number    111    6505554448
+    Set Conjunction Number    33
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    4432
+    Set MI Final Destination    MNL
+    Set MI Low Fare Carrier    PR
+    Select MI Type Of Ticket    ET
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    F - PASSENGER REQUESTED SPECIFIC CLASS
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    Click Add Button In EO Panel    Ticket Info
+    Click Finish PNR    Amend Booking For Verify That BSP Air Ticket, Fuel Surcharge, Transaction Fee And Discount Remarks Are Written For Marked Up Nett Fare
+    Execute Simultaneous Change Handling    Amend Booking For Verify That BSP Air Ticket, Fuel Surcharge, Transaction Fee And Discount Remarks Are Written For Marked Up Nett Fare
+    Verify PNR Is Successfully Created    False    1 Exchange Order(s) Transaction Successfully Saved!
+    Click Panel    Other Svcs
+    Verify EO Status For Third Party Vendor    New    1
+    Get Exchange Order Number
+    Retrieve PNR Details from Amadeus    command=RTY
+    Verify BSP Ticket Accounting Remarks Are Written    BSP AIR TICKET    BSP    HK
+    Verify Merchant Fee Remarks Are Written    HK
+    Verify BSP Ticket Fuel Surcharge Accounting Remarks Are Written    HK
+    Verify BSP Ticket Transaction Fee Accounting Remarks Are Written    HK    #vendor_code_number=032001
+    Verify BSP Ticket Discount Accounting Remarks Are Written    HK
+
+[AB OS] Verify That BSP Air Ticket, Transaction Fee And Discount Remarks Are Written For Cash Or Invoice
+    [Tags]    us467    horton    us1167    us1322    us1462    us1700
+    ...    de486
+    Retrieve PNR And Populate Amend Workflow    fop_dropdown_value=Cash
+    Click Panel    Client Info
+    Manually Set Value In Form Of Payment    DC    378282246310005    1226
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Click Panel    Other Svcs
+    Select Product And Vendor    ADDITIONAL BSP AIR    AIR FRANCE
+    Click Tab In Other Services Panel    Ticket Info
+    Select Consolidator Ticket Client Type    DU
+    Select Bill Fare    Published Fare
+    Populate Ticket Info Fees    HK    1000    25    HK    0    SQ
+    Set Tranx/Service Fee Value    500
+    Set Fuel Surcharge Fee    30
+    Set Commission Value    20
+    Set Discount Value    25
+    Tick Select All Segments    TICK
+    #us1620
+    Verify Form Of Payment Details Are Correct    DC***********0005/D1226    Credit Card (CX)
+    #us1620
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Cash    #Changed
+    Set Issue In Exchange For    1235567890
+    Populate Airline Code And Ticket Number    111    6505554448
+    Set Conjunction Number    33
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    QF
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    F - PASSENGER REQUESTED SPECIFIC CLASS
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    Click Add Button In EO Panel    Ticket Info
+    Click Finish PNR    Amend Booking For Verify That BSP Air Ticket, Transaction Fee And Discount Remarks Are Written For Cash Or Invoice
+    Execute Simultaneous Change Handling    Amend Booking For Verify That BSP Air Ticket, Transaction Fee And Discount Remarks Are Written For Cash Or Invoice
+    Click Panel    Other Svcs
+    Verify EO Status For Third Party Vendor    New    1
+    Get Exchange Order Number
+    Verify PNR Is Successfully Created    False    2 Exchange Order(s) Transaction Successfully Saved!
+    Get Exchange Order Number
+    Retrieve PNR Details from Amadeus    command=RTY
+    Verify BSP Ticket Accounting Remarks Are Written    ADDITIONAL BSP AIR    AIR FRANCE    HK
+    Verify BSP Ticket Fuel Surcharge Accounting Remarks Are Written    HK
+    Verify BSP Ticket Transaction Fee Accounting Remarks Are Written    HK
+    Verify BSP Ticket Discount Accounting Remarks Are Written    HK
+
+[AB AOS] Verify That Fields Are Pre-populated And Remarks Are Written For Cash Or Invoice
+    [Tags]    us467    horton    us1291    us1167    us1322    us1462
+    Retrieve PNR And Populate Amend Workflow    fop_dropdown_value=Invoice
+    Click Panel    Other Svcs
+    Click Amend EO    ${eo_number}
+    Click Tab In Other Services Panel    Ticket Info
+    #us1620
+    Verify Form Of Payment Details Are Correct    Cash
+    #us1620
+    Verify Nett Fare Value Is Correct    1000
+    Verify Gross Fare Value Is Correct    1020
+    Verify Tax 1 Value and Code Are Correct    25    HK
+    Verify Nett Cost In EO Value Is Correct    1000
+    Verify Commission Fee Value Is Correct    20
+    Verify Fuel Surcharge Value Is Correct    30
+    Verify Discount Fee Value Is Correct    25
+    Verify Merchant Fee Value Is Correct    0
+    Verify Total Selling Price Value Is Correct    1020
+    Verify CWT Absorb Checkbox For Merchant Fee Status Is Correct    False
+    Verify Tranx/Service Fee Value Is Correct    500
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Verify Issue In Exchange For Is Correct    1235567890
+    Verify Airline Code And Ticket Number Is Correct    111    6505554448
+    Verify Conjunction Number Is Correct    33
+    Verify Exchange Order Number    ${eo_number}
+    #Population
+    Select Bill Fare    Marked Up Nett Fare
+    Populate Ticket Info Fees    HK    1100    30    HK    10    SQ
+    Set Tranx/Service Fee Value    250
+    Set Fuel Surcharge Fee    55
+    Set Commission Value    10
+    Set Discount Value    20
+    Tick Select All Segments    TICK
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    DC    378282246310005    12    2026    #Changed
+    Set Issue In Exchange For    4444333322
+    Populate Airline Code And Ticket Number    123    6505554448
+    Set Conjunction Number    ${EMPTY}
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Set MI Low Fare    100
+    Get MI Fields Values
+    Click Update Button In EO Panel    Ticket Info
+    Click Finish PNR    Amend Booking For Verify That Fields Are Pre-populated And Remarks Are Written For Cash Or Invoice
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Fields Are Pre-populated And Remarks Are Written For Cash Or Invoice
+    Verify Exchange Order Number Is Retained    ${eo_number}
+    Verify PNR Is Successfully Created    False    2 Exchange Order(s) Transaction Successfully Saved!
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details from Amadeus    command=RTY
+    Verify BSP Ticket Accounting Remarks Are Written    ADDITIONAL BSP AIR    AIR FRANCE    HK
+    Verify BSP Ticket Fuel Surcharge Accounting Remarks Are Written    HK
+    Verify BSP Ticket Transaction Fee Accounting Remarks Are Written    HK
+    Verify BSP Ticket Discount Accounting Remarks Are Written    HK
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    True    ADDITIONAL BSP AIR    AIR FRANCE    1
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    True    Discount    AIR FRANCE    2    True
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    True    Transaction Fee    AIR FRANCE    2    True
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB OS] Verify That Transaction Fee, Fuel Surcharge And Discount Remarks Are Not Written
+    [Tags]    us467    horton    us1167    us1322    us1456    de486
+    Create PNR Using Credit Card As FOP    HK    True
+    Click Panel    Other Svcs
+    Select Product And Vendor    ADDITIONAL BSP AIR    AIR FRANCE
+    Click Tab In Other Services Panel    Ticket Info
+    Select Consolidator Ticket Client Type    DU
+    Select Bill Fare    Marked Up Nett Fare
+    Populate Ticket Info Fees    HK    800    30    HK    10    SQ
+    Set Tranx/Service Fee Value    0
+    Set Fuel Surcharge Fee    0
+    Set Commission Value    0
+    Set Discount Value    0
+    Tick Select All Segments    TICK
+    #us1620
+    Verify Form Of Payment Details Are Correct    BTA CTCL VI/VI************7710/D0823    Credit Card (CX)
+    #us1620
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    DC    378282246310005    12    2026
+    Set Issue In Exchange For    ${EMPTY}
+    Populate Airline Code And Ticket Number    111    1234567890
+    Set Conjunction Number    33
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    QF
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    F - PASSENGER REQUESTED SPECIFIC CLASS
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    ADDITIONAL BSP AIR
+    Click Finish PNR
+    Verify PNR Is Successfully Created    False    Exchange Order(s) Transaction Successfully Saved!
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details from Amadeus    command=RTY
+    Verify BSP Ticket Accounting Remarks Are Written    ADDITIONAL BSP AIR    AIR FRANCE    HK
+    Verify BSP Ticket Transaction Fee Accounting Remarks Are Not Written    HK
+    Verify BSP Ticket Fuel Surcharge Accounting Remarks Are Not Written    HK
+    Verify BSP Ticket Discount Accounting Remarks Are Not Written    HK
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Amend Booking For Verify That Additional BSP Air Computes The Correct Fees
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Client Info
+    Select Form Of Payment    Invoice
+    Click Panel    Other Svcs
+    Select Product And Vendor    ADDITIONAL BSP AIR    AIR FRANCE
+    Click Tab In Other Services Panel    Ticket Info
+    #us1620
+    Verify Form Of Payment Details Are Correct    Invoice
+    #us1620
+    #Apply Formula Is Ticked
+    Select Consolidator Ticket Client Type    TF
+    Set Nett Fare    500
+    Set Tax 1    10
+    Set Tranx/Service Fee Value    500
+    Set Fuel Surcharge Fee    30
+    Set Commission Value    50
+    Set Discount Value    275
+    Compute Consolidator And LCC Fees For Other Services    HK    2
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Gross Fare Value Is Correct
+    Verify Discount Fee Value Is Correct    0
+    Verify Merchant Fee Value Is Correct
+    #Scenario 2 With Commission Percentage
+    Compute Consolidator And LCC Fees For Other Services    HK    2    is_commission_percent=true
+    Verify Gross Fare Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct
+    Verify Discount Fee Value Is Correct    0
+    Verify Merchant Fee Value Is Correct
+    #Scenario 3 With Discount Percentage
+    Set Discount Value    50
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Cash
+    Compute Consolidator And LCC Fees For Other Services    HK    2    is_discount_percent=true
+    Verify Gross Fare Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct    500
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    #Client_type == MG
+    Select Consolidator Ticket Client Type    MG
+    Set Commission Value    50
+    Set Discount Value    275
+    Compute Consolidator And LCC Fees For Other Services    HK    2
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Gross Fare Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    #Scenario 2 With Commission Percentage
+    Compute Consolidator And LCC Fees For Other Services    HK    2    is_commission_percent=true
+    Verify Gross Fare Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct
+    Verify Discount Fee Value Is Correct    275
+    Verify Merchant Fee Value Is Correct
+    #Scenario 3 With Discount Percentage
+    Set Discount Value    50
+    Compute Consolidator And LCC Fees For Other Services    HK    2    is_discount_percent=true
+    Verify Gross Fare Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct    500
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    #Scenario 4 CWT Merchant Absorb
+    Tick Merchant Fee CWT Absorb
+    Compute Consolidator And LCC Fees For Other Services    HK    2
+    Verify Gross Fare Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct    500
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    #Client_type == TP
+    Select Consolidator Ticket Client Type    TP
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    DC    378282246310005    12    2026    #Changed
+    Set Commission Value    50
+    Set Discount Value    275
+    Compute Consolidator And LCC Fees For Other Services    HK    2
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    #Scenario 2 With Commission Percentage
+    Compute Consolidator And LCC Fees For Other Services    HK    2    is_commission_percent=true
+    Verify Gross Fare Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct    0
+    Verify Discount Fee Value Is Correct    275
+    Verify Merchant Fee Value Is Correct
+    #Apply Formula Is Not Ticked
+    Select Consolidator Ticket Client Type    DU
+    Tick Apply Formula Checkbox    Untick
+    Set Nett Fare    250
+    Set Tax 1    25
+    Set Commission Value    500
+    Set Discount Value    500
+    Set Tranx/Service Fee Value    0
+    Set Fuel Surcharge Fee    0
+    Compute Consolidator And LCC Fees For Other Services    HK    2
+    Verify Nett Cost In EO Value Is Correct
+    Verify Merchant Fee Value Is Correct    0
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Tick Select All Segments    Tick
+    Populate Airline Code And Ticket Number    111    1234567890
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    QF
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    B - PASSENGER REQUESTED SPECIFIC AIRLINE
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Click Add Button In EO Panel    Ticket Info
+    Click Finish PNR    Amend Booking For Verify That Additional BSP Air Computes The Correct Fees
+
+Amend Booking For Verify That BSP Air Ticket, Fuel Surcharge, Transaction Fee And Discount Remarks Are Written For Marked Up Nett Fare
+    Retrieve PNR And Populate Amend Workflow    fop_dropdown_value=Cash
+    Click Panel    Client Info
+    Select Form Of Payment    Invoice
+    Click Panel    Other Svcs
+    Select Product And Vendor    BSP AIR TICKET    BSP
+    Click Tab In Other Services Panel    Ticket Info
+    Select Consolidator Ticket Client Type    DU
+    Select Bill Fare    Marked Up Nett Fare
+    Populate Ticket Info Fees    HK    1000    0    HK    0    SQ
+    Set Tranx/Service Fee Value    500
+    Set Fuel Surcharge Fee    30
+    Set Commission Value    20
+    Set Discount Value    25
+    Tick Select All Segments    TICK
+    #us1620
+    Verify Form Of Payment Details Are Correct    Invoice
+    #us1620
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CX)    TEST CARD/AX***********0009/D0822/CVV****    #Changed
+    Set Issue In Exchange For    1234567899
+    Populate Airline Code And Ticket Number    111    6505554448
+    Set Conjunction Number    33
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    4432
+    Set MI Final Destination    MNL
+    Set MI Low Fare Carrier    PR
+    Select MI Type Of Ticket    ET
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    F - PASSENGER REQUESTED SPECIFIC CLASS
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    Click Add Button In EO Panel    Ticket Info
+    Click Finish PNR    Amend Booking For Verify That BSP Air Ticket, Fuel Surcharge, Transaction Fee And Discount Remarks Are Written For Marked Up Nett Fare
+
+Amend Booking For Verify That BSP Air Ticket, Transaction Fee And Discount Remarks Are Written For Cash Or Invoice
+    Retrieve PNR And Populate Amend Workflow    fop_dropdown_value=Cash
+    Click Panel    Client Info
+    Manually Set Value In Form Of Payment    DC    378282246310005    1226
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Click Panel    Other Svcs
+    Select Product And Vendor    ADDITIONAL BSP AIR    AIR FRANCE
+    Click Tab In Other Services Panel    Ticket Info
+    Select Consolidator Ticket Client Type    DU
+    Select Bill Fare    Published Fare
+    Populate Ticket Info Fees    HK    1000    25    HK    0    SQ
+    Set Tranx/Service Fee Value    500
+    Set Fuel Surcharge Fee    30
+    Set Commission Value    20
+    Set Discount Value    25
+    Tick Select All Segments    TICK
+    #us1620
+    Verify Form Of Payment Details Are Correct    DC***********0005/D1226
+    #us1620
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Cash    #Changed
+    Set Issue In Exchange For    1235567890
+    Populate Airline Code And Ticket Number    111    6505554448
+    Set Conjunction Number    33
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    QF
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    F - PASSENGER REQUESTED SPECIFIC CLASS
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    Click Add Button In EO Panel    Ticket Info
+    Click Finish PNR    Amend Booking For Verify That BSP Air Ticket, Transaction Fee And Discount Remarks Are Written For Cash Or Invoice
+
+Amend Booking For Verify That Fields Are Pre-populated And Remarks Are Written For Cash Or Invoice
+    Retrieve PNR And Populate Amend Workflow    fop_dropdown_value=Invoice
+    Click Panel    Other Svcs
+    Click Amend EO    ${eo_number_first}
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    DC    378282246310005    12    2026
+    Tick Select All Segments    TICK
+    Click Update Button In EO Panel    Ticket Info
+    Click Panel    Other Svcs
+    Click Amend EO    ${eo_number}
+    Click Tab In Other Services Panel    Ticket Info
+    #us1620
+    Verify Form Of Payment Details Are Correct    Cash
+    #us1620
+    Verify Nett Fare Value Is Correct    1000
+    Verify Gross Fare Value Is Correct    1020
+    Verify Tax 1 Value and Code Are Correct    25    HK
+    Verify Nett Cost In EO Value Is Correct    1000
+    Verify Commission Fee Value Is Correct    20
+    Verify Fuel Surcharge Value Is Correct    30
+    Verify Discount Fee Value Is Correct    25
+    Verify Merchant Fee Value Is Correct    0
+    Verify Total Selling Price Value Is Correct    1020
+    Verify CWT Absorb Checkbox For Merchant Fee Status Is Correct    False
+    Verify Tranx/Service Fee Value Is Correct    500
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Verify Issue In Exchange For Is Correct    1235567890
+    Verify Airline Code And Ticket Number Is Correct    111    6505554448
+    Verify Conjunction Number Is Correct    33
+    Verify Exchange Order Number    ${eo_number}
+    #Population
+    Select Bill Fare    Marked Up Nett Fare
+    Populate Ticket Info Fees    HK    1100    30    HK    10    SQ
+    Set Tranx/Service Fee Value    250
+    Set Fuel Surcharge Fee    55
+    Set Commission Value    10
+    Set Discount Value    20
+    Tick Select All Segments    TICK
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    DC    378282246310005    12    2026    #Changed
+    Set Issue In Exchange For    4444333322
+    Populate Airline Code And Ticket Number    123    6505554448
+    Set Conjunction Number    ${EMPTY}
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Set MI Low Fare    100
+    Get MI Fields Values
+    Click Update Button In EO Panel    Ticket Info
+    Click Finish PNR    Amend Booking For Verify That Fields Are Pre-populated And Remarks Are Written For Cash Or Invoice
+
+Amend Booking Verify That Accounting Lines For BSP Ticket Product Is Not Written When Cancelled
+    Retrieve PNR And Populate Amend Workflow    fop_dropdown_value=Invoice
+    Click Panel    Other Svcs
+    Cancel EO    ${eo_number_first}    Ticket Info    HK
+    Click Finish PNR    Amend Booking Verify That Accounting Lines For BSP Ticket Product Is Not Written When Cancelled

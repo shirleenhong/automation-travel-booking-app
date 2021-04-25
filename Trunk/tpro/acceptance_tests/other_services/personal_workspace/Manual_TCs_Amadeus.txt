@@ -1,0 +1,39 @@
+*** Test Cases ***
+[1A][NB][HK] Other Services with GST Is Possible For Products And Vendors With GST
+    Open Power Express And Retrieve Profile    ${version}    Test    u003jdc    en-GB    jcabela    APAC QA
+    Select GDS    Amadeus
+    Handle Generic Window Popup
+    Set Client And Traveler    APAC SYN CORP ¦ APAC SYN HK    BEAR    HONG
+    Handle Generic Window Popup
+    Click Clear All
+    Set Client And Traveler    APAC SYN CORP ¦ APAC SYN HK    BEAR    HONG
+    Handle Generic Window Popup
+    Click New Booking
+    Book Flight X Months From Now    HKGMNL/APR    SS1Y1    FXP/S2    6    3
+    Click Panel    Client Info
+    Manually Set Value In Form Of Payment    VI    4444333322221111    1220
+    Select Merchant Fee Type    Airline
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare Quote 1
+    Comment    Populate Air Fare Savings Code    RF - Restricted Fare Accepted    P - Passenger Declined Restricted Fare    CW - Business CWT Nett Fare
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Delivery
+    Select Delivery Method    Amadeus edited TKXL
+    Click Finish PNR
+    Click Other Services
+    Select Product    AIR REFUND
+    Select Vendor    AIR FRANCE
+    Click Continue In Other Svcs
+    Click Tab In Other Services Panel    Service Info
+    Populate Service Info With Values    Vendor Contact    300    400    Cash or Invoice    ${EMPTY}    ${EMPTY}
+    ...    ${EMPTY}    ${EMPTY}    Description 1    bta description1
+    Click Calculate
+    Get Service Info Field Values
+    Get Product Code    hk    ${product}
+    Get GST Percentage    hk    ${product}
+    Get Vendor Code    hk    ${product}    ${vendor}
+    Click Finish PNR    ${EMPTY}    5    Other Svcs
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Accounting Remarks For Other Services Are Written in RM Lines    hk    false
+    Verify f

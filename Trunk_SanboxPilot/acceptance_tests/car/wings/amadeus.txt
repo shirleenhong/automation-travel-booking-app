@@ -1,0 +1,57 @@
+*** Settings ***
+Force Tags        amadeus    emea
+Resource          ../car_verification.txt
+
+*** Test Cases ***
+[CS FR] Verify That Car Remarks Are Correctly Written In The PNR When 2 Car Segments Are Added
+    [Tags]    us4429    data_dependent
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    de-DE    AutomationDE    # DE AUTO AMADEUS
+    Select GDS    Amadeus
+    Set Client And Traveler    Amadeus DE 15 - Auto ¦ US2447    AutoOneFiveOneTwo    OptimizeTrvlrFive
+    Click New Booking
+    Tick Not Known At Time Of Booking For Form Of Payment
+    Click Create Shell
+
+[AB FR] Verify That Car Remarks Are Correctly Written In The PNR When 2 Car Segments Are Added
+    [Tags]    us4429    data_dependent
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Book Flight X Months From Now    MELSYD/AVA    SS1Y1    FXB    5
+    Book Active Car Segment    SYD    5    1    5    2    ZI
+    ...    1
+    Book Active Car Segment    SYD    5    3    5    4    ZI
+    ...    2
+    Retrieve PNR Details from Amadeus    \    RT    False
+    Insert Car Identifier Free Text To Car Segment    SYD    ${pickup_date_1}    TESTONE
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Car
+    Click Finish PNR
+    Re-Execute Amend Booking Workflow With 2 New Car Segments Added If Simultaneous Change Error Is Displayed
+    Enter Specific Command On Native GDS    RT
+    Verify Car Identifier Appended To Car Segment Is Correct    SYD    ${pickup_date_1}    SI-TESTONE *C01*
+    Verify Car Identifier Appended To Car Segment Is Correct    SYD    ${pickup_date_2}    SI-*C02*
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Amend Booking Workflow With 2 New Car Segments Added
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Book Flight X Months From Now    MELSYD/AVA    SS1Y1    FXB    5
+    Book Active Car Segment    SYD    5    1    5    2    ZI
+    ...    1
+    Book Active Car Segment    SYD    5    3    5    4    ZI
+    ...    2
+    Retrieve PNR Details from Amadeus    \    \    false
+    Insert Car Identifier Free Text To Car Segment    SYD    ${pickup_date_1}    TESTONE
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Car
+    Click Finish PNR
+
+Insert Car Identifier Free Text To Car Segment
+    [Arguments]    ${location}    ${pickup_date}    ${free_text}
+    ${car_segment_line}    Get Lines Containing String    ${pnr_details}    ${location} ${pickup_date}
+    ${car_segment_line_no}    Fetch From Left    ${car_segment_line.strip()}    CCR
+    ${car_segment_line_no}    Set Variable    ${car_segment_line_no.strip()}
+    Activate Power Express Window
+    Log    Command Entered: ${car_segment_line_no}/SI-${free_text}
+    Enter GDS Command    ${car_segment_line_no}/SI-${free_text}

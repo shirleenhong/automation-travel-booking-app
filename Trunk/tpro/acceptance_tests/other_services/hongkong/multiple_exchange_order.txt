@@ -1,0 +1,383 @@
+*** Settings ***
+Force Tags        multiple_exchange_order
+Resource          ../other_services.txt
+
+*** Test Cases ***
+[NB] Verify That Accounting Remarks For Multiple EOs Are Written Using Cash
+    [Tags]    us1456
+    Create PNR Using Cash As FOP    HK    True
+    Click Panel    Other Svcs
+    #Visa Processing
+    Populate Exchange Order Product    VISA PROCESSING    CWT VISA    Cash    Remarks    Vendor Info
+    Get Other Services Cost Details    Visa Processing
+    Get Other Services Form Of Payment Details    Visa Processing
+    Get Other Service Visa Processing Country Details    Visa Processing
+    Click Add Button In EO Panel    Visa Info
+    #Handling Fee
+    Populate Exchange Order Product    HANDLING FEE    CWT    Cash    Remarks    Vendor Info
+    Get Other Services Cost Details    Handling Fee
+    Get Other Services Additional Information Details    Handling Fee
+    Get Other Services Form Of Payment Details    Handling Fee
+    Click Add Button In EO Panel    Service Info
+    #Meet and Greet
+    Comment    Populate Exchange Order Product    MEET AND GREET SERVICE    MEET AND GREET SERVICES    Cash    Remarks    Vendor Info
+    Comment    Get Other Services Cost Details    Meet and Greet
+    Comment    Get Other Services Additional Information Details    Meet and Greet
+    Comment    Get Other Services Form Of Payment Details    Meet and Greet
+    Comment    Click Add Button In EO Panel    Service Info
+    Click Finish PNR
+    Click Panel    Other Svcs
+    Get Exchange Order Number Using Product    VISA PROCESSING
+    Get Exchange Order Number Using Product    HANDLING FEE
+    Comment    Get Exchange Order Number Using Product    MEET AND GREET SERVICE
+    Retrieve PNR Details from Amadeus    command=RTY
+    Verify That Accounting Lines For Visa Processing Are Written When FOP Is Invoice    VISA PROCESSING    CWT VISA
+    Verify Other Services Without GST Service Accounting General Remarks    HANDLING FEE    CWT    Cash    HK
+    Verify Other Services Cash Or Invoice Fees Accounting Remarks Are Written    HK    HANDLING FEE    #For Handling Fee
+    Comment    Verify Other Services Without GST Service Accounting General Remarks    MEET AND GREET SERVICE    MEET AND GREET SERVICES    Cash    HK
+    Comment    Verify Other Services Cash Or Invoice Fees Accounting Remarks Are Written    HK    #For Meet and Greet
+    Verify BA And TA Remarks    ${uid}
+
+[AB AOS] Verify That Accounting Remarks For Multiple EOs Are Written Using Cash
+    [Tags]    us1462
+    Retrieve PNR And Populate Amend Workflow    HK
+    Click Panel    Other Svcs
+    #Verify Visa Processing Values are Correct
+    Click Amend EO    ${eo_number_VISA PROCESSING}
+    Verify Form Of Payment Details Are Correct    Cash    ${EMPTY}    #change FOP Type from EMPTY to Credit Card (CX) once decision has been made
+    Get Other Services Visa Processing Cost    Visa Processing
+    Verify Vendor Contact Value Is Correct    Vendor Test
+    Verify Visa Processing Nett Cost Value Is Correct    1000
+    Verify Visa Processing Vendor Handling Value Is Correct    2500
+    Verify Visa Processing CWT Handling Value Is Correct    250
+    Verify Visa Processing Selling Price Value Is Correct    3750
+    Verify Visa Processing Commission Value Is Correct    250
+    Verify Visa Processing Total Selling Price Is Correct    3750
+    Verify Visa Processing Country Details    Singapore    Other    Single    Months    Normal    ${EMPTY}
+    Verify Exchange Order Number    ${eo_number_VISA PROCESSING}
+    Get Other Services Form Of Payment Details    Visa Processing
+    Get Other Service Visa Processing Country Details    Visa Processing
+    Click Update Button In EO Panel    Visa Info
+    #Verify Handling Fee Values are Correct
+    Click Amend EO    ${eo_number_HANDLING FEE}
+    Verify Form Of Payment Details Are Correct    Cash    ${EMPTY}    #change FOP Type from EMPTY to Credit Card (CX) once decision has been made
+    Verify Vendor Contact Value Is Correct    Vendor Test
+    Verify Nett Cost Value Is Correct    1000
+    Verify Selling Price Value Is Correct    2500
+    Verify Commission Fee Value Is Correct    1500
+    Verify Merchant Fee Value Is Correct    0
+    Verify Total Selling Price Value Is Correct    2500
+    Verify Description Value From Additional Information Is Correct    HANDLING FEE
+    Verify BTA Description Value Is Correct    HANDLING FEE
+    Verify Exchange Order Number    ${eo_number_HANDLING FEE}
+    Get Other Services Form Of Payment Details    HANDLING FEE
+    Get Other Services Cost Details    HANDLING FEE
+    Get Other Services Additional Information Details    HANDLING FEE
+    Click Update Button In EO Panel    Service Info
+    Click Finish PNR    keyword=Amend Booking For Verify That Accounting Remarks For Multiple EOs Are Written Using Cash
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Accounting Remarks For Multiple EOs Are Written Using Cash
+    Click Panel    Other Svcs
+    Get Exchange Order Number Using Product    VISA PROCESSING
+    Get Exchange Order Number Using Product    HANDLING FEE
+    Retrieve PNR Details from Amadeus    command=RTY
+    Verify That Accounting Lines For Visa Processing Are Written When FOP Is Invoice    VISA PROCESSING    CWT VISA
+    Verify Other Services Without GST Service Accounting General Remarks    HANDLING FEE    CWT    Cash    HK
+    Verify Other Services Cash Or Invoice Fees Accounting Remarks Are Written    HK    HANDLING FEE    #For Handling Fee
+    Verify BA And TA Remarks    ${uid}
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB] Verify That Accounting Remarks For Multiple EOs Are Written Using Credit Card
+    [Tags]    us1456    de464    de554
+    Create PNR Using Credit Card As FOP    HK    True    True
+    Click Panel    Other Svcs
+    #Air BSP
+    Populate Exchange Order Product    ADDITIONAL BSP AIR    UNITED AIRLINES    Credit Card (CX)    Remarks    Vendor Info    MCO/MPD
+    Select Consolidator Ticket Client Type    DU
+    Set Discount Value    20
+    Get Ticket Info Fee Values    HK    ADDITIONAL BSP AIR
+    Get Selected Air Segment From Air Segment Grid    ADDITIONAL BSP AIR
+    Get Other Services Form Of Payment Details    ADDITIONAL BSP AIR
+    Click Tab In Other Services Panel    MI
+    Set MI Reference Fare    1234
+    Set MI Low Fare    500
+    Get MI Fields Values    ADDITIONAL BSP AIR
+    Click Add Button In EO Panel    Ticket Info
+    #24 EMERGENCY SERVICE FEE
+    Populate Exchange Order Product    24 EMERGENCY SERVICE FEE    CWT    Credit Card (CX)    Remarks    Vendor Info
+    Get Other Services Cost Details    24 EMERGENCY SERVICE FEE
+    Get Other Services Form Of Payment Details    24 EMERGENCY SERVICE FEE
+    Get Other Services Additional Information Details    24 EMERGENCY SERVICE FEE
+    Click Add Button In EO Panel    Service Info
+    #Car Rental Prepaid
+    Populate Exchange Order Product    Car Rental Prepaid    FAR EAST RENT A CAR LTD    Credit Card (CX)    Remarks    Vendor Info
+    Get Other Services Cost Details    Car Rental Prepaid
+    Get Other Services Form Of Payment Details    Car Rental Prepaid
+    Click Tab In Other Services Panel    Departure From
+    Get Location Value    identifier=departure_from
+    Click Tab In Other Services Panel    Departure To
+    Select Flight Value    2
+    Get Location Value    identifier=departure_to
+    Get Date & Time Value    identifier=departure_to
+    Get Date And Time Checkbox Status    identifier=departure_to
+    Get Flight Value    identifier=departure_to
+    Click Tab In Other Services Panel    Arrival From
+    Tick Date & Time Checkbox
+    Get Flight Value    identifier=arrival_from
+    Get Date & Time Value    identifier=arrival_from
+    Get Date And Time Checkbox Status    identifier=arrival_from
+    Get Location Value    identifier=arrival_from
+    Click Tab In Other Services Panel    Arrival To
+    Get Location Value    identifier=arrival_to
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR
+    Verify PNR Is Successfully Created    False    Exchange Order(s) Transaction Successfully Saved!
+    Click Panel    Other Svcs
+    Get Exchange Order Number Using Product    ADDITIONAL BSP AIR
+    Get Exchange Order Number Using Product    24 EMERGENCY SERVICE FEE
+    Get Exchange Order Number Using Product    Car Rental Prepaid
+    Retrieve PNR Details from Amadeus
+    #Remarks for Additional Air Ticket
+    Verify BSP Ticket Accounting Remarks Are Written    ADDITIONAL BSP AIR    UNITED AIRLINES    HK    identifier=ADDITIONAL BSP AIR
+    Verify BSP Ticket Fuel Surcharge Accounting Remarks Are Written    HK
+    Comment    Verify BSP Ticket Transaction Fee Accounting Remarks Are Written    HK
+    Verify BSP Ticket Discount Accounting Remarks Are Written    HK
+    Comment    Verify BSP Ticket Merchant Fee Accounting Remarks Are Written    HK    <--- NOT yet Created!!!
+    #Remarks for 24 Emergency Service Fee
+    Verify Other Services Without GST Service Accounting General Remarks    24 EMERGENCY SERVICE FEE    CWT    Credit Card (CX)    HK    identifier=24 EMERGENCY SERVICE FEE
+    Verify Other Services Credit Card Fees Accounting Remarks Are Written    4484886032737710    VI    08    2023    Credit Card (CX)    HK
+    ...    False    24 Emergency Service Fee
+    #Remarks for Car Rental Prepaid
+    Verify Other Services General Notepad Remarks    Car Rental Prepaid
+    Verify That Car Remarks Are Written In PNR When FOP is CX    Car Rental Prepaid    FAR EAST RENT A CAR LTD    HK
+
+[AB AOS] Verify That Accounting Remarks For Multiple EOs Are Written Using Credit Card
+    [Tags]    us1462    de436    de464    de554
+    Retrieve PNR And Populate Amend Workflow    HK
+    Click Panel    Other Svcs
+    #Verify ADDITIONAL BSP AIR Values are Correct
+    #Ticket_Info
+    Click Amend EO    ${eo_number_ADDITIONAL BSP AIR}
+    Verify Form Of Payment Details Are Correct    BTA CTCL VI/VI************7710/D0823    Credit Card (CX)
+    Verify Nett Fare Value Is Correct    501
+    Verify Gross Fare Value Is Correct    543
+    Verify Tax 1 Value and Code Are Correct    11    XT
+    Verify Nett Cost In EO Value Is Correct    501
+    Verify Commission Fee Value Is Correct    51
+    Verify Fuel Surcharge Value Is Correct    151
+    Verify Discount Fee Value Is Correct    20
+    Verify Merchant Fee Value Is Correct    11
+    Verify Total Selling Price Value Is Correct    554
+    Verify CWT Absorb Checkbox For Merchant Fee Status Is Correct    False
+    Comment    Verify Tranx/Service Fee Value Is Correct    501    Amend_ADDITIONAL BSP AIR
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Verify Issue In Exchange For Is Correct    ${EMPTY}
+    Verify Airline Code And Ticket Number Is Correct    123    1234555525
+    Verify Conjunction Number Is Correct    ${EMPTY}
+    Verify Exchange Order Number    ${eo_number_ADDITIONAL BSP AIR}
+    Tick Select All Segments
+    Get Ticket Info Fee Values    HK    Amend_ADDITIONAL BSP AIR
+    Get Selected Air Segment From Air Segment Grid    Amend_ADDITIONAL BSP AIR
+    Get Other Services Form Of Payment Details    Amend_ADDITIONAL BSP AIR
+    #MI
+    Click Tab In Other Services Panel    MI
+    Verify MI Reference Fare Value Is Correct    1234
+    Verify MI Low Fare Value Is Correct    500
+    Verify MI Final Destination Value Is Correct    MNL
+    Verify MI Low Fare Carrier Value Is Correct    PR
+    Verify MI Type Of Ticket Value Is Correct    ET
+    Verify MI Realised Saving Code Value Is Correct    XX - NO SAVING
+    Verify MI Missed Saving Code Value Is Correct    F - PASSENGER REQUESTED SPECIFIC CLASS
+    Verify MI Class Of Service Value Is Correct    YF - Economy Class Full Fare
+    Get MI Fields Values    Amend_ADDITIONAL BSP AIR
+    Click Update Button In EO Panel    Ticket Info
+    #Verify 24 EMERGENCY SERVICE FEE Values are Correct
+    Click Amend EO    ${eo_number_24 EMERGENCY SERVICE FEE}
+    Verify Form Of Payment Details Are Correct    BTA CTCL VI/VI************7710/D0823    Credit Card (CX)
+    Verify Vendor Contact Value Is Correct    Vendor Test
+    Verify Nett Cost Value Is Correct    1000
+    Verify Selling Price Value Is Correct    2500
+    Verify Commission Fee Value Is Correct    1550
+    Verify Merchant Fee Value Is Correct    50
+    Verify Total Selling Price Value Is Correct    2550
+    Verify Description Value From Additional Information Is Correct    24 EMERGENCY SERVICE FEE
+    Verify BTA Description Value Is Correct    24 EMERGENCY SERVICE
+    Verify Exchange Order Number    ${eo_number_24 EMERGENCY SERVICE FEE}
+    Get Other Services Form Of Payment Details    Amend_24 EMERGENCY SERVICE FEE
+    Get Other Services Cost Details    Amend_24 EMERGENCY SERVICE FEE
+    Get Other Services Additional Information Details    Amend_24 EMERGENCY SERVICE FEE
+    Click Update Button In EO Panel    Service Info
+    #Verify CAR RENTAL PREPAID Values are Correct
+    Click Amend EO    ${eo_number_Car Rental Prepaid}
+    Verify Form Of Payment Details Are Correct    BTA CTCL VI/VI************7710/D0823    Credit Card (CX)
+    Verify Vendor Contact Value Is Correct    Vendor Test
+    Verify Nett Cost Value Is Correct    1000
+    Verify Selling Price Value Is Correct    2500
+    Verify Commission Fee Value Is Correct    1550
+    Verify Merchant Fee Value Is Correct    50
+    Verify Total Selling Price Value Is Correct    2550
+    Click Tab In Other Services Panel    Departure From
+    Verify Departure From Tab Field Values    Other    Automation Test    ${EMPTY}
+    Get Location Value    identifier=departure_from
+    Click Tab In Other Services Panel    Departure To
+    Verify Departure To Tab Field Values    Home    Automation Test
+    Get Location Value    identifier=departure_to
+    Get Date & Time Value    identifier=departure_to
+    Get Date And Time Checkbox Status    identifier=departure_to
+    Click Tab In Other Services Panel    Arrival From
+    Verify Arrival From Tab Field Values    Office    31st Floor Zuellig, Philippines, 2010
+    Get Location Value    identifier=arrival_from
+    Get Date & Time Value    identifier=arrival_from
+    Get Date And Time Checkbox Status    identifier=arrival_from
+    Click Tab In Other Services Panel    Arrival To
+    Verify Arrival To Tab Field Values    Other    Automation Test    ${EMPTY}
+    Get Location Value    identifier=arrival_to
+    Get Other Services Cost Details    Amend_Car Rental Prepaid
+    Get Other Services Form Of Payment Details    Amend_Car Rental Prepaid
+    Click Update Button In EO Panel    Service Info
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR    Amend Booking For Verify That Accounting Remarks For Multiple EOs Are Written Using Credit Card
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Accounting Remarks For Multiple EOs Are Written Using Credit Card
+    Verify PNR Is Successfully Created    False    Exchange Order(s) Transaction Successfully Saved!
+    Click Panel    Other Svcs
+    Get Exchange Order Number Using Product    ADDITIONAL BSP AIR
+    Get Exchange Order Number Using Product    24 EMERGENCY SERVICE FEE
+    Get Exchange Order Number Using Product    Car Rental Prepaid
+    Retrieve PNR Details from Amadeus
+    #Remarks for Additional Air Ticket
+    Verify BSP Ticket Accounting Remarks Are Written    ADDITIONAL BSP AIR    UNITED AIRLINES    HK    identifier=Amend_ADDITIONAL BSP AIR
+    Verify BSP Ticket Fuel Surcharge Accounting Remarks Are Written    HK
+    Comment    Verify BSP Ticket Transaction Fee Accounting Remarks Are Written    HK
+    Verify BSP Ticket Discount Accounting Remarks Are Written    HK
+    Comment    Verify BSP Ticket Merchant Fee Accounting Remarks Are Written    HK    <--- NOT yet Created!!!
+    #Remarks for 24 Emergency Service Fee
+    Verify Other Services Without GST Service Accounting General Remarks    24 EMERGENCY SERVICE FEE    CWT    Credit Card (CX)    HK    identifier=Amend_24 EMERGENCY SERVICE FEE
+    Verify Other Services Credit Card Fees Accounting Remarks Are Written    4484886032737710    VI    08    2023    Credit Card (CX)    HK
+    ...    False    24 Emergency Service Fee
+    #Remarks for Car Rental Prepaid
+    Verify Other Services General Notepad Remarks    Car Rental Prepaid
+    Verify That Car Remarks Are Written In PNR When FOP is CX    Car Rental Prepaid    FAR EAST RENT A CAR LTD    HK
+    [Teardown]    Run Keyword And Ignore Error    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Amend Booking For Verify That Accounting Remarks For Multiple EOs Are Written Using Cash
+    Retrieve PNR And Populate Amend Workflow    HK
+    Click Panel    Other Svcs
+    #Verify Visa Processing Values are Correct
+    Click Amend EO    ${eo_number_VISA PROCESSING}
+    Verify Form Of Payment Details Are Correct    Cash    ${EMPTY}    #change FOP Type from EMPTY to Credit Card (CX) once decision has been made
+    Get Other Services Visa Processing Cost    Visa Processing
+    Verify Vendor Contact Value Is Correct    Vendor Test
+    Verify Visa Processing Nett Cost Value Is Correct    1000
+    Verify Visa Processing Vendor Handling Value Is Correct    2500
+    Verify Visa Processing CWT Handling Value Is Correct    250
+    Verify Visa Processing Selling Price Value Is Correct    3750
+    Verify Visa Processing Commission Value Is Correct    250
+    Verify Visa Processing Total Selling Price Is Correct    3750
+    Verify Visa Processing Country Details    Singapore    Other    Single    Months    Normal    ${EMPTY}
+    Verify Exchange Order Number    ${eo_number_VISA PROCESSING}
+    Get Other Services Form Of Payment Details    Visa Processing
+    Get Other Service Visa Processing Country Details    Visa Processing
+    Click Update Button In EO Panel    Visa Info
+    #Verify Handling Fee Values are Correct
+    Click Amend EO    ${eo_number_HANDLING FEE}
+    Verify Form Of Payment Details Are Correct    Cash    ${EMPTY}    #change FOP Type from EMPTY to Credit Card (CX) once decision has been made
+    Verify Vendor Contact Value Is Correct    Vendor Test
+    Verify Nett Cost Value Is Correct    1000
+    Verify Selling Price Value Is Correct    2500
+    Verify Commission Fee Value Is Correct    1500
+    Verify Merchant Fee Value Is Correct    0
+    Verify Total Selling Price Value Is Correct    2500
+    Verify Description Value From Additional Information Is Correct    HANDLING FEE
+    Verify BTA Description Value Is Correct    HANDLING FEE
+    Verify Exchange Order Number    ${eo_number_HANDLING FEE}
+    Get Other Services Form Of Payment Details    HANDLING FEE
+    Get Other Services Cost Details    HANDLING FEE
+    Get Other Services Additional Information Details    HANDLING FEE
+    Click Update Button In EO Panel    Service Info
+    Click Finish PNR    Amend Booking For Verify That Accounting Remarks For Multiple EOs Are Written Using Cash
+
+Amend Booking For Verify That Accounting Remarks For Multiple EOs Are Written Using Credit Card
+    Retrieve PNR And Populate Amend Workflow    HK
+    Click Panel    Other Svcs
+    #Verify ADDITIONAL BSP AIR Values are Correct
+    #Ticket_Info
+    Click Amend EO    ${eo_number_ADDITIONAL BSP AIR}
+    Verify Form Of Payment Details Are Correct    BTA CTCL VI/VI************7710/D0823    Credit Card (CX)
+    Verify Nett Fare Value Is Correct    501
+    Verify Gross Fare Value Is Correct    543
+    Verify Tax 1 Value and Code Are Correct    11    XT
+    Verify Nett Cost In EO Value Is Correct    501
+    Verify Commission Fee Value Is Correct    51
+    Verify Fuel Surcharge Value Is Correct    151
+    Verify Discount Fee Value Is Correct    20
+    Verify Merchant Fee Value Is Correct    11
+    Verify Total Selling Price Value Is Correct    554
+    Verify CWT Absorb Checkbox For Merchant Fee Status Is Correct    False
+    Verify Tranx/Service Fee Value Is Correct    501    Amend_ADDITIONAL BSP AIR
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Verify Issue In Exchange For Is Correct    ${EMPTY}
+    Verify Airline Code And Ticket Number Is Correct    123    1234555525
+    Verify Conjunction Number Is Correct    ${EMPTY}
+    Verify Exchange Order Number    ${eo_number_ADDITIONAL BSP AIR}
+    Tick Select All Segments
+    Get Ticket Info Fee Values    HK    Amend_ADDITIONAL BSP AIR
+    Get Selected Air Segment From Air Segment Grid    Amend_ADDITIONAL BSP AIR
+    Get Other Services Form Of Payment Details    Amend_ADDITIONAL BSP AIR
+    #MI
+    Click Tab In Other Services Panel    MI
+    Verify MI Reference Fare Value Is Correct    1234
+    Verify MI Low Fare Value Is Correct    500
+    Verify MI Final Destination Value Is Correct    MNL
+    Verify MI Low Fare Carrier Value Is Correct    PR
+    Verify MI Type Of Ticket Value Is Correct    ET
+    Verify MI Realised Saving Code Value Is Correct    XX - NO SAVING
+    Verify MI Missed Saving Code Value Is Correct    F - PASSENGER REQUESTED SPECIFIC CLASS
+    Verify MI Class Of Service Value Is Correct    YF - Economy Class Full Fare
+    Get MI Fields Values    Amend_ADDITIONAL BSP AIR
+    Click Update Button In EO Panel    Ticket Info
+    #Verify 24 EMERGENCY SERVICE FEE Values are Correct
+    Click Amend EO    ${eo_number_24 EMERGENCY SERVICE FEE}
+    Verify Form Of Payment Details Are Correct    BTA CTCL VI/VI************7710/D0823    Credit Card (CX)
+    Verify Vendor Contact Value Is Correct    Vendor Test
+    Verify Nett Cost Value Is Correct    1000
+    Verify Selling Price Value Is Correct    2500
+    Verify Commission Fee Value Is Correct    1550
+    Verify Merchant Fee Value Is Correct    50
+    Verify Total Selling Price Value Is Correct    2550
+    Verify Description Value From Additional Information Is Correct    24 EMERGENCY SERVICE FEE
+    Verify BTA Description Value Is Correct    24 EMERGENCY SERVICE
+    Verify Exchange Order Number    ${eo_number_24 EMERGENCY SERVICE FEE}
+    Get Other Services Form Of Payment Details    Amend_24 EMERGENCY SERVICE FEE
+    Get Other Services Cost Details    Amend_24 EMERGENCY SERVICE FEE
+    Get Other Services Additional Information Details    Amend_24 EMERGENCY SERVICE FEE
+    Click Update Button In EO Panel    Service Info
+    #Verify CAR RENTAL PREPAID Values are Correct
+    Click Amend EO    ${eo_number_Car Rental Prepaid}
+    Verify Form Of Payment Details Are Correct    BTA CTCL VI/VI************7710/D0823    Credit Card (CX)
+    Verify Vendor Contact Value Is Correct    Vendor Test
+    Verify Nett Cost Value Is Correct    1000
+    Verify Selling Price Value Is Correct    2500
+    Verify Commission Fee Value Is Correct    1550
+    Verify Merchant Fee Value Is Correct    50
+    Verify Total Selling Price Value Is Correct    2550
+    Click Tab In Other Services Panel    Departure From
+    Verify Departure From Tab Field Values    Other    Automation Test    ${EMPTY}
+    Get Location Value    identifier=departure_from
+    Click Tab In Other Services Panel    Departure To
+    Verify Departure To Tab Field Values    Home    Automation Test
+    Get Location Value    identifier=departure_to
+    Get Date & Time Value    identifier=departure_to
+    Get Date And Time Checkbox Status    identifier=departure_to
+    Click Tab In Other Services Panel    Arrival From
+    Verify Arrival From Tab Field Values    Office    31st Floor Zuellig, Philippines, 2010
+    Get Location Value    identifier=arrival_from
+    Get Date & Time Value    identifier=arrival_from
+    Get Date And Time Checkbox Status    identifier=arrival_from
+    Click Tab In Other Services Panel    Arrival To
+    Verify Arrival To Tab Field Values    Other    Automation Test    ${EMPTY}
+    Get Location Value    identifier=arrival_to
+    Get Other Services Cost Details    Amend_Car Rental Prepaid
+    Get Other Services Form Of Payment Details    Amend_Car Rental Prepaid
+    Click Update Button In EO Panel    Service Info
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR    Amend Booking For Verify That Accounting Remarks For Multiple EOs Are Written Using Credit Card

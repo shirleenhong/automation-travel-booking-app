@@ -1,0 +1,11 @@
+*** Settings ***
+Resource          ../../resources/common/global_resources.txt
+
+*** Test Cases ***
+Test
+    :FOR    ${INDEX}    IN RANGE    200
+    \    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    fr-FR    AutomationFR
+    \    ...    FR AUTO AMADEUS
+    \    Select GDS    Amadeus
+    \    Emulate PCC    PARWL210G
+    \    Enter GDS Command    JUO

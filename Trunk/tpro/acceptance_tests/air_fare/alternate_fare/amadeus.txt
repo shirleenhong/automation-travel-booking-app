@@ -1,0 +1,845 @@
+*** Settings ***
+Resource          ../../../../resources/panels/air_fare.txt
+Resource          ../air_fare_verification.txt
+
+*** Test Cases ***
+[NB SG] Verify That Alternate Fare Values Are Pre-populated And Applicable Remarks Are Written
+    [Tags]    sg    us973    us972    us296    team_c    not_ready
+    Open Power Express And Retrieve Profile    ${version}    Test    u003axo    en-GB    aobsumsg    APAC QA
+    Select GDS    Amadeus
+    Activate Power Express Window
+    Set Client And Traveler    US826 SG Commission Setup ¦ SG US826 Commission Setup    BEAR    SINCOM
+    Click New Booking
+    Click Panel    Client Info
+    Select Form Of Payment    PORTRAIT/AX***********0002/D1221-AMEX
+    Verify FOP Merchant Field Is Not Visible On Client Info Panel
+    Click Panel    Cust Refs
+    Click Update PNR
+    Book Flight X Months From Now    SINLAX/ACX    SS1Y1    FXP/S2-3    6    2
+    Book Amadeus Offer Retain Flight    S2-3
+    Book Amadeus Offer Retain Flight    S2-3    4
+    Book Flight X Months From Now    LAXHKG/ACX    SS1Y2    FXP/S4    6    10
+    Book Amadeus Offer Retain Flight    S4    2
+    Book Flight X Months From Now    HKGMNL/ACX    SS1Y1    FXP/S5    6    18
+    Book Amadeus Offer Retain Flight    S5    5
+    Book Amadeus Offer Retain Flight    S5    3
+    Populate All Panels (Except Given Panels If Any)    Client Info
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Populate Air Fare Panel Using Default Values For APAC
+    Click Fare Tab    Fare 2
+    Populate Air Fare Panel Using Default Values For APAC
+    Click Fare Tab    Fare 3
+    Populate Air Fare Panel Using Default Values For APAC
+    Click Fare Tab    Alt Fare 1
+    Get Alternate Base Fare, Total Taxes And Fare Basis    Alt Fare 1
+    Get Offer From RTOF    Alt Fare 1
+    Get Alternate Fare Details    Alt Fare 1    APAC
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 1
+    Select Alternate Fare Class Code    Alt Fare 1    FF - First Class Full Fare
+    Select Form Of Payment On Fare Quote Tab    Alt Fare 1    Invoice
+    Get Main Fees On Fare Quote Tab    Alt Fare 1
+    Click Fare Tab    Alt Fare 2
+    Get Alternate Base Fare, Total Taxes And Fare Basis    Alt Fare 2
+    Get Offer From RTOF    Alt Fare 2
+    Get Alternate Fare Details    Alt Fare 2    APAC
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 2
+    Select Alternate Fare Class Code    Alt Fare 2    YF - Economy Class Full Fare
+    Select Form Of Payment On Fare Quote Tab    Alt Fare 2    Invoice
+    Get Main Fees On Fare Quote Tab    Alt Fare 2
+    Click Fare Tab    Alt Fare 3
+    Get Alternate Base Fare, Total Taxes And Fare Basis    Alt Fare 3
+    Get Offer From RTOF    Alt Fare 3
+    Get Alternate Fare Details    Alt Fare 3    APAC
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 3
+    Select Alternate Fare Class Code    Alt Fare 3    FD - First Class Discounted Fare
+    Select Form Of Payment On Fare Quote Tab    Alt Fare 3    Invoice
+    Get Main Fees On Fare Quote Tab    Alt Fare 3
+    Click Fare Tab    Alt Fare 4
+    Get Alternate Base Fare, Total Taxes And Fare Basis    Alt Fare 4
+    Get Offer From RTOF    Alt Fare 4
+    Get Alternate Fare Details    Alt Fare 4    APAC
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 4
+    Select Alternate Fare Class Code    Alt Fare 4    YW - Economy Class CWT Negotiated Fare
+    Select Form Of Payment On Fare Quote Tab    Alt Fare 4    Invoice
+    Get Main Fees On Fare Quote Tab    Alt Fare 4
+    Click Fare Tab    Alt Fare 5
+    Get Alternate Base Fare, Total Taxes And Fare Basis    Alt Fare 5
+    Get Offer From RTOF    Alt Fare 5
+    Get Alternate Fare Details    Alt Fare 5    APAC
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 5
+    Select Alternate Fare Class Code    Alt Fare 5    YD - Economy Class Discounted Fare
+    Select Form Of Payment On Fare Quote Tab    Alt Fare 5    Invoice
+    Get Main Fees On Fare Quote Tab    Alt Fare 5
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus
+    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 1
+    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 2
+    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 3
+    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 4
+    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 5
+
+[AB SG] Verify That Alternate Fare Values Are Retained And Applicable Remarks Are Written
+    [Tags]    sg    us973    us972    us296    team_c    not_ready
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Delete Air Segment    S2-3
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Populate Air Fare Panel Using Default Values For APAC
+    Click Fare Tab    Fare 2
+    Populate Air Fare Panel Using Default Values For APAC
+    Click Fare Tab    Fare 3
+    Populate Air Fare Panel Using Default Values For APAC
+    Click Fare Tab    Alt Fare 1
+    Get Alternate Fare Details    Alt Fare 1
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 1
+    Click Fare Tab    Alt Fare 2
+    Get Alternate Fare Details    Alt Fare 2
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 2
+    Click Fare Tab    Alt Fare 3
+    Get Alternate Fare Details    Alt Fare 3
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 3
+    Click Fare Tab    Alt Fare 4
+    Get Alternate Fare Details    Alt Fare 4
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 4
+    Click Fare Tab    Alt Fare 5
+    Get Alternate Fare Details    Alt Fare 5
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 5
+    Click Fare Tab    Alt Fare 1
+    Get Alternate Fare Details    Alt Fare 1
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 1
+    Delete Amadeus Offer    XE1
+    Delete Alternate Fare Tab    Alt Fare 1
+    Delete Amadeus Offer    XE2
+    Delete Alternate Fare Tab    Alt Fare 2
+    Click Read Booking
+    Click Fare Tab    Alt Fare 1
+    Get Alternate Fare Details    Alt Fare 1
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 1    Alt Fare 3
+    Get Main Fees On Fare Quote Tab    Alt Fare 1
+    Click Fare Tab    Alt Fare 2
+    Get Alternate Fare Details    Alt Fare 2
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 2    Alt Fare 4
+    Get Main Fees On Fare Quote Tab    Alt Fare 2
+    Click Fare Tab    Alt Fare 3
+    Get Alternate Fare Details    Alt Fare 3    Amend
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 3    Alt Fare 5
+    Get Main Fees On Fare Quote Tab    Alt Fare 3
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Finish PNR
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Alternate Fare Values Are Retained And Applicable Remarks Are Written [SG]
+    Retrieve PNR Details from Amadeus
+    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 1
+    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 2
+    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 3
+    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 4
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB IN] Verify That Alternate Fare Values Are Pre-populated And Applicable Remarks Are Written
+    [Tags]    in    us973    us972    us296    team_c    not_ready
+    Open Power Express And Retrieve Profile    ${version}    Test    u003axo    en-GB    aobsum    APAC QA
+    Select GDS    Amadeus
+    Activate Power Express Window
+    Set Client And Traveler    US826 IN Airline Setup ¦ IN US826 Airline Setup    BEAR    INAIR
+    Click New Booking
+    Click Panel    Client Info
+    Click Panel    Cust Refs
+    Populate Cust Refs Panel With Default Values
+    Click Update PNR
+    Book Flight X Months From Now    BLRBOM/AAI    SS1Y1    FXP/S2    6    15
+    Book Flight X Months From Now    BOMDEL/AAI    SS1Y1    FXP/S3    6    25
+    Book Amadeus Offer Retain Flight    S3    3
+    Book Flight X Months From Now    DELORD/AAI    SS1Y1    FXP/S4    6    35
+    Book Amadeus Offer Retain Flight    S4    1
+    Book Amadeus Offer Retain Flight    S4    4
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Populate Air Fare Panel Using Default Values For APAC
+    Click Fare Tab    Fare 2
+    Populate Air Fare Panel Using Default Values For APAC
+    Click Fare Tab    Fare 3
+    Populate Air Fare Panel Using Default Values For APAC
+    Click Fare Tab    Alt Fare 1
+    Get Alternate Base Fare, Total Taxes And Fare Basis    Alt Fare 1
+    Get Offer From RTOF    Alt Fare 1
+    Get Alternate Fare Details    Alt Fare 1    APAC
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 1
+    Select Alternate Fare Class Code    Alt Fare 1    FF - First Class Full Fare
+    Select Form Of Payment On Fare Quote Tab    Alt Fare 1    Cash
+    Click Fare Tab    Alt Fare 2
+    Get Alternate Base Fare, Total Taxes And Fare Basis    Alt Fare 2
+    Get Offer From RTOF    Alt Fare 2
+    Get Alternate Fare Details    Alt Fare 2    APAC
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 2
+    Select Alternate Fare Class Code    Alt Fare 2    YF - Economy Class Full Fare
+    Select Form Of Payment On Fare Quote Tab    Alt Fare 2    Cash
+    Click Fare Tab    Alt Fare 3
+    Get Alternate Base Fare, Total Taxes And Fare Basis    Alt Fare 3
+    Get Offer From RTOF    Alt Fare 3
+    Get Alternate Fare Details    Alt Fare 3    APAC
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 3
+    Select Alternate Fare Class Code    Alt Fare 3    FD - First Class Discounted Fare
+    Select Form Of Payment On Fare Quote Tab    Alt Fare 3    Cash
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus
+    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 1
+    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 2
+    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 3
+
+[AB IN] Verify That Alternate Fare Values Are Retained And Applicable Remarks Are Written
+    [Tags]    in    us973    us972    us296    team_c    not_ready
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Book Flight X Months From Now    DXBBLR/AAI    SS1Y1    FXP/S2-3    6    5
+    Book Amadeus Offer Retain Flight    S2-3    7
+    Book Amadeus Offer Retain Flight    S2-3    2
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Populate Air Fare Panel Using Default Values For APAC
+    Click Fare Tab    Alt Fare 3
+    Get Alternate Fare Details    Alt Fare 3
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 3    Alt Fare 1
+    Click Fare Tab    Alt Fare 4
+    Get Alternate Fare Details    Alt Fare 4
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 4    Alt Fare 2
+    Click Fare Tab    Alt Fare 5
+    Get Alternate Fare Details    Alt Fare 5
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 5    Alt Fare 3
+    Click Fare Tab    Alt Fare 1
+    Get Alternate Base Fare, Total Taxes And Fare Basis    Alt Fare 1
+    Get Offer From RTOF    Alt Fare 1
+    Get Alternate Fare Details    Alt Fare 1    APAC
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 1
+    Select Alternate Fare Class Code    Alt Fare 1    YF - Economy Class Full Fare
+    Select Form Of Payment On Fare Quote Tab    Alt Fare 1    Cash
+    Click Fare Tab    Alt Fare 2
+    Get Alternate Base Fare, Total Taxes And Fare Basis    Alt Fare 2
+    Get Offer From RTOF    Alt Fare 2
+    Get Alternate Fare Details    Alt Fare 2    APAC
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 2
+    Select Alternate Fare Class Code    Alt Fare 2    YW - Economy Class CWT Negotiated Fare
+    Select Form Of Payment On Fare Quote Tab    Alt Fare 2    Cash
+    Click Finish PNR
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Alternate Fare Values Are Retained And Applicable Remarks Are Written [IN]
+    Retrieve PNR Details from Amadeus
+    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 1
+    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 2
+    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 3
+    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 4
+    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 5
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB HK] Verify That Alternate Fare Values Are Pre-populated And Applicable Remarks Are Written
+    [Tags]    us973    us972    us296    team_c    hk
+    Open Power Express And Retrieve Profile    ${version}    Test    u003axo    en-GB    aobsumsg    APAC QA
+    Select GDS    Amadeus
+    Activate Power Express Window
+    Set Client And Traveler    APAC SYN CORP ¦ APAC SYN HK 3    BEAR    PABLO
+    Click New Booking
+    Click Panel    Client Info
+    Select Form Of Payment    BTA CTCL VI/VI************7710/D0823
+    Verify FOP Merchant Field Is Not Visible On Client Info Panel
+    Populate All Panels (Except Given Panels If Any)
+    Click Update PNR
+    Book Flight X Months From Now    SINLAX/ACX    SS1Y1    FXP/S2-3    6    2
+    Book Amadeus Offer Retain Flight    S2-3
+    Book Amadeus Offer Retain Flight    S2-3    4
+    Book Flight X Months From Now    LAXHKG/ACX    SS1Y1    FXP/S4    6    10
+    Book Amadeus Offer Retain Flight    S4    2
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    BTA CTCL VI/VI************7710/D0823
+    Verify FOP Merchant Field Is Mandatory And Blank On Fare Quote Tab
+    Select FOP Merchant On Fare Quote Tab    Fare 1    Airline
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Fare 2
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    BTA CTCL VI/VI************7710/D0823
+    Verify FOP Merchant Field Is Mandatory And Blank On Fare Quote Tab
+    Select FOP Merchant On Fare Quote Tab    Fare 2    CWT
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Alt Fare 1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    BTA CTCL VI/VI************7710/D0823
+    Verify FOP Merchant Field Is Mandatory And Blank On Fare Quote Tab
+    Select FOP Merchant On Fare Quote Tab    Alt Fare 1    Airline
+    Populate Alternate Fare Quote Tabs With Default Values
+    Get Alternate Base Fare, Total Taxes And Fare Basis    Alt Fare 1
+    Get Offer From RTOF    Alt Fare 1
+    Get Alternate Fare Details    Alt Fare 1    APAC
+    Comment    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 1
+    Select Alternate Fare Class Code    Alt Fare 1    FF - First Class Full Fare
+    Get Main Fees On Fare Quote Tab    Alt Fare 1
+    Click Fare Tab    Alt Fare 2
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    BTA CTCL VI/VI************7710/D0823
+    Verify FOP Merchant Field Is Mandatory And Blank On Fare Quote Tab
+    Select FOP Merchant On Fare Quote Tab    Alt Fare 2    CWT
+    Populate Alternate Fare Quote Tabs With Default Values
+    Get Alternate Base Fare, Total Taxes And Fare Basis    Alt Fare 2
+    Get Offer From RTOF    Alt Fare 2
+    Get Alternate Fare Details    Alt Fare 2    APAC
+    Comment    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 2
+    Select Alternate Fare Class Code    Alt Fare 2    YF - Economy Class Full Fare
+    Get Main Fees On Fare Quote Tab    Alt Fare 2
+    Click Fare Tab    Alt Fare 3
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    BTA CTCL VI/VI************7710/D0823
+    Verify FOP Merchant Field Is Mandatory And Blank On Fare Quote Tab
+    Select FOP Merchant On Fare Quote Tab    Alt Fare 2    Airline
+    Populate Alternate Fare Quote Tabs With Default Values
+    Get Alternate Base Fare, Total Taxes And Fare Basis    Alt Fare 3
+    Get Offer From RTOF    Alt Fare 3
+    Get Alternate Fare Details    Alt Fare 3    APAC
+    Comment    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 3
+    Select Alternate Fare Class Code    Alt Fare 3    FD - First Class Discounted Fare
+    Get Main Fees On Fare Quote Tab    Alt Fare 3
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus
+    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 1
+    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 2
+    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 3
+
+[AB HK] Verify That Alternate Fare Values Are Retained And Applicable Remarks Are Written
+    [Tags]    us973    us972    us296    team_c    hk    de442
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Book Flight X Months From Now    HKGLAX/AAA    SS1Y1    FXP/S5    6    18
+    Verify Form Of Payment Card Selected Is Displayed On Client Info    BTA CTCL VI/VI************7710/D0823
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    BTA CTCL VI/VI************7710/D0823
+    Comment    Verify FOP Merchant Selected Is Displayed On Fare Quote Tab    Airline
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Fare 2
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    BTA CTCL VI/VI************7710/D0823
+    Comment    Verify FOP Merchant Selected Is Displayed On Fare Quote Tab    CWT
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Fare 3
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    BTA CTCL VI/VI************7710/D0823
+    Verify FOP Merchant Field Is Mandatory And Blank On Fare Quote Tab
+    Select FOP Merchant On Fare Quote Tab    Fare 3    CWT
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Alt Fare 1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    BTA CTCL VI/VI************7710/D0823
+    Comment    Verify FOP Merchant Selected Is Displayed On Fare Quote Tab    Airline
+    Populate Alternate Fare Quote Tabs With Default Values
+    Get Alternate Fare Details    Alt Fare 1    APAC
+    Get Main Fees On Fare Quote Tab    Alt Fare 1
+    Click Fare Tab    Alt Fare 2
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    BTA CTCL VI/VI************7710/D0823
+    Comment    Verify FOP Merchant Selected Is Displayed On Fare Quote Tab    CWT
+    Populate Alternate Fare Quote Tabs With Default Values
+    Get Alternate Fare Details    Alt Fare 2    APAC
+    Get Main Fees On Fare Quote Tab    Alt Fare 2
+    Comment    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 2
+    Click Fare Tab    Alt Fare 3
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    BTA CTCL VI/VI************7710/D0823
+    Comment    Verify FOP Merchant Selected Is Displayed On Fare Quote Tab    Airline
+    Populate Alternate Fare Quote Tabs With Default Values
+    Get Alternate Fare Details    Alt Fare 3    APAC
+    Get Main Fees On Fare Quote Tab    Alt Fare 3
+    Comment    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 3
+    Comment    Click Fare Tab    Alt Fare 4
+    Comment    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    BTA CTCL VI/VI************7710/D0823
+    Comment    Verify FOP Merchant Field Is Mandatory And Blank On Fare Quote Tab
+    Comment    Select FOP Merchant On Fare Quote Tab    Alt Fare 4    CWT
+    Comment    Populate Alternate Fare Quote Tabs With Default Values
+    Comment    Get Alternate Base Fare, Total Taxes And Fare Basis    Alt Fare 4
+    Comment    Get Offer From RTOF    Alt Fare 4
+    Comment    Get Alternate Fare Details    Alt Fare 4    APAC
+    Comment    Comment    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 4
+    Comment    Select Alternate Fare Class Code    Alt Fare 4    YF - Economy Class Full Fare
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Finish PNR    Amend Booking For Verify That Alternate Fare Values Are Retained And Applicable Remarks Are Written [HK]
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Alternate Fare Values Are Retained And Applicable Remarks Are Written [HK]
+    Retrieve PNR Details from Amadeus
+    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 1
+    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 2
+    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 3
+    Comment    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 4
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB HK] Verify That Alternate Fare Values Are Pre-populated Using Single FOP And Applicable Remarks Are Written
+    [Tags]    team_c    hk    us1710
+    Open Power Express And Retrieve Profile    ${version}    Test    u003axo    en-GB    aobsumsg    APAC QA
+    Select GDS    Amadeus
+    Activate Power Express Window
+    Set Client And Traveler    APAC SYN CORP ¦ APAC SYN HK 3    BEAR    PABLO
+    Click New Booking
+    Click Panel    Client Info
+    Manually Set Value In Form Of Payment    VI    4012888888881881    1231
+    Verify FOP Merchant Field Is Not Visible On Client Info Panel
+    Populate All Panels (Except Given Panels If Any)    Client Info
+    Click Update PNR
+    Book Flight X Months From Now    SINLAX/ACX    SS1Y1    FXP/S2-3    6    2
+    Book Amadeus Offer Retain Flight    S2-3
+    Book Amadeus Offer Retain Flight    S2-3    4
+    Book Flight X Months From Now    LAXHKG/ACX    SS1Y1    FXP/S4    6    10
+    Book Amadeus Offer Retain Flight    S4    2
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    VI************1881/D1231
+    Verify FOP Merchant Field Is Mandatory And Blank On Fare Quote Tab
+    Select FOP Merchant On Fare Quote Tab    Fare 1    Airline
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Fare 2
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    VI************1881/D1231
+    Verify FOP Merchant Field Is Mandatory And Blank On Fare Quote Tab
+    Select Form Of Payment On Fare Quote Tab    Fare 2    Invoice
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Alt Fare 1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    VI************1881/D1231
+    Verify FOP Merchant Field Is Mandatory And Blank On Fare Quote Tab
+    Select Form Of Payment On Fare Quote Tab    Alt Fare 1    Invoice
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Populate Alternate Fare Quote Tabs With Default Values
+    Get Alternate Base Fare, Total Taxes And Fare Basis    Alt Fare 1
+    Get Offer From RTOF    Alt Fare 1
+    Get Alternate Fare Details    Alt Fare 1    APAC
+    Select Alternate Fare Class Code    Alt Fare 1    FF - First Class Full Fare
+    Get Main Fees On Fare Quote Tab    Alt Fare 1
+    Click Fare Tab    Alt Fare 2
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    VI************1881/D1231
+    Verify FOP Merchant Field Is Mandatory And Blank On Fare Quote Tab
+    Select FOP Merchant On Fare Quote Tab    Alt Fare 2    Airline
+    Populate Alternate Fare Quote Tabs With Default Values
+    Get Alternate Base Fare, Total Taxes And Fare Basis    Alt Fare 2
+    Get Offer From RTOF    Alt Fare 2
+    Get Alternate Fare Details    Alt Fare 2    APAC
+    Select Alternate Fare Class Code    Alt Fare 2    YF - Economy Class Full Fare
+    Get Main Fees On Fare Quote Tab    Alt Fare 2
+    Click Fare Tab    Alt Fare 3
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    VI************1881/D1231
+    Verify FOP Merchant Field Is Mandatory And Blank On Fare Quote Tab
+    Select FOP Merchant On Fare Quote Tab    Alt Fare 3    CWT
+    Populate Alternate Fare Quote Tabs With Default Values
+    Get Alternate Base Fare, Total Taxes And Fare Basis    Alt Fare 3
+    Get Offer From RTOF    Alt Fare 3
+    Get Alternate Fare Details    Alt Fare 3    APAC
+    Select Alternate Fare Class Code    Alt Fare 3    FD - First Class Discounted Fare
+    Get Main Fees On Fare Quote Tab    Alt Fare 3
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus
+    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 1
+    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 2
+    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 3
+
+[AB HK] Verify That Alternate Fare Values Are Retained Except Single Use FOP And Applicable Remarks Are Written
+    [Tags]    team_c    hk    us1710    de442
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Book Flight X Months From Now    HKGMNL/ACX    SS1Y1    FXP/S5    6    18
+    Select Form Of Payment    Invoice
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    Invoice
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Select Form Of Payment On Fare Quote Tab    Fare 1    BTA CTCL VI/VI************7710/D0823
+    Select FOP Merchant On Fare Quote Tab    Fare 1    CWT
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Fare 2
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    Invoice
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Select Form Of Payment On Fare Quote Tab    Fare 2    BTA CTCL VI/VI************7710/D0823
+    Select FOP Merchant On Fare Quote Tab    Fare 2    Airline
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Fare 3
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    Invoice
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Alt Fare 1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    Invoice
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Populate Alternate Fare Quote Tabs With Default Values
+    Get Alternate Fare Details    Alt Fare 1    APAC
+    Get Main Fees On Fare Quote Tab    Alt Fare 1
+    Click Fare Tab    Alt Fare 2
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    Invoice
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Select Form Of Payment On Fare Quote Tab    Alt Fare 2    BTA CTCL VI/VI************7710/D0823
+    Select FOP Merchant On Fare Quote Tab    Alt Fare 2    Airline
+    Populate Alternate Fare Quote Tabs With Default Values
+    Get Alternate Fare Details    Alt Fare 2    APAC
+    Get Main Fees On Fare Quote Tab    Alt Fare 2
+    Click Fare Tab    Alt Fare 3
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    Invoice
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Select Form Of Payment On Fare Quote Tab    Alt Fare 3    BTA CTCL VI/VI************7710/D0823
+    Select FOP Merchant On Fare Quote Tab    Alt Fare 3    Airline
+    Populate Alternate Fare Quote Tabs With Default Values
+    Get Alternate Fare Details    Alt Fare 3    APAC
+    Get Main Fees On Fare Quote Tab    Alt Fare 3
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Finish PNR
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Alternate Fare Values Are Retained Except Single Use FOP And Applicable Remarks Are Written
+    Retrieve PNR Details from Amadeus
+    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 1
+    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 2
+    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 3
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB SG] Verify That Alternate Fare Values Are Pre-populated Using Invoice And Applicable Remarks Are Written
+    [Tags]    team_c    sg    us1710
+    Open Power Express And Retrieve Profile    ${version}    Test    u003axo    en-GB    aobsumsg    APAC QA
+    Select GDS    Amadeus
+    Activate Power Express Window
+    Set Client And Traveler    APAC SYN CORP ¦ APAC SYN SG 3    BEAR    MONT
+    Click New Booking
+    Click Panel    Client Info
+    Select Form Of Payment    Invoice
+    Verify FOP Merchant Field Is Not Visible On Client Info Panel
+    Populate All Panels (Except Given Panels If Any)
+    Click Update PNR
+    Book Flight X Months From Now    SINLAX/ACX    SS1Y1    FXP/S2-3    6    2
+    Book Amadeus Offer Retain Flight    S2-3
+    Book Amadeus Offer Retain Flight    S2-3    4
+    Book Flight X Months From Now    LAXHKG/ACX    SS1Y1    FXP/S4    6    10
+    Book Amadeus Offer Retain Flight    S4    2
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    Invoice
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Fare 2
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    Invoice
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Alt Fare 1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    Invoice
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Populate Alternate Fare Quote Tabs With Default Values
+    Get Alternate Base Fare, Total Taxes And Fare Basis    Alt Fare 1
+    Get Offer From RTOF    Alt Fare 1
+    Get Alternate Fare Details    Alt Fare 1    APAC
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 1
+    Select Alternate Fare Class Code    Alt Fare 1    FF - First Class Full Fare
+    Set New Variable Names On Alternate Fare    Alt Fare 1
+    Click Fare Tab    Alt Fare 2
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    Invoice
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Populate Alternate Fare Quote Tabs With Default Values
+    Get Alternate Base Fare, Total Taxes And Fare Basis    Alt Fare 2
+    Get Offer From RTOF    Alt Fare 2
+    Get Alternate Fare Details    Alt Fare 2    APAC
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 2
+    Select Alternate Fare Class Code    Alt Fare 2    YF - Economy Class Full Fare
+    Set New Variable Names On Alternate Fare    Alt Fare 2
+    Click Fare Tab    Alt Fare 3
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    Invoice
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Populate Alternate Fare Quote Tabs With Default Values
+    Get Alternate Base Fare, Total Taxes And Fare Basis    Alt Fare 3
+    Get Offer From RTOF    Alt Fare 3
+    Get Alternate Fare Details    Alt Fare 3    APAC
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 3
+    Select Alternate Fare Class Code    Alt Fare 3    FD - First Class Discounted Fare
+    Set New Variable Names On Alternate Fare    Alt Fare 3
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus
+    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 1
+    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 2
+    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 3
+
+[AB SG] Verify That Alternate Fare Values Are Retained Using Invoice And Applicable Remarks Are Written
+    [Tags]    team_c    sg    us1710    de442
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Book Flight X Months From Now    HKGMNL/ACX    SS1Y1    FXP/S5    6    18
+    Verify Form Of Payment Card Selected Is Displayed On Client Info    Invoice
+    Click Read Booking
+    Click Panel    Client Info
+    Select Form Of Payment    TEST CARD/AX***********0009/D0822/CVV****
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    TEST CARD/AX***********0009/D0822/CVV****
+    Verify FOP Merchant Field Is Mandatory And Blank On Fare Quote Tab
+    Select FOP Merchant On Fare Quote Tab    Fare 1    Airline
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Fare 2
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    TEST CARD/AX***********0009/D0822/CVV****
+    Verify FOP Merchant Field Is Mandatory And Blank On Fare Quote Tab
+    Select FOP Merchant On Fare Quote Tab    Fare 2    CWT
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Fare 3
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    TEST CARD/AX***********0009/D0822/CVV****
+    Verify FOP Merchant Field Is Mandatory And Blank On Fare Quote Tab
+    Select FOP Merchant On Fare Quote Tab    Fare 3    Airline
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Alt Fare 1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    TEST CARD/AX***********0009/D0822/CVV****
+    Verify FOP Merchant Field Is Mandatory And Blank On Fare Quote Tab
+    Select FOP Merchant On Fare Quote Tab    Alt Fare 1    CWT
+    Populate Alternate Fare Quote Tabs With Default Values
+    Get Alternate Base Fare, Total Taxes And Fare Basis    Alt Fare 1
+    Get Offer From RTOF    Alt Fare 1
+    Verify Alternate Fare Values Are Retained    Alt Fare 1
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 1
+    Click Fare Tab    Alt Fare 2
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    TEST CARD/AX***********0009/D0822/CVV****
+    Verify FOP Merchant Field Is Mandatory And Blank On Fare Quote Tab
+    Select FOP Merchant On Fare Quote Tab    Alt Fare 2    Airline
+    Populate Alternate Fare Quote Tabs With Default Values
+    Get Alternate Base Fare, Total Taxes And Fare Basis    Alt Fare 2
+    Get Offer From RTOF    Alt Fare 2
+    Verify Alternate Fare Values Are Retained    Alt Fare 2
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 2
+    Click Fare Tab    Alt Fare 3
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    TEST CARD/AX***********0009/D0822/CVV****
+    Verify FOP Merchant Field Is Mandatory And Blank On Fare Quote Tab
+    Select FOP Merchant On Fare Quote Tab    Alt Fare 3    CWT
+    Populate Alternate Fare Quote Tabs With Default Values
+    Get Alternate Base Fare, Total Taxes And Fare Basis    Alt Fare 3
+    Get Offer From RTOF    Alt Fare 3
+    Verify Alternate Fare Values Are Retained    Alt Fare 3
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 3
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Finish PNR    Amend Booking For Verify That Alternate Fare Values Are Retained Using Invoice And Applicable Remarks Are Written
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Alternate Fare Values Are Retained Using Invoice And Applicable Remarks Are Written
+    Retrieve PNR Details from Amadeus
+    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 1
+    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 2
+    Verify Alternate Fare Itinerary Remarks Are Written    Alt Fare 3
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Amend Booking For Verify That Alternate Fare Values Are Retained And Applicable Remarks Are Written [SG]
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Delete Air Segment    S2-3
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Populate Air Fare Panel Using Default Values For APAC
+    Click Fare Tab    Fare 2
+    Populate Air Fare Panel Using Default Values For APAC
+    Click Fare Tab    Fare 3
+    Populate Air Fare Panel Using Default Values For APAC
+    Click Fare Tab    Alt Fare 1
+    Get Alternate Fare Details    Alt Fare 1
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 1
+    Click Fare Tab    Alt Fare 2
+    Get Alternate Fare Details    Alt Fare 2
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 2
+    Click Fare Tab    Alt Fare 3
+    Get Alternate Fare Details    Alt Fare 3
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 3
+    Click Fare Tab    Alt Fare 4
+    Get Alternate Fare Details    Alt Fare 4
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 4
+    Click Fare Tab    Alt Fare 5
+    Get Alternate Fare Details    Alt Fare 5
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 5
+    Click Fare Tab    Alt Fare 1
+    Get Alternate Fare Details    Alt Fare 1
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 1
+    Delete Amadeus Offer    XE1
+    Delete Alternate Fare Tab    Alt Fare 1
+    Delete Amadeus Offer    XE2
+    Delete Alternate Fare Tab    Alt Fare 2
+    Click Read Booking
+    Click Fare Tab    Alt Fare 1
+    Get Alternate Fare Details    Alt Fare 1
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 1    Alt Fare 3
+    Click Fare Tab    Alt Fare 2
+    Get Alternate Fare Details    Alt Fare 2
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 2    Alt Fare 4
+    Click Fare Tab    Alt Fare 3
+    Get Alternate Fare Details    Alt Fare 3    Amend
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 3    Alt Fare 5
+    Click Finish PNR
+
+Amend Booking For Verify That Alternate Fare Values Are Retained And Applicable Remarks Are Written [IN]
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Book Flight X Months From Now    DXBBLR/AAI    SS1Y1    FXP/S2-3    6    5
+    Book Amadeus Offer Retain Flight    S2-3    7
+    Book Amadeus Offer Retain Flight    S2-3    2
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Populate Air Fare Panel Using Default Values For APAC
+    Click Fare Tab    Alt Fare 3
+    Get Alternate Fare Details    Alt Fare 3
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 3    Alt Fare 1
+    Click Fare Tab    Alt Fare 4
+    Get Alternate Fare Details    Alt Fare 4
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 4    Alt Fare 2
+    Click Fare Tab    Alt Fare 5
+    Get Alternate Fare Details    Alt Fare 5
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 5    Alt Fare 3
+    Click Fare Tab    Alt Fare 1
+    Get Alternate Base Fare, Total Taxes And Fare Basis    Alt Fare 1
+    Get Offer From RTOF    Alt Fare 1
+    Get Alternate Fare Details    Alt Fare 1    APAC
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 1
+    Select Alternate Fare Class Code    Alt Fare 1    YF - Economy Class Full Fare
+    Select Form Of Payment On Fare Quote Tab    Alt Fare 1    Cash
+    Click Fare Tab    Alt Fare 2
+    Get Alternate Base Fare, Total Taxes And Fare Basis    Alt Fare 2
+    Get Offer From RTOF    Alt Fare 2
+    Get Alternate Fare Details    Alt Fare 2    APAC
+    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 2
+    Select Alternate Fare Class Code    Alt Fare 2    YW - Economy Class CWT Negotiated Fare
+    Select Form Of Payment On Fare Quote Tab    Alt Fare 2    Cash
+    Click Finish PNR
+
+Amend Booking For Verify That Alternate Fare Values Are Retained And Applicable Remarks Are Written [HK]
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Book Flight X Months From Now    HKGLAX/AAA    SS1Y1    FXP/S5    6    18
+    Verify Form Of Payment Card Selected Is Displayed On Client Info    BTA CTCL VI/VI************7710/D0823
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    BTA CTCL VI/VI************7710/D0823
+    Comment    Verify FOP Merchant Selected Is Displayed On Fare Quote Tab    Airline
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Fare 2
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    BTA CTCL VI/VI************7710/D0823
+    Comment    Verify FOP Merchant Selected Is Displayed On Fare Quote Tab    CWT
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Fare 3
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    BTA CTCL VI/VI************7710/D0823
+    Verify FOP Merchant Field Is Mandatory And Blank On Fare Quote Tab
+    Select FOP Merchant On Fare Quote Tab    Fare 3    CWT
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Alt Fare 1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    BTA CTCL VI/VI************7710/D0823
+    Comment    Verify FOP Merchant Selected Is Displayed On Fare Quote Tab    Airline
+    Populate Alternate Fare Quote Tabs With Default Values
+    Get Alternate Fare Details    Alt Fare 1    APAC
+    Get Main Fees On Fare Quote Tab    Alt Fare 1
+    Click Fare Tab    Alt Fare 2
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    BTA CTCL VI/VI************7710/D0823
+    Comment    Verify FOP Merchant Selected Is Displayed On Fare Quote Tab    CWT
+    Populate Alternate Fare Quote Tabs With Default Values
+    Get Alternate Fare Details    Alt Fare 2    APAC
+    Get Main Fees On Fare Quote Tab    Alt Fare 2
+    Comment    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 2
+    Click Fare Tab    Alt Fare 3
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    BTA CTCL VI/VI************7710/D0823
+    Comment    Verify FOP Merchant Selected Is Displayed On Fare Quote Tab    Airline
+    Populate Alternate Fare Quote Tabs With Default Values
+    Get Alternate Fare Details    Alt Fare 3    APAC
+    Get Main Fees On Fare Quote Tab    Alt Fare 3
+    Comment    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 3
+    Comment    Click Fare Tab    Alt Fare 4
+    Comment    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    BTA CTCL VI/VI************7710/D0823
+    Comment    Verify FOP Merchant Field Is Mandatory And Blank On Fare Quote Tab
+    Comment    Select FOP Merchant On Fare Quote Tab    Alt Fare 4    CWT
+    Comment    Populate Alternate Fare Quote Tabs With Default Values
+    Comment    Get Alternate Base Fare, Total Taxes And Fare Basis    Alt Fare 4
+    Comment    Get Offer From RTOF    Alt Fare 4
+    Comment    Get Alternate Fare Details    Alt Fare 4    APAC
+    Comment    Comment    Verify Offer Details Are Displayed On Alternate Fare Tab    Alt Fare 4
+    Comment    Select Alternate Fare Class Code    Alt Fare 4    YF - Economy Class Full Fare
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Finish PNR    Amend Booking For Verify That Alternate Fare Values Are Retained And Applicable Remarks Are Written [HK]
+
+Amend Booking For Verify That Alternate Fare Values Are Retained Except Single Use FOP And Applicable Remarks Are Written
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Book Flight X Months From Now    HKGMNL/ACX    SS1Y1    FXP/S5    6    18
+    Select Form Of Payment    Invoice
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    Invoice
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Select Form Of Payment On Fare Quote Tab    Fare 1    BTA CTCL VI/VI************7710/D0823
+    Select FOP Merchant On Fare Quote Tab    Fare 1    CWT
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Fare 2
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    Invoice
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Select Form Of Payment On Fare Quote Tab    Fare 2    BTA CTCL VI/VI************7710/D0823
+    Select FOP Merchant On Fare Quote Tab    Fare 2    Airline
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Fare 3
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    Invoice
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Alt Fare 1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    Invoice
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Populate Alternate Fare Quote Tabs With Default Values
+    Get Alternate Fare Details    Alt Fare 1    APAC
+    Get Main Fees On Fare Quote Tab    Alt Fare 1
+    Click Fare Tab    Alt Fare 2
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    Invoice
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Select Form Of Payment On Fare Quote Tab    Alt Fare 2    BTA CTCL VI/VI************7710/D0823
+    Select FOP Merchant On Fare Quote Tab    Alt Fare 2    Airline
+    Populate Alternate Fare Quote Tabs With Default Values
+    Get Alternate Fare Details    Alt Fare 2    APAC
+    Get Main Fees On Fare Quote Tab    Alt Fare 2
+    Click Fare Tab    Alt Fare 3
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    Invoice
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Select Form Of Payment On Fare Quote Tab    Alt Fare 3    BTA CTCL VI/VI************7710/D0823
+    Select FOP Merchant On Fare Quote Tab    Alt Fare 3    Airline
+    Populate Alternate Fare Quote Tabs With Default Values
+    Get Alternate Fare Details    Alt Fare 3    APAC
+    Get Main Fees On Fare Quote Tab    Alt Fare 3
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Finish PNR
+
+Amend Booking For Verify That Alternate Fare Values Are Retained Using Invoice And Applicable Remarks Are Written
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Book Flight X Months From Now    HKGMNL/ACX    SS1Y1    FXP/S5    6    18
+    Verify Form Of Payment Card Selected Is Displayed On Client Info    Invoice
+    Click Read Booking
+    Click Panel    Client Info
+    Select Form Of Payment    TEST CARD/AX***********0009/D0822/CVV****
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    TEST CARD/AX***********0009/D0822/CVV****
+    Verify FOP Merchant Field Is Mandatory And Blank On Fare Quote Tab
+    Select FOP Merchant On Fare Quote Tab    Fare 1    Airline
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Fare 2
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    TEST CARD/AX***********0009/D0822/CVV****
+    Verify FOP Merchant Field Is Mandatory And Blank On Fare Quote Tab
+    Select FOP Merchant On Fare Quote Tab    Fare 2    CWT
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Fare 3
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    TEST CARD/AX***********0009/D0822/CVV****
+    Verify FOP Merchant Field Is Mandatory And Blank On Fare Quote Tab
+    Select FOP Merchant On Fare Quote Tab    Fare 3    Airline
+    Populate Fare Quote Tabs with Default Values
+    Click Fare Tab    Alt Fare 1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    TEST CARD/AX***********0009/D0822/CVV****
+    Verify FOP Merchant Field Is Mandatory And Blank On Fare Quote Tab
+    Select FOP Merchant On Fare Quote Tab    Alt Fare 1    CWT
+    Populate Alternate Fare Quote Tabs With Default Values
+    Get Alternate Fare Details    Alt Fare 1    APAC
+    Click Fare Tab    Alt Fare 2
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    TEST CARD/AX***********0009/D0822/CVV****
+    Verify FOP Merchant Field Is Mandatory And Blank On Fare Quote Tab
+    Select FOP Merchant On Fare Quote Tab    Alt Fare 2    Airline
+    Populate Alternate Fare Quote Tabs With Default Values
+    Get Alternate Fare Details    Alt Fare 2    APAC
+    Click Fare Tab    Alt Fare 3
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    TEST CARD/AX***********0009/D0822/CVV****
+    Verify FOP Merchant Field Is Mandatory And Blank On Fare Quote Tab
+    Select FOP Merchant On Fare Quote Tab    Alt Fare 3    CWT
+    Populate Alternate Fare Quote Tabs With Default Values
+    Get Alternate Fare Details    Alt Fare 3    APAC
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Finish PNR

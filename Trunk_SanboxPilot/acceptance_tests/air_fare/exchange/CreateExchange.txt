@@ -1,0 +1,66 @@
+*** Settings ***
+Resource          ../../../resources/common/global_resources.txt
+Resource          ../../../resources/panels/delivery.txt
+Resource          ../../gds/gds_verification.txt
+
+*** Keywords ***
+Create Exchange Booking with Tax
+    [Arguments]    ${pnr}    ${segment_number}    ${tax_added}    ${ticket_num}
+    Activate Amadeus Selling Platform
+    Enter GDS Command    RT${pnr}    TTK/EXCH/S${segment_number}
+    Get Clipboard Data Amadeus
+    ${line}    Get Lines Containing String    ${data_clipboard}    GRAND TOTAL
+    ${array}    Split String    ${line}
+    ${currency}    Get From List    ${array}    2
+    ${amount}    Get From List    ${array}    -1
+    Enter GDS Command    TTK/T${segment_number}/R${currency}${prev_amount}/X${currency}${tax_added}YR/T${currency}${tax_added}
+    Enter GDS Command    FP PAX O/CCVI+/CASH/${currency}10.00/S${segment_number}
+    Enter GDS Command    FHE 057-1346629127/S${segment_number}
+    Get Line Number    ${ticket_num}
+    Enter GDS Command    FO*L${line_number}/S${segment_number}    ${SPACE}
+    Enter GDS Command    RFCWTPTEST    ER    ER    IG
+
+Get Total Fare From GDS Logs Exchange
+    [Arguments]    ${tqt_number}
+    Activate Amadeus Selling Platform
+    Enter GDS Command    TQT/T${tqt_number}
+    Get Clipboard Data Amadeus
+    ${line}    Get Lines Containing String    ${data_clipboard}    GRAND TOTAL
+    ${array}    Split String    ${line}
+    ${amount}    Get From List    ${array}    -1
+    Set Test Variable    ${prev_amount}    ${amount}
+    Enter GDS Command    IG
+
+Verify EMD Tab Exists
+    ${is_error_icon_exist}    Run Keyword And Return Status    Object Exists    ${sikuli_image_path}\\emdtab.png    0.80    ${timeout}
+    Run Keyword And Continue On Failure    Should Be True    ${is_error_icon_exist}    Invalid icon is NOT displayed
+    Click Object    ${sikuli_image_path}\\emdtab.png    0.80    ${timeout}
+    Sleep    2
+
+Populate EMD Tab
+    [Arguments]    ${amount_value}    ${reason_for_emd}
+    ${currency_emd}    Determine Multiple Object Name Based On Active Tab    ctxtCurrencyEmd
+    ${reason_emd}    Determine Multiple Object Name Based On Active Tab    ccboChangesEmd
+    Control Set Text    ${title_power_express}    ${EMPTY}    ${currency_emd}    ${amount_value}
+    Control Set Text    ${title_power_express}    ${EMPTY}    ${reason_emd}    ${reason_for_emd}
+    Click Object    ${sikuli_image_path}\\details_tab.png    0.80    ${timeout}
+    Sleep    2
+
+Verify Values in EMD Tab
+    [Arguments]    ${expected_flight_status}
+    ${checkbox}    Determine Multiple Object Name Based On Active Tab    cchkEnableEMD
+    ${pass_name}    Determine Multiple Object Name Based On Active Tab    ctxtPassengerNameEmd
+    ${int_name}    Determine Multiple Object Name Based On Active Tab    cradInternationalEmd
+    ${dom_name}    Determine Multiple Object Name Based On Active Tab    cradDomesticEmd
+    ${currency_emd}    Determine Multiple Object Name Based On Active Tab    ctxtCurrencyEmd
+    ${reason_emd}    Determine Multiple Object Name Based On Active Tab    ccboChangesEmd
+    ${dom}    Get Checkbox Status    ${dom_name}
+    ${actual_flight_status}    Set Variable If    ${dom}== True    dom    int
+    Should Be Equal    ${expected_flight_status}    ${actual_flight_status}
+
+Get Line Number
+    [Arguments]    ${linenumber}
+    Enter GDS Command    RT
+    Get Clipboard Data Amadeus
+    ${line_num}    Get Line Number In Amadeus PNR Remarks    ${linenumber}
+    Set Test Variable    ${line_number}    ${line_num}

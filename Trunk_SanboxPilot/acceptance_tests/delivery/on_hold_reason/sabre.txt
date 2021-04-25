@@ -1,0 +1,186 @@
+*** Settings ***
+Force Tags        sabre
+Resource          ../delivery_verification.txt
+
+*** Test Cases ***
+[NB] Verify That Quick Steps Is Working For 'On-Hold - Awaiting Customer References'
+    [Tags]    us2444
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    fr-FR    AutomationFR    FR AUTO SABRE
+    Select GDS    Sabre
+    Create New Booking With One Way Flight Using Default Values    Sabre FR 15 - Auto ¦ US2447    AutoFifteenTwelve    OptimizeTrvlrOne    HKGMNL‡PR    ${EMPTY}    AIR FARE
+    ...    CUST REFS    DELIVERY
+    Click Panel    Cust Refs
+    Tick Not Known At Time Of Booking    TICK
+    Click Panel    Air Fare
+    Populate Fare Tab With Default Values    Fare 1
+    Click Panel    Delivery
+    Populate Delivery Panel Without On Hold Reason
+    Verify On Hold Booking Reason Is Checked    Awaiting Customer References
+    Verify On Hold Booking Reason Is Disabled    Awaiting Customer References
+    Click Finish PNR
+    Retrieve PNR Details From Sabre Red    ${current_pnr}    *M‡    0
+    Verify Specific Line Is Written In The PNR    M‡ONHOLD-EN ATTENTE R F RENCES CLIENTS
+
+[QA] Verify That Quick Steps Is Working For 'On-Hold - Awaiting Customer References'
+    [Tags]    us2444
+    Retrieve PNR    ${current_pnr}
+    Verify Quick Amend Is Visible
+    Verify Quick Amend Spiel Is Visible    Cette réservation est en attente – de références client, gagnez du temps en cliquant sur « Modification Rapide » pour ajouter les informations manquantes et terminer la réservation.
+    Delete Current Specific Log File    SyExPerfLog
+    Click Quick Amend With Timestamp
+    Verify Actual Panel Equals To Expected Panel    CUST REFS    DELIVERY    RECAP
+    Click Panel    Cust Refs
+    Verify Cust Refs Not Known Checkbox Is Unticked And Disabled
+    Click Panel    Delivery
+    Verify Reasons For Placing Booking On Hold Section In Delivery Panel Is Disabled
+    Verify On Hold Booking Reason Is Unchecked    Awaiting Customer References
+    Populate Delivery Panel Without On Hold Reason
+    Click Finish PNR
+    Re-Execute Quick Amend If Simultaneous Change Error Is Displayed
+    Retrieve PNR Details From Sabre Red    ${current_pnr}    *M‡    0
+    Verify Specific Line Is Not Written In The PNR    M‡ONHOLD-EN ATTENTE R F RENCES CLIENTS
+    Verify Entry Is Present In Perf Log File    BusinessFunctionMetric.AmendBookingAddCDR
+    Verify Entry Is Present In Application Usage DB    AmendBookingAddCDR    ${exp_OverallTransactionStartTime}
+    Retrieve PNR    ${current_pnr}
+    Verify Quick Amend Is Not Visible
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB] Verify That Quick Steps Is Working For 'On-Hold - Awaiting Approval'
+    [Tags]    us2447
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    fr-FR    AutomationFR    FR AUTO SABRE
+    Select GDS    Sabre
+    Create New Booking With Round Trip Air Flight Using Default Values    Sabre FR 15 - Auto ¦ US2447    AutoFifteenTwelve    OptimizeTrvlrOne    HKGMNL‡PR    01Y1    ${EMPTY}
+    ...    MNLHKG‡PR    01Y1    WPRQ    ${EMPTY}    AIR FARE    CUST REFS
+    Populate Fare Tab With Default Values    Fare 1
+    Click Finish PNR
+    Retrieve PNR Details From Sabre Red    ${current_pnr}    *M‡    0
+    Verify Specific Line Is Written In The PNR    M‡ONHOLD-EN ATTENTE DE VALIDATION
+
+[QA] Verify That Quick Steps Is Working For 'On-Hold - Awaiting Approval'
+    [Tags]    us2447
+    Retrieve PNR    ${current_pnr}
+    Verify Quick Amend Is Visible
+    Verify Quick Amend Spiel Is Visible    Cette réservation est en attente – de confirmation, gagnez du temps en cliquant sur « Modification Rapide » pour ajouter les informations manquantes et terminer la réservation.
+    Delete Current Specific Log File    SyExPerfLog
+    Click Quick Amend With Timestamp
+    Verify Actual Panel Equals To Expected Panel    DELIVERY    RECAP
+    Click Panel    Delivery
+    Verify Reasons For Placing Booking On Hold Section In Delivery panel Is Disabled
+    Verify On Hold Booking Reason Is Unchecked    Awaiting Approval
+    Populate Delivery Panel Without On Hold Reason
+    Click Finish PNR
+    Re-Execute Quick Amend If Simultaneous Change Error Is Displayed
+    Retrieve PNR Details From Sabre Red    ${current_pnr}    *M‡    0
+    Verify Specific Line Is Not Written In The PNR    M‡ONHOLD-EN ATTENTE DE VALIDATION
+    Verify Entry is Present in Perf Log File    BusinessFunctionMetric.AmendBookingAddSimpleApproval
+    Verify Entry is Present in Application Usage DB    AmendBookingAddSimpleApproval    ${exp_OverallTransactionStartTime}
+    Retrieve PNR    ${current_pnr}
+    Verify Quick Amend Is Not Visible
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB] Verify That Quick Steps Is Working For 'On-Hold - Awaiting Secure Flight Data'
+    [Tags]    us2445
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    fr-FR    AutomationFR    FR AUTO SABRE
+    Select GDS    Sabre
+    Create New Booking With One Way Flight Using Default Values    Sabre FR 15 - Auto ¦ US2447    AutoFifteenTwelve    OptimizeTrvlrOne    LAXCDG‡AF    ${EMPTY}    AIR FARE
+    ...    CUST REFS    APIS/SFPD    DELIVERY
+    Click Panel    Air Fare
+    Populate Fare Tab With Default Values    Fare 1
+    Click Panel    APIS/SFPD
+    Populate APIS/SFPD Panel With Default Values
+    Click Panel    Delivery
+    Populate Delivery Panel Without On Hold Reason
+    Verify On Hold Booking Reason Is Checked    Awaiting Secure Flight Data
+    Verify On Hold Booking Reason Is Disabled    Awaiting Secure Flight Data
+    Click Finish PNR
+    Retrieve PNR Details From Sabre Red    ${current_pnr}    *M‡    0
+    Verify Specific Line Is Written In The PNR    M‡ONHOLD-EN ATTENTE DONN ES SECURE FLIGHT
+
+[QA] Verify That Quick Steps Is Working For 'On-Hold - Awaiting Secure Flight Data'
+    [Tags]    us2445
+    Retrieve PNR    ${current_pnr}
+    Verify Quick Amend Is Visible
+    Verify Quick Amend Spiel Is Visible    Cette réservation est en attente – d’APIS, gagnez du temps en cliquant sur « Modification Rapide » pour ajouter les informations manquantes et terminer la réservation
+    Delete Current Specific Log File    SyExPerfLog
+    Click Quick Amend With Timestamp
+    Verify Actual Panel Equals To Expected Panel    APIS/SFPD    DELIVERY    RECAP
+    Click Panel    APIS/SFPD
+    Verify APIS/SFPD Not Known Checkbox Is Unticked And Disabled
+    Click Panel    Delivery
+    Verify Reasons For Placing Booking On Hold Section In Delivery panel Is Disabled
+    Verify On Hold Booking Reason Is Unchecked    Awaiting Secure Flight Data
+    Populate Delivery Panel Without On Hold Reason
+    Click Finish PNR
+    Re-Execute Quick Amend If Simultaneous Change Error Is Displayed
+    Retrieve PNR Details From Sabre Red    ${current_pnr}    *M‡    0
+    Verify Specific Line Is not Written In The PNR    M‡ONHOLD-EN ATTENTE DONN ES SECURE FLIGHT
+    Verify Entry is Present in Perf Log File    BusinessFunctionMetric.AmendBookingAddSFPD
+    Verify Entry is Present in Application Usage DB    AmendBookingAddSFPD    ${exp_OverallTransactionStartTime}
+    Retrieve PNR    ${current_pnr}
+    Verify Quick Amend Is Not Visible
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB] Verify That Quick Steps Is Working For 'On-Hold - Awaiting Policy Check'
+    [Tags]    us2446
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    fr-FR    AutomationFR    FR AUTO SABRE
+    Select GDS    Sabre
+    Create New Booking With Round Trip Air Flight Using Default Values    Sabre FR 15 - Auto ¦ US2447    AutoFifteenTwelve    OptimizeTrvlrOne    BNESYD‡VA    01Y1    ${EMPTY}
+    ...    SYDBNE‡VA    01Y1    WPRQ    ${EMPTY}    AIR FARE    POLICY CHECK
+    ...    DELIVERY    CLIENT INFO
+    Click Panel    Client Info
+    Select Form Of Payment    Cash
+    Populate Fare Tab With Default Values    Fare 1
+    Click Panel    Policy Check
+    Select Policy Status    Virgin Australia Risk    AA - En attente de validation
+    Select Policy Status    Australia Risk    HA - Est autorisé à voyager
+    Click Panel    Delivery
+    Populate Delivery Panel Without On Hold Reason
+    Verify On Hold Booking Reason Is Checked    Awaiting Approval
+    Verify On Hold Booking Reason Is Disabled    Awaiting Approval
+    Click Finish PNR
+    Retrieve PNR Details From Sabre Red    ${current_pnr}    *M‡    0
+    Verify Specific Line Is Written In The PNR    M‡ONHOLD-EN ATTENTE DE VALIDATION
+
+[QA] Verify That Quick Steps Is Working For 'On-Hold - Awaiting Policy Check'
+    [Tags]    us2446
+    Retrieve PNR    ${current_pnr}
+    Verify Quick Amend Is Visible
+    Verify Quick Amend Spiel Is Visible    Cette réservation est en attente – de dérogation (politique voyage), gagnez du temps en cliquant sur « Modification Rapide » pour ajouter les informations manquantes et terminer la réservation
+    Delete Current Specific Log File    SyExPerfLog
+    Click Quick Amend With Timestamp
+    Verify Actual Panel Equals To Expected Panel    POLICY CHECK    DELIVERY    RECAP
+    Click Panel    Policy Check
+    Verify Policy Status Is Blank By Default    Virgin Australia Risk
+    Verify Policy Status Does Not Contain Option    Virgin Australia Risk    AA - En attente de validation
+    Verify Policy Reason Is Not Displayed    Australia Risk
+    Select Policy Status    Virgin Australia Risk    HA - Est autorisé à voyager
+    Click Panel    Delivery
+    Verify Reasons For Placing Booking On Hold Section In Delivery panel Is Disabled
+    Verify On Hold Booking Reason Is Unchecked    Awaiting Approval
+    Populate Delivery Panel Without On Hold Reason
+    Click Finish PNR
+    Re-Execute Quick Amend For Awaiting Policy Check If Simultaneous Change Error Is Displayed
+    Retrieve PNR Details From Sabre Red    ${current_pnr}    *M‡    0
+    Verify Specific Line Is Not Written In The PNR    M‡ONHOLD-EN ATTENTE DE VALIDATION
+    Verify Entry Is Present In Perf Log File    BusinessFunctionMetric.AmendBookingAddPolicyApproval
+    Verify Entry Is Present In Application Usage DB    AmendBookingAddPolicyApproval    ${exp_OverallTransactionStartTime}
+    Retrieve PNR    ${current_pnr}
+    Verify Quick Amend Is Not Visible
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Quick Amend
+    Retrieve PNR    ${current_pnr}
+    Click Quick Amend With Timestamp
+    Populate Delivery Panel Without On Hold Reason
+    Click Finish PNR
+    Sleep    5
+
+Quick Amend For Awaiting Policy Check
+    Retrieve PNR    ${current_pnr}
+    Click Quick Amend With Timestamp
+    Click Panel    Policy Check
+    Select Policy Status    Virgin Australia Risk    HA - Est autorisé à voyager
+    Click Panel    Delivery
+    Populate Delivery Panel Without On Hold Reason
+    Click Finish PNR

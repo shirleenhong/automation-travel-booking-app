@@ -1,0 +1,101 @@
+*** Settings ***
+Documentation     common verification keywords for all API services
+Resource          libraries.txt
+
+*** Keywords ***
+Verify Actual Value Does Not Match Expected Value
+    [Arguments]    ${actual_value}    ${expected_value}
+    Log    Actual Value: ${actual_value}
+    Log    Expected Value: ${expected_value}
+    Run Keyword And Continue On Failure    Should Be Equal As Strings    ${actual_value}    ${expected_value}    Actual value "${actual_value}" matches expected value "${expected_value}"    FALSE
+
+Verify Actual Value Matches Expected Value
+    [Arguments]    ${actual_value}    ${expected_value}    ${custom_error}=Actual value "${actual_value}" does not match expected value "${expected_value}"
+    Log    Actual Value: ${actual_value}
+    Log    Expected Value: ${expected_value}
+    Run Keyword And Continue On Failure    Should Be Equal As Strings    ${actual_value}    ${expected_value}    ${custom_error}    FALSE
+
+Verify Json Element Does Not Exist
+    [Arguments]    ${expected_policycheck_remarks}    ${json_object}
+    ${remark}    Get Json Value    ${test_response.content}    ${json_object}
+    ${actual_itinerary_remarks}    To Json    ${remark}
+    Should Be Equal    ${expected_policycheck_remarks}    ${actual_itinerary_remarks}
+
+Verify Json Element Exists
+    [Arguments]    ${json_object}
+    Log    Json Object: ${json_object}
+    ${status}    Run Keyword And Return Status    Get Json Value    ${test_response.content}    ${json_object}
+    Verify Actual Value Matches Expected Value    ${status}    True
+
+Verify Json Value Is Correct
+    [Arguments]    ${json_object}    ${expected_value}    ${data_type}=string    ${handle_null}=true
+    Log    Json Object: ${json_object}
+    Log    Expected Value: ${expected_value}
+    ${expected_value}    Set Variable If    "${data_type}" == "string"    "${expected_value}"    ${expected_value}
+    ${expected_value}    Set Variable If    "${data_type}" == "array"    [${expected_value}]    ${expected_value}
+    ${expected_value}    Convert To String    ${expected_value}
+    ${expected_value}    Run Keyword If    "${handle_null}" == "true"    Replace String    ${expected_value}    "null"    null
+    ...    ELSE    Set Variable    ${expected_value}
+    ${expected_value}    Run Keyword If    "${handle_null}" == "true"    Replace String    ${expected_value}    [null]    null
+    ...    ELSE    Set Variable    ${expected_value}
+    Run Keyword And Continue On Failure    Json Value Should Equal    ${test_response.content}    ${json_object}    ${expected_value}
+
+Verify Json Value Matches Pattern
+    [Arguments]    ${json_object}    ${expected_pattern}
+    Log    Json Object: ${json_object}
+    Log    Expected Pattern: ${expected_pattern}
+    ${actual_value}    Get Json Value    ${test_response.content}    ${json_object}
+    Verify String Matches Pattern    ${actual_value}    ${expected_pattern}
+
+Verify List Contains Value
+    [Arguments]    ${list}    ${value}
+    Log List    ${list}
+    Log    Expected Value: ${value}
+    Run Keyword And Continue On Failure    List Should Contain Value    ${list}    ${value}    List "${list}" does not contain value "${value}"
+
+Verify List Does Not Contains Value
+    [Arguments]    ${list}    ${value}
+    Log List    ${list}
+    Log    Value that should not exist: ${value}
+    Run Keyword And Continue On Failure    List Should Not Contain Value    ${list}    ${value}    List "${list}" does contain value "${value}"
+
+Verify List Contains Sub List
+    [Arguments]    ${actual_remarks}    ${expected_data}
+    Log List    ${actual_remarks}
+    Log List    ${expected_data}
+    Run Keyword And Continue On Failure    List Should Contain Sub List    ${actual_remarks}    ${expected_data}    List "${actual_remarks}" does not contain sublist "${expected_data}"
+
+Verify Response Status Code Is Correct
+    [Arguments]    ${status_code}
+    Verify Actual Value Matches Expected Value    ${test_response.status_code}    ${status_code}
+
+Verify String Contains Substring
+    [Arguments]    ${string}    ${substring}
+    Log    Actual String: ${string}
+    Log    Expected Substring: ${substring}
+    Run Keyword And Continue On Failure    Should Contain    ${string}    ${substring}    String "${string}" does not contain substring "${substring}"    FALSE
+
+Verify String Contains Substring X Times
+    [Arguments]    ${string}    ${substring}    ${occurence}
+    Log    Actual String: ${string}
+    Log    Expected Substring: ${substring} (displayed ${occurence} time/s only)
+    Run Keyword And Continue On Failure    Should Contain X Times    ${string}    ${substring}    ${occurence}    Substring "${substring}" is not found ${occurence} time/s
+
+Verify String Does Not Contain Substring
+    [Arguments]    ${string}    ${substring}
+    Log    Actual String: ${string}
+    Log    Expected Substring: ${substring}
+    ${string}    Decode Bytes To String    ${string}    UTF8
+    Run Keyword And Continue On Failure    Should Not Contain    ${string}    ${substring}    String "${string}" contains substring "${substring}"    FALSE
+
+Verify String Does Not Match Pattern
+    [Arguments]    ${string}    ${pattern}
+    Log    Actual String: ${string}
+    Log    Expected Pattern: ${pattern}
+    Run Keyword And Continue On Failure    Should Not Match RegExp    ${string}    ${pattern}    String "${string}" matches pattern "${pattern}"    FALSE
+
+Verify String Matches Pattern
+    [Arguments]    ${string}    ${pattern}
+    Log    Actual String: ${string}
+    Log    Expected Pattern: ${pattern}
+    Run Keyword And Continue On Failure    Should Match RegExp    ${string}    ${pattern}    String "${string}" does not match pattern "${pattern}"    FALSE

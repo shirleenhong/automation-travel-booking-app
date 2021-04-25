@@ -1,0 +1,218 @@
+*** Settings ***
+Force Tags        amadeus    emea
+Resource          ../air_fare_verification.txt
+
+*** Test Cases ***
+[NB FR] Verify That Air Fare Panel Retrieves And Writes Correct Remarks For Different Airline Codes In Correct Order
+    [Tags]    us1423    fr
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    fr-FR    AutomationFR    FR AUTO AMADEUS
+    Select GDS    amadeus
+    Emulate PCC    PARWL210G
+    Set Client And Traveler    Amadeus FR 16 - Auto ¦ US1423    AutoSixteenTwo    NoramTrvlrFive
+    Click New Booking
+    Get Future Dates For LCC Remarks    6
+    Enter GDS Command    SS U21075 Y ${departure_date1} BSLBER GK1 / 11551440 / ABCDEFG    RMF/${SPACE*2}LCC-U2*CREDITCARD CHARGE GBP 1.56    RMF/${SPACE*2}LCC-U2*NUMBER OF PAX: 1    RMF/${SPACE*2}LCC-U2*PAID BY CAXXXXXXXXXXXX3463/D0117
+    Enter GDS Command    RMF/${SPACE*2}LCC-U2*SERVICEFEE TOTAL GBP 0.00    RMF/${SPACE*2}LCC-U2*FARE TOTAL GBP 79.54    RMF/${SPACE*2}LCC-U2*TAXES TOTAL 15.50    RMF/${SPACE*2}LCC-U2*GRAND TOTAL GBP 95.04
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Click Fare Tab    LCC Fare 1
+    Verify LCC Fare Tab Details    BSL-BER    95.04    95.04    95.04    LCC - LOW COST ACCEPTE    PDR - PAS DE REFUS
+    Verify Fare Not Finalised Is Unticked
+    Set High Fare Field    300,00
+    Set Charged Fare Field    200,00
+    Set Low Fare Field    100,00
+    Select Class Code Value    YC - Tarif Client Classe Economique
+    Select Fare Restriction    FULLY FLEXIBLE
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify LCC Remarks Are Written In The PNR In Correct Order    LCC-U2*CREDITCARD CHARGE GBP 1.56    LCC-U2*NUMBER OF PAX: 1    LCC-U2*PAID BY CAXXXXXXXXXXXX3463/D0117    LCC-U2*SERVICEFEE TOTAL GBP 0.00    LCC-U2*FARE TOTAL GBP 79.54    LCC-U2*TAXES TOTAL 15.50
+    ...    LCC-U2*GRAND TOTAL GBP 200.00
+    Verify Specific Line Is Written In The PNR    BF-GBP79.54:H-300.00 C-200.00 L-100.00 N-200.00
+    Verify Specific Line Is Written In The PNR    BF-GBP79.54:HC-LCC LC-PDR CL-YC DEST-BER TK-ET INV-0
+    Verify Specific Line Is Written In The PNR    BF-GBP79.54:PCC-TEST123 AG-2020
+    Verify Specific Line Is Written In The PNR    BF-GBP79.54:CHGS-CHANGEMENT D'HORAIRE SANS FRAIS
+    Verify Specific Line Is Written In The PNR    BF-GBP79.54:CANX-REMBOURSEMENT INTEGRAL
+    Verify Specific Line Is Written In The PNR    BF-GBP79.54:APP-U2:RERTE-AUTORISE
+    Verify Specific Line Is Written In The PNR    BF-GBP79.54:MIN-PAS DE SEJOUR MINIMUM:MAX-1 AN
+    Verify Specific Line Is Written In The PNR    RMG PCCPARWL210G
+    Verify Specific Line Is Written In The PNR    RM *7302*300.00/S2
+    Verify Specific Line Is Written In The PNR    RM *7305*LCC/S2
+    Verify Specific Line Is Written In The PNR    RM *7303*100.00/S2
+    Verify Specific Line Is Written In The PNR    RM *7306*PDR/S2
+    Verify Specific Line Is Written In The PNR    RM *7110*YC/S2
+    Verify Specific Line Is Written In The PNR    RM *7105*BER/S2
+    Verify Specific Line Is Written In The PNR    TK TL\\d{2}\\D{3}/PARWL210G/Q62C100-ONHOLD    true
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}    True    False    NO    2
+
+[NB DE] Verify That Air Fare Panel Retrieves And Writes Correct Remarks For Different Airline Codes In Correct Order
+    [Tags]    us1423    de
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    de-DE    AutomationDE    DE AUTO AMADEUS
+    Select GDS    amadeus
+    Set Client And Traveler    Amadeus DE 16 - Auto ¦ US1423    AutoOneSixSeven    NoramTrvlrFive
+    Click New Booking
+    Get Future Dates For LCC Remarks    6
+    Enter GDS Command    SS U21074 Y ${departure_date1} BCNBSL GK1 / 11551440 / ABCDEFG    SS FR1075 Y ${departure_date2} BSLBER GK1 / 11551440 / ABCDEFG    RMF/${SPACE*2}LCC-U2*CREDITCARD CHARGE GBP 1.56    RMF/${SPACE*2}LCC-U2*NUMBER OF PAX: 1
+    Enter GDS Command    RMF/${SPACE*2}LCC-U2*PAID BY CAXXXXXXXXXXXX3463/D0117    RMF/${SPACE*2}LCC-U2*SERVICEFEE TOTAL GBP 0.00    RMF/${SPACE*2}LCC-U2*FARE TOTAL GBP 79.54    RMF/${SPACE*2}LCC-U2*TAXES TOTAL 15.50
+    Enter GDS Command    RMF/${SPACE*2}LCC-U2*GRAND TOTAL GBP 95.04    RMF/${SPACE*2}LCC-FR*CREDITCARD CHARGE GBP 1.56    RMF/${SPACE*2}LCC-FR*NUMBER OF PAX: 1    RMF/${SPACE*2}LCC-FR*PAID BY CAXXXXXXXXXXXX3463/D0117
+    Enter GDS Command    RMF/${SPACE*2}LCC-FR*SERVICEFEE TOTAL GBP 0.00    RMF/${SPACE*2}LCC-FR*FARE TOTAL GBP 74.54    RMF/${SPACE*2}LCC-FR*TAXES TOTAL 15.50    RMF/${SPACE*2}LCC-FR*GRAND TOTAL GBP 91.04
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Click Fare Tab    LCC Fare 1
+    Verify LCC Fare Tab Details    BCN-BSL    95.04    95.04    95.04    XX - No Saving    L - Lowest Fare Accepted
+    Verify Fare Not Finalised Is Unticked
+    Set High Fare Field    300,00
+    Set Charged Fare Field    200,00
+    Set Low Fare Field    100,00
+    Select Missed Saving Code Value    Z - CWT Alternative Declined
+    Select Class Code Value    FW - First CWT Nett Fare
+    Select Fare Restriction    FULLY FLEXIBLE
+    Click Fare Tab    LCC Fare 2
+    Verify LCC Fare Tab Details    BSL-BER    91.04    91.04    91.04    XX - No Saving    L - Lowest Fare Accepted
+    Select Class Code Value    FW - First CWT Nett Fare
+    Select Fare Restriction    FULLY FLEXIBLE
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify LCC Remarks Are Written In The PNR In Correct Order    LCC-U2*CREDITCARD CHARGE GBP 1.56    LCC-U2*NUMBER OF PAX: 1    LCC-U2*PAID BY CAXXXXXXXXXXXX3463/D0117    LCC-U2*SERVICEFEE TOTAL GBP 0.00    LCC-U2*FARE TOTAL GBP 79.54    LCC-U2*TAXES TOTAL 15.50
+    ...    LCC-U2*GRAND TOTAL GBP 200.00    LCC-FR*CREDITCARD CHARGE GBP 1.56    LCC-FR*NUMBER OF PAX: 1    LCC-FR*PAID BY CAXXXXXXXXXXXX3463/D0117    LCC-FR*SERVICEFEE TOTAL GBP 0.00    LCC-FR*FARE TOTAL GBP 74.54
+    ...    LCC-FR*TAXES TOTAL 15.50    LCC-FR*GRAND TOTAL GBP 91.04
+    Verify Specific Line Is Written In The PNR    RMF BF-GBP79.54:H-300.00 C-200.00 L-100.00 N-200.00
+    Verify Specific Line Is Written In The PNR    RMF BF-GBP79.54:HC-XX LC-Z CL-FW DEST-BSL TK-ET INV
+    Verify Specific Line Is Written In The PNR    RMF BF-GBP79.54:CHGS-UMBUCHUNG AUF ANDERE FLUGZEIT KOSTENLOS
+    Verify Specific Line Is Written In The PNR    RMF BF-GBP79.54:CANX-VOLLERSTATTUNG
+    Verify Specific Line Is Written In The PNR    RMF BF-GBP79.54:APP-U2:RERTE-ZULAESSIG
+    Verify Specific Line Is Written In The PNR    RMF BF-GBP79.54:MIN-KEIN MINDESTAUFENTHALT:MAX-1 JAHR
+    Verify Specific Line Is Written In The PNR    RMF BF-GBP74.54:H-91.04 C-91.04 L-91.04 N-91.04
+    Verify Specific Line Is Written In The PNR    RMF BF-GBP74.54:HC-XX LC-L CL-FW DEST-BER TK-ET INV
+    Verify Specific Line Is Written In The PNR    RMF BF-GBP74.54:CHGS-UMBUCHUNG AUF ANDERE FLUGZEIT KOSTENLOS
+    Verify Specific Line Is Written In The PNR    RMF BF-GBP74.54:CANX-VOLLERSTATTUNG
+    Verify Specific Line Is Written In The PNR    RMF BF-GBP74.54:APP-FR:RERTE-ZULAESSIG
+    Verify Specific Line Is Written In The PNR    RMF BF-GBP74.54:MIN-KEIN MINDESTAUFENTHALT:MAX-1 JAHR
+    Verify Specific Line Is Written In The PNR    RMG PCCFRAWL22KG
+    Verify Specific Line Is Written In The PNR    RMM ONHOLD:FEHLENDE GENEHMIGUNG
+    Verify Specific Line Is Written In The PNR    RM *7302*300.00/S2
+    Verify Specific Line Is Written In The PNR    RM *7305*XX/S2
+    Verify Specific Line Is Written In The PNR    RM *7303*100.00/S2
+    Verify Specific Line Is Written In The PNR    RM *7306*Z/S2
+    Verify Specific Line Is Written In The PNR    RM *7110*FW/S2
+    Verify Specific Line Is Written In The PNR    RM *7105*BSL/S2
+    Verify Specific Line Is Written In The PNR    RM *7302*91.04/S3
+    Verify Specific Line Is Written In The PNR    RM *7305*XX/S3
+    Verify Specific Line Is Written In The PNR    RM *7303*91.04/S3
+    Verify Specific Line Is Written In The PNR    RM *7306*L/S3
+    Verify Specific Line Is Written In The PNR    RM *7110*FW/S3
+    Verify Specific Line Is Written In The PNR    RM *7105*BER/S3
+    Verify Specific Line Is Written In The PNR    TK TL\\d{2}\\D{3}/FRAWL22KG/Q0C0-ONHOLD    true
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}    True    False    NO    2
+
+[NB UK] Verify That Air Fare Panel Retrieves And Writes Correct Remarks For Different Airline Codes In Correct Order
+    [Tags]    us1423    uk
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    en-GB    AutomationUK    UK AUTO AMADEUS
+    Select GDS    amadeus
+    Set Client And Traveler    Amadeus UK 16 - Auto ¦ US1641    AutoOneSixSeven    EmeaTrvlrFour
+    Click New Booking
+    Update PNR for EN or GB
+    Get Future Dates For LCC Remarks    5
+    Enter GDS Command    SS U21074 Y ${departure_date1} BCNBSL GK1 / 11551440 / ABCDEFG    SS FR1075 Y ${departure_date2} BSLBER GK1 / 11551440 / ABCDEFG    RMF/${SPACE*2}LCC-U2*CREDITCARD CHARGE GBP 1.56    RMF/${SPACE*2}LCC-U2*NUMBER OF PAX: 1
+    Enter GDS Command    RMF/${SPACE*2}LCC-U2*PAID BY CAXXXXXXXXXXXX3463/D0117    RMF/${SPACE*2}LCC-U2*SERVICEFEE TOTAL GBP 0.00    RMF/${SPACE*2}LCC-U2*FARE TOTAL GBP 79.54    RMF/${SPACE*2}LCC-U2*TAXES TOTAL 15.50
+    Enter GDS Command    RMF/${SPACE*2}LCC-U2*GRAND TOTAL GBP 95.04    RMF/${SPACE*2}LCC-FR*CREDITCARD CHARGE GBP 1.56    RMF/${SPACE*2}LCC-FR*NUMBER OF PAX: 1    RMF/${SPACE*2}LCC-FR*PAID BY CAXXXXXXXXXXXX3463/D0117
+    Enter GDS Command    RMF/${SPACE*2}LCC-FR*SERVICEFEE TOTAL GBP 0.00    RMF/${SPACE*2}LCC-FR*FARE TOTAL GBP 74.54    RMF/${SPACE*2}LCC-FR*TAXES TOTAL 15.50    RMF/${SPACE*2}LCC-FR*GRAND TOTAL GBP 91.04
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Click Fare Tab    LCC Fare 1
+    Verify LCC Fare Tab Details    BCN-BSL    95.04    95.04    95.04    ${EMPTY}    ${EMPTY}
+    Verify Fare Not Finalised Is Unticked
+    Set High Fare Field    300.00
+    Set Charged Fare Field    200.00
+    Set Low Fare Field    100.00
+    Select Realised Saving Code Value    C1 - Client Special Fare Accepted
+    Select Missed Saving Code Value    YY - Re-Issue
+    Select Class Code Value    FW - First CWT Nett Fare
+    Select Fare Restriction    FULLY FLEXIBLE
+    Click Fare Tab    LCC Fare 2
+    Verify LCC Fare Tab Details    BSL-BER    91.04    91.04    91.04    ${EMPTY}    ${EMPTY}
+    Select Realised Saving Code Value    C1 - Client Special Fare Accepted
+    Select Missed Saving Code Value    YY - Re-Issue
+    Select Class Code Value    FW - First CWT Nett Fare
+    Select Fare Restriction    FULLY FLEXIBLE
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify LCC Remarks Are Written In The PNR In Correct Order    LCC-U2*CREDITCARD CHARGE GBP 1.56    LCC-U2*NUMBER OF PAX: 1    LCC-U2*PAID BY CAXXXXXXXXXXXX3463/D0117    LCC-U2*SERVICEFEE TOTAL GBP 0.00    LCC-U2*FARE TOTAL GBP 79.54    LCC-U2*TAXES TOTAL 15.50
+    ...    LCC-U2*GRAND TOTAL GBP 200.00    LCC-FR*CREDITCARD CHARGE GBP 1.56    LCC-FR*NUMBER OF PAX: 1    LCC-FR*PAID BY CAXXXXXXXXXXXX3463/D0117    LCC-FR*SERVICEFEE TOTAL GBP 0.00    LCC-FR*FARE TOTAL GBP 74.54
+    ...    LCC-FR*TAXES TOTAL 15.50    LCC-FR*GRAND TOTAL GBP 91.04
+    Verify Specific Line Is Written In The PNR    RMF BF-GBP79.54:H-300.00 C-200.00 L-100.00 N-200.00
+    Verify Specific Line Is Written In The PNR    RMF BF-GBP79.54:HC-C1 LC-YY CL-FW DEST-BSL TK-ET INV-0
+    Verify Specific Line Is Written In The PNR    RMF BF-GBP79.54:CHGS-SCHEDULE CHANGE PERMITTED FREE OF
+    Verify Specific Line Is Written In The PNR    RMF BF-GBP79.54:CANX-FULL REFUND
+    Verify Specific Line Is Written In The PNR    RMF BF-GBP79.54:APP-U2:RERTE-PERMITTED
+    Verify Specific Line Is Written In The PNR    RMF BF-GBP79.54:MIN-NO MINIMUM STAY:MAX-ONE YEAR
+    Verify Specific Line Is Written In The PNR    RMF BF-GBP74.54:H-91.04 C-91.04 L-91.04 N-91.04
+    Verify Specific Line Is Written In The PNR    RMF BF-GBP74.54:HC-C1 LC-YY CL-FW DEST-BER TK-ET INV-0
+    Verify Specific Line Is Written In The PNR    RMF BF-GBP74.54:MIN-NO MINIMUM STAY:MAX-ONE YEAR
+    Verify Specific Line Is Written In The PNR    RMF BF-GBP74.54:CANX-FULL REFUND
+    Verify Specific Line Is Written In The PNR    RMF BF-GBP74.54:APP-FR:RERTE-PERMITTED
+    Verify Specific Line Is Written In The PNR    RMF BF-GBP74.54:MIN-NO MINIMUM STAY:MAX-ONE YEAR
+    Verify Specific Line Is Written In The PNR    RMG PCC7HK
+    Verify Specific Line Is Written In The PNR    RM *7302*300.00/S2
+    Verify Specific Line Is Written In The PNR    RM *7305*C1/S2
+    Verify Specific Line Is Written In The PNR    RM *7303*100.00/S2
+    Verify Specific Line Is Written In The PNR    RM *7306*YY/S2
+    Verify Specific Line Is Written In The PNR    RM *7110*FW/S2
+    Verify Specific Line Is Written In The PNR    RM *7105*BSL/S2
+    Verify Specific Line Is Written In The PNR    RM *7302*91.04/S3
+    Verify Specific Line Is Written In The PNR    RM *7305*C1/S3
+    Verify Specific Line Is Written In The PNR    RM *7303*91.04/S3
+    Verify Specific Line Is Written In The PNR    RM *7305*C1/S3
+    Verify Specific Line Is Written In The PNR    RM *7110*FW/S3
+    Verify Specific Line Is Written In The PNR    RM *7105*BER/S3
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}    True    False    NO    2
+
+[NB UK] Verify That LCC Without High Fare Will Write The Correct Remarks
+    [Tags]    us1423    uk
+    Open Power Express And Retrieve Profile    ${version}    Test    U002TXC    en-GB    tchuauk    UK QA Team Amadeus
+    Select GDS    amadeus
+    Set Client And Traveler    UK Amadeus 1 - SyEx ¦ UK - Amadeus Sub1    Berg    Natalia
+    Click New Booking
+    Click Tab In Top Left    GDS Screen
+    Get Future Dates For LCC Remarks    5
+    Click Panel    Client Info
+    Populate Client Info Panel With Default Values
+    Click Panel    Cust Refs
+    Populate Cust Refs Panel With Default Values
+    Click Update PNR
+    Enter GDS Command    SS U21074 Y ${departure_date1} BCNBSL GK1 / 11551440 / ABCDEFG    SS FR1075 Y ${departure_date2} BSLBER GK1 / 11551440 / ABCDEFG    RMF/${SPACE*2}LCC-U2*CREDITCARD CHARGE GBP 1.56    RMF/${SPACE*2}LCC-U2*NUMBER OF PAX: 1
+    Enter GDS Command    RMF/${SPACE*2}LCC-U2*PAID BY CAXXXXXXXXXXXX3463/D0117    RMF/${SPACE*2}LCC-U2*SERVICEFEE TOTAL GBP 0.00    RMF/${SPACE*2}LCC-U2*FARE TOTAL GBP 79.54    RMF/${SPACE*2}LCC-U2*TAXES TOTAL 15.50
+    Enter GDS Command    RMF/${SPACE*2}LCC-U2*GRAND TOTAL GBP 95.04    RMF/${SPACE*2}LCC-FR*CREDITCARD CHARGE GBP 1.56    RMF/${SPACE*2}LCC-FR*NUMBER OF PAX: 1    RMF/${SPACE*2}LCC-FR*PAID BY CAXXXXXXXXXXXX3463/D0117
+    Enter GDS Command    RMF/${SPACE*2}LCC-FR*SERVICEFEE TOTAL GBP 0.00    RMF/${SPACE*2}LCC-FR*FARE TOTAL GBP 74.54    RMF/${SPACE*2}LCC-FR*TAXES TOTAL 15.50    RMF/${SPACE*2}LCC-FR*GRAND TOTAL GBP 91.04
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Click Fare Tab    LCC Fare 1
+    Verify Fare Not Finalised Is Unticked
+    Verify High Fare Field Is Not Visible
+    Set Charged Fare Field    200
+    Set Low Fare Field    100
+    Select Realised Saving Code Value    C1 - Client Special Fare Accepted
+    Select Missed Saving Code Value    YY - Re-Issue
+    Select Class Code Value    YC - Economy Client Fare
+    Click Fare Tab    LCC Fare 2
+    Verify High Fare Field Is Not Visible
+    Set Charged Fare Field    200
+    Set Low Fare Field    100
+    Select Realised Saving Code Value    C1 - Client Special Fare Accepted
+    Select Missed Saving Code Value    YY - Re-Issue
+    Select Class Code Value    YC - Economy Client Fare
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Specific Line Is Written In The PNR    RMF BF-GBP79.54:H-200.00 C-200.00 L-100.00 N-200.00
+    Verify Specific Line Is Written In The PNR    RMF BF-GBP79.54:HC-C1 LC-YY CL-YC DEST-BSL TK-ET INV-0
+    Verify Specific Line Is Written In The PNR    RMF BF-GBP79.54:PCC-TEST1 AG-CHUA
+    Verify Specific Line Is Written In The PNR    RMF BF-GBP74.54:H-200.00 C-200.00 L-100.00 N-200.00
+    Verify Specific Line Is Written In The PNR    RMF BF-GBP74.54:HC-C1 LC-YY CL-YC DEST-BER TK-ET INV-0
+    Verify Specific Line Is Written In The PNR    RM *9991*400.00
+    Verify Specific Line Is Written In The PNR    RM *9992*200.00
+    Verify Specific Line Is Written In The PNR    RM *9993*C1
+    Verify Specific Line Is Written In The PNR    RM *9994*400.00
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}    True    False    NO    2

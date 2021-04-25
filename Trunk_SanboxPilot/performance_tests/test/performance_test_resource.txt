@@ -1,0 +1,245 @@
+*** Settings ***
+Resource          ../../resources/common/global_resources.txt
+Resource          ../../acceptance_tests/client_info/client_info_verification.txt
+Resource          ../../acceptance_tests/air_fare/air_fare_verification.txt
+Resource          ../../acceptance_tests/gds/gds_verification.txt
+
+*** Keywords ***
+Get City Pair
+    [Arguments]    ${GDS}    ${INDEX}
+    Comment    @{city_pairs} =    Split String    ${city_pairs_${GDS}}    ,
+    Comment    ${city_pairs_count} =    Get Length    ${city_pairs_${GDS}}
+    Comment    ${random_number}=    Evaluate    random.sample(range(0, ${city_pairs_count}),1)    random
+    Comment    ${city_pair} =    Set Suite Variable    ${city_pairs_${GDS}[${INDEX}]}
+    Set Suite Variable    ${city_pair}    ${city_pairs_${GDS}[${INDEX}]}
+
+Get Client And Traveler
+    [Arguments]    ${GDS}    ${INDEX}
+    Comment    ${travelers_count} =    Get Length    ${travelers_${GDS}}
+    Comment    ${random_number}=    Evaluate    random.sample(range(0, ${travelers_count}),1)    random
+    ${traveler} =    Split String    ${travelers_${GDS}[${INDEX}]}    ,
+    Set Suite Variable    ${client}    ${traveler[0]}
+    Set Suite Variable    ${trav_last_name}    ${traveler[1]}
+    Set Suite Variable    ${trav_first_name}    ${traveler[2]}
+
+Append PNR To PNR List
+    ${get_pnr} =    Control Get Text    ${title_power_express}    ${EMPTY}    [NAME:ctxtLocator]
+    Log    PNR: ${get_pnr}
+    Append To List    ${pnr_list}    ${client},${trav_last_name},${trav_first_name},${get_pnr}
+    Log    ${pnr_list}
+
+Log Execution Time
+    [Arguments]    ${event}    ${start_time}    ${end_time}
+    ${time}=    Subtract Date From Date    ${end_time}    ${start_time}
+    ${converted_time}=    Convert Time    ${time}    verbose
+    Log    RESPONSE TIME - ${event}: ${converted_time}
+
+Add To Execution Time List
+    [Arguments]    ${start_time}    ${end_time}    ${list}
+    ${time}=    Subtract Date From Date    ${end_time}    ${start_time}
+    Insert Into List    ${list}    -1    ${time}
+
+Get Average Execution Time
+    [Arguments]    ${execution_time_list}    ${event}
+    Log    test
+    ${total}=    Set Variable    0
+    ${average}=    Set Variable    0
+    ${length} =    Get Length    ${execution_time_list}
+    : FOR    ${INDEX}    IN RANGE    0    ${length}
+    \    ${total}=    Evaluate    ${total}+${execution_time_list[${INDEX}]}
+    Log    ${total}
+    ${average}=    Evaluate    ${total}/${length}
+    ${converted_time}=    Convert Time    ${average}    verbose
+    Log    Average execution time for ${event} is ${converted_time} for ${length} call/s.
+    ${average_execution_log}=    Set Variable    Average execution time for ${event} is ${converted_time} for ${length} call/s.
+    [Return]    ${average_execution_log}
+
+Display Average Execution Times
+    Get Average Execution Time    ${list_set_client_traver}    "Set Client And Traveler"
+    Get Average Execution Time    ${list_new_booking}    "Click New Booking"
+    ${length} =    Get Length    ${list_update_pnr}
+    Run Keyword If    ${length} > 0    Get Average Execution Time    ${list_update_pnr}    "Update PNR"
+    Get Average Execution Time    ${list_read_booking_new}    "Click Read Booking - New Booking"
+    Get Average Execution Time    ${list_finish_pnr_new}    "Finish PNR - New Booking"
+    Get Average Execution Time    ${list_amend_booking}    "Click Amend Booking"
+    Get Average Execution Time    ${list_read_booking_amend}    "Click Read Booking - Amend Booking"
+    Get Average Execution Time    ${list_finish_pnr_amend}    "Finish PNR - Amend Booking"
+    Get Average Execution Time    ${list_send_itin}    "Send Itinerary"
+    Get Average Execution Time    ${list_finish_pnr_si}    "Finish PNR - Send Itinerary"
+    Get Average Execution Time    ${list_cancel_booking}    "Cancel Booking"
+    Get Average Execution Time    ${list_finish_pnr_cancel}    "Finish PNR - Cancel Booking"
+
+Performance - Open Power Express And Retrieve Profile
+    [Arguments]    ${version}    ${syex_env}    ${username}    ${locale}    ${user_profile}    ${team}
+    Launch Power Express    ${version}    ${syex_env}    ${username}
+    Performance - Set User Settings    ${locale}
+    Run Keyword Unless    '${syex_env.lower()}' == 'pilot'    Performance - Select Profile    ${user_profile}
+    Run Keyword If    "${team}" != "${EMPTY}"    Performance - Select Team    ${team}
+
+Performance - Set User Settings
+    [Arguments]    ${locale}
+    Win Wait    ${title_settings}    ${EMPTY}    60
+    Win Activate    ${title_settings}    ${EMPTY}
+    Control Click    ${user_selection_window}    ${EMPTY}    ${EMPTY}
+    Set Control Text Value    ${cbo_locale}    ${locale}    ${title_settings}
+    Control Click    ${title_settings}    ${EMPTY}    [NAME:chkDisableContactTracking]
+    ${start_time}=    Get Time    epoch
+    Control Click    ${title_settings}    ${EMPTY}    ${btn_OKSettings}
+    ${end_time}=    Get Time    epoch
+    Log Execution Time    Click OK Button in System User Settings window    ${start_time}    ${end_time}
+    Set Suite Variable    ${locale}
+    Verify User Configuration
+
+Performance - Select Profile
+    [Arguments]    ${user_profile}
+    ${start_time}=    Get Time    epoch
+    Select Profile    ${user_profile}
+    ${end_time}=    Get Time    epoch
+    Log Execution Time    Click Profile in Select Profile    ${start_time}    ${end_time}
+
+Performance - Select Team
+    [Arguments]    ${team}
+    Set Test Variable    ${team_selection_window}    [REGEXPTITLE:lection|Teamauswahl]
+    Wait Until Team Selection Window is Active
+    ${index_value} =    Get Team Index Value    ${team}
+    Control Focus    ${team_selection_window}    ${EMPTY}    ${chklist_TeamSelection}
+    Run Keyword If    "${index_value}" == "0"    Run Keywords    Sleep    0.5
+    ...    AND    Send    {SPACE}
+    ...    ELSE    Run Keywords    Send    {DOWN ${index_value}}
+    ...    AND    Sleep    0.5
+    ...    AND    Send    {SPACE}
+    ...    AND    Sleep    0.5
+    ${start_time}=    Get Time    epoch
+    Control Click    ${team_selection_window}    ${EMPTY}    [NAME:btnOK]
+    ${end_time}=    Get Time    epoch
+    Log Execution Time    Click OK in Select Team    ${start_time}    ${end_time}
+
+Performance - Set Client And Traveler
+    [Arguments]    ${client}    ${lastname}    ${firstname}    ${order}=${EMPTY}
+    Comment    Win Set On Top    ${title_power_express}    ${EMPTY}    1
+    Click Control Button    ${cbo_Client}    ${title_power_express}
+    Control Set Text    ${title_power_express}    ${EMPTY}    ${cbo_Client}    ${client}
+    Sleep    1
+    Control Focus    ${title_power_express}    ${EMPTY}    ${cbo_Client}
+    Send    {TAB}
+    Set Control Text Value    ${edit_lastName}    ${lastname}    ${title_power_express}
+    Control Focus    ${title_power_express}    ${EMPTY}    ${edit_lastName}
+    Send    {TAB}
+    Control Set Text    ${title_power_express}    ${EMPTY}    ${edit_firstName}    ${firstname}
+    ${start_time}=    Get Time    epoch
+    Send    {ENTER}
+    ${end_time}=    Get Time    epoch
+    Log Execution Time    Search Profile    ${start_time}    ${end_time}
+    Control Focus    ${title_power_express}    ${EMPTY}    [NAME:btnPortraitSearchTravellerProfile1]
+    ${start_time}=    Get Time    epoch
+    Control Click    ${title_power_express}    ${EMPTY}    [NAME:btnPortraitSearchTravellerProfile1]
+    ${end_time}=    Get Time    epoch
+    Log Execution Time    ID Traveler    ${start_time}    ${end_time}
+    Add To Execution Time List    ${start_time}    ${end_time}    ${list_set_client_traver}
+    Click Control Button    [NAME:gProfileGrid]    ${title_power_express}
+    Run Keyword If    "${order}" != "${EMPTY}"    Send    {DOWN ${order}}
+    ...    ELSE    Send    {SPACE}
+    Wait Until Progress Info is Completed
+    Comment    Win Set On Top    ${title_power_express}    ${EMPTY}    0
+    [Teardown]    Take Screenshot
+
+Performance - Click New Booking
+    ${start_time}=    Get Time    epoch
+    Click New Booking
+    ${end_time}=    Get Time    epoch
+    Log Execution Time    New Booking    ${start_time}    ${end_time}
+    Add To Execution Time List    ${start_time}    ${end_time}    ${list_new_booking}
+
+Performance - Click Update PNR
+    ${start_time}=    Get Time    epoch
+    Update PNR for EN or GB
+    ${end_time}=    Get Time    epoch
+    Log Execution Time    Update PNR    ${start_time}    ${end_time}
+    Add To Execution Time List    ${start_time}    ${end_time}    ${list_update_pnr}
+
+Performance - Click Read Booking
+    [Arguments]    ${event}    ${list}
+    ${start_time}=    Get Time    epoch
+    Click Read Booking
+    ${end_time}=    Get Time    epoch
+    Log Execution Time    ${event}    ${start_time}    ${end_time}
+    Add To Execution Time List    ${start_time}    ${end_time}    ${list}
+
+Performance - Click Finish PNR
+    [Arguments]    ${event}    ${list}    ${workflow}=${EMPTY}
+    Click Panel    Recap
+    ${start_time}=    Get Time    epoch
+    Click Control Button    [NAME:btnSendPNR]
+    Handle Parallel Process    ${workflow}
+    Wait Until Progress Info is Completed
+    : FOR    ${INDEX}    IN RANGE    1    90
+    \    ${end_pnr} =    Control Get Text    ${title_power_express}    ${EMPTY}    [NAME:lblEndMessage]
+    \    ${simultaneous_changes} =    Run Keyword And Return Status    Should Contain    ${end_pnr}    SIMULT
+    \    Run Keyword If    '${simultaneous_changes}' == 'True'    Exit For Loop
+    \    Sleep    .1
+    ${end_time}=    Get Time    epoch
+    Log Execution Time    ${event}    ${start_time}    ${end_time}
+    Add To Execution Time List    ${start_time}    ${end_time}    ${list}
+    Get PNR Record Locator
+    Verify PNR Message
+    Set Test Variable    ${bln_CoordsKnown}    False
+    ${pnr_created_folder} =    Set Variable If    '${test_environment}' == 'local'    C:\\Users\\Public\\Documents\\    '${test_environment}' == 'citrix'    D:\\TFS\\
+    Run Keyword And Continue On Failure    Append To File    ${pnr_created_folder}pnr_created.txt    ${\n}${current_pnr} - ${GDS_switch}
+    Sleep    5
+
+Performance - Click Amend Booking
+    ${start_time}=    Get Time    epoch
+    Click Amend Booking
+    ${end_time}=    Get Time    epoch
+    Log Execution Time    Amend Booking    ${start_time}    ${end_time}
+    Add To Execution Time List    ${start_time}    ${end_time}    ${list_amend_booking}
+
+Performance - Click Send Itinerary
+    ${start_time}=    Get Time    epoch
+    Click Send Itinerary
+    ${end_time}=    Get Time    epoch
+    Log Execution Time    Send Itinerary    ${start_time}    ${end_time}
+    Add To Execution Time List    ${start_time}    ${end_time}    ${list_send_itin}
+
+Performance - Click Cancel Booking
+    ${start_time}=    Get Time    epoch
+    Click Cancel Booking
+    ${end_time}=    Get Time    epoch
+    Log Execution Time    Cancel Booking    ${start_time}    ${end_time}
+    Add To Execution Time List    ${start_time}    ${end_time}    ${list_cancel_booking}
+
+Performance - Create New Booking With One Way Flight Using Default Values
+    [Arguments]    ${client}    ${surname}    ${firstname}    ${city_pair}    ${gds}    ${client_account}=${EMPTY}
+    ...    @{exclude_panels}
+    Performance - Set Client And Traveler    ${client}    ${surname}    ${firstname}
+    Comment    Handle Incomplete Contact Details    717171 ¦ Client Account Name Change ¦ DE - Amadeus Sub1
+    Performance - Click New Booking
+    Comment    Performance - Click Update PNR
+    Select GDS    ${gds}
+    Book One Way Flight X Months From Now    ${city_pair}    6
+    Performance - Click Read Booking    Read Booking from New Booking    ${list_read_booking_new}
+    Populate All Panels (Except Given Panels If Any)    @{exclude_panels}
+
+Performance - Amend Booking
+    Retrieve PNR    ${current_pnr}
+    Performance - Click Amend Booking
+    Performance - Click Read Booking    Read Booking from Amend Booking    ${list_read_booking_amend}
+    Populate All Panels (Except Given Panels If Any)    Fare 1
+    Populate Fare Tab With Default Values    Fare 1
+    Performance - Click Finish PNR    Finish PNR From Amend Booking    ${list_finish_pnr_amend}    Performance - Amend Booking
+    Click Clear All
+
+Performance - Send Itinerary
+    Retrieve PNR    ${current_pnr}
+    Performance - Click Send Itinerary
+    Populate All Panels (Except Given Panels If Any)
+    Performance - Click Finish PNR    Finish PNR From Send Itinerary    ${list_finish_pnr_si}    Performance - Send Itinerary
+    Click Clear All
+
+Performance - Cancel Booking
+    Retrieve PNR    ${current_pnr}
+    Performance - Click Cancel Booking
+    Click Panel    Recap
+    Comment    Populate All Panels (Except Given Panels If Any)
+    Performance - Click Finish PNR    Finish PNR From Cancel Booking    ${list_finish_pnr_cancel}    Performance - Cancel Booking
+    Click Clear All

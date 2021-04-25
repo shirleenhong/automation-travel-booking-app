@@ -1,0 +1,156 @@
+*** Settings ***
+Force Tags        emea    amadeus
+Resource          apis_sfpd_verification.txt
+
+*** Test Cases ***
+[1A EMEA][NB] Verify That SFPD Panel Is Displayed And Any Existing SSR DOCS Is Updated Or Retain In Finish PNR
+    [Tags]    [EMEA]    US5404    not_ready
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    fr-FR    AutomationFR    FR AUTO AMADEUS
+    Select GDS    Amadeus
+    Set Client And Traveler
+    Click New Booking
+    Book Flight X Months From Now    LHRCDG/AAF    SS1Y1    6    1
+    Enter Command In Native GDS    FXP    FQN1*PE
+    Enter Command In Native GDS    SR DOCS YY HK1-P-GBR-01234567-GBR-30JUN74-M-14APR09-MALLARI-RIZALIE/P1
+    Click Read Booking
+    Click Panel    Client Info
+    Select Form Of Payment    ${EMPTY}
+    Tick Not Known At Time Of Booking For Form Of Payment
+    Retrieve PNR Details From Sabre Red    \    RT
+    Verify Specific Line Is Written In The PNR    SSR DOCS YY HK1 P/GBR/01234567/GBR/30JUN74/M/14APR09/MALLARI/RIZALIE
+    Verify Passport & Visa Info Panel Is Displayed
+    Click Panel    PSPT and Visa
+    Tick Use Document
+    Verify APIS And SFPD Panel Is Displayed
+    Click Panel    APIS/SFPD
+    Verify Apis Address Fields Are Displayed
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus
+    Enter Command In Native GDS    RTG
+    Verify Specific Line Is Written In The PNR    SSR DOCS YY HK1 P/GBR/01234567/GBR/30JUN74/M/14APR09/MALLARI/RIZALIE
+
+[1A EMEA][AB] Verify That SFPD Panel Is Displayed And Any Existing SSR DOCS Is Updated Or Retain In Finish PNR
+    [Tags]    [EMEA]    US5404    not_ready
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Verify Specific Line Is Written In The PNR    SSR DOCS YY HK1 P/GBR/01234567/GBR/30JUN74/M/14APR09/MALLARI/RIZALIE
+    Click Panel    Client Info
+    Select Form Of Payment    ${EMPTY}
+    Tick Not Known At Time Of Booking For Form Of Payment
+    Verify Passport & Visa Info Panel Is Displayed
+    Click Panel    PSPT and Visa
+    Tick Use Document
+    Verify APIS And SFPD Panel Is Displayed
+    Click Panel    APIS/SFPD
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus
+    Enter Command In Native GDS    RTG
+    Verify Specific Line Is Written In The PNR    SSR DOCS YY HK1 P/GBR/01234567/GBR/30JUN74/M/14APR09/MALLARI/RIZALIE
+
+[1A EMEA][NB] Verify That SFPD Panel Is Not Displayed And Any Existing SSR DOCS Is Updated Or Retain In Finish PNR
+    [Tags]    [EMEA]    US5404    not_ready
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    fr-FR    AutomationFR    FR AUTO AMADEUS
+    Select GDS    Amadeus
+    Set Client And Traveler
+    Click New Booking
+    Book Flight X Months From Now    LHRCDG/AAF    SS1Y1    6    1
+    Enter Command In Native GDS    FXP    FQN1*PE
+    Enter Command In Native GDS    SR DOCS YY HK1-P-GBR-01234567-GBR-30JUN74-M-14APR09-MALLARI-RIZALIE/P1
+    Click Read Booking
+    Click Panel    Client Info
+    Select Form Of Payment    ${EMPTY}
+    Tick Not Known At Time Of Booking For Form Of Payment
+    Retrieve PNR Details From Sabre Red    \    RT
+    Verify Specific Line Is Written In The PNR    SSR DOCS YY HK1 P/GBR/01234567/GBR/30JUN74/M/14APR09/MALLARI/RIZALIE
+    Verify Passport & Visa Info Panel Is Displayed
+    Click Panel    PSPT and Visa
+    Tick Use Document
+    Verify APIS And SFPD Panel Is Not Displayed
+    Verify Apis Address Fields Are Displayed
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus
+    Enter Command In Native GDS    RTG
+    Verify Specific Line Is Written In The PNR    SSR DOCS YY HK1 P/GBR/01234567/GBR/30JUN74/M/14APR09/MALLARI/RIZALIE
+
+[1A EMEA][AB] Verify That SFPD Panel Is Not Displayed And Any Existing SSR DOCS Is Updated Or Retain In Finish PNR
+    [Tags]    [EMEA]    US5404    not_ready
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Verify Specific Line Is Written In The PNR    SSR DOCS YY HK1 P/GBR/01234567/GBR/30JUN74/M/14APR09/MALLARI/RIZALIE
+    Click Panel    Client Info
+    Select Form Of Payment    ${EMPTY}
+    Tick Not Known At Time Of Booking For Form Of Payment
+    Verify Passport & Visa Info Panel Is Displayed
+    Click Panel    PSPT and Visa
+    Tick Use Document
+    Verify APIS And SFPD Panel Is Not Displayed
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus
+    Enter Command In Native GDS    RTG
+    Verify Specific Line Is Written In The PNR    SSR DOCS YY HK1 P/GBR/01234567/GBR/30JUN74/M/14APR09/MALLARI/RIZALIE
+
+[1A EMEA][AB] Verify that Not Known checkbox in APIS panel is enabled when selected Delivery method during NB is Amadeus TKOK
+    [Tags]    de5897    fr
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    fr-FR    AutomationFR    FR AUTO AMADEUS
+    Select GDS    Amadeus
+    Set Client And Traveler    Amadeus FR 15 - Auto ¦ UAT CLASSIC    AutoFifteenClassic    EmeaUatClassicOne
+    Click New Booking
+    Click Panel    Client Info
+    Select Form Of Payment    Cash
+    Book Flight X Months From Now    BOSCDG/AAF    SS1Y2    FXP    6
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    APIS/SFPD    Delivery
+    Click Panel    Delivery
+    Populate Delivery Panel With Specific Delivery Method    Amadeus edited TKOK
+    Click Panel    APIS/SFPD
+    Populate APIS/SFPD Panel With Default Values
+    Click Finish PNR
+    Click Clear All
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Click Panel    APIS/SFPD
+    Verify that APIS not known checkbox is enabled
+    Click Clear All
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[1A EMEA][AB] Verify that Not Known checkbox in APIS panel is enabled when selected Delivery method during NB is Amadeus TKXL
+    [Tags]    de5897    fr
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    fr-FR    AutomationFR    FR AUTO AMADEUS
+    Select GDS    Amadeus
+    Set Client And Traveler    Amadeus FR 15 - Auto ¦ UAT CLASSIC    AutoFifteenClassic    EmeaUatClassicOne
+    Click New Booking
+    Click Panel    Client Info
+    Select Form Of Payment    Cash
+    Book Flight X Months From Now    BOSCDG/AAF    SS1Y2    FXP    6
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    APIS/SFPD    Delivery
+    Click Panel    Delivery
+    Populate Delivery Panel With Specific Delivery Method    Amadeus edited TKXL
+    Click Panel    APIS/SFPD
+    Populate APIS/SFPD Panel With Default Values
+    Click Finish PNR
+    Click Clear All
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Click Panel    APIS/SFPD
+    Verify that APIS not known checkbox is enabled
+    Click Clear All
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Verify APIS And SFPD Panel Is Displayed
+    Verify Control Object Is Visible    [NAME:APIS/SFPD]
+
+Verify APIS And SFPD Panel Is Not Displayed
+    Verify Control Object Is Not Visible    [NAME:APIS/SFPD]
+
+Verify that APIS not known checkbox is enabled
+    Verify Control Object Is Enabled    [NAME:chkSFPD]

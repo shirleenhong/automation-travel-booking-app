@@ -1,0 +1,233 @@
+*** Settings ***
+Force Tags        sabre_rail
+Resource          ../rail_verification.txt
+Resource          ../../gds/gds_verification.txt
+
+*** Test Cases ***
+Verify That Rail Remarks Are Written In PNR (TST=1, Class=BF, Fare=PT, Ticket Type=E)
+    [Tags]    uat    not_ready    fr-FR
+    [Setup]
+    Set Suite Variable    ${gds_switch}    sabre
+    Set Suite Variable    ${locale}    fr-FR
+    Comment    Open Power Express And Retrieve Profile    ${version}    ${syex_env}    U003WXR    fr-FR    AutomationFR
+    ...    FR AUTO SABRE
+    Comment    Select GDS    Sabre
+    Create Shell PNR For Sabre Rail    Sabre 211 - Auto ¦ US1419    AutoTwoOneOne    NoramTrvlrOne    ${EMPTY}
+    Select Sabre Tab    Sabre Rail
+    Select Rail Vendor    SNCF
+    Click Create New PNR    New PNR with profile
+    Comment    Search One Way Rail Availabity X Months From Now    FRLPE    FRPLY    60
+    Comment    Select Fares Criteria For TVG/Eurostar    Expand
+    Comment    Populate Rail More Criteria    Full Flex    \    BF
+    Comment    Populate Rail Negotiated Fares    BF
+    Comment    Click Rail Search Button
+    Comment    Select Rail Outbound Offers    1
+    Comment    Click Rail Next Button    Itinerary
+    Comment    Populate Rail Passenger Details    jayson.panganiban@carlsonwagonlit.com    01-01-1971
+    Comment    Click Rail Next Button    Passengers
+    Comment    Click Rail Next Button    Seats
+    Comment    Click Rail Next Button    Contact Info
+    Comment    Select Rail Delivery Mode    Electronic Ticket (TKE)
+    Comment    Click Rail Book Button
+    Comment    Click Rail Ignore PNR
+    Comment    Select Sabre Tab    Area A
+    Comment    Enter Specific Command On Native GDS    *${current_pnr}
+    Comment    Click Read Booking
+    Comment    Populate All Panels (Except Given Panels If Any)
+    Comment    Click Panel    Delivery
+    Comment    Select Delivery Method    AUTOTICKETER RAIL
+    Comment    Click Finish PNR    \    10
+    Comment    Retrieve PNR Details From Sabre Red    ${current_pnr}
+    Comment    Verify Generic Remarks Are Written    NoramTrvlrOne    AutoTwoOneOne    .*0653*
+    Comment    Verify Specific Line Is Written In The PNR    *0106*0717171
+    Comment    Verify CWT Itinerary Remarks Are Written    FA00    BF
+    [Teardown]    Run Keywords    Click Clear All
+    ...    AND    Cancel Sabre Rail PNR
+
+Verify That Rail Remarks Are Written In PNR (TST=2, Class=AF, Fare=FQ50, Ticket Type=D)
+    [Tags]    not_ready    uat    fr-FR
+    [Setup]    Setup Prereq
+    Open Power Express And Retrieve Profile    ${version}    ${syex_env}    U003WXR    fr-FR    AutomationFR    FR AUTO SABRE
+    Select GDS    Sabre
+    Create Shell PNR For Sabre Rail    Sabre 211 - Auto ¦ US1419    AutoTwoOneOne    NoramTrvlrOne    ${EMPTY}
+    Select Sabre Tab    Sabre Rail
+    Select Rail Vendor    SNCF
+    Click Create New PNR    New PNR with profile
+    Search Round Trip Rail Availabity X Months From Now    FRBOD    FRPNO    40    42
+    Select Fares criteria for TVG/Eurostar    Expand
+    Select Rail Class Criteria    Disable    \    First class    Second class
+    Select Rail Fares Profile    Enable    True    Business subscription
+    Populate Rail More Criteria    Full flex    \    AF    FQ50
+    Populate Rail Negotiated Fares    AF
+    Click Rail Search Button
+    Select Rail Outbound Offers    1
+    Select Rail Return Offers    1
+    Click Rail Next Button    Itinerary
+    Populate Rail Passenger Details    jayson.panganiban@carlsonwagonlit.com    01-01-1971
+    Click Rail Next Button    Passengers
+    Click Rail Next Button    Seats
+    Click Rail Next Button    Contact Info
+    Select Rail Delivery Mode    Homeprint (TKD)
+    Click Rail Book Button
+    Click Rail Ignore PNR
+    Select Sabre Tab    Area A
+    Enter Specific Command On Native GDS    *${current_pnr}
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)
+    Click Panel    Delivery
+    Select Delivery Method    AUTOTICKETER RAIL
+    Click Finish PNR
+    Retrieve PNR Details From Sabre Red    ${current_pnr}
+    Verify Generic Remarks Are Written    NoramTrvlrOne    AutoTwoOneOne    .*0653*
+    Verify Specific Line Is Written In The PNR    *0106*0717171
+    Verify CWT Itinerary Remarks Are Written    FQ50    AF
+    [Teardown]    Run Keywords    Cancel Sabre Rail PNR
+    ...    AND    Click Clear All
+
+Verify That Rail Remarks Are Written In PNR (TST=1, Class=BP, Fare=PN00, Ticket Type=D)
+    [Tags]    not_ready    uat    fr-FR
+    [Setup]    Setup Prereq
+    Comment    Open Power Express And Retrieve Profile    ${version}    ${syex_env}    U003WXR    fr-FR    AutomationFR
+    ...    FR AUTO SABRE
+    Comment    Select GDS    Sabre
+    Create Shell PNR For Sabre Rail    Sabre 211 - Auto ¦ US1419    AutoTwoOneOne    NoramTrvlrOne    ${EMPTY}
+    Select Sabre Tab    Sabre Rail
+    Select Rail Vendor    SNCF
+    Click Create New PNR    New PNR with profile
+    Search One Way Rail Availabity X Months From Now    FRLIL    FRPNO    50
+    Select Fares criteria for TVG/Eurostar    Expand
+    Select Rail Fares Profile    Enable    True    Leisure
+    Populate Rail More Criteria    \    \    BP    PN00
+    Populate Rail Negotiated Fares    BP
+    Click Rail Search Button
+    Select Rail Outbound Offers    1
+    Click Rail Next Button    Itinerary
+    Populate Rail Passenger Details    jayson.panganiban@carlsonwagonlit.com    01-01-1971
+    Click Rail Next Button    Passengers
+    Click Rail Next Button    Seats
+    Click Rail Next Button    Contact Info
+    Select Rail Delivery Mode    Homeprint (TKD)
+    Click Rail Book Button
+    Click Rail Ignore PNR
+    Select Sabre Tab    Area A
+    Enter Specific Command On Native GDS    *${current_pnr}
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)
+    Click Panel    Delivery
+    Select Delivery Method    AUTOTICKETER RAIL
+    Click Finish PNR    \    10
+    Retrieve PNR Details From Sabre Red    ${current_pnr}
+    Verify Generic Remarks Are Written    NoramTrvlrOne    AutoTwoOneOne    .*0653*
+    Verify Specific Line Is Written In The PNR    *0106*0717171
+    Verify CWT Itinerary Remarks Are Written    PN00    BP
+    [Teardown]    Run Keywords    Cancel Sabre Rail PNR
+    ...    AND    Click Clear All
+
+Verify That Rail Remarks Are Written In PNR (TST=1, Class=BE, Fare=FN30, Ticket Type=D)
+    [Tags]    not_ready    uat    fr-FR
+    [Setup]
+    Open Power Express And Retrieve Profile    ${version}    ${syex_env}    U003WXR    fr-FR    AutomationFR    FR AUTO SABRE
+    Select GDS    Sabre
+    Create Shell PNR For Sabre Rail    Sabre 211 - Auto ¦ US1419    AutoTwoOneOne    NoramTrvlrOne    ${EMPTY}
+    Select Sabre Tab    Sabre Rail
+    Select Rail Vendor    SNCF
+    Click Create New PNR    New PNR with profile
+    Search Round Trip Rail Availabity X Months From Now    FRLPD    FRPAR    45    46
+    Select Fares criteria for TVG/Eurostar    Expand
+    Select Rail Fares Profile    Enable    True    Social
+    Populate Rail More Criteria    \    \    BE    FN30
+    Populate Rail Negotiated Fares    BE
+    Click Rail Search Button
+    Select Rail Outbound Offers    1
+    Select Rail Return Offers    1
+    Click Rail Next Button    Itinerary
+    Populate Rail Passenger Details    jayson.panganiban@carlsonwagonlit.com    01-01-1971
+    Click Rail Next Button    Passengers
+    Click Rail Next Button    Seats
+    Click Rail Next Button    Contact Info
+    Select Rail Delivery Mode    Electronic Ticket (TKE)
+    Click Rail Book Button
+    Click Rail Ignore PNR
+    Select Sabre Tab    Area A
+    Enter Specific Command On Native GDS    *${current_pnr}
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)
+    Click Panel    Delivery
+    Select Delivery Method    AUTOTICKETER RAIL
+    Click Finish PNR
+    Retrieve PNR Details From Sabre Red    ${current_pnr}
+    Verify Generic Remarks Are Written    NoramTrvlrOne    AutoTwoOneOne    .*0653*
+    Verify Specific Line Is Written In The PNR    *0106*0717171
+    Verify CWT Itinerary Remarks Are Written    FN30    BE
+    [Teardown]    Run Keywords    Cancel Sabre Rail PNR
+    ...    AND    Click Clear All
+
+Verify That Rail Remarks Are Written In PNR (TST=1, Class=BF, Fare=FQ50, Ticket Type=D)
+    [Tags]    not_ready    uat    fr-FR
+    [Setup]
+    Open Power Express And Retrieve Profile    ${version}    ${syex_env}    U003WXR    fr-FR    AutomationFR    FR AUTO SABRE
+    Select GDS    Sabre
+    Set Client And Traveler    Sabre 211 - Auto ¦ US1419    AutoTwoOneOne    NoramTrvlrOne
+    Click New Booking
+    Enter Specific Command On Native GDS    *R
+    Select Sabre Tab    Sabre Rail
+    Select Rail Vendor    SNCF
+    Click Create New PNR    New PNR with profile
+    Search Round Trip Rail Availabity X Months From Now    FRLIL    FRPNO    50    52
+    Select Fares criteria for TVG/Eurostar    Expand
+    Select Rail Fares Profile    Enable    True    Business subscription
+    Populate Rail More Criteria    \    \    BF    FN30
+    Populate Rail Negotiated Fares    BF
+    Click Rail Search Button
+    Select Rail Outbound Offers    1
+    Select Rail Return Offers    1
+    Click Rail Next Button    Itinerary
+    Populate Rail Passenger Details    jayson.panganiban@carlsonwagonlit.com    01-01-1971
+    Click Rail Next Button    Passengers
+    Click Rail Next Button    Seats
+    Click Rail Next Button    Contact Info
+    Select Rail Delivery Mode    Electronic Ticket (TKE)
+    Click Rail Book Button
+    Click Rail Ignore PNR
+    Select Sabre Tab    Area A
+    Enter Specific Command On Native GDS    *${current_pnr}
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)
+    Click Panel    Delivery
+    Select Delivery Method    AUTOTICKETER RAIL
+    Click Finish PNR
+    Retrieve PNR Details From Sabre Red    ${current_pnr}
+    Verify Generic Remarks Are Written    NoramTrvlrOne    AutoTwoOneOne    .*0653*
+    Verify Specific Line Is Written In The PNR    *0106*0717171
+    Verify CWT Itinerary Remarks Are Written    FN30    BE
+    [Teardown]    Run Keywords    Cancel Sabre Rail PNR
+    ...    AND    Click Clear All
+
+*** Keywords ***
+Verify CWT Itinerary Remarks Are Written
+    [Arguments]    ${fare_code}    ${fare_class}
+    Retrieve PNR Details From Sabre Red    ${current_pnr}    *Z‡
+    Verify Specific Line Is Written In The PNR    Z‡LANGUAGE-SV-SE
+    Retrieve PNR Details From Sabre Red    ${current_pnr}    *‡
+    Verify Specific Line Is Written In The PNR    ‡S0 YOU VERIFY THIS ITINERARY IS COMPLETE AND ACCURATE
+    Verify Specific Line Is Written In The PNR    ‡S0 BOOKING OR THIS ITINERARY WILL BE CONSIDERED VALID
+    Verify Specific Line Is Written In The PNR    ‡S0 REVIEW YOUR ITINERARY FOR CONTENT AND ACCURACY
+    Verify Specific Line Is Written In The PNR    ‡S0 TO DIRECT DIAL THE LYONDELL TRAVEL TEAM, CALL
+    Verify Specific Line Is Written In The PNR    ‡S0 800- \ \ - \ \ \ \ DURING NORMAL BUSINESS HOURS
+    Verify Specific Line Is Written In The PNR    ‡PASSPORT AND VISA INFORMATION
+    Verify Specific Line Is Written In The PNR    ‡ 2C TTL
+    Verify Specific Line Is Written In The PNR    ‡ 2C FARE CONDITIONS ${fare_code} ${fare_class}
+
+Verify Generic Rail Remarks Are Written
+    Verify Specific Line Is Written In The PNR    *0102*1    #Invoice
+    Verify Specific Line Is Written In The PNR    *0111*    #User
+    Verify Specific Line Is Written In The PNR    *0112*    #Ordered by
+    Verify Specific Line Is Written In The PNR    *0650*    #Passenger traveller id (GUID)
+    Verify Specific Line Is Written In The PNR    *0702*    #Info L02: E-mail address \ \
+
+Setup Prereq
+    Comment    Click Clear All
+    Set Suite Variable    ${locale}    fr-FR
+    Set Suite Variable    ${gds_switch}    sabre
+    Set Suite Variable    ${current_pnr}    BUJBXZ
+    Set Suite Variable    ${sabre_rail_pnr}    RRBSRP

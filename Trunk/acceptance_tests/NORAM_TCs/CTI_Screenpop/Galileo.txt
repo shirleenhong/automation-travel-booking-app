@@ -1,0 +1,22 @@
+*** Settings ***
+Resource          ../../../resources/common/global_resources.txt
+
+*** Test Cases ***
+CTI Screenpop
+    Comment    Open Power Express And Retrieve Profile    ${version}    ${syex_env}    U003WXR    en-GB    AutomationUK
+    ...    UK Head Office Test Team
+    Set Suite Variable    ${version}    ${version}
+    Set Suite Variable    ${syex_env}    ${syex_env}
+    Set Suite Variable    ${username}    U003WXR
+    Set Suite Variable    ${locale}    en-GB
+    Set Suite Variable    ${user_profile}    AutomationUK
+    Set Suite Variable    ${team}    UK Head Office Test Team
+    Set Suite Variable    ${keyword}    ${EMPTY}
+    Set Suite Variable    ${error_message}    ${EMPTY}
+    Set Log Level    NONE
+    Sleep    5
+    Set Test Variable    ${retry_popup_status}    False
+    Wait Until Keyword Succeeds    180    5    Verify Progress Info Window is Not Active    ${error_message}
+    Comment    Wait Until Progress Bar Is Completed
+    Activate Power Express Window
+    Set Log Level    INFO

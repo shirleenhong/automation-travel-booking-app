@@ -1,0 +1,28 @@
+*** Settings ***
+Resource          ../common/utilities.txt
+Variables         ../variables/policy_check_control_objects.py
+
+*** Keywords ***
+Populate Policy Check Panel With Default Values
+    [Arguments]    ${str_policy_status}=${EMPTY}
+    Wait Until Control Object Is Visible    [NAME:tlpPolicyCheck]
+    : FOR    ${index}    IN RANGE    0    10
+    \    ${is_field_visible} =    Control Command    ${title_power_express}    ${EMPTY}    ${cbo_policystatus${index}}    IsVisible
+    \    ...    ${EMPTY}
+    \    Exit For Loop If    ${is_field_visible} == 0
+    \    ${pc_policy_status} =    Control Get Text    ${title_power_express}    ${EMPTY}    ${cbo_policystatus${index}}
+    \    Run Keyword If    "${pc_policy_status}" == "${EMPTY}"    Control Click    ${title_power_express}    ${EMPTY}    ${cbo_policystatus${index}}
+    \    Run Keyword If    "${pc_policy_status}" == "${EMPTY}"    Send    {DOWN}{TAB}
+    [Teardown]    Take Screenshot
+
+Select Policy Status
+    [Arguments]    ${expected_policy_reason}    ${policy_status}
+    Wait Until Control Object Is Visible    [NAME:tlpPolicyCheck]
+    : FOR    ${INDEX}    IN RANGE    0    10
+    \    ${actual_policy_reason}    Get Control Text Value    [NAME:clblPolicyReason${index}]
+    \    Log     ${actual_policy_reason}
+    \    Run Keyword If    '${actual_policy_reason}' == '${expected_policy_reason}'    Run Keywords    Click Control Button    ${cbo_policystatus${index}}
+    \    ...    AND    Send    ${policy_status}{TAB}
+    \    ...    AND    Exit For Loop
+    \    Run Keyword If    '${actual_policy_reason}' != '${expected_policy_reason}' and ${INDEX} == 9    Fail    ${expected_policy_reason} is not present
+    [Teardown]    Take Screenshot

@@ -1,0 +1,112 @@
+*** Settings ***
+Force Tags
+Resource          ../delivery_verification.txt
+Resource          ../../air_fare/air_fare_verification.txt
+
+*** Test Cases ***
+[NB] Verify that Subject Line Is Added In the PNR When SO Itinerary Product Is CWT Itinerary
+    [Tags]    us2012
+    Open Power Express And Retrieve Profile    ${version}    test    U003WXR    fr-FR    AutomationFR    FR AUTO AMADEUS
+    Select GDS    Amadeus
+    Create New Booking With One Way Flight Using Default Values    Amadeus FR 15 - Auto ¦ US2954    AutoFifteenTwo    EmeaTrvlrFour    LHRCDG    ${EMPTY}
+    Click Panel    Delivery
+    Select Delivery Method    E-Ticket
+    Verify That Subject Line Dropdown Is Visible
+    Set Subject Line Value    LISTE D ATTENTE CONFIRMEE
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTRZ
+    Verify Specific Line Is Written In The PNR    RMZ CONF*SUBJECT:16*
+
+[AB] Verify That Subject Line Is Updated In The PNR When SO Itinerary Product Is CWT Itinerary
+    [Tags]    us2012
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)
+    Click Panel    Delivery
+    Verify That Subject Line Dropdown Is Visible
+    Verify That Correct Subject Line is Selected    LISTE D ATTENTE CONFIRMEE
+    Set Subject Line Value    VOTRE BILLET ELECTRONIQUE EST A PRESENT MODIFIE
+    Click Finish PNR
+    Execute Simultaneous Change Handling    Amend Amadeus Subject Line
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTRZ
+    Verify Specific Line Is Written In The PNR    RMZ CONF*SUBJECT:23*
+    Enter Command In Native GDS    IR    RT${current_pnr}    RMZ/CONF*SUBJECT:12*    RMZ/CONF*SUBJECT:1*    RFCWTPTEST    ER
+    ...    ER    RTRZ
+    [Teardown]
+
+[SI] Verify That Subject Line Is Updated In The PNR When SO Itinerary Product Is CWT Itinerary
+    [Tags]    us2012
+    Retrieve PNR    ${current_pnr}
+    Click Send Itinerary
+    Click Panel    Delivery
+    Verify That Subject Line Dropdown Is Visible
+    Verify That Correct Subject Line is Selected    DOUBLE RESERVATIONS TROUVEES
+    Set Subject Line Value    ABONNEMENT CONFIRME
+    Click Finish PNR
+    Execute Simultaneous Change Handling    Send Itinerary Subject Line
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTRZ
+    Verify Specific Line Is Written In The PNR    RMZ CONF*SUBJECT:12*
+    Verify Specific Line Is Written In The PNR Only Once    RMZ CONF*SUBJECT:
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB] Verify That Delivery Panel Subject Line Must Not Be Shown When SO Itinerary - Enable Subject Line Is Set To NO For CWT Itinerary
+    [Tags]    us2012
+    Open Power Express And Retrieve Profile    ${version}    ${syex_env}    U003WXR    de-DE    AutomationDE
+    Select GDS    Amadeus
+    Create New Booking With One Way Flight Using Default Values    Amadeus DE 15 - Auto ¦ US2447    AutoSeventeenFive    PerfFive    LHRCDG    ${EMPTY}
+    Click Panel    Delivery
+    Select Delivery Method    Amadeus TKOK
+    Verify That Subject Line Dropdown is Not Visible
+    Click Panel    Recap
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTRZ
+    Verify Specific Line Is Written In The PNR    RMZ CONF*SUBJECT:25*
+    Verify Specific Line Is Written In The PNR Only Once    RMZ CONF*SUBJECT:
+    Enter Command In Native GDS    RT${current_pnr}    RMZ/CONF*SUBJECT:1*    RFCWTPTEST    ER    ER    RTRZ
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTRZ
+    Take Screenshot
+    [Teardown]
+
+[AB] Verify That Delivery Panel Subject Line Must Not Be Shown When SO Itinerary - Enable Subject Line Is Set To NO For CWT Itinerary
+    [Tags]    us2012
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)
+    Verify That Subject Line Dropdown is Not Visible
+    Click Finish PNR
+    Execute Simultaneous Change Handling    Amend Amadeus Without Subject Line
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTRZ
+    Verify Specific Line Is Written In The PNR    RMZ CONF*SUBJECT:1*
+    Verify Specific Line Is Written In The PNR    RMZ CONF*SUBJECT:25*
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Amend Amadeus Subject Line
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)
+    Click Panel    Delivery
+    Verify That Subject Line Dropdown Is Visible
+    Verify That Correct Subject Line is Selected    LISTE D ATTENTE CONFIRMEE
+    Set Subject Line Value    VOTRE BILLET ELECTRONIQUE EST A PRESENT MODIFIE
+    Click Finish PNR
+
+Amend Amadeus Without Subject Line
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)
+    Verify That Subject Line Dropdown is Not Visible
+    Click Finish PNR
+
+Send Itinerary Subject Line
+    Retrieve PNR    ${current_pnr}
+    Click Send Itinerary
+    Click Panel    Delivery
+    Verify That Subject Line Dropdown Is Visible
+    Verify That Correct Subject Line is Selected    DOUBLE RESERVATIONS TROUVEES
+    Set Subject Line Value    ABONNEMENT CONFIRME
+    Click Finish PNR

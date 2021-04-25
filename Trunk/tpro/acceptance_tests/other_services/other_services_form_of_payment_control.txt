@@ -1,0 +1,151 @@
+*** Settings ***
+Resource          ../../../resources/common/global_resources.txt
+
+*** Keywords ***
+Get Credit Card Details
+    Get FOP Vendor Value
+    Get Credit Card Value
+    Get Expiry Month Value
+    Get Expiry Year Value
+
+Get Credit Card Value
+    ${object_name}    Determine Multiple Object Name Based On Active Tab    ValueMaskedTextBox,AssociatedCharges_CardNumberMaskedTextBox,Charges_CardNumberMaskedTextBox,Charges_CardNumberTextBox,CreditCardNumberTextBox,CreditCardNumberTextbox    False
+    ${credit_card_number}    Get Control Text Value    ${object_name}
+    Set Suite Variable    ${credit_card_number}
+    [Return]    ${credit_card_number}
+
+Get Expiry Month Value
+    ${object_name}    Determine Multiple Object Name Based On Active Tab    ExpiryMonthComboBox,AssociatedCharges_ExpiryMonthComboBox,Charges_ExpiryMonthComboBox    False
+    ${expiry_month}    Get Control Text Value    ${object_name}
+    Set Suite Variable    ${expiry_month}
+    [Return]    ${expiry_month}
+
+Get Expiry Year Value
+    ${object_name}    Determine Multiple Object Name Based On Active Tab    ExpiryYearComboBox,AssociatedCharges_ExpiryYearComboBox,Charges_ExpiryYearComboBox    False
+    ${expiry_year}    Get Control Text Value    ${object_name}
+    Set Suite Variable    ${expiry_year}
+    Set Suite Variable    ${short_expiry_year}    ${expiry_year[2:4]}
+    [Return]    ${expiry_year}
+
+Get FOP Value
+    ${object_name}    Determine Multiple Object Name Based On Active Tab    FormOfPaymentComboBox,FormsOfPaymentComboBox,AssociatedCharges_FormOfPaymentComboBox,Charges_FormOfPaymentComboBox    False
+    ${form_of_payment}    Get Control Text Value    ${object_name}
+    Set Suite Variable    ${form_of_payment}
+    [Return]    ${form_of_payment}
+
+Get FOP Vendor Value
+    ${object_name}    Determine Multiple Object Name Based On Active Tab    FopVendorComboBox,AssociatedCharges_FopVendorComboBox,Charges_FopVendorComboBox,CreditCardTypesComboBox,CreditCardTypeCombobox    False
+    ${form_of_payment_vendor}    Get Control Text Value    ${object_name}
+    Set Suite Variable    ${form_of_payment_vendor}
+    [Return]    ${form_of_payment_vendor}
+
+Get Other Services Form Of Payment Details
+    [Arguments]    ${identifier}=${EMPTY}
+    Get FOP Value
+    Comment    ${object_name}    Determine Multiple Object Name Based On Active Tab    FopVendorComboBox,AssociatedCharges_FopVendorComboBox,Charges_FopVendorComboBox,CreditCardTypesComboBox,CreditCardTypeCombobox,FormsOfPaymentComboBox    False
+    Comment    ${is_cc_vendor_present}    Control Command    ${title_power_express}    ${EMPTY}    ${object_name}    IsVisible
+    ...    ${EMPTY}
+    Comment    Run Keyword If    ${is_cc_vendor_present} == 1    Get Credit Card Details
+    Comment    ${is_fop_cc}    Run Keyword And Return Status    Verify Text Contains Expected Value    ${forms_of_payment}    \\*\\*\\*\\*\\*    True
+    ${is_fop_cc}    Set Variable If    "${form_of_payment.lower()}" == "cash" or "${form_of_payment.lower()}" == "invoice" or "${form_of_payment.lower()}" == "nonref"    False    True
+    ${form_of_payment_vendor}    Run Keyword If    ${is_fop_cc}    Get String Matching Regexp    (\\\w{2})(\\\**)(\\\d{4})    ${form_of_payment}    group_number=1
+    ${credit_card_number}    Run Keyword If    ${is_fop_cc}    Get String Matching Regexp    (\\\w{2})(\\\**\\\d{4})    ${form_of_payment}    group_number=2
+    ${expiry_month}    Run Keyword If    ${is_fop_cc}    Get String Matching Regexp    (\\\/\\\w)(\\\d{2})(\\\d{2})    ${form_of_payment}    group_number=2
+    ${expiry_year}    Run Keyword If    ${is_fop_cc}    Get String Matching Regexp    (\\\/\\\w)(\\\d{2})(\\\d{2})    ${form_of_payment}    group_number=3
+    Run Keyword If    ${is_fop_cc}    Run Keywords    Set Suite Variable    ${form_of_payment_vendor}
+    ...    AND    Set Suite Variable    ${form_of_payment_vendor_${identifier}}    ${form_of_payment_vendor}
+    Run Keyword If    ${is_fop_cc}    Run Keywords    Set Suite Variable    ${credit_card_number}
+    ...    AND    Set Suite Variable    ${credit_card_number_${identifier}}    ${credit_card_number}
+    Run Keyword If    ${is_fop_cc}    Run Keywords    Set Suite Variable    ${expiry_month}
+    ...    AND    Set Suite Variable    ${expiry_month_${identifier}}    ${expiry_month}
+    Run Keyword If    ${is_fop_cc}    Run Keywords    Set Suite Variable    ${expiry_year}
+    ...    AND    Set Suite Variable    ${expiry_year_${identifier}}    ${expiry_year}
+    Run Keyword If    ${is_fop_cc}    Run Keywords    Set Suite Variable    ${short_expiry_year}    ${expiry_year}
+    ...    AND    Set Suite Variable    ${short_expiry_year_${identifier}}    ${expiry_year}
+    Run Keyword If    ${is_fop_cc}    Get FOP Type
+    ${form_of_payment}    Set Variable If    "${form_of_payment.lower()}" == "cash" or "${form_of_payment.lower()}" == "invoice" or "${form_of_payment.lower()}" == "nonref"    ${form_of_payment}    ${fop_type}
+    Set Suite Variable    ${form_of_payment}
+    Set Suite Variable    ${form_of_payment_${identifier}}    ${form_of_payment}
+    Set Suite Variable    ${form_of_payment_vendor_${identifier}}    ${form_of_payment_vendor}
+    [Teardown]    Take Screenshot
+
+Populate Credit Card Details
+    [Arguments]    ${credit_card_number}    ${vendor}    ${expiry_month}    ${expiry_year}
+    Unmask Credit Card Number
+    Select Credit Card Vendor    ${vendor}
+    Set Credit Card Value    ${credit_card_number}
+    Select Expiry Month    ${expiry_month}
+    Select Expiry Year    ${expiry_year}
+    [Teardown]    Take Screenshot
+
+Select Credit Card Vendor
+    [Arguments]    ${credit_card_vendor}
+    Select Value From Dropdown List    [NAME:FopVendorComboBox]    ${credit_card_vendor}
+
+Select Form Of Payment (FOP)
+    [Arguments]    ${form_of_payment}    ${card_vendor_type}=${EMPTY}    ${cc_number}=${EMPTY}    ${expiry_month}=${EMPTY}    ${expiry_year}=${EMPTY}
+    Wait Until Control Object Is Visible    [NAME:FormsOfPaymentComboBox]
+    ${fop_value}    Set Variable If    "${card_vendor_type.upper()}"== "VI"    TEST CARD/VI************0087/D0823/CVV***    "${card_vendor_type.upper()}"== "CA"    BTA CARD/CA************1114/D0828/CVV****    "${form_of_payment}"== "Cash" or "${form_of_payment}"=="Invoice"
+    ...    ${form_of_payment}    "${card_vendor_type.upper()}"== "DC"    BTA TMP-DC/DC***********0012/D0722/CVV***    "${card_vendor_type.upper()}"== "AX"    TEST CARD/AX***********0009/D0822/CVV****
+    Select Value From Dropdown List    [NAME:FormsOfPaymentComboBox]    ${fop_value}
+    Run Keyword If    "${form_of_payment}"!= "Cash" or "${form_of_payment}"!="Invoice"    Select Value From Dropdown List    [NAME:FormOfPaymentTypeComboBox]    CX
+    Set Test Variable    ${form_of_payment}
+    [Teardown]    Take Screenshot
+
+Select Form Of Payment (FOP) Value
+    [Arguments]    ${form_of_payment}
+    Wait Until Control Object Is Visible    [NAME:FormOfPaymentComboBox]
+    Select Value From Dropdown List    [NAME:FormOfPaymentComboBox]    ${form_of_payment}
+
+Set Credit Card Value
+    [Arguments]    ${credit_card_number}
+    Set Control Text Value    [NAME:ValueMaskedTextBox]    ${EMPTY}
+    Set Control Text Value    [NAME:ValueMaskedTextBox]    ${credit_card_number}
+
+Get Other Services Default Form Of Payment
+    ${default_form_of_payment}    Get Control Text Value    [NAME:FormsOfPaymentComboBox]
+    Set Suite Variable    ${default_form_of_payment}
+    ${is_fop_cc}    Set Variable If    "${default_form_of_payment.lower()}" == "cash" or "${default_form_of_payment.lower()}" == "invoice" or "${default_form_of_payment.lower()}" == "nonref" or "${default_form_of_payment.lower()}" == "${EMPTY}"    False    True
+    ${fop_type}    Run Keyword If    ${is_fop_cc}    Get Control Text Value    [NAME:FormOfPaymentTypeComboBox]
+    [Return]    ${default_form_of_payment}
+
+Manually Add Form Of Payment (FOP) In Other Services
+    [Arguments]    ${fop_type_value}    ${os_card_vendor}    ${os_card_number}    ${os_exp_month}    ${os_exp_year}
+    Click Control Button    [NAME:cmdAddFOP]
+    Wait Until Control Object Is Visible    [NAME:FopVendorComboBox]
+    Select Value From Dropdown List    [NAME:FopVendorComboBox]    ${os_card_vendor}
+    Set Control Text Value    [NAME:ValueMaskedTextBox]    ${os_card_number}
+    Select Value From Dropdown List    [NAME:ExpiryMonthComboBox]    ${os_exp_month}
+    Select Value From Dropdown List    [NAME:ExpiryYearComboBox]    ${os_exp_year}
+    Click Control Button    [NAME:SaveFopButton]
+    Wait Until Control Object Is Visible    [NAME:FormOfPaymentTypeComboBox]
+    Run Keyword If    '${fop_type_value}' !='${EMPTY}'    Select Value From Dropdown List    [NAME:FormOfPaymentTypeComboBox]    ${fop_type_value}
+    Set Suite Variable    ${is_manual}    true
+    [Teardown]    Take Screenshot
+
+Select Form Of Payment (FOP) In Other Services
+    [Arguments]    ${fop_type_value}    ${fop_dropdown_value}
+    Wait Until Control Object Is Visible    [NAME:FormsOfPaymentComboBox]
+    Run Keyword If    "${fop_dropdown_value}" != "${EMPTY}"    Select Value From Dropdown List    [NAME:FormsOfPaymentComboBox]    ${fop_dropdown_value}
+    Run Keyword If    "${fop_dropdown_value.lower()}" != "cash" and "${fop_dropdown_value.lower()}" != "invoice" and "${fop_dropdown_value.lower()}" != "nonref" and "${fop_type_value}" != "${EMPTY}"    Select Value From Dropdown List    [NAME:FormOfPaymentTypeComboBox]    ${fop_type_value}
+    Set Suite Variable    ${is_manual}    false
+    Set Suite Variable    ${fop_type_value}
+    [Teardown]    Take Screenshot
+
+Click Mask Icon
+    Click Control    [NAME:MaskContentButton]
+
+Get FOP Type
+    ${fop_type}    Get Control Text Value    [NAME:FormOfPaymentTypeComboBox]
+    Set Suite Variable    ${fop_type}
+
+Select FOP Type
+    [Arguments]    ${fop_type}
+    [Documentation]    Values to be selected Credit Card (CC) and Credit Card (CX)
+    Select Value From Dropdown List    [NAME:FormOfPaymentTypeComboBox]    ${fop_type}
+    [Teardown]    Take Screenshot
+
+Get FOP Type In Other Services
+    ${object_name}    Determine Multiple Object Name Based On Active Tab    FormOfPaymentTypeComboBox, FormsOfPaymentTypeComboBox,FormsOfPaymentComboBox    False
+    ${fop_type}    Get Control Text Value    ${object_name}
+    Set Suite Variable    ${fop_type}

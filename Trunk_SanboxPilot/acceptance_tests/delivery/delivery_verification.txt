@@ -1,0 +1,255 @@
+*** Settings ***
+Resource          ../../resources/common/global_resources.txt
+Resource          ../database/database_verification.txt
+Resource          ../air_fare/air_fare_verification.txt
+Resource          ../apis_sfpd/apis_sfpd_verification.txt
+Resource          ../cust_refs/cust_refs_verification.txt
+Resource          ../../resources/panels/gds_screen.txt
+Resource          ../../resources/common/gds_native.txt
+
+*** Keywords ***
+Verify Delivery Method Default Value Is Correct
+    [Arguments]    ${expected_default_value}
+    Verify Control Object Text Value Is Correct    ${combo_deliverMethod}    ${expected_default_value}
+    [Teardown]    Take Screenshot
+
+Verify Delivery Method Selected Is Reflected In The Ticketing Line
+    [Arguments]    ${ticketing_line_prefix}    ${delivery_method_suffix}
+    ${escaped_ticketing_line_prefix}    Regexp Escape    ${ticketing_line_prefix}
+    ${escaped_delivery_method_suffix}    Regexp Escape    ${delivery_method_suffix}
+    Verify Specific Line Is Written In The PNR    ${escaped_ticketing_line_prefix}\\D{2}\\d{2}\\D{3}${escaped_delivery_method_suffix}    true
+
+Verify Invalid Ticketing Date Error Message Is Displayed
+    ${is_error_present}    Run Keyword and Return Status    Object Exists    ${sikuli_image_path}\\ticketing_date_error_icon.png    0.95    ${timeout}
+    ${pos_x}    Control Get Pos X    ${title_power_express}    ${EMPTY}    [Name:uccTicketingDate]
+    ${pos_y}    Control Get Pos Y    ${title_power_express}    ${EMPTY}    [Name:uccTicketingDate]
+    Auto It Set Option    MouseCoordMode    1
+    Run Keyword If    "${is_error_present}" == "True"    Mouse Move    ${pos_x+115}    ${pos_y+35}
+    ${ticketing_date_error}    Run Keyword If    "${locale}" == "fr-FR"    Run Keyword and Return Status    Object Exists    ${sikuli_image_path}\\ticketingdate_invalid_fr.PNG    0.95
+    ...    ${timeout}
+    ...    ELSE IF    "${locale}" == "en-US"    Run Keyword and Return Status    Object Exists    ${sikuli_image_path}\\ticketingdate_invalid.PNG    0.95
+    ...    ${timeout}
+    Run Keyword If    "${ticketing_date_error}" == "True"    Log    Invalid Ticketing Date Error message is Displayed
+    ...    ELSE    Run Keyword and Continue on Failure    FAIL    Invalid Ticketing Date Error message is Not Displayed
+    Run Keyword If    "${is_error_present}" == "True"    Mouse Move    ${pos_x+115}    ${pos_y}
+    Auto It Set Option    MouseCoordMode    0
+    [Teardown]    Take Screenshot
+
+Verify Invalid Ticketing Date Error Message Is Not Displayed
+    ${is_error_present}    Run Keyword and Return Status    Object Exists    ${sikuli_image_path}\\ticketing_date_error_icon.png    0.95    ${timeout}
+    Run Keyword And Continue On Failure    Should Be True    "${is_error_present}" == "False"    Invalid ticketing date error should not be displayed.
+    [Teardown]    Take Screenshot
+
+Verify On Hold Booking Reason Is Checked
+    [Arguments]    ${on_hold_reason}
+    ${is_checked}    Determine Selected On Hold Reason Code    ${on_hold_reason}
+    Run Keyword And Continue On Failure    Should Be True    '${is_checked}' == 'True'    ${on_hold_reason} checkbox must be ticked.
+    [Teardown]    Take Screenshot
+
+Verify On Hold Booking Reason Is Disabled
+    [Arguments]    ${onhold_reason}
+    Run Keyword If    "${on_hold_reason}" == "Awaiting Secure Flight Data"    Set Test Variable    ${onhold_reason_obj}    ${check_box_holdreason0}
+    ...    ELSE IF    "${on_hold_reason}" == "Awaiting Customer References"    Set Test Variable    ${onhold_reason_obj}    ${check_box_holdreason1}
+    ...    ELSE IF    "${on_hold_reason}" == "Awaiting Fare Details"    Set Test Variable    ${onhold_reason_obj}    ${check_box_holdreason2}
+    ...    ELSE IF    "${on_hold_reason}" == "Awaiting Approval"    Set Test Variable    ${onhold_reason_obj}    ${check_box_holdreason3}
+    ...    ELSE IF    "${on_hold_reason}" == "Awaiting Itinerary Segment"    Set Test Variable    ${onhold_reason_obj}    ${check_box_holdreason4}
+    ...    ELSE    Run Keyword And Continue On Failure    FAIL    Onhold booking reason not found.
+    ${is_checked}    ${is_enabled}    Get Checkbox Status (Onhold Reasons)    ${onhold_reason_obj}
+    Run Keyword And Continue On Failure    Should Be True    '${is_enabled}' == 'False'    ${on_hold_reason} checkbox must be disabled.
+    [Teardown]    Take Screenshot
+
+Verify On Hold Booking Reason Is Unchecked
+    [Arguments]    ${on_hold_reason}
+    ${is_checked}    Determine Selected On Hold Reason Code    ${on_hold_reason}
+    Run Keyword And Continue On Failure    Should Be True    '${is_checked}' == 'False'    ${on_hold_reason} checkbox must not be ticked.
+    [Teardown]    Take Screenshot
+
+Verify Policy Reason Is Not Displayed
+    [Arguments]    ${expected_policy_reason}
+    : FOR    ${index}    IN RANGE    0    10
+    \    ${isVisible}    Control Command    Power Express    ${EMPTY}    [NAME:clblPolicyReason${index}]    IsVisible
+    \    ...    ${EMPTY}
+    \    Exit For Loop If    '${isVisible}' != '1'
+    \    ${actual_policy_reason}    Get Control Text Value    [NAME:clblPolicyReason${index}]
+    \    Run Keyword And Continue On Failure    Should Not Match    ${actual_policy_reason}    ${expected_policy_reason}    Policy reason '${expected_policy_reason}' should no longer be displayed in Quick Amend.
+
+Verify Policy Status Does Not Contain Option
+    [Arguments]    ${expected_policy_reason}    ${policy_status}
+    : FOR    ${index}    IN RANGE    0    10
+    \    ${isVisible}    Control Command    Power Express    ${EMPTY}    [NAME:clblPolicyReason${index}]    IsVisible
+    \    ...    ${EMPTY}
+    \    Run Keyword If    '${isVisible}' != '1'    Run Keyword And Continue On Failure    FAIL    Policy reason not found in list: ${policy_reason}
+    \    Exit For Loop If    '${isVisible}' != '1'
+    \    ${actual_policy_reason}    Get Control Text Value    [NAME:clblPolicyReason${index}]
+    \    @{actual_list}    Run Keyword If    '${actual_policy_reason}' == '${expected_policy_reason}'    Get Value From Dropdown List    ${cbo_policystatus${index}}
+    \    Run Keyword If    '${actual_policy_reason}' == '${expected_policy_reason}'    Run Keyword And Continue On Failure    Run Keywords    List Should Not Contain Value    ${actual_list}
+    \    ...    ${policy_status}
+    \    ...    AND    Exit For Loop
+    [Teardown]    Take Screenshot
+
+Verify Policy Status Is Blank By Default
+    [Arguments]    ${expected_policy_reason}
+    : FOR    ${index}    IN RANGE    0    10
+    \    ${isVisible}    Control Command    Power Express    ${EMPTY}    [NAME:clblPolicyReason${index}]    IsVisible
+    \    ...    ${EMPTY}
+    \    Run Keyword If    '${isVisible}' != '1'    Run Keyword And Continue On Failure    FAIL    Policy reason not found in list: ${policy_reason}
+    \    Exit For Loop If    '${isVisible}' != '1'
+    \    ${actual_policy_reason}    Get Control Text Value    [NAME:clblPolicyReason${index}]
+    \    Run Keyword If    '${actual_policy_reason}' == '${expected_policy_reason}'    Run Keywords    Verify Control Object Text Value Is Correct    ${cbo_policystatus${index}}    ${EMPTY}
+    \    ...    AND    Exit For Loop
+    [Teardown]    Take Screenshot
+
+Verify Quick Amend Is Not Visible
+    Verify Control Object Is Not Visible    ${label_quick_amend}
+    Verify Control Object Is Not Visible    ${button_quick_amend}
+    [Teardown]    Take Screenshot
+
+Verify Quick Amend Is Visible
+    Verify Control Object Is Visible    ${label_quick_amend}
+    Verify Control Object Is Visible    ${button_quick_amend}
+    [Teardown]    Take Screenshot
+
+Verify Quick Amend Spiel Is Not Visible
+    Verify Control Object Is Visible    ${label_quick_amend}
+    [Teardown]    Take Screenshot
+
+Verify Quick Amend Spiel Is Visible
+    [Arguments]    ${expected_text}
+    Verify Control Object Text Value Is Correct    ${label_quick_amend}    ${expected_text}
+    [Teardown]    Take Screenshot
+
+Verify Reasons For Placing Booking On Hold Section In Delivery Panel Is Disabled
+    ${is_checked_0}    ${is_enabled_0}    Get Checkbox Status (Onhold Reasons)    ${check_box_holdreason0}
+    ${is_checked_1}    ${is_enabled_1}    Get Checkbox Status (Onhold Reasons)    ${check_box_holdreason1}
+    ${is_checked_2}    ${is_enabled_2}    Get Checkbox Status (Onhold Reasons)    ${check_box_holdreason2}
+    ${is_checked_3}    ${is_enabled_3}    Get Checkbox Status (Onhold Reasons)    ${check_box_holdreason3}
+    ${is_checked_4}    ${is_enabled_4}    Get Checkbox Status (Onhold Reasons)    ${check_box_holdreason4}
+    Run Keyword If    "${is_enabled_0}" == "False" and "${is_enabled_1}" == "False" and "${is_enabled_2}" == "False" and "${is_enabled_3}" == "False" and "${is_enabled_4}" == "False"    Log    Verification Passed
+    ...    ELSE    Run Keyword And Continue On Failure    FAIL    On Hold reasons must be disabled.
+    [Teardown]    Take Screenshot
+
+Verify That Follow Up Date Is Not Visible
+    Verify Control Object Is Not Visible    [NAME:uccFollowupDate]
+    [Teardown]    Take Screenshot
+
+Verify Ticketing Date Field Value
+    [Arguments]    ${expected_ticketing_date_value}
+    Activate Power Express Window
+    Verify Control Object Text Value Is Correct    [NAME:uccTicketingDate]    ${expected_ticketing_date_value}
+    [Teardown]    Take Screenshot
+
+Verify Ticketing Date Field Value Is Current Date
+    ${current_date}    ExtendedCustomSyExLibrary.Get Current Date
+    Verify Ticketing Date Field Value    ${current_date}
+
+Verify Ticketing Date Field Value Is LDT-1
+    Verify Ticketing Date Field Value    ${ldt-1}
+
+Verify Ticketing Date Field Value Is Travel Date-1
+    Verify Ticketing Date Field Value    ${travel_date-1}
+
+Verify Ticketing Time Limit Field Is Enabled
+    Verify Control Object Is Enabled    [NAME:ccboTimeLimit]
+    [Teardown]    Take Screenshot
+
+Verify Ticketing Time Limit Field Is Visible
+    Verify Control Object Is Visible    [NAME:ccboTimeLimit]
+    [Teardown]    Take Screenshot
+
+Verify Ticketing Time Limit Field Value
+    [Arguments]    ${expected_ticketing_time_limit_value}
+    Verify Control Object Text Value Is Correct    [NAME:ccboTimeLimit]    ${expected_ticketing_time_limit_value}
+    [Teardown]    Take Screenshot
+
+Verify Time Limit Remarks Field Is Enabled
+    Verify Control Object Is Enabled    [NAME:ctxtTimeRemarks]
+    [Teardown]    Take Screenshot
+
+Verify Time Limit Remarks Field Is Visible
+    Verify Control Object Is Visible    [NAME:ctxtTimeRemarks]
+    [Teardown]    Take Screenshot
+
+Verify Time Limit Remarks Field Value
+    [Arguments]    ${expected_ticket_time_limit_remarks}
+    Verify Control Object Text Value Is Correct    [NAME:ctxtTimeRemarks]    ${expected_ticket_time_limit_remarks}
+    [Teardown]    Take Screenshot
+
+Verify Travel Date-1 Is Written In The Ticketing Line
+    ${travel_date-1_syex}    Convert Date To Gds Format    ${travel_date-1}    %m/%d/%Y
+    Run Keyword If    "${GDS_Switch.lower()}" == "sabre"    Verify Specific Line Is Written In The PNR    TAW3W7FQC/ETK ${travel_date-1_syex} HOLD AWAITING.APPROVAL
+    ...    ELSE IF    "${GDS_Switch.lower()}" == "apollo"    Verify Specific Line Is Written In The PNR    TKTG-TAU/${travel_date-1_syex}¤24LY/ETK.HOLD.AWAITING.SECURE.FLIGHT.DATA
+
+Verify On Hold Booking Reasons Are All Unchecked
+    Verify On Hold Booking Reason Is Unchecked    Awaiting Customer References
+    Verify On Hold Booking Reason Is Unchecked    Awaiting Secure Flight Data
+    Verify On Hold Booking Reason Is Unchecked    Awaiting Fare Details
+    Verify On Hold Booking Reason Is Unchecked    Awaiting Approval
+    Verify On Hold Booking Reason Is Unchecked    Awaiting Itinerary Segment
+    Verify On Hold Booking Reason Is Unchecked    Awaiting Form of Payment
+
+Remove Ticketing Date Not Set Confirm By Remark In Apollo PNR
+    Retrieve PNR Details From Travelport    ${current_pnr}
+    ${line_number}    Get Line Number In PNR Remarks    TICKETING DATE NOT SET CONFIRM BY
+    Activate Power Express Window
+    Run Keyword If    '${line_number}' != '${EMPTY}'    Enter GDS Command    C:${line_number}¤:5    R:CWTPTEST    ER    ER
+    Run Keyword If    '${line_number}' == '${EMPTY}'    Enter GDS Command    I
+
+Get Ticketing Line From Apollo PNR
+    Get Ticketing Date From Apollo PNR
+    Get Ticketing Date Year    ${ticketing_date_month}    ${ticketing_date_day}
+    ${ticketing_date}    Convert Date To Syex Format    ${ticketing_date_month}${ticketing_date_day}${date_year}    %b%d%Y
+    Set Suite Variable    ${ticketing_date}
+
+Get Ticketing Date From Apollo PNR
+    ${ticketing_date_marker}    Set Variable If    '${gds_switch}' == 'apollo'    TKTG-TAU/24LY/
+    ${ticketing_date_line}    Get Lines Containing String    ${pnr_details}    ${ticketing_date_marker}
+    ${ticketing_date_array}    Split String    ${ticketing_date_line}    ${ticketing_date_marker}
+    ${ticketing_date_line}    Remove All Spaces    ${ticketing_date_array[1]}
+    ${ticketing_date_month}    Get Substring    ${ticketing_date_line}    4    7
+    ${ticketing_date_day}    Get Substring    ${ticketing_date_line}    2    4
+    Set Test Variable    ${ticketing_date_month}
+    Set Test Variable    ${ticketing_date_day}
+
+Verify Ticketing Date Field Value Is Ticketing Date From PNR
+    Verify Ticketing Date Field Value    ${ticketing_date}
+
+Verify Ticketing Date Field In PNR Is Not Changed
+    Run Keyword If    '${gds_switch}' == 'apollo'    Get Ticketing Line From Apollo PNR
+    Run Keyword If    '${gds_switch}' == 'sabre'    Get Ticketing Line From Sabre PNR
+    Click Panel    Delivery
+    ${ticketing_date_express}    Get Control Text Value    [NAME:uccTicketingDate]
+    Should Be Equal As Strings    ${ticketing_date_express}    ${ticketing_date}
+
+Remove Ticketing Date Not Set Confirm By Remark In PNR
+    Retrieve PNR Details From Sabre Red    ${current_pnr}    *P‡    0
+    ${line_number}    Get Line Number In PNR Remarks    TICKETING DATE NOT SET CONFIRM BY
+    Activate Power Express Window
+    Run Keyword If    '${line_number}' != '${EMPTY}'    Enter GDS Command    5${line_number}¤    6CWTTEST    ER    ER
+    Run Keyword If    '${line_number}' != '${EMPTY}'    Remove Ticketing Date Not Set Confirm By Remark In PNR
+    Run Keyword If    '${line_number}' == '${EMPTY}'    Enter GDS Command    I
+
+Get Ticketing Line From Sabre PNR
+    Get Ticketing Date From Sabre PNR
+    Get Ticketing Date Year    ${ticketing_date_month}    ${ticketing_date_day}
+    ${ticketing_date}    Convert Date To Syex Format    ${ticketing_date_month}${ticketing_date_day}${date_year}    %b%d%Y
+    Set Suite Variable    ${ticketing_date}
+
+Get Ticketing Date From Sabre PNR
+    ${ticketing_date_marker}    Set Variable If    '${gds_switch}' == 'sabre'    1.TAW3W7FQC/ETK
+    ${ticketing_date_line}    Get Lines Containing String    ${pnr_details}    ${ticketing_date_marker}
+    ${ticketing_date_array}    Split String    ${ticketing_date_line}    ${ticketing_date_marker}
+    ${ticketing_date_line}    Remove All Spaces    ${ticketing_date_array[1]}
+    ${ticketing_date_month}    Get Substring    ${ticketing_date_line}    2    5
+    ${ticketing_date_day}    Get Substring    ${ticketing_date_line}    0    2
+    Set Test Variable    ${ticketing_date_month}
+    Set Test Variable    ${ticketing_date_day}
+
+Verify That Subject Line Dropdown Is Visible
+    Verify Control Object Is Visible    [NAME:cboSubjectLine]
+
+Verify That Correct Subject Line is Selected
+    [Arguments]    ${SubjectLine}
+    Verify Control Object Text Value Is Correct    [NAME:cboSubjectLine]    ${SubjectLine}
+
+Verify That Subject Line Dropdown Is Not Visible
+    Verify Control Object Is Not Visible    [NAME:cboSubjectLine]

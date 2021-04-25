@@ -1,0 +1,153 @@
+*** Settings ***
+Force Tags        galileo    emea
+Resource          pspt_and_visa_verification.txt
+
+*** Test Cases ***
+[NB UK] Verify That Additional Visa Are Not Displayed
+    [Tags]    uk    uat    emea
+    Open Power Express And Retrieve Profile    ${version}    ${syex_env}    U003WXR    en-GB    AutomationUK    UK Head Office Test Team
+    Select GDS    galileo
+    Set Client And Traveler    UK STAFF TEST ¦ AUTO UK-STAFF TEST    Automason    Yuri
+    Select Client Account Value    717171 ¦ VAT CHANGES TESTING. ¦ AUTO UK-STAFF TEST
+    Click New Booking
+    Click Panel    Client Info
+    Select Form Of Payment    NonRef
+    Click Panel    Cust Refs
+    Tick Not Known At Time Of Booking    Tick
+    Click Update PNR
+    Book Flight X Months From Now    LHRAMS/BA    01Y1    \    6
+    Book Flight X Months From Now    AMSLHR/BA    01Y1    FQ:NR    6    3
+    Click Read Booking
+    Click Panel    Pspt And Visa
+    Verify No Additional Visa Fields Are Displayed
+    [Teardown]    Click Clear All
+
+[NB] Verify That Domestic Trip Checkbox Is Unchecked For Domestic Flight Different From Traveler's Nationality Timatic On
+    [Tags]    us5155
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    en-GB    AutomationUK    UK AUTO GALILEO
+    Select GDS    Galileo
+    Create New Booking With Timestamp With Round Trip Air Flight Using Default Values    Galileo 16 - Auto ¦ US3277    AutoOneSixSeven    OptimizeTrvlrFour    YYZYVR/AC    01Y1    ${EMPTY}
+    ...    YVRYYZ/AC    01Y1    FQ:NR    ${EMPTY}    PSPT AND VISA
+    Click Panel    Pspt and Visa
+    Verify Checkbox Is Unticked    ${check_box_domestic_trip}
+    Verify Passport & Visa Info Panel Is Displayed
+    Verify Travel Document Details Are Correct    British Citizen passport    United Kingdom    123456789    11/28/2022
+    Untick Domestic Trip
+    Click Check Visa Requirements No ESTA
+    Get Passport & Visa Info Panel Text
+    Verify Pspt And Visa Info Panel Contains Text    The passenger must have an Electronic Travel Authorization (eTA).
+    Click Finish PNR
+    Retrieve PNR Details From Travelport    ${current_pnr}
+    Verify Specific Line Is Written In The PNR    P AND V : NATIONALITY GB
+    Verify Specific Line Is Written In The PNR    123456789
+    Verify Specific Line Is Written In The PNR    11/28/2022
+    Verify Specific Line Is Written In The PNR    PASSPORT AND VISA INFORMATION
+    Verify Specific Line Is Written In The PNR    TRAVELLERS NATIONALITY: UNITED KINGDOM
+    Verify Specific Line Is Written In The PNR    VALID PASSPORT HELD: UNABLE TO CONFIRM
+    Verify Specific Line Is Written In The PNR    VISA CHECK: CANADA REQUIRED
+    [Teardown]
+
+[AB] Verify That Domestic Trip Checkbox Is Unchecked For Domestic Flight Different From Traveler's Nationality Timatic On
+    [Tags]    us5155
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    PSPT AND VISA
+    Click Panel    Pspt and Visa
+    Verify Checkbox Is Unticked    ${check_box_domestic_trip}
+    Verify Passport & Visa Info Panel Is Not Displayed
+    Verify Travel Document Details Are Correct    British Citizen passport    United Kingdom    123456789    11/28/2022
+    Untick Domestic Trip
+    Click Check Visa Requirements No ESTA
+    Get Passport & Visa Info Panel Text
+    Verify Pspt And Visa Info Panel Contains Text    The passenger must have an Electronic Travel Authorization (eTA).
+    Click Finish PNR
+    Execute Simultaneous Change Handling    Amend Booking Workflow For Domestic Trip Checkbox Unticked Timatic On
+    Retrieve PNR Details From Travelport    ${current_pnr}
+    Verify Specific Line Is Written In The PNR    P AND V : NATIONALITY GB
+    Verify Specific Line Is Written In The PNR    123456789
+    Verify Specific Line Is Written In The PNR    11/28/2022
+    Verify Specific Line Is Written In The PNR    PASSPORT AND VISA INFORMATION
+    Verify Specific Line Is Written In The PNR    TRAVELLERS NATIONALITY: UNITED KINGDOM
+    Verify Specific Line Is Written In The PNR    VALID PASSPORT HELD: UNABLE TO CONFIRM
+    Verify Specific Line Is Written In The PNR    VISA CHECK: CANADA REQUIRED
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB] Verify That Domestic Trip Checkbox Is Checked For Domestic Flight Different From Traveler's Nationality Multiple Docs
+    [Tags]    us5155
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    en-GB    AutomationUK    UK AUTO GALILEO
+    Select GDS    Galileo
+    Create New Booking With Timestamp With Round Trip Air Flight Using Default Values    Galileo 15 - Auto ¦ US2643    AutoFifteenTen    OptimizeTrvlrTwo    YYZYVR/AC    01Y1    ${EMPTY}
+    ...    YVRYYZ/AC    01Y1    FQ:NR    ${EMPTY}    PSPT AND VISA
+    Click Panel    Pspt and Visa
+    Verify Checkbox Is Ticked    ${check_box_domestic_trip}
+    Verify Passport & Visa Info Panel Is Not Displayed
+    Verify Travel Document Details Are Correct    British Citizen passport    United Kingdom    P1234    7/6/2021
+    Untick Domestic Trip
+    Tick Use Document
+    Click Check Visa Requirements No ESTA
+    Get Passport & Visa Info Panel Text
+    Verify Pspt And Visa Info Panel Contains Text    The passenger must have an Electronic Travel Authorization (eTA).
+    Click Finish PNR
+    Retrieve PNR Details From Travelport    ${current_pnr}
+    Verify Specific Line Is Written In The PNR    P AND V : NATIONALITY GB
+    Verify Specific Line Is Written In The PNR    P1234
+    Verify Specific Line Is Written In The PNR    7/6/2021
+    [Teardown]
+
+[AB] Verify That Domestic Trip Checkbox Is Checked For Domestic Flight Different From Traveler's Nationality Multiple Docs
+    [Tags]    us5155
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    PSPT AND VISA
+    Click Panel    Pspt and Visa
+    Verify Passport & Visa Info Panel Is Not Displayed
+    Verify Travel Document Details Are Correct    British Citizen passport    United Kingdom    P1234    6/7/2021
+    Untick Domestic Trip
+    Tick Use Document
+    Click Check Visa Requirements No ESTA
+    Get Passport & Visa Info Panel Text
+    Verify Pspt And Visa Info Panel Contains Text    The passenger must have an Electronic Travel Authorization (eTA).
+    Click Finish PNR
+    Execute Simultaneous Change Handling    Amend Booking Workflow For Domestic Trip Checkbox Unticked Multiple Docs
+    Retrieve PNR Details From Travelport    ${current_pnr}
+    Verify Specific Line Is Written In The PNR    P AND V : NATIONALITY GB
+    Verify Specific Line Is Written In The PNR    P1234
+    Verify Specific Line Is Written In The PNR    6/7/2021
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Verify No Additional Visa Fields Are Displayed
+    Verify Visa Details Fields Are Displayed
+
+Amend Booking Workflow For Domestic Trip Checkbox Unticked Timatic On
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    PSPT AND VISA
+    Click Panel    Pspt and Visa
+    Verify Checkbox Is Unticked    ${check_box_domestic_trip}
+    Verify Passport & Visa Info Panel Is Not Displayed
+    Verify Travel Document Details Are Correct    British Citizen passport    United Kingdom    123456789    11/28/2022
+    Tick Domestic Trip
+    Untick Domestic Trip
+    Click Check Visa Requirements No ESTA
+    Get Passport & Visa Info Panel Text
+    Verify Pspt And Visa Info Panel Contains Text    The passenger must have an Electronic Travel Authorization (eTA).
+    Click Finish PNR
+
+Amend Booking Workflow For Domestic Trip Checkbox Unticked Multiple Docs
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    PSPT AND VISA
+    Click Panel    Pspt and Visa
+    Verify Passport & Visa Info Panel Is Not Displayed
+    Verify Travel Document Details Are Correct    British Citizen passport    United Kingdom    P1234    7/6/2021
+    Untick Domestic Trip
+    Tick Use Document
+    Click Check Visa Requirements No ESTA
+    Get Passport & Visa Info Panel Text
+    Verify Pspt And Visa Info Panel Contains Text    The passenger must have an Electronic Travel Authorization (eTA).
+    Click Finish PNR

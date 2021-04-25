@@ -1,0 +1,17 @@
+HTTP/1.1 200 OK
+Cache-Control: private
+Content-Type: text/html; charset=utf-8
+Content-Encoding: gzip
+ETag: H+aikFjQrikKCmAfJnRd7Hcr23M47TfYAeh1/2ZkvdA=
+Vary: Accept-Encoding
+Server: Microsoft-IIS/10.0
+X-UA-Compatible: IE=10; IE=9; IE=8;requiresActiveX=true;
+X-Powered-By: ASP.NET
+X-Citrix-Application: Receiver for Web
+X-Frame-Options: deny
+Content-Security-Policy: frame-ancestors 'none'
+X-XSS-Protection: 1; mode=block
+X-Content-Type-Options: nosniff
+Date: Wed, 03 Oct 2018 18:09:31 GMT
+Content-Length: 11952
+

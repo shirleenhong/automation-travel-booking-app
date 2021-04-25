@@ -1,0 +1,15 @@
+[t2]
+FileName1=t2.xml
+URL1=https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/Home/Configuration
+Total=3
+RequestHeaderFile=t2_RequestHeader.txt
+RequestBodyFile=NONE
+ResponseHeaderFile=t2_ResponseHeader.txt
+ContentType=application/xml
+SnapshotXmlFile=snapshot_2.xml
+FileName2=t2_favicon_9B19689CB70C681E.ico
+URL2=https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/images/common/favicon_9B19689CB70C681E.ico
+FileName3=t2_favicon.ico
+URL3=https://www.bing.com/favicon.ico
+[ProtocolInfo]
+ProtocolId=QTWeb

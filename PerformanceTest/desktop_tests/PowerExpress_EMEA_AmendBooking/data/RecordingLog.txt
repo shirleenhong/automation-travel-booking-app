@@ -1,0 +1,831 @@
+[API Trapper      (2188:2ef8)] Recording in 32-bit mode: C:\Program Files (x86)\Internet Explorer\iexplore.exe
+[API Trapper      (1884:29dc)] Recording in 64-bit mode: D:\Program Files (x86)\HPE\LoadRunner\bin\mediator_x64.exe
+[API Trapper      (33f0:2cf8)] Recording in 64-bit mode: C:\Program Files\Internet Explorer\IEXPLORE.EXE
+[API Trapper      (240c:3120)] Recording in 32-bit mode: D:\Program Files (x86)\HPE\LoadRunner\bin\mediator.exe
+[API Trapper      ( 52c:33cc)] Recording in 32-bit mode: C:\Program Files (x86)\Internet Explorer\IEXPLORE.EXE
+[Network Analyzer ( 52c:334c)] ------------------------------------------------------------------------------------------
+[Network Analyzer ( 52c:334c)] Load Network Traffic Analyzers:
+[Network Analyzer ( 52c:334c)]     Analyzer Module: Citrix_ICA (value=GetCitrixProtocolAnalyzer:CitrixAnalyzer.dll)
+[Network Analyzer ( 52c:334c)]     + Network Analyzer: CitrixAnalyzer.dll @ GetCitrixProtocolAnalyzer Loaded!
+[Network Analyzer ( 52c:334c)]     Analyzer Module: WPLUS (value=)
+[Network Analyzer ( 52c:334c)]     Analyzer Module: WebBase (value=GetHttpProtocolAnalyzer:api_http_filter.dll)
+[Network Analyzer ( 52c:334c)]     + Network Analyzer: api_http_filter.dll @ GetHttpProtocolAnalyzer Loaded!
+[Network Analyzer ( 52c:334c)]     + Interception Auditors: WinInetWplusInterceptionAudit:api_http_filter.dll
+[Network Analyzer ( 52c:334c)]     Analyzer Module: QTWeb (value=GetWebSocketProtocolAnalyzer:WebSocketAnalyzer.dll)
+[Network Analyzer ( 52c:334c)]     + Network Analyzer: WebSocketAnalyzer.dll @ GetWebSocketProtocolAnalyzer Loaded!
+[Network Analyzer ( 52c:334c)]     Analyzer Module: local_server (value=)
+[Network Analyzer ( 52c:334c)] ------------------------------------------------------------------------------------------
+[Network Analyzer ( 52c:2cac)] Address lookup for VWNV02PL00162 = 10.213.128.38
+[Network Analyzer ( 52c:334c)] Address lookup for VWNV02PL00162 = 10.213.128.38
+[Network Analyzer ( 52c:334c)] Request Connection: Remote Server @ 10.200.188.1:443   (Service=)  (Sid=  1)  PROXIED!
+[Network Analyzer ( 52c:16f8)]   (Sid:  1) Negotiate Proxy -> Server SSL Handshake (ssl:TLSv1.2, ciphers:ECDHE-RSA-AES256-SHA384)
+[Network Analyzer ( 52c:16f8)]   (Sid:  1) Negotiate Client -> Proxy SSL Handshake (ssl:TLSv1.2, ciphers:ECDHE-RSA-AES256-SHA384)
+[Network Analyzer (33f0:1a28)] ------------------------------------------------------------------------------------------
+[Network Analyzer (33f0:1a28)] Load Network Traffic Analyzers:
+[Network Analyzer (33f0:1a28)]     Analyzer Module: Citrix_ICA (value=)
+[Network Analyzer (33f0:1a28)]     Analyzer Module: WPLUS (value=)
+[Network Analyzer (33f0:1a28)]     Analyzer Module: WebBase (value=GetHttpProtocolAnalyzer:api_http_filter_x64.dll)
+[Network Analyzer (33f0:1a28)]     + Network Analyzer: api_http_filter_x64.dll @ GetHttpProtocolAnalyzer Loaded!
+[Network Analyzer (33f0:1a28)]     + Interception Auditors: WinInetWplusInterceptionAudit:api_http_filter_x64.dll
+[Network Analyzer (33f0:1a28)]     Analyzer Module: QTWeb (value=GetWebSocketProtocolAnalyzer:WebSocketAnalyzer_x64.dll)
+[Network Analyzer (33f0:1a28)]     + Network Analyzer: WebSocketAnalyzer_x64.dll @ GetWebSocketProtocolAnalyzer Loaded!
+[Network Analyzer (33f0:1a28)]     Analyzer Module: local_server (value=)
+[Network Analyzer (33f0:1a28)] ------------------------------------------------------------------------------------------
+[Network Analyzer (33f0:313c)] Address lookup for VWNV02PL00162 = 10.213.128.38
+[Network Analyzer (33f0:2cc8)] Address lookup for VWNV02PL00162 = 10.213.128.38
+[Network Analyzer (33f0:1a28)] Address lookup for VWNV02PL00162 = 10.213.128.38
+[Network Analyzer (33f0:1a28)] Request Connection: Remote Server @ 204.79.197.200:443   (Service=)  (Sid=  1)  PROXIED!
+[Network Analyzer (33f0:2cc8)] Request Connection: Remote Server @ 204.79.197.200:443   (Service=)  (Sid=  2)  PROXIED!
+[Network Analyzer ( 52c:2f20)] Address lookup for VWNV02PL00162 = 10.213.128.38
+[Network Analyzer ( 52c:2f20)] Request Connection: Remote Server @ 72.21.91.29:80   (Service=)  (Sid=  2)  PROXIED!
+[Network Analyzer (33f0: ea4)]   (Sid:  2) Negotiate Proxy -> Server SSL Handshake (ssl:TLSv1.2, ciphers:ECDHE-RSA-AES128-SHA256)
+[Network Analyzer (33f0:1f64)]   (Sid:  1) Negotiate Proxy -> Server SSL Handshake (ssl:TLSv1.2, ciphers:ECDHE-RSA-AES128-SHA256)
+[Network Analyzer (33f0:1f64)]   (Sid:  1) Negotiate Client -> Proxy SSL Handshake (ssl:TLSv1.2, ciphers:ECDHE-RSA-AES256-SHA384)
+[Network Analyzer (33f0: ea4)]   (Sid:  2) Negotiate Client -> Proxy SSL Handshake (ssl:TLSv1.2, ciphers:ECDHE-RSA-AES256-SHA384)
+[Network Analyzer (33f0:1c80)] Address lookup for VWNV02PL00162 = 10.213.128.38
+[Network Analyzer (33f0:1c80)] Request Connection: Remote Server @ 104.18.24.243:80   (Service=)  (Sid=  3)  PROXIED!
+[Network Analyzer ( 52c:13a4)] Address lookup for VWNV02PL00162 = 10.213.128.38
+[Network Analyzer ( 52c:13a4)] Request Connection: Remote Server @ 72.21.91.29:80   (Service=)  (Sid=  3)  PROXIED!
+[Network Analyzer (33f0:1c80)] Address lookup for VWNV02PL00162 = 10.213.128.38
+[Network Analyzer (33f0:1c80)] Request Connection: Remote Server @ 72.21.81.200:80   (Service=)  (Sid=  4)  PROXIED!
+[Network Analyzer ( 52c:334c)] Address lookup for VWNV02PL00162 = 10.213.128.38
+[Network Analyzer ( 52c:334c)] Request Connection: Remote Server @ 10.200.188.1:443   (Service=)  (Sid=  4)  PROXIED!
+[Network Analyzer ( 52c:29e0)]   (Sid:  4) Negotiate Proxy -> Server SSL Handshake (ssl:TLSv1.2, ciphers:ECDHE-RSA-AES256-SHA384)
+[Network Analyzer ( 52c:2cac)]   (Sid:  1) Connection Terminated (by Client)
+[Network Analyzer ( 52c:29e0)]   (Sid:  4) Negotiate Client -> Proxy SSL Handshake (ssl:TLSv1.2, ciphers:ECDHE-RSA-AES256-SHA384)
+[Web Request      ( 52c:2cac)] "GET /Citrix/PilotWeb/"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  4) Client -> Server @ : 304 bytes (SSL)(Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  4) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:334c)] Address lookup for VWNV02PL00162 = 10.213.128.38
+[Network Analyzer ( 52c:2cac)]   (Sid:  4) Server -> Client : 5266 bytes (SSL) (Service=HTTP)
+[Network Analyzer (33f0:1c80)] Address lookup for VWNV02PL00162 = 10.213.128.38
+[Network Analyzer (33f0:1c80)] Request Connection: Remote Server @ 65.200.22.226:80   (Service=)  (Sid=  5)  PROXIED!
+[Network Analyzer (33f0:313c)]   (Sid:  3) Connection Terminated (by Server)
+[Network Analyzer ( 52c:334c)] Request Connection: Remote Server @ 10.200.188.1:443   (Service=)  (Sid=  5)  PROXIED!
+[Web Request      ( 52c:2cac)] "GET /Citrix/PilotWeb/receiver/css/ctxs.large-ui.min_62D11B01D15101DA.css"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  4) Client -> Server @ : 412 bytes (SSL)(Service=HTTP)
+[Network Analyzer ( 52c:334c)] Address lookup for VWNV02PL00162 = 10.213.128.38
+[Network Analyzer ( 52c:1d40)] Address lookup for VWNV02PL00162 = 10.213.128.38
+[Network Analyzer ( 52c:19d8)] Address lookup for VWNV02PL00162 = 10.213.128.38
+[Network Analyzer ( 52c:2f8c)] Address lookup for VWNV02PL00162 = 10.213.128.38
+[Network Analyzer ( 52c:2cac)]   (Sid:  4) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  4) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  4) Server -> Client : 4359 bytes (SSL) (Service=HTTP)
+[Web Request      ( 52c:2cac)] "GET /Citrix/PilotWeb/receiver/js/external/hammer.v2.0.8.min_F699A1E56189259A.js"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  4) Client -> Server @ : 439 bytes (SSL)(Service=HTTP)
+[Network Analyzer ( 52c:334c)] Request Connection: Remote Server @ 10.200.188.1:443   (Service=)  (Sid=  6)  PROXIED!
+[Network Analyzer ( 52c:1d40)] Request Connection: Remote Server @ 10.200.188.1:443   (Service=)  (Sid=  7)  PROXIED!
+[Network Analyzer ( 52c:19d8)] Request Connection: Remote Server @ 10.200.188.1:443   (Service=)  (Sid=  8)  PROXIED!
+[Network Analyzer ( 52c:2f8c)] Request Connection: Remote Server @ 10.200.188.1:443   (Service=)  (Sid=  9)  PROXIED!
+[Network Analyzer ( 52c:2cac)]   (Sid:  4) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  4) Server -> Client : 2265 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:13cc)]   (Sid:  5) Negotiate Proxy -> Server SSL Handshake (ssl:TLSv1.2, ciphers:ECDHE-RSA-AES256-SHA384)
+[Web Request      ( 52c:2cac)] "GET /Citrix/PilotWeb/receiver/js/external/jquery.dotdotdot.min_08EE54CBA886AD0A.js"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  4) Client -> Server @ : 442 bytes (SSL)(Service=HTTP)
+[Network Analyzer ( 52c:13cc)]   (Sid:  5) Negotiate Client -> Proxy SSL Handshake (ssl:TLSv1.2, ciphers:ECDHE-RSA-AES256-SHA384)
+[Network Analyzer ( 52c:2cac)]   (Sid:  4) Server -> Client : 3703 bytes (SSL) (Service=HTTP)
+[Web Request      ( 52c:2cac)] "GET /Citrix/PilotWeb/receiver/images/common/wspinner@2x_26FCB0A3548E30DC.gif"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  5) Client -> Server @ : 453 bytes (SSL)(Service=HTTP)
+[Web Request      ( 52c:2cac)] "GET /Citrix/PilotWeb/receiver/js/external/velocity.min_B218502A82F66680.js"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  4) Client -> Server @ : 434 bytes (SSL)(Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  5) Server -> Client : 2620 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  4) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  4) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Web Request      ( 52c:2cac)] "GET /Citrix/PilotWeb/receiver/js/external/slick.min_FEB62CC230E2BA2A.js"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  5) Client -> Server @ : 431 bytes (SSL)(Service=HTTP)
+[Network Analyzer ( 52c:3378)]   (Sid:  6) Negotiate Proxy -> Server SSL Handshake (ssl:TLSv1.2, ciphers:ECDHE-RSA-AES256-SHA384)
+[Network Analyzer ( 52c:2cac)]   (Sid:  4) Server -> Client : 1345 bytes (SSL) (Service=HTTP)
+[Web Request      ( 52c:2cac)] "GET /Citrix/PilotWeb/receiver/js/ctxs.core.min_33B1CC992A07D57E.js"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  4) Client -> Server @ : 426 bytes (SSL)(Service=HTTP)
+[Network Analyzer ( 52c:3378)]   (Sid:  6) Negotiate Client -> Proxy SSL Handshake (ssl:TLSv1.2, ciphers:ECDHE-RSA-AES256-SHA384)
+[Network Analyzer ( 52c:2cac)]   (Sid:  5) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  5) Server -> Client : 3487 bytes (SSL) (Service=HTTP)
+[Web Request      ( 52c:2cac)] "GET /Citrix/PilotWeb/custom/style.css"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  6) Client -> Server @ : 377 bytes (SSL)(Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  4) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  5) Server -> Client : 1937 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  4) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  4) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  4) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Web Request      ( 52c:2cac)] "GET /Citrix/PilotWeb/receiver/js/ctxs.webui.min_91463D1B79731411.js"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  5) Client -> Server @ : 427 bytes (SSL)(Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  4) Server -> Client : 5649 bytes (SSL) (Service=HTTP)
+[Web Request      ( 52c:2cac)] "GET /Citrix/PilotWeb/receiver/images/1x/actionSprite_531B7A6FF85CA98E.png"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  4) Client -> Server @ : 450 bytes (SSL)(Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  6) Server -> Client : 1145 bytes (SSL) (Service=HTTP)
+[Web Request      ( 52c:2cac)] "GET /Citrix/PilotWeb/receiver/images/1x/folder_template_C13BB96DEBC9F30F.png"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  6) Client -> Server @ : 453 bytes (SSL)(Service=HTTP)
+[Network Analyzer ( 52c: d80)]   (Sid:  7) Negotiate Proxy -> Server SSL Handshake (ssl:TLSv1.2, ciphers:ECDHE-RSA-AES256-SHA384)
+[Network Analyzer ( 52c:2cac)]   (Sid:  4) Server -> Client : 2791 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  5) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  5) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Web Request      ( 52c:2cac)] "GET /Citrix/PilotWeb/receiver/images/1x/CitrixReceiver_WebScreen_CBE548FB8FEE049E.png"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  4) Client -> Server @ : 462 bytes (SSL)(Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  5) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  5) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  5) Server -> Client : 3908 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  6) Server -> Client : 828 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  4) Server -> Client : 3873 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  5) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  5) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Web Request      ( 52c:2cac)] "GET /Citrix/PilotWeb/receiver/images/common/ReceiverFullScreenBackground_46E559C0E6B5A27B.jpg"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  6) Client -> Server @ : 470 bytes (SSL)(Service=HTTP)
+[Network Analyzer ( 52c: d80)]   (Sid:  7) Negotiate Client -> Proxy SSL Handshake (ssl:TLSv1.2, ciphers:ECDHE-RSA-AES256-SHA384)
+[Network Analyzer ( 52c:2cac)]   (Sid:  5) Server -> Client : 1954 bytes (SSL) (Service=HTTP)
+[Web Request      ( 52c:2cac)] "GET /Citrix/PilotWeb/receiver/js/external/jquery.ui.touch-punch.min_94EA8262E7FD35F4.js"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  7) Client -> Server @ : 447 bytes (SSL)(Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  5) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  5) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  5) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  5) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  6) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:1b14)]   (Sid:  8) Negotiate Proxy -> Server SSL Handshake (ssl:TLSv1.2, ciphers:ECDHE-RSA-AES256-SHA384)
+[Network Analyzer ( 52c:2cac)]   (Sid:  6) Server -> Client : 2916 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  5) Server -> Client : 3908 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  6) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  7) Server -> Client : 1218 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  5) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  6) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  5) Server -> Client : 1397 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  6) Server -> Client : 2909 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  6) Server -> Client : 2862 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  6) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  6) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  6) Server -> Client : 6442 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:1b14)]   (Sid:  8) Negotiate Client -> Proxy SSL Handshake (ssl:TLSv1.2, ciphers:ECDHE-RSA-AES256-SHA384)
+[Network Analyzer ( 52c:3034)]   (Sid:  9) Negotiate Proxy -> Server SSL Handshake (ssl:TLSv1.2, ciphers:ECDHE-RSA-AES256-SHA384)
+[Network Analyzer ( 52c:3034)]   (Sid:  9) Negotiate Client -> Proxy SSL Handshake (ssl:TLSv1.2, ciphers:ECDHE-RSA-AES256-SHA384)
+[Network Analyzer (33f0:1c80)] Address lookup for VWNV02PL00162 = 10.213.128.38
+[Network Analyzer (33f0:1c80)] Request Connection: Remote Server @ 204.79.197.200:443   (Service=)  (Sid=  6)  PROXIED!
+[Network Analyzer (33f0:1b54)]   (Sid:  6) Negotiate Proxy -> Server SSL Handshake (ssl:TLSv1.2, ciphers:ECDHE-RSA-AES128-SHA256)
+[Network Analyzer (33f0:1b54)]   (Sid:  6) Negotiate Client -> Proxy SSL Handshake (ssl:TLSv1.2, ciphers:ECDHE-RSA-AES256-SHA384)
+[Web Request      (33f0:313c)] "GET /favicon.ico"   
+[Network Analyzer (33f0:313c)]   (Sid:  6) Client -> Server @ : 228 bytes (SSL)(Service=HTTP)
+[Network Analyzer (33f0:313c)]   (Sid:  6) Server -> Client : 582 bytes (SSL) (Service=HTTP)
+[Web Request      ( 52c:2cac)] "GET /Citrix/PilotWeb/receiver/js/external/jquery-1.12.4.min_618538B4AB9639D4.js"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  8) Client -> Server @ : 439 bytes (SSL)(Service=HTTP)
+[Web Request      ( 52c:2cac)] "GET /Citrix/PilotWeb/receiver/js/external/jquery-ui-v1.11.4.min_17D0B6DEFA33B91A.js"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  9) Client -> Server @ : 443 bytes (SSL)(Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  8) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  9) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Network Analyzer (33f0:313c)]   (Sid:  2) Connection Terminated (by Client)
+[Network Analyzer (33f0:313c)]   (Sid:  1) Connection Terminated (by Client)
+[Network Analyzer (33f0:2cc8)] Address lookup for VWNV02PL00162 = 10.213.128.38
+[Network Analyzer (33f0:2cc8)] Request Connection: Remote Server @ 204.79.197.200:443   (Service=)  (Sid=  7)  PROXIED!
+[Network Analyzer ( 52c:2cac)]   (Sid:  8) Server -> Client : 2963 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  8) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  9) Server -> Client : 2963 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  8) Server -> Client : 7203 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  9) Server -> Client : 3911 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  8) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  8) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  8) Server -> Client : 4752 bytes (SSL) (Service=HTTP)
+[Web Request      ( 52c:2cac)] "GET /Citrix/PilotWeb/custom/script.js"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  8) Client -> Server @ : 397 bytes (SSL)(Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  8) Server -> Client : 928 bytes (SSL) (Service=HTTP)
+[Web Request      ( 52c:2cac)] "GET /Citrix/PilotWeb/custom/strings.en.js"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  8) Client -> Server @ : 401 bytes (SSL)(Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  8) Server -> Client : 618 bytes (SSL) (Service=HTTP)
+[Web Request      ( 52c:2cac)] "GET /Citrix/PilotWeb/receiver/images/1x/viewSprite_B2F322BDCB824FAF.png"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  8) Client -> Server @ : 448 bytes (SSL)(Service=HTTP)
+[Web Request      ( 52c:2cac)] "POST /Citrix/PilotWeb/Home/Configuration"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  9) Client -> Server @ : 511 bytes (SSL)(Service=HTTP)
+[Network Analyzer (33f0:1d98)]   (Sid:  7) Negotiate Proxy -> Server SSL Handshake (ssl:TLSv1.2, ciphers:ECDHE-RSA-AES128-SHA256)
+[Network Analyzer ( 52c:2cac)]   (Sid:  8) Server -> Client : 3564 bytes (SSL) (Service=HTTP)
+[Network Analyzer (33f0:1d98)]   (Sid:  7) Negotiate Client -> Proxy SSL Handshake (ssl:TLSv1.2, ciphers:ECDHE-RSA-AES256-SHA384)
+[Network Analyzer ( 52c:2cac)]   (Sid:  9) Server -> Client : 1834 bytes (SSL) (Service=HTTP)
+[Web Request      ( 52c:2cac)] "GET /Citrix/PilotWeb/receiver/images/common/favicon_9B19689CB70C681E.ico"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  8) Client -> Server @ : 393 bytes (SSL)(Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  8) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  8) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  8) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  8) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  8) Server -> Client : 6035 bytes (SSL) (Service=HTTP)
+[Web Request      (33f0:313c)] "GET /favicon.ico"   
+[Network Analyzer (33f0:313c)]   (Sid:  7) Client -> Server @ : 228 bytes (SSL)(Service=HTTP)
+[Network Analyzer (33f0:313c)]   (Sid:  7) Server -> Client : 582 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  8) Client -> Server @ : 753 bytes (SSL)(Service=HTTP)
+[Web Request      ( 52c:2cac)] "POST /Citrix/PilotWeb/Resources/List"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  8) Client -> Server @ : 35 bytes (SSL)(Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  8) Server -> Client : 560 bytes (SSL) (Service=HTTP)
+[Web Request      ( 52c:2cac)] "POST /Citrix/PilotWeb/Authentication/GetAuthMethods"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  8) Client -> Server @ : 730 bytes (SSL)(Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  8) Server -> Client : 490 bytes (SSL) (Service=HTTP)
+[Web Request      ( 52c:2cac)] "POST /Citrix/PilotWeb/ExplicitAuth/Login"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  8) Client -> Server @ : 952 bytes (SSL)(Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  8) Server -> Client : 935 bytes (SSL) (Service=HTTP)
+[Web Request      ( 52c:2cac)] "GET /Citrix/PilotWeb/receiver/images/common/authspinner_B0BCD339560CA593.gif"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  8) Client -> Server @ : 615 bytes (SSL)(Service=HTTP)
+[Web Request      ( 52c:2cac)] "GET /Citrix/PilotWeb/custom/Citrix_HalfLogonLogo.png"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  9) Client -> Server @ : 591 bytes (SSL)(Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  8) Server -> Client : 1350 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  9) Server -> Client : 5093 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  9) Client -> Server @ : 1025 bytes (SSL)(Service=HTTP)
+[Web Request      ( 52c:2cac)] "GET /Citrix/PilotWeb/receiver/images/1x/spinner_white_auth_button_53FD5A337A529DA7.gif"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  8) Client -> Server @ : 625 bytes (SSL)(Service=HTTP)
+[Web Request      ( 52c:2cac)] "POST /Citrix/PilotWeb/ExplicitAuth/LoginAttempt"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  9) Client -> Server @ : 107 bytes (SSL)(Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  8) Server -> Client : 2467 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  9) Server -> Client : 587 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  9) Client -> Server @ : 833 bytes (SSL)(Service=HTTP)
+[Web Request      ( 52c:2cac)] "POST /Citrix/PilotWeb/Resources/List"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  9) Client -> Server @ : 35 bytes (SSL)(Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  9) Server -> Client : 790 bytes (SSL) (Service=HTTP)
+[Web Request      ( 52c:2cac)] "GET /Citrix/PilotWeb/receiver/images/common/icon_loading_9A0623127A028FEB.png"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  9) Client -> Server @ : 661 bytes (SSL)(Service=HTTP)
+[Web Request      ( 52c:2cac)] "POST /Citrix/PilotWeb/Authentication/GetUserName"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  8) Client -> Server @ : 757 bytes (SSL)(Service=HTTP)
+[Web Request      ( 52c:2cac)] "GET /Citrix/PilotWeb/Resources/Icon/L0NpdHJpeC9QaWxvdC9yZXNvdXJjZXMvdjIvTTNkT01VZE5Sa1YwVDBkMGEwTnJZVEkzY2xoMGJrTjJRMWRTVDFsU2RUaFdTVlZCVFdaU1ZsUmlkejAtL2ltYWdl?size=128"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  6) Client -> Server @ : 753 bytes (SSL)(Service=HTTP)
+[Web Request      ( 52c:2cac)] "GET /Citrix/PilotWeb/custom/Citrix_HalfHeaderLogo.png"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  5) Client -> Server @ : 637 bytes (SSL)(Service=HTTP)
+[Web Request      ( 52c:2cac)] "GET /Citrix/PilotWeb/receiver/images/1x/spinner_5CF0D1C8A76AAC8E.png"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  7) Client -> Server @ : 652 bytes (SSL)(Service=HTTP)
+[Web Request      ( 52c:2cac)] "GET /Citrix/PilotWeb/receiver/images/1x/search_close_BC5A22358E58905F.png"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  4) Client -> Server @ : 657 bytes (SSL)(Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  9) Server -> Client : 640 bytes (SSL) (Service=HTTP)
+[Web Request      ( 52c:2cac)] "GET /Citrix/PilotWeb/receiver/images/1x/ico_search_E84E3D63D821F80D.png"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  9) Client -> Server @ : 655 bytes (SSL)(Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  8) Server -> Client : 325 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  4) Server -> Client : 849 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  5) Server -> Client : 3761 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  7) Server -> Client : 2425 bytes (SSL) (Service=HTTP)
+[Web Request      ( 52c:2cac)] "POST /Citrix/PilotWeb/ExplicitAuth/AllowSelfServiceAccountManagement"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  4) Client -> Server @ : 792 bytes (SSL)(Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  9) Server -> Client : 964 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  4) Server -> Client : 476 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  6) Server -> Client : 7215 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  6) Server -> Client : 1331 bytes (SSL) (Service=HTTP)
+[Web Request      ( 52c:2cac)] "GET /Citrix/PilotWeb/Resources/LaunchIca/RGVmYXVsdEFnZ3JlZ2F0aW9uR3JvdXAuXFNFQ08gUGVyZm9ybWFuY2UgVGVzdGluZw--.ica?CsrfToken=B28F8D77DE489D789A2C266CDDE17BB7&IsUsingHttps=Yes&displayNameDesktopTitle=SECO%20Performance%20Testing&launchId=1538590216331"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  6) Client -> Server @ : 820 bytes (SSL)(Service=HTTP)
+[Web Request      ( 52c:2cac)] "GET /Citrix/PilotWeb/receiver/images/1x/ico_desktop_ready_482FD91B201F2A55.png"   
+[Network Analyzer ( 52c:2cac)]   (Sid:  4) Client -> Server @ : 662 bytes (SSL)(Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  4) Server -> Client : 884 bytes (SSL) (Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid:  6) Server -> Client : 1149 bytes (SSL) (Service=HTTP)
+[Citrix Recorder  (1e88: 1ac)] CitrixClientImpl.dll version: 12.55.911.0
+[Citrix Recorder  (1e88: 1ac)] Running Citrix processes:
+	receiver.exe, pid 4408, GDI handles in use: 34
+	wfica32.exe, pid 6120, GDI handles in use: 100
+	wfica32.exe, pid 12788, GDI handles in use: 85
+	wfica32.exe, pid 10516, GDI handles in use: 75
+[Citrix Recorder  (1e88: 1ac)] Modifying ICA file with commands "ConnectionBar=0	TWIMode=Off": done with status 0 (SUCCESS).
+[Citrix Recorder  (1e88: 1ac)] ctrx_set_connect_opt("ICAFILE", "");
+[Citrix Recorder  (1e88: 1ac)] client resolution = 1920x1200, client color depth = 16 bits
+[Network Analyzer (33f0:313c)]   (Sid:  5) Server -> Client : 414 bytes 
+[Network Analyzer (33f0:313c)]   (Sid:  5) Connection Terminated (by Server)
+[Citrix Recorder  (1e88: 1ac)] ctrx_create_window "Windows Logon" flag=1 style=-1778384896 ext_style=0 id=65568
+[Citrix Recorder  (1e88: 1ac)] Foreground window = 65580
+[Network Analyzer ( 52c:2cac)]   (Sid:  2) Connection Terminated (by Client)
+[Citrix Recorder  (1e88: 1ac)] ctrx_wait_for_event("LOGON");
+[Citrix Recorder  (1e88: 1ac)] Foreground window = 0
+[Citrix Recorder  (1e88: 1ac)] ctrx_delete_window "Windows Logon" 
+[Citrix Recorder  (1e88: 1ac)] Foreground window = 65924
+[Citrix Recorder  (1e88: 1ac)] ctrx_create_window "Desktop" flag=1 style=-1778384896 ext_style=128 id=66066
+[Citrix Recorder  (1e88: 1ac)] ctrx_create_window "Shell_TrayWnd" flag=1 style=-1769734144 ext_style=392 id=65924
+[Citrix Recorder  (1e88: 1ac)] ctrx_create_window "Start" flag=0 style=-1811936256 ext_style=524424 id=65928
+[Citrix Recorder  (1e88: 1ac)] Foreground window = 65928
+[Citrix Recorder  (1e88: 1ac)] Foreground window = 66066
+[Network Analyzer ( 52c:2cac)]   (Sid:  3) Connection Terminated (by Server)
+[Network Analyzer (33f0:313c)]   (Sid:  4) Connection Terminated (by Server)
+[Network Analyzer (33f0:313c)]   (Sid:  7) Connection Terminated (by Server)
+[Network Analyzer (33f0:313c)]   (Sid:  6) Connection Terminated (by Server)
+[User action                 ] StartTransactionEvent Login_Amadeus [Citrix Recorder  (1e88: 1ac)] ctrx_sync_on_window("Desktop", 0, 0, 1281, 769);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 44, 135, Desktop=snapshot2);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 44, 135, Desktop=snapshot2);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 44, 135, Desktop);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_double_click();
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 44, 135, Desktop=snapshot2);
+[Citrix Recorder  (1e88: 1ac)] ctrx_create_window "Untitled - Google Chrome" flag=0 style=382664704 ext_style=256 id=66156
+[Citrix Recorder  (1e88: 1ac)] ctrx_active_window("Untitled - Google Chrome");
+[Citrix Recorder  (1e88: 1ac)] Foreground window = 66156
+[Citrix Recorder  (1e88: 1ac)] ctrx_sync_on_window("Amadeus Selling Platform Connect - Google Chrome", 14, 14, 1051, 705);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 181, 375, Amadeus Selling Platform Connect - Google Chrome=snapshot4);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 181, 375, Amadeus Selling Platform Connect - Google Chrome=snapshot4);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 181, 375, Amadeus Selling Platform Connect - Google Chrome=snapshot4);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 181, 375, Amadeus Selling Platform Connect - Google Chrome=snapshot4);
+[Network Analyzer ( 52c:2cac)]   (Sid:  6) Connection Terminated (by Client)
+[Network Analyzer ( 52c:2cac)]   (Sid:  4) Connection Terminated (by Client)
+[Network Analyzer ( 52c:2cac)]   (Sid:  9) Connection Terminated (by Client)
+[Network Analyzer ( 52c:2cac)]   (Sid:  7) Connection Terminated (by Client)
+[Network Analyzer ( 52c:2cac)]   (Sid:  5) Connection Terminated (by Client)
+[Network Analyzer ( 52c:2cac)]   (Sid:  8) Connection Terminated (by Client)
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(16, 1, snapshot5);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(84, 1, snapshot5);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(16, 0, snapshot5);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(16, 1, snapshot6);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(84, 1, snapshot6);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(84, 1, snapshot6);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(69, 1, snapshot6);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(69, 1, snapshot6);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(83, 1, snapshot6);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(83, 1, snapshot6);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(84, 1, snapshot6);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(84, 1, snapshot6);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(16, 0, snapshot6);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(48, 0, snapshot6);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(48, 0, snapshot6);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(49, 0, snapshot6);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(49, 0, snapshot6);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 331, 381, Amadeus Selling Platform Connect - Google Chrome=snapshot7);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 331, 381, Amadeus Selling Platform Connect - Google Chrome=snapshot7);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 318, 435, Amadeus Selling Platform Connect - Google Chrome=snapshot8);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 318, 435, Amadeus Selling Platform Connect - Google Chrome=snapshot8);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 193, 399, Amadeus Selling Platform Connect - Google Chrome=snapshot9);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 193, 399, Amadeus Selling Platform Connect - Google Chrome=snapshot9);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(16, 1, snapshot10);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(72, 1, snapshot10);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(72, 1, snapshot10);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(75, 1, snapshot10);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(75, 1, snapshot10);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(71, 1, snapshot10);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(71, 1, snapshot10);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(87, 1, snapshot10);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(87, 1, snapshot10);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(76, 1, snapshot10);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(76, 1, snapshot10);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(16, 0, snapshot10);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(50, 0, snapshot10);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(50, 0, snapshot10);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(48, 0, snapshot10);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(48, 0, snapshot10);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(49, 0, snapshot10);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(49, 0, snapshot10);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(50, 0, snapshot10);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(50, 0, snapshot10);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 253, 431, Amadeus Selling Platform Connect - Google Chrome=snapshot11);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 253, 431, Amadeus Selling Platform Connect - Google Chrome=snapshot11);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(16, 1, snapshot12);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(67, 1, snapshot12);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(16, 0, snapshot12);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(16, 1, snapshot13);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(67, 1, snapshot13);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(67, 1, snapshot13);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(16, 0, snapshot13);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(16, 1, snapshot14);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(50, 1, snapshot14);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(50, 1, snapshot14);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(16, 0, snapshot14);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(82, 0, snapshot14);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(82, 0, snapshot14);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(76, 0, snapshot14);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(76, 0, snapshot14);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(83, 0, snapshot14);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(83, 0, snapshot14);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(79, 0, snapshot14);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(79, 0, snapshot14);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(78, 0, snapshot14);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(78, 0, snapshot14);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(49, 0, snapshot14);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(49, 0, snapshot14);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(50, 0, snapshot14);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(50, 0, snapshot14);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(51, 0, snapshot14);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(51, 0, snapshot14);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 184, 472, Amadeus Selling Platform Connect - Google Chrome=snapshot15);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 184, 472, Amadeus Selling Platform Connect - Google Chrome=snapshot15);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(13, 0, snapshot16);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 175, 498, Amadeus Selling Platform Connect - Google Chrome=snapshot17);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 176, 498, Amadeus Selling Platform Connect - Google Chrome=snapshot17);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 176, 498, Amadeus Selling Platform Connect - Google Chrome=snapshot17);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 176, 498, Amadeus Selling Platform Connect - Google Chrome=snapshot17);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(8, 0, snapshot18);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(8, 0, snapshot18);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(56, 0, snapshot18);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(56, 0, snapshot18);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(9, 0, snapshot19);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(9, 0, snapshot20);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(9, 0, snapshot20);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(9, 0, snapshot21);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(16, 1, snapshot22);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(67, 1, snapshot22);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(67, 1, snapshot22);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(16, 0, snapshot22);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(16, 1, snapshot23);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(50, 1, snapshot23);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(50, 1, snapshot23);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(16, 0, snapshot23);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(82, 0, snapshot23);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(82, 0, snapshot23);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(76, 0, snapshot23);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(76, 0, snapshot23);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(83, 0, snapshot23);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(83, 0, snapshot23);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(79, 0, snapshot23);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(79, 0, snapshot23);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(78, 0, snapshot23);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(78, 0, snapshot23);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(49, 0, snapshot23);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(49, 0, snapshot23);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(50, 0, snapshot23);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(50, 0, snapshot23);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(51, 0, snapshot23);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(51, 0, snapshot23);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(13, 0, snapshot24);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 243, 417, Amadeus Selling Platform Connect - Google Chrome=snapshot25);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 243, 417, Amadeus Selling Platform Connect - Google Chrome=snapshot26);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 243, 417, Amadeus Selling Platform Connect - Google Chrome=snapshot26);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(39, 8, snapshot27);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(8, 0, snapshot28);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(8, 0, snapshot29);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(8, 0, snapshot29);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(8, 0, snapshot30);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(8, 0, snapshot31);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(39, 8, snapshot32);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(39, 8, snapshot33);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(39, 8, snapshot33);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(39, 8, snapshot34);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(39, 8, snapshot34);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 243, 417, Amadeus Selling Platform Connect - Google Chrome=snapshot35);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 243, 417, Amadeus Selling Platform Connect - Google Chrome=snapshot35);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 266, 418, Amadeus Selling Platform Connect - Google Chrome=snapshot36);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 266, 418, Amadeus Selling Platform Connect - Google Chrome=snapshot36);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 266, 418, Amadeus Selling Platform Connect - Google Chrome=snapshot37);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 266, 418, Amadeus Selling Platform Connect - Google Chrome=snapshot37);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 265, 417, Amadeus Selling Platform Connect - Google Chrome);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_double_click();
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 265, 417, Amadeus Selling Platform Connect - Google Chrome=snapshot37);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_double_click();
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 108, 414, Amadeus Selling Platform Connect - Google Chrome=snapshot39);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 108, 414, Amadeus Selling Platform Connect - Google Chrome=snapshot39);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 108, 414, Amadeus Selling Platform Connect - Google Chrome=snapshot39);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(46, 8, snapshot41);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(46, 8, snapshot41);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(46, 8, snapshot42);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 276, 422, Amadeus Selling Platform Connect - Google Chrome=snapshot43);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 276, 422, Amadeus Selling Platform Connect - Google Chrome=snapshot43);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(8, 0, snapshot44);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(8, 0, snapshot44);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(8, 0, snapshot45);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 276, 422, Amadeus Selling Platform Connect - Google Chrome=snapshot46);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 274, 421, Amadeus Selling Platform Connect - Google Chrome=snapshot46);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 274, 421, Amadeus Selling Platform Connect - Google Chrome=snapshot46);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 300, 415, Amadeus Selling Platform Connect - Google Chrome=snapshot47);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 300, 415, Amadeus Selling Platform Connect - Google Chrome=snapshot48);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 299, 415, Amadeus Selling Platform Connect - Google Chrome=snapshot48);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 299, 415, Amadeus Selling Platform Connect - Google Chrome=snapshot48);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 228, 417, Amadeus Selling Platform Connect - Google Chrome=snapshot49);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 228, 417, Amadeus Selling Platform Connect - Google Chrome=snapshot50);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 227, 417, Amadeus Selling Platform Connect - Google Chrome=snapshot50);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 227, 417, Amadeus Selling Platform Connect - Google Chrome=snapshot50);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 227, 417, Amadeus Selling Platform Connect - Google Chrome=snapshot50);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(16, 1, snapshot51);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(72, 1, snapshot51);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(72, 1, snapshot51);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(75, 1, snapshot51);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(75, 1, snapshot51);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(87, 1, snapshot51);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(87, 1, snapshot51);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(16, 0, snapshot51);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(8, 0, snapshot52);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(16, 1, snapshot53);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(87, 1, snapshot53);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(87, 1, snapshot53);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(76, 1, snapshot53);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(76, 1, snapshot53);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(16, 0, snapshot53);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(8, 0, snapshot54);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(8, 0, snapshot54);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(8, 0, snapshot55);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(8, 0, snapshot56);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(16, 1, snapshot57);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(75, 1, snapshot57);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(75, 1, snapshot57);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(16, 0, snapshot57);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(16, 1, snapshot58);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(87, 1, snapshot58);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(87, 1, snapshot58);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(76, 1, snapshot58);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(76, 1, snapshot58);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(16, 0, snapshot58);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(50, 0, snapshot58);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(50, 0, snapshot58);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(49, 0, snapshot58);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(49, 0, snapshot58);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(48, 0, snapshot58);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(48, 0, snapshot58);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(50, 0, snapshot58);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(50, 0, snapshot58);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(39, 8, snapshot59);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(39, 8, snapshot60);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(39, 8, snapshot60);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(39, 8, snapshot61);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(32, 0, snapshot62);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(32, 0, snapshot62);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(32, 0, snapshot63);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(32, 0, snapshot63);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(32, 0, snapshot64);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(46, 8, snapshot65);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(46, 8, snapshot65);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(8, 0, snapshot66);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 253, 460, Amadeus Selling Platform Connect - Google Chrome=snapshot67);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 253, 460, Amadeus Selling Platform Connect - Google Chrome=snapshot68);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 253, 460, Amadeus Selling Platform Connect - Google Chrome=snapshot68);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 210, 446, Amadeus Selling Platform Connect - Google Chrome=snapshot69);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 210, 446, Amadeus Selling Platform Connect - Google Chrome=snapshot70);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 210, 446, Amadeus Selling Platform Connect - Google Chrome=snapshot70);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(16, 1, snapshot71);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(67, 1, snapshot71);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(16, 0, snapshot71);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(16, 1, snapshot72);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(67, 1, snapshot72);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(16, 0, snapshot72);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(16, 1, snapshot73);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(67, 1, snapshot73);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(16, 0, snapshot73);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 210, 446, Amadeus Selling Platform Connect - Google Chrome=snapshot74);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 210, 446, Amadeus Selling Platform Connect - Google Chrome=snapshot74);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(16, 1, snapshot75);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(67, 1, snapshot75);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(16, 0, snapshot75);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(16, 1, snapshot76);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(67, 1, snapshot76);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(16, 0, snapshot76);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(16, 1, snapshot77);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(67, 1, snapshot77);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(16, 0, snapshot77);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 210, 446, Amadeus Selling Platform Connect - Google Chrome=snapshot78);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 210, 446, Amadeus Selling Platform Connect - Google Chrome=snapshot78);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(16, 1, snapshot79);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(67, 1, snapshot79);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(16, 0, snapshot79);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(16, 1, snapshot80);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(67, 1, snapshot80);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(16, 0, snapshot80);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(16, 1, snapshot81);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(67, 1, snapshot81);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(16, 0, snapshot81);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 210, 446, Amadeus Selling Platform Connect - Google Chrome=snapshot82);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 210, 446, Amadeus Selling Platform Connect - Google Chrome=snapshot82);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 210, 446, Amadeus Selling Platform Connect - Google Chrome);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_double_click();
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 210, 446, Amadeus Selling Platform Connect - Google Chrome=snapshot82);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(16, 1, snapshot83);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(67, 1, snapshot83);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(67, 1, snapshot83);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(16, 0, snapshot83);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(16, 1, snapshot84);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(50, 1, snapshot84);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(16, 0, snapshot84);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(16, 1, snapshot85);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(50, 1, snapshot85);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(50, 1, snapshot85);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(16, 0, snapshot85);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(82, 0, snapshot85);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(82, 0, snapshot85);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(76, 0, snapshot85);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(76, 0, snapshot85);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(83, 0, snapshot85);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(83, 0, snapshot85);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(79, 0, snapshot85);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(79, 0, snapshot85);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(78, 0, snapshot85);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(78, 0, snapshot85);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(49, 0, snapshot85);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(49, 0, snapshot85);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(50, 0, snapshot85);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(50, 0, snapshot85);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(51, 0, snapshot85);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(51, 0, snapshot85);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(13, 0, snapshot86);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 184, 422, Amadeus Selling Platform Connect - Google Chrome=snapshot87);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 184, 422, Amadeus Selling Platform Connect - Google Chrome=snapshot87);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(16, 1, snapshot88);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(71, 1, snapshot88);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(16, 0, snapshot88);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(16, 1, snapshot89);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(71, 1, snapshot89);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(16, 0, snapshot89);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(16, 1, snapshot90);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(71, 1, snapshot90);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(16, 0, snapshot90);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 233, 416, Amadeus Selling Platform Connect - Google Chrome=snapshot91);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 232, 416, Amadeus Selling Platform Connect - Google Chrome=snapshot91);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 232, 416, Amadeus Selling Platform Connect - Google Chrome=snapshot91);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 232, 416, Amadeus Selling Platform Connect - Google Chrome=snapshot92);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 226, 414, Amadeus Selling Platform Connect - Google Chrome=snapshot94);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 226, 414, Amadeus Selling Platform Connect - Google Chrome=snapshot94);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 236, 415, Amadeus Selling Platform Connect - Google Chrome=snapshot95);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 181, 426, Amadeus Selling Platform Connect - Google Chrome=snapshot96);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 229, 426, Amadeus Selling Platform Connect - Google Chrome=snapshot97);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 229, 426, Amadeus Selling Platform Connect - Google Chrome=snapshot98);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 229, 426, Amadeus Selling Platform Connect - Google Chrome=snapshot98);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(46, 8, snapshot99);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(16, 1, snapshot100);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(16, 0, snapshot100);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 251, 418, Amadeus Selling Platform Connect - Google Chrome=snapshot101);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 251, 418, Amadeus Selling Platform Connect - Google Chrome=snapshot101);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(16, 1, snapshot102);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(72, 1, snapshot102);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(72, 1, snapshot102);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(75, 1, snapshot102);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(75, 1, snapshot102);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(71, 1, snapshot102);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(71, 1, snapshot102);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(87, 1, snapshot102);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(87, 1, snapshot102);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(76, 1, snapshot102);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(76, 1, snapshot102);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(16, 0, snapshot102);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(50, 0, snapshot102);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(50, 0, snapshot102);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(49, 0, snapshot102);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(49, 0, snapshot102);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(48, 0, snapshot102);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(48, 0, snapshot102);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(50, 0, snapshot102);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(50, 0, snapshot102);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(9, 0, snapshot103);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(16, 1, snapshot104);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(67, 1, snapshot104);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(16, 0, snapshot104);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 236, 440, Amadeus Selling Platform Connect - Google Chrome=snapshot105);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 236, 440, Amadeus Selling Platform Connect - Google Chrome=snapshot106);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 236, 440, Amadeus Selling Platform Connect - Google Chrome=snapshot106);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(16, 1, snapshot107);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(67, 1, snapshot107);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(16, 0, snapshot107);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(16, 1, snapshot108);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(67, 1, snapshot108);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(16, 0, snapshot108);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(16, 1, snapshot109);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(67, 1, snapshot109);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(16, 0, snapshot109);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 236, 440, Amadeus Selling Platform Connect - Google Chrome=snapshot110);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 236, 440, Amadeus Selling Platform Connect - Google Chrome=snapshot110);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(16, 1, snapshot111);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(67, 1, snapshot111);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(67, 1, snapshot111);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(50, 1, snapshot111);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(50, 1, snapshot111);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(16, 0, snapshot111);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(82, 0, snapshot111);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(82, 0, snapshot111);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(76, 0, snapshot111);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(76, 0, snapshot111);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(83, 0, snapshot111);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(83, 0, snapshot111);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(79, 0, snapshot111);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(79, 0, snapshot111);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(78, 0, snapshot111);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(78, 0, snapshot111);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(49, 0, snapshot111);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(49, 0, snapshot111);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(50, 0, snapshot111);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(50, 0, snapshot111);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(51, 0, snapshot111);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(51, 0, snapshot111);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(13, 0, snapshot112);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 375, 150, HKGWL2102 - Amadeus Selling Platform Connect - Google Chrome=snapshot113);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 375, 150, HKGWL2102 - Amadeus Selling Platform Connect - Google Chrome=snapshot114);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 375, 150, HKGWL2102 - Amadeus Selling Platform Connect - Google Chrome=snapshot114);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 965, 10, HKGWL2102 - Amadeus Selling Platform Connect - Google Chrome=snapshot115);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 965, 10, HKGWL2102 - Amadeus Selling Platform Connect - Google Chrome=snapshot115);
+[Citrix Recorder  (1e88: 1ac)] Foreground window = 65928
+[User action                 ] StartTransactionEvent Launch_PowerEX [Citrix Recorder  (1e88: 1ac)] ctrx_sync_on_window("Start", 2, 728, 53, 39);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 105, 26, HKGWL2102 - Amadeus Selling Platform Connect - Google Chrome=snapshot117);
+[Citrix Recorder  (1e88: 1ac)] ctrx_sync_on_window("HKGWL2102 - Amadeus Selling Platform Connect - Google Chrome", 14, 14, 1051, 705);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 105, 26, HKGWL2102 - Amadeus Selling Platform Connect - Google Chrome=snapshot119);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 105, 26, HKGWL2102 - Amadeus Selling Platform Connect - Google Chrome=snapshot119);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 105, 26, HKGWL2102 - Amadeus Selling Platform Connect - Google Chrome);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_double_click();
+[Citrix Recorder  (1e88: 1ac)] Foreground window = 0
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 105, 26, HKGWL2102 - Amadeus Selling Platform Connect - Google Chrome=snapshot119);
+[Citrix Recorder  (1e88: 1ac)] Foreground window = 66066
+[Citrix Recorder  (1e88: 1ac)] ctrx_sync_on_window("Desktop", 0, 0, 1281, 769);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(13, 0, snapshot121);
+[Citrix Recorder  (1e88: 1ac)] Foreground window = 66174
+[Citrix Recorder  (1e88: 1ac)] Foreground window = 328244
+[Citrix Recorder  (1e88: 1ac)] Foreground window = 0
+[Citrix Recorder  (1e88: 1ac)] ctrx_create_window "Power Express" flag=1 style=382337024 ext_style=327937 id=131710
+[Citrix Recorder  (1e88: 1ac)] ctrx_create_window "Power Express_2" flag=1 style=382337024 ext_style=327937 id=131720
+[Citrix Recorder  (1e88: 1ac)] ctrx_delete_window "Power Express_2" 
+[Citrix Recorder  (1e88: 1ac)] ctrx_active_window("Power Express");
+[Citrix Recorder  (1e88: 1ac)] Foreground window = 131710
+[Citrix Recorder  (1e88: 1ac)] ctrx_create_window "Team Selection" flag=0 style=381681664 ext_style=327945 id=131908
+[Citrix Recorder  (1e88: 1ac)] ctrx_active_window("Team Selection");
+[Citrix Recorder  (1e88: 1ac)] Foreground window = 131908
+[User action                 ] EndTransactionEvent Launch_PowerEX [User action                 ] StartTransactionEvent SelectTeam [Citrix Recorder  (1e88: 1ac)] ctrx_sync_on_window("Team Selection", 100, 55, 322, 313);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 31, 65, Team Selection=snapshot123);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 31, 65, Team Selection=snapshot124);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 31, 65, Team Selection=snapshot124);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 262, 285, Team Selection=snapshot125);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 262, 285, Team Selection=snapshot126);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 262, 285, Team Selection=snapshot126);
+[Citrix Recorder  (1e88: 1ac)] ctrx_active_window("Power Express V18.10.63.0  [SVCSYEXTEST34 in TEST]");
+[Citrix Recorder  (1e88: 1ac)] Foreground window = 131710
+[Citrix Recorder  (1e88: 1ac)] ctrx_delete_window "Team Selection" 
+[User action                 ] EndTransactionEvent SelectTeam [User action                 ] StartTransactionEvent SelectClient [Citrix Recorder  (1e88: 1ac)] ctrx_sync_on_window("Power Express V18.10.63.0  [SVCSYEXTEST34 in TEST]", 0, 0, 1029, 756);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 125, 449, Power Express V18.10.63.0  [SVCSYEXTEST34 in TEST]=snapshot128);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 125, 449, Power Express V18.10.63.0  [SVCSYEXTEST34 in TEST]=snapshot128);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(16, 1, snapshot129);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(16, 0, snapshot129);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 507, 443, Power Express V18.10.63.0  [SVCSYEXTEST34 in TEST]=snapshot130);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 507, 443, Power Express V18.10.63.0  [SVCSYEXTEST34 in TEST]=snapshot130);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 505, 594, Power Express V18.10.63.0  [SVCSYEXTEST34 in TEST]=snapshot131);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 505, 594, Power Express V18.10.63.0  [SVCSYEXTEST34 in TEST]=snapshot132);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 505, 594, Power Express V18.10.63.0  [SVCSYEXTEST34 in TEST]=snapshot132);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 505, 594, Power Express V18.10.63.0  [SVCSYEXTEST34 in TEST]=snapshot133);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 505, 594, Power Express V18.10.63.0  [SVCSYEXTEST34 in TEST]=snapshot133);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 505, 594, Power Express V18.10.63.0  [SVCSYEXTEST34 in TEST]=snapshot134);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 505, 594, Power Express V18.10.63.0  [SVCSYEXTEST34 in TEST]=snapshot134);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 272, 523, Power Express V18.10.63.0  [SVCSYEXTEST34 in TEST]=snapshot136);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 276, 524, Power Express V18.10.63.0  [SVCSYEXTEST34 in TEST]=snapshot136);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 276, 524, Power Express V18.10.63.0  [SVCSYEXTEST34 in TEST]=snapshot136);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 276, 524, Power Express V18.10.63.0  [SVCSYEXTEST34 in TEST]=snapshot136);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 197, 495, Power Express V18.10.63.0  [SVCSYEXTEST34 in TEST]=snapshot139);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 197, 495, Power Express V18.10.63.0  [SVCSYEXTEST34 in TEST]=snapshot139);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(66, 0, snapshot139);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(66, 0, snapshot139);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(69, 0, snapshot139);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(69, 0, snapshot139);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(65, 0, snapshot139);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(65, 0, snapshot139);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(82, 0, snapshot139);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_up_ex(82, 0, snapshot139);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(13, 0, snapshot140);
+[Citrix Recorder  (1e88: 1ac)] ctrx_key_down_ex(32, 0, snapshot141);
+[Citrix Recorder  (1e88: 1ac)] ctrx_create_window "Progress Information" flag=0 style=381681664 ext_style=327937 id=131924
+[Citrix Recorder  (1e88: 1ac)] ctrx_active_window("Progress Information");
+[Citrix Recorder  (1e88: 1ac)] Foreground window = 131924
+[Citrix Recorder  (1e88: 1ac)] ctrx_active_window("Power Express V18.10.63.0  [SVCSYEXTEST34 in TEST]");
+[Citrix Recorder  (1e88: 1ac)] Foreground window = 131710
+[Citrix Recorder  (1e88: 1ac)] ctrx_create_window "Power Express V18.10.63.0  [SVCSYEXTEST34 in TEST] (Not Respon" flag=0 style=382337024 ext_style=327937 id=66508
+[Citrix Recorder  (1e88: 1ac)] ctrx_create_window "Progress Information_2" flag=1 style=381681664 ext_style=327937 id=66510
+[Citrix Recorder  (1e88: 1ac)] ctrx_active_window("Power Express V18.10.63.0  [SVCSYEXTEST34 in TEST] (Not Respon");
+[Citrix Recorder  (1e88: 1ac)] Foreground window = 66508
+[Citrix Recorder  (1e88: 1ac)] ctrx_active_window("Power Express V18.10.63.0  [SVCSYEXTEST34 in TEST]");
+[Citrix Recorder  (1e88: 1ac)] Foreground window = 131710
+[Citrix Recorder  (1e88: 1ac)] ctrx_delete_window "Progress Information_2" 
+[Citrix Recorder  (1e88: 1ac)] ctrx_delete_window "Power Express V18.10.63.0  [SVCSYEXTEST34 in TEST] (Not Respon" 
+[Citrix Recorder  (1e88: 1ac)] ctrx_delete_window "Progress Information" 
+[User action                 ] EndTransactionEvent SelectClient [User action                 ] StartTransactionEvent ClearALL [Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 982, 427, Power Express V18.10.63.0  [SVCSYEXTEST34 in TEST]=snapshot142);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 982, 427, Power Express V18.10.63.0  [SVCSYEXTEST34 in TEST]=snapshot142);
+[Citrix Recorder  (1e88: 1ac)] ctrx_create_window "Power Express" flag=0 style=381681664 ext_style=327945 id=132048
+[Citrix Recorder  (1e88: 1ac)] ctrx_active_window("Power Express");
+[Citrix Recorder  (1e88: 1ac)] Foreground window = 132048
+[Citrix Recorder  (1e88: 1ac)] ctrx_sync_on_window("Power Express", 212, 342, 592, 228);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 254, 195, Power Express=snapshot144);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 254, 195, Power Express=snapshot145);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 253, 195, Power Express=snapshot145);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 253, 195, Power Express=snapshot145);
+[Citrix Recorder  (1e88: 1ac)] ctrx_active_window("Power Express V18.10.63.0  [SVCSYEXTEST34 in TEST]");
+[Citrix Recorder  (1e88: 1ac)] Foreground window = 131710
+[Citrix Recorder  (1e88: 1ac)] ctrx_delete_window "Power Express" 
+[User action                 ] EndTransactionEvent ClearALL [Citrix Recorder  (1e88: 1ac)] ctrx_sync_on_window("Power Express V18.10.63.0  [SVCSYEXTEST34 in TEST]", 0, 0, 1029, 756);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 12, 12, Power Express V18.10.63.0  [SVCSYEXTEST34 in TEST]=snapshot147);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 12, 12, Power Express V18.10.63.0  [SVCSYEXTEST34 in TEST]=snapshot147);
+[Citrix Recorder  (1e88: 1ac)] ctrx_create_window "3_21_147_130" flag=3 style=-1803550720 ext_style=393 id=263120
+[Citrix Recorder  (1e88: 1ac)] ctrx_sync_on_window("3_21_147_130", 3, 21, 147, 130);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 52, 131, Power Express V18.10.63.0  [SVCSYEXTEST34 in TEST]=snapshot149);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 52, 131, Power Express V18.10.63.0  [SVCSYEXTEST34 in TEST]=snapshot149);
+[Citrix Recorder  (1e88: 1ac)] ctrx_delete_window "3_21_147_130" 
+[Citrix Recorder  (1e88: 1ac)] Foreground window = 0
+[Citrix Recorder  (1e88: 1ac)] ctrx_delete_window "Power Express V18.10.63.0  [SVCSYEXTEST34 in TEST]" 
+[Citrix Recorder  (1e88: 1ac)] ctrx_sync_on_window("Shell_TrayWnd", -2, 724, 1285, 47);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 140, 8, Shell_TrayWnd=snapshot151);
+[Citrix Recorder  (1e88: 1ac)] Foreground window = 0
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 140, 8, Shell_TrayWnd=snapshot152);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 140, 8, Shell_TrayWnd=snapshot152);
+[Citrix Recorder  (1e88: 1ac)] ctrx_active_window("HKGWL2102 - Amadeus Selling Platform Connect - Google Chrome");
+[Citrix Recorder  (1e88: 1ac)] Foreground window = 66156
+[Citrix Recorder  (1e88: 1ac)] ctrx_sync_on_window("HKGWL2102 - Amadeus Selling Platform Connect - Google Chrome", 14, 14, 1051, 705);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 1022, 152, HKGWL2102 - Amadeus Selling Platform Connect - Google Chrome=snapshot154);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 1022, 152, HKGWL2102 - Amadeus Selling Platform Connect - Google Chrome=snapshot155);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 1022, 152, HKGWL2102 - Amadeus Selling Platform Connect - Google Chrome=snapshot155);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 524, 449, HKGWL2102 - Amadeus Selling Platform Connect - Google Chrome=snapshot156);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 524, 449, HKGWL2102 - Amadeus Selling Platform Connect - Google Chrome=snapshot157);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 524, 449, HKGWL2102 - Amadeus Selling Platform Connect - Google Chrome=snapshot157);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 1026, 10, Amadeus Selling Platform Connect - Google Chrome=snapshot158);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 1026, 10, Amadeus Selling Platform Connect - Google Chrome=snapshot158);
+[Citrix Recorder  (1e88: 1ac)] Foreground window = 65928
+[Citrix Recorder  (1e88: 1ac)] ctrx_delete_window "Amadeus Selling Platform Connect - Google Chrome" 
+[Citrix Recorder  (1e88: 1ac)] ctrx_sync_on_window("Start", 2, 728, 53, 39);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 39, 13, Start=snapshot160);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 40, 13, Start=snapshot160);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 40, 13, Start=snapshot160);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 40, 13, Start=snapshot160);
+[Citrix Recorder  (1e88: 1ac)] ctrx_create_window "Start menu" flag=0 style=-1774190592 ext_style=392 id=131530
+[Citrix Recorder  (1e88: 1ac)] ctrx_create_window "SvcSyExTest34" flag=1 style=-1811939328 ext_style=524424 id=131596
+[Citrix Recorder  (1e88: 1ac)] Foreground window = 131530
+[Citrix Recorder  (1e88: 1ac)] ctrx_sync_on_window("Start menu", 0, 268, 406, 457);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 273, 433, Start menu=snapshot162);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 273, 433, Start menu=snapshot163);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 273, 433, Start menu=snapshot163);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_down(1, 0, 285, 432, Start menu=snapshot164);
+[Citrix Recorder  (1e88: 1ac)] ctrx_mouse_up(1, 0, 285, 432, Start menu=snapshot164);
+[Citrix Recorder  (1e88: 1ac)] Foreground window = 65924
+[Citrix Recorder  (1e88: 1ac)] ctrx_delete_window "SvcSyExTest34" 
+[Citrix Recorder  (1e88: 1ac)] ctrx_delete_window "Start menu" 
+[Citrix Recorder  (1e88: 1ac)] Foreground window = 0
+[Citrix Recorder  (1e88: 1ac)] Foreground window = 0
+[Citrix Recorder  (1e88: 1ac)] ctrx_delete_window "Start" 
+[Citrix Recorder  (1e88: 1ac)] ctrx_delete_window "Shell_TrayWnd" 
+[Citrix Recorder  (1e88: 1ac)] ctrx_delete_window "Desktop" 
+[Citrix Recorder  (1e88: 1ac)] ctrx_logoff("CTRX_NORMAL_LOGOFF");
+[Network Analyzer ( 52c:1dec)] Address lookup for VWNV02PL00162 = 10.213.128.38
+[Network Analyzer ( 52c:1dec)] Request Connection: Remote Server @ 10.200.188.1:443   (Service=)  (Sid= 10)  PROXIED!
+[Network Analyzer ( 52c:1ff8)]   (Sid: 10) Negotiate Proxy -> Server SSL Handshake (ssl:TLSv1.2, ciphers:ECDHE-RSA-AES256-SHA384)
+[Network Analyzer ( 52c:1ff8)]   (Sid: 10) Negotiate Client -> Proxy SSL Handshake (ssl:TLSv1.2, ciphers:ECDHE-RSA-AES256-SHA384)
+[Web Request      ( 52c:2cac)] "POST /Citrix/PilotWeb/Authentication/Logoff"   
+[Network Analyzer ( 52c:2cac)]   (Sid: 10) Client -> Server @ : 797 bytes (SSL)(Service=HTTP)
+[Network Analyzer ( 52c:2cac)]   (Sid: 10) Server -> Client : 585 bytes (SSL) (Service=HTTP)

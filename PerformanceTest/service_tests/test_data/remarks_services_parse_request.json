@@ -1,0 +1,22 @@
+{
+  "hierarchy": {
+    "global": null,
+    "globalRegion": "APAC",
+    "country": "IN",
+    "team": "93",
+    "clientTopUnit": "14:2B60",
+    "clientSubUnit": "A:86BB0",
+    "clientAccount": "519"
+  },
+  "gdsCode": "1A",
+  "remarks": [
+    "1 RIR ONHOLD:string",
+    "2 RIR ******************* HEALTH RECOMMENDATION *******************",
+    "3 RIR FOR DESTINATIONS: string",
+    "4 RIR YELLOW FEVER VACCINATION IS REQUIRED 10 DAYS PRIOR TO TRAVEL.",
+    "5 RIR A VACCINATION CERTIFICATE IS REQUIRED FOR ALL THE TRAVELER",
+    "6 RIR OVER SIX MONTHS OF AGE",
+    "7 RIR ********************** POLICY WARNING ***********************"
+  ],
+  "applicationContext": "string"
+}

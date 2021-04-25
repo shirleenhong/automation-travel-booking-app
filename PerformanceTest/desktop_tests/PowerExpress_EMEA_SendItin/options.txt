@@ -1,0 +1,9 @@
+-+
+-DCCI
+-D_IDA_XL
+-DWINNT
+-IC:\Users\U001JCP\Documents\VuGen\Scripts\PowerExpress_EMEA_CitrixClient33\PowerExpress_EMEA_SendItin
+-IC:\Program Files (x86)\Micro Focus\LoadRunner\include
+-ec:\users\u001jcp\documents\vugen\scripts\powerexpress_emea_citrixclient33\powerexpress_emea_senditin\\logfile.log
+c:\users\u001jcp\documents\vugen\scripts\powerexpress_emea_citrixclient33\powerexpress_emea_senditin\\combined_PowerExpress_EMEA_SendItin.c
+c:\users\u001jcp\documents\vugen\scripts\powerexpress_emea_citrixclient33\powerexpress_emea_senditin\\pre_cci.c

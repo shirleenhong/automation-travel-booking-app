@@ -1,0 +1,17 @@
+[t7]
+FileName1=t7.html
+URL1=https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/Resources/List
+Total=4
+RequestHeaderFile=t7_RequestHeader.txt
+RequestBodyFile=t7_RequestBody.txt
+ResponseHeaderFile=t7_ResponseHeader.txt
+ContentType=application/json
+SnapshotXmlFile=snapshot_7.xml
+FileName2=t7_icon_loading_9A0623127A028FEB.png
+URL2=https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/receiver/images/common/icon_loading_9A0623127A028FEB.png
+FileName3=t7_CitrixReceiverLogo_Home_5C24BCEC5A182425.png
+URL3=https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/receiver/images/1x/CitrixReceiverLogo_Home_5C24BCEC5A182425.png
+FileName4=t7_search_close_BC5A22358E58905F.png
+URL4=https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/receiver/images/1x/search_close_BC5A22358E58905F.png
+[ProtocolInfo]
+ProtocolId=QTWeb

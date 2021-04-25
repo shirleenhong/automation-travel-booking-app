@@ -1,0 +1,29 @@
+*** Settings ***
+Resource          ../../../resources/common/global_resources.txt
+
+*** Keywords ***
+Get Exchange Order Text
+    ${exchange_order_text}    Get Control Text Value    [NAME:ExhangeOrderNumberTextBox]
+    Set Test Variable    ${exchange_order_text}
+    [Return]    ${exchange_order_text}
+
+Click Cancel
+    Take Screenshot
+    Click Control Button    [NAME:CancelButton]
+
+Cancel EO
+    [Arguments]    ${eo_number}    ${tab_name}    ${country}
+    Click Amend Eo Button    ${eo_number}
+    Wait Until Control Object Is Visible    [NAME:OtherServicesTabControl]
+    Click Cancel Button In EO Panel    ${tab_name}
+    Wait Until Window Exists    Confirmation    timeout=8    retry_interval=4
+    ${is_eo_cancelled}    Is Exchange Order Cancelled
+    Run Keyword If    ${is_eo_cancelled}    Log    EO Number "${eo_number}" is already cancelled.    WARN
+    [Teardown]    Take Screenshot
+
+Click Cancel Button In EO Panel
+    [Arguments]    ${tab}
+    Click Tab In Other Services Panel    ${tab}
+    Activate Power Express Window
+    Click Control Button    [NAME:RemoveButton]
+    [Teardown]    Take Screenshot

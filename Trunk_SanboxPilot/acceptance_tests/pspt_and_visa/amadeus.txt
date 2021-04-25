@@ -1,0 +1,110 @@
+*** Settings ***
+Force Tags        amadeus    emea
+Resource          pspt_and_visa_verification.txt
+
+*** Test Cases ***
+[1A EMEA][NB] Verify That Pspt & Visa And APIS/SFPD Panels Are Shown For FR Non-Mindef
+    [Tags]    us3575
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    fr-FR    AutomationFR    FR AUTO AMADEUS
+    Select GDS    Amadeus
+    Create New Booking With One Way Flight And One Alternate Offer Using Default Values    Amadeus FR Legacy - Auto ¦ US681    AutoLegacy    EmeaTrvlrOneFive    LAXCDG/AAF    SS1Y1    FXB
+    ...    ${EMPTY}    AIR FARE
+    Verify Pspt & Visa And APIS/SFPD Panels Are Shown For Non-Mindef
+
+[NB] Verify That Domestic Trip Checkbox Is Unchecked For Domestic Flight Different From Traveler's Nationality Timatic Off
+    [Tags]    us5155
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    en-GB    AutomationUK    UK AUTO AMADEUS
+    Select GDS    Amadeus
+    Create New Booking With Timestamp With Round Trip Air Flight Using Default Values    UK Amadeus 1 - SyEx ¦ Power Hotel Integration    Edwards    Cory    YYZYVR/AAC    SS1Y1    ${EMPTY}
+    ...    YVRYYZ/AAC    SS1Y1    FXP    ${EMPTY}    Pspt and Visa
+    Click Panel    Pspt and Visa
+    Verify Checkbox Is Unticked    ${check_box_domestic_trip}
+    Verify Passport & Visa Info Panel Is Not Displayed
+    Verify Travel Document Details Are Correct    British Citizen passport    United Kingdom    A09876543    10/30/2020
+    Untick Domestic Trip
+    Tick Use Document
+    Click Check Visa Requirements No ESTA
+    Get Passport & Visa Info Panel Text
+    Verify Pspt And Visa Info Panel Contains Text    The passenger must have an Electronic Travel Authorization (eTA).
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Specific Line Is Written In The PNR    RIR TRAVELLERS NATIONALITY: UNITED KINGDOM
+    Verify Specific Line Is Written In The PNR    A09876543
+    Verify Specific Line Is Written In The PNR    10/30/2020
+    [Teardown]
+
+[AB] Verify That Domestic Trip Checkbox Is Unchecked For Domestic Flight Different From Traveler's Nationality Timatic Off
+    [Tags]    us5155
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Pspt and Visa
+    Click Panel    Pspt and Visa
+    Verify Checkbox Is Unticked    ${check_box_domestic_trip}
+    Verify Passport & Visa Info Panel Is Not Displayed
+    Verify Travel Document Details Are Correct    British Citizen passport    United Kingdom    A09876543    10/30/2020
+    Untick Domestic Trip
+    Tick Use Document
+    Click Check Visa Requirements No ESTA
+    Get Passport & Visa Info Panel Text
+    Verify Pspt And Visa Info Panel Contains Text    The passenger must have an Electronic Travel Authorization (eTA).
+    Click Finish PNR    Amend Booking Workflow For Domestic Trip Checkbox Unticked Timatic Off
+    Execute Simultaneous Change Handling    Amend Booking Workflow For Domestic Trip Checkbox Unticked Timatic Off
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Specific Line Is Written In The PNR    RIR TRAVELLERS NATIONALITY: UNITED KINGDOM
+    Verify Specific Line Is Written In The PNR    A09876543
+    Verify Specific Line Is Written In The PNR    10/30/2020
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB] Verify That Domestic Trip Checkbox Is Unchecked For Domestic Flight Similar To Traveler's Nationality
+    [Tags]    us5155
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    en-GB    AutomationUK    UK AUTO AMADEUS
+    Select GDS    Amadeus
+    Create New Booking With Timestamp With Round Trip Air Flight Using Default Values    UK Amadeus 1 - SyEx ¦ Power Hotel Integration    Edwards    Cory    EMABHD/ABE    SS1Y1    ${EMPTY}
+    ...    BHDEMA/ABE    SS1Y1    FXP    ${EMPTY}    Pspt and Visa
+    Click Panel    Pspt and Visa
+    Verify Checkbox Is Ticked    ${check_box_domestic_trip}
+    Verify Passport & Visa Info Panel Is Not Displayed
+    Click Finish PNR
+    [Teardown]
+
+[AB] Verify That Domestic Trip Checkbox Is Unchecked For Domestic Flight Similar To Traveler's Nationality
+    [Tags]    us5155
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Pspt and Visa
+    Click Panel    Pspt and Visa
+    Verify Checkbox Is Ticked    ${check_box_domestic_trip}
+    Verify Passport & Visa Info Panel Is Not Displayed
+    Click Finish PNR    Amend Booking Workflow For Domestic Trip Checkbox Same Nationality
+    Execute Simultaneous Change Handling    Amend Booking Workflow For Domestic Trip Checkbox Same Nationality
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Amend Booking Workflow For Domestic Trip Checkbox Unticked Timatic Off
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Pspt and Visa
+    Click Panel    Pspt and Visa
+    Verify Checkbox Is Unticked    ${check_box_domestic_trip}
+    Verify Passport & Visa Info Panel Is Not Displayed
+    Take Screenshot
+    Verify Travel Document Details Are Correct    British Citizen passport    United Kingdom    A09876543    10/30/2020
+    Untick Domestic Trip
+    Tick Use Document
+    Click Check Visa Requirements No ESTA
+    Get Passport & Visa Info Panel Text
+    Verify Pspt And Visa Info Panel Contains Text    The passenger must have an Electronic Travel Authorization (eTA).
+    Click Finish PNR    Amend Booking Workflow For Domestic Trip Checkbox Unticked Timatic Off
+
+Amend Booking Workflow For Domestic Trip Checkbox Same Nationality
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Pspt and Visa
+    Click Panel    Pspt and Visa
+    Verify Checkbox Is Ticked    ${check_box_domestic_trip}
+    Verify Passport & Visa Info Panel Is Not Displayed
+    Click Finish PNR    Amend Booking Workflow For Domestic Trip Checkbox Same Nationality

@@ -1,0 +1,598 @@
+*** Settings ***
+Suite Setup
+Force Tags        amadeus
+Resource          ../../client_info/client_info_verification.txt
+Resource          ../other_services_verification.txt
+Resource          ../../air_fare/air_fare_verification.txt
+Resource          ../other_services.txt
+
+*** Test Cases ***
+TC 1 LIMOUSINE
+    Create PNR Using Credit Card As FOP
+    Click Other Services
+    Select Product And Vendor    <insert product name>    <insert vendor name>
+    Populate Service Info Cost Details    <insert vendor name>    <nett cost>    <selling price>
+    Get Other Services Cost Details
+    Select Form Of Payment (FOP)    Cash or Invoice
+    Populate Service Info Car Tab    Departure From    Airport    Depart from airport
+    Get Service Info Car Tab Values    Departure From
+    Populate Service Info Car Tab    Departure To    Office    Depart to office    flight_segment=1
+    Get Service Info Car Tab Values    Departure To
+    Populate Service Info Car Tab    Arrival From    Home    Arrive From Home
+    Get Service Info Car Tab Values    Arrival From
+    Populate Service Info Car Tab    Arrival To    Other    Arrive to other    flight_segment=1    date_and_time=True
+    Get Service Info Car Tab Values    Arrival To
+    Click Vendor Info Tab
+    Get Contact No from Vendor Info Tab
+    Click Finish PNR    panel=Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details From Amadeus    command=RTX    refresh_needed=False
+    Validate Passive Segments    Car Rental Prepaid    <insert vendor name>    <country name>
+    # Validate Notepad Remarks
+    # Validate Insurance Remarks in Notepad/General Remarks Group
+    Retrieve PNR    ${current_pnr}
+    Click Amend Eo    ${eo_number}
+    Click Tab In Other Services Panel    Departure From
+    Select Location Value    Office
+    Get Location Value    identifier=departure_from
+    Get Description Value    identifier=departure_from
+    Click Tab In Other Services Panel    Departure To
+    Select Location Value    Other
+    Set Other Value    Other
+    Set Description Value    Other Description Text
+    Get Location Value    identifier=departure_to
+    Get Description Value    identifier=departure_to
+    Select Flight Value
+    Tick Date & Time Checkbox
+    Get Date & Time Value    identifier=departure_to
+    Click Tab In Other Services Panel    Arrival To
+    Select Location Value    Office
+    Get Location Value    identifier=departure_from
+    Get Description Value    identifier=arrival_to
+    Select Flight Value
+    UnTick Date & Time Checkbox
+    Get Date & Time Value    identifier=arrival_to
+    Click Vendor Info Tab
+    Get Contact No from Vendor Info Tab
+    Click Finish PNR    panel=Other Svcs
+    Verify PNR Is Successfully Created    FALSE    Exchange Order Transaction Successfully Saved
+    Get Exchange Order Number
+    Retrieve PNR Details From Amadeus    command=RTY
+    Validate Passive Segments    Car Rental Prepaid    <insert vendor name>    <country name>
+    # Validate Notepad Remarks
+    # Validate Insurance Remarks in Notepad/General Remarks Group
+
+TC 2 Car Rental Prepaid
+    Create PNR Using Credit Card As FOP
+    Click Other Services
+    Select Product And Vendor    <insert product name>    <insert vendor name>
+    Populate Service Info Cost Details    <insert vendor name>    <nett cost>    <selling price>
+    Get Other Services Cost Details
+    Select Form Of Payment (FOP)    Cash or Invoice
+    Populate Service Info Car Tab    Departure From    Airport    Depart from airport
+    Get Service Info Car Tab Values    Departure From
+    Populate Service Info Car Tab    Departure To    Office    Depart to office    flight_segment=1
+    Get Service Info Car Tab Values    Departure To
+    Populate Service Info Car Tab    Arrival From    Home    Arrive From Home
+    Get Service Info Car Tab Values    Arrival From
+    Populate Service Info Car Tab    Arrival To    Other    Arrive to other    flight_segment=1    date_and_time=True
+    Get Service Info Car Tab Values    Arrival To
+    Click Vendor Info Tab
+    Get Contact No from Vendor Info Tab
+    Click Finish PNR    panel=Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details From Amadeus    command=RTX    refresh_needed=False
+    Validate Passive Segments    Car Rental Prepaid    <insert vendor name>    <country name>
+    # Validate Notepad Remarks
+    # Validate Insurance Remarks in Notepad/General Remarks Group
+    Retrieve PNR    ${current_pnr}
+    Click Amend Eo    ${eo_number}
+    Click Tab In Other Services Panel    Departure From
+    Select Location Value    Office
+    Get Location Value    identifier=departure_from
+    Get Description Value    identifier=departure_from
+    Click Tab In Other Services Panel    Departure To
+    Select Location Value    Other
+    Set Other Value    Other
+    Set Description Value    Other Description Text
+    Get Location Value    identifier=departure_to
+    Get Description Value    identifier=departure_to
+    Select Flight Value
+    Tick Date & Time Checkbox
+    Get Date & Time Value    identifier=departure_to
+    Click Tab In Other Services Panel    Arrival To
+    Select Location Value    Office
+    Get Location Value    identifier=departure_from
+    Get Description Value    identifier=arrival_to
+    Select Flight Value
+    UnTick Date & Time Checkbox
+    Get Date & Time Value    identifier=arrival_to
+    Click Vendor Info Tab
+    Get Contact No from Vendor Info Tab
+    Click Finish PNR    panel=Other Svcs
+    Verify PNR Is Successfully Created    FALSE    Exchange Order Transaction Successfully Saved
+    Get Exchange Order Number
+    Retrieve PNR Details From Amadeus    command=RTY
+    Validate Passive Segments    Car Rental Prepaid    <insert vendor name>    <country name>
+    # Validate Notepad Remarks
+    # Validate Insurance Remarks in Notepad/General Remarks Group
+
+TC 3 DISCOUNT
+    Create PNR Using Credit Card As FOP
+    Click Other Services
+    Select Product And Vendor    <insert product name>    <insert vendor name>
+    Populate Service Info Cost Details    <insert vendor name>    <nett cost>    <selling price>
+    Get Other Services Cost Details
+    Select Form Of Payment (FOP)    Cash or Invoice
+    Populate Service Info Car Tab    Departure From    Airport    Depart from airport
+    Get Service Info Car Tab Values    Departure From
+    Populate Service Info Car Tab    Departure To    Office    Depart to office    flight_segment=1
+    Get Service Info Car Tab Values    Departure To
+    Populate Service Info Car Tab    Arrival From    Home    Arrive From Home
+    Get Service Info Car Tab Values    Arrival From
+    Populate Service Info Car Tab    Arrival To    Other    Arrive to other    flight_segment=1    date_and_time=True
+    Get Service Info Car Tab Values    Arrival To
+    Click Vendor Info Tab
+    Get Contact No from Vendor Info Tab
+    Click Finish PNR    panel=Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details From Amadeus    command=RTX    refresh_needed=False
+    Validate Passive Segments    Car Rental Prepaid    <insert vendor name>    <country name>
+    # Validate Notepad Remarks
+    # Validate Insurance Remarks in Notepad/General Remarks Group
+    Retrieve PNR    ${current_pnr}
+    Click Amend Eo    ${eo_number}
+    Click Tab In Other Services Panel    Departure From
+    Select Location Value    Office
+    Get Location Value    identifier=departure_from
+    Get Description Value    identifier=departure_from
+    Click Tab In Other Services Panel    Departure To
+    Select Location Value    Other
+    Set Other Value    Other
+    Set Description Value    Other Description Text
+    Get Location Value    identifier=departure_to
+    Get Description Value    identifier=departure_to
+    Select Flight Value
+    Tick Date & Time Checkbox
+    Get Date & Time Value    identifier=departure_to
+    Click Tab In Other Services Panel    Arrival To
+    Select Location Value    Office
+    Get Location Value    identifier=departure_from
+    Get Description Value    identifier=arrival_to
+    Select Flight Value
+    UnTick Date & Time Checkbox
+    Get Date & Time Value    identifier=arrival_to
+    Click Vendor Info Tab
+    Get Contact No from Vendor Info Tab
+    Click Finish PNR    panel=Other Svcs
+    Verify PNR Is Successfully Created    FALSE    Exchange Order Transaction Successfully Saved
+    Get Exchange Order Number
+    Retrieve PNR Details From Amadeus    command=RTY
+    Validate Passive Segments    Car Rental Prepaid    <insert vendor name>    <country name>
+    # Validate Notepad Remarks
+    # Validate Insurance Remarks in Notepad/General Remarks Group
+
+TC 4 FERRY TICKET
+    Create PNR Using Credit Card As FOP
+    Click Other Services
+    Select Product And Vendor    <insert product name>    <insert vendor name>
+    Populate Service Info Cost Details    <insert vendor name>    <nett cost>    <selling price>
+    Get Other Services Cost Details
+    Select Form Of Payment (FOP)    Cash or Invoice
+    Populate Service Info Car Tab    Departure From    Airport    Depart from airport
+    Get Service Info Car Tab Values    Departure From
+    Populate Service Info Car Tab    Departure To    Office    Depart to office    flight_segment=1
+    Get Service Info Car Tab Values    Departure To
+    Populate Service Info Car Tab    Arrival From    Home    Arrive From Home
+    Get Service Info Car Tab Values    Arrival From
+    Populate Service Info Car Tab    Arrival To    Other    Arrive to other    flight_segment=1    date_and_time=True
+    Get Service Info Car Tab Values    Arrival To
+    Click Vendor Info Tab
+    Get Contact No from Vendor Info Tab
+    Click Finish PNR    panel=Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details From Amadeus    command=RTX    refresh_needed=False
+    Validate Passive Segments    Car Rental Prepaid    <insert vendor name>    <country name>
+    # Validate Notepad Remarks
+    # Validate Insurance Remarks in Notepad/General Remarks Group
+    Retrieve PNR    ${current_pnr}
+    Click Amend Eo    ${eo_number}
+    Click Tab In Other Services Panel    Departure From
+    Select Location Value    Office
+    Get Location Value    identifier=departure_from
+    Get Description Value    identifier=departure_from
+    Click Tab In Other Services Panel    Departure To
+    Select Location Value    Other
+    Set Other Value    Other
+    Set Description Value    Other Description Text
+    Get Location Value    identifier=departure_to
+    Get Description Value    identifier=departure_to
+    Select Flight Value
+    Tick Date & Time Checkbox
+    Get Date & Time Value    identifier=departure_to
+    Click Tab In Other Services Panel    Arrival To
+    Select Location Value    Office
+    Get Location Value    identifier=departure_from
+    Get Description Value    identifier=arrival_to
+    Select Flight Value
+    UnTick Date & Time Checkbox
+    Get Date & Time Value    identifier=arrival_to
+    Click Vendor Info Tab
+    Get Contact No from Vendor Info Tab
+    Click Finish PNR    panel=Other Svcs
+    Verify PNR Is Successfully Created    FALSE    Exchange Order Transaction Successfully Saved
+    Get Exchange Order Number
+    Retrieve PNR Details From Amadeus    command=RTY
+    Validate Passive Segments    Car Rental Prepaid    <insert vendor name>    <country name>
+    # Validate Notepad Remarks
+    # Validate Insurance Remarks in Notepad/General Remarks Group
+
+TC 5 TRAIN TICKET
+    Create PNR Using Credit Card As FOP
+    Click Other Services
+    Select Product And Vendor    <insert product name>    <insert vendor name>
+    Populate Service Info Cost Details    <insert vendor name>    <nett cost>    <selling price>
+    Get Other Services Cost Details
+    Select Form Of Payment (FOP)    Cash or Invoice
+    Populate Service Info Car Tab    Departure From    Airport    Depart from airport
+    Get Service Info Car Tab Values    Departure From
+    Populate Service Info Car Tab    Departure To    Office    Depart to office    flight_segment=1
+    Get Service Info Car Tab Values    Departure To
+    Populate Service Info Car Tab    Arrival From    Home    Arrive From Home
+    Get Service Info Car Tab Values    Arrival From
+    Populate Service Info Car Tab    Arrival To    Other    Arrive to other    flight_segment=1    date_and_time=True
+    Get Service Info Car Tab Values    Arrival To
+    Click Vendor Info Tab
+    Get Contact No from Vendor Info Tab
+    Click Finish PNR    panel=Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details From Amadeus    command=RTX    refresh_needed=False
+    Validate Passive Segments    Car Rental Prepaid    <insert vendor name>    <country name>
+    # Validate Notepad Remarks
+    # Validate Insurance Remarks in Notepad/General Remarks Group
+    Retrieve PNR    ${current_pnr}
+    Click Amend Eo    ${eo_number}
+    Click Tab In Other Services Panel    Departure From
+    Select Location Value    Office
+    Get Location Value    identifier=departure_from
+    Get Description Value    identifier=departure_from
+    Click Tab In Other Services Panel    Departure To
+    Select Location Value    Other
+    Set Other Value    Other
+    Set Description Value    Other Description Text
+    Get Location Value    identifier=departure_to
+    Get Description Value    identifier=departure_to
+    Select Flight Value
+    Tick Date & Time Checkbox
+    Get Date & Time Value    identifier=departure_to
+    Click Tab In Other Services Panel    Arrival To
+    Select Location Value    Office
+    Get Location Value    identifier=departure_from
+    Get Description Value    identifier=arrival_to
+    Select Flight Value
+    UnTick Date & Time Checkbox
+    Get Date & Time Value    identifier=arrival_to
+    Click Vendor Info Tab
+    Get Contact No from Vendor Info Tab
+    Click Finish PNR    panel=Other Svcs
+    Verify PNR Is Successfully Created    FALSE    Exchange Order Transaction Successfully Saved
+    Get Exchange Order Number
+    Retrieve PNR Details From Amadeus    command=RTY
+    Validate Passive Segments    Car Rental Prepaid    <insert vendor name>    <country name>
+    # Validate Notepad Remarks
+    # Validate Insurance Remarks in Notepad/General Remarks Group
+
+TC 6 Car Transfer
+    Create PNR Using Credit Card As FOP
+    Click Other Services
+    Select Product And Vendor    Car Transfer    BUDGET
+    Populate Service Info Cost Details    Test Automation    500    550
+    Get Other Services Cost Details
+    Select Form Of Payment (FOP)    Cash or Invoice
+    Populate Service Info Car Tab    Departure From    Airport    Depart from airport
+    Get Service Info Car Tab Values    Departure From
+    Populate Service Info Car Tab    Departure To    Airport    Depart to office    flight_segment=1    date_and_time=True
+    Get Service Info Car Tab Values    Departure To
+    Populate Service Info Car Tab    Arrival From    Airport    Arrive From Home
+    Get Service Info Car Tab Values    Arrival From
+    Populate Service Info Car Tab    Arrival To    Airport    Arrive to other    flight_segment=1    date_and_time=True
+    Get Service Info Car Tab Values    Arrival To
+    Click Vendor Info Tab
+    Get Contact No from Vendor Info Tab
+    Click Finish PNR    panel=Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details    ${current_pnr}
+    Verify That Car Remarks Are Written In PNR When FOP is Cash Or Invoice    Car Transfer    Imperial Chauffeur Services Pte Ltd    Cash or Invoice    SG
+    Verify Other Services General Notepad Remarks    Car Transfer
+    Comment    Validate Passive Segments    Car Transfer    SG
+    # Validate Notepad Remarks
+    # Validate Insurance Remarks in Notepad/General Remarks Group
+    Comment    Retrieve PNR    SUC-${vendor_code}/
+    Comment    Click Amend Eo
+    Comment    Click Tab In Other Services Panel    SUN-${vendor}/
+    Comment    Select Location Value
+    Comment    Get Location Value    SUT-${contact_no}/
+    Comment    Get Description Value
+    Comment    Click Tab In Other Services Panel    STP-${departure_from_location} ${departure_from_desc}/
+    Comment    Select Location Value
+    Comment    Set Other Value    SD-${departure_to_date}/
+    Comment    Set Description Value
+    Comment    Get Location Value    ST-${departure_to_time}/
+    Comment    Get Description Value
+    Comment    Select Flight Value    EP-${departure_to_location} ${departure_to_desc}/
+    Comment    Tick Date & Time Checkbox
+    Comment    Get Date & Time Value    TTL-${selling_price}SGD/
+    Comment    Click Tab In Other Services Panel
+    Comment    Select Location Value    TK-${eo_number}
+    Comment    Get Location Value    identifier=departure_from
+    Comment    Get Description Value    identifier=arrival_to
+    Comment    Select Flight Value
+    Comment    UnTick Date & Time Checkbox
+    Comment    Get Date & Time Value    identifier=arrival_to
+    Comment    Click Vendor Info Tab
+    Comment    Get Contact No from Vendor Info Tab
+    Comment    Click Finish PNR    panel=Other Svcs
+    Comment    Verify PNR Is Successfully Created    FALSE    Exchange Order Transaction Successfully Saved
+    Comment    Get Exchange Order Number
+    Comment    Retrieve PNR Details From Amadeus    command=RTY
+    Comment    Validate Passive Segments    Car Transfer    CITYCAB PTE LTD    SG
+    Comment    # Validate Notepad Remarks
+    Comment    # Validate Insurance Remarks in Notepad/General Remarks Group
+
+TC 7 FERRY
+    Create PNR Using Credit Card As FOP
+    Click Other Services
+    Select Product And Vendor    <insert product name>    <insert vendor name>
+    Populate Service Info Cost Details    <insert vendor name>    <nett cost>    <selling price>
+    Get Other Services Cost Details
+    Select Form Of Payment (FOP)    Cash or Invoice
+    Populate Service Info Car Tab    Departure From    Airport    Depart from airport
+    Get Service Info Car Tab Values    Departure From
+    Populate Service Info Car Tab    Departure To    Office    Depart to office    flight_segment=1
+    Get Service Info Car Tab Values    Departure To
+    Populate Service Info Car Tab    Arrival From    Home    Arrive From Home
+    Get Service Info Car Tab Values    Arrival From
+    Populate Service Info Car Tab    Arrival To    Other    Arrive to other    flight_segment=1    date_and_time=True
+    Get Service Info Car Tab Values    Arrival To
+    Click Vendor Info Tab
+    Get Contact No from Vendor Info Tab
+    Click Finish PNR    panel=Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details From Amadeus    command=RTX    refresh_needed=False
+    Validate Passive Segments    Car Rental Prepaid    <insert vendor name>    <country name>
+    # Validate Notepad Remarks
+    # Validate Insurance Remarks in Notepad/General Remarks Group
+    Retrieve PNR    ${current_pnr}
+    Click Amend Eo    ${eo_number}
+    Click Tab In Other Services Panel    Departure From
+    Select Location Value    Office
+    Get Location Value    identifier=departure_from
+    Get Description Value    identifier=departure_from
+    Click Tab In Other Services Panel    Departure To
+    Select Location Value    Other
+    Set Other Value    Other
+    Set Description Value    Other Description Text
+    Get Location Value    identifier=departure_to
+    Get Description Value    identifier=departure_to
+    Select Flight Value
+    Tick Date & Time Checkbox
+    Get Date & Time Value    identifier=departure_to
+    Click Tab In Other Services Panel    Arrival To
+    Select Location Value    Office
+    Get Location Value    identifier=departure_from
+    Get Description Value    identifier=arrival_to
+    Select Flight Value
+    UnTick Date & Time Checkbox
+    Get Date & Time Value    identifier=arrival_to
+    Click Vendor Info Tab
+    Get Contact No from Vendor Info Tab
+    Click Finish PNR    panel=Other Svcs
+    Verify PNR Is Successfully Created    FALSE    Exchange Order Transaction Successfully Saved
+    Get Exchange Order Number
+    Retrieve PNR Details From Amadeus    command=RTY
+    Validate Passive Segments    Car Rental Prepaid    <insert vendor name>    <country name>
+    # Validate Notepad Remarks
+    # Validate Insurance Remarks in Notepad/General Remarks Group
+
+TC 8 Train Tickets
+    Create PNR Using Credit Card As FOP
+    Click Other Services
+    Select Product And Vendor    <insert product name>    <insert vendor name>
+    Populate Service Info Cost Details    <insert vendor name>    <nett cost>    <selling price>
+    Get Other Services Cost Details
+    Select Form Of Payment (FOP)    Cash or Invoice
+    Populate Service Info Car Tab    Departure From    Airport    Depart from airport
+    Get Service Info Car Tab Values    Departure From
+    Populate Service Info Car Tab    Departure To    Office    Depart to office    flight_segment=1
+    Get Service Info Car Tab Values    Departure To
+    Populate Service Info Car Tab    Arrival From    Home    Arrive From Home
+    Get Service Info Car Tab Values    Arrival From
+    Populate Service Info Car Tab    Arrival To    Other    Arrive to other    flight_segment=1    date_and_time=True
+    Get Service Info Car Tab Values    Arrival To
+    Click Vendor Info Tab
+    Get Contact No from Vendor Info Tab
+    Click Finish PNR    panel=Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details From Amadeus    command=RTX    refresh_needed=False
+    Validate Passive Segments    Car Rental Prepaid    <insert vendor name>    <country name>
+    # Validate Notepad Remarks
+    # Validate Insurance Remarks in Notepad/General Remarks Group
+    Retrieve PNR    ${current_pnr}
+    Click Amend Eo    ${eo_number}
+    Click Tab In Other Services Panel    Departure From
+    Select Location Value    Office
+    Get Location Value    identifier=departure_from
+    Get Description Value    identifier=departure_from
+    Click Tab In Other Services Panel    Departure To
+    Select Location Value    Other
+    Set Other Value    Other
+    Set Description Value    Other Description Text
+    Get Location Value    identifier=departure_to
+    Get Description Value    identifier=departure_to
+    Select Flight Value
+    Tick Date & Time Checkbox
+    Get Date & Time Value    identifier=departure_to
+    Click Tab In Other Services Panel    Arrival To
+    Select Location Value    Office
+    Get Location Value    identifier=departure_from
+    Get Description Value    identifier=arrival_to
+    Select Flight Value
+    UnTick Date & Time Checkbox
+    Get Date & Time Value    identifier=arrival_to
+    Click Vendor Info Tab
+    Get Contact No from Vendor Info Tab
+    Click Finish PNR    panel=Other Svcs
+    Verify PNR Is Successfully Created    FALSE    Exchange Order Transaction Successfully Saved
+    Get Exchange Order Number
+    Retrieve PNR Details From Amadeus    command=RTY
+    Validate Passive Segments    Car Rental Prepaid    <insert vendor name>    <country name>
+    # Validate Notepad Remarks
+    # Validate Insurance Remarks in Notepad/General Remarks Group
+
+*** Keywords ***
+Populate Service Info Car Tab
+    [Arguments]    ${tab_name}    ${location}    ${location_desc}=${EMPTY}    ${other_desc}=${EMPTY}    ${tel_number}=${EMPTY}    ${flight_segment}=${EMPTY}
+    ...    ${date_and_time}=False    ${passenger_id}=${EMPTY}
+    [Documentation]    ${tab_name} |
+    ...
+    ...    ${location} |
+    ...
+    ...    ${location_desc}=${EMPTY} |
+    ...
+    ...    ${other_desc}=${EMPTY} |
+    ...
+    ...    ${tel_number}=${EMPTY} |
+    ...
+    ...    ${flight_segment}=${EMPTY} |
+    ...
+    ...    ${date_and_time}=False |
+    ...
+    ...    ${passenger_id}=${EMPTY}
+    Click Tab In Other Services Panel    ${tab_name}
+    ${tab_name}    Replace String    ${tab_name}    ${SPACE}    _
+    ${tab_name}    Set Variable    ${tab_name.lower()}
+    # Select Location
+    Select Location Value    ${location}
+    # Enter Description
+    Set Description Value    ${location_desc}
+    # Select Date & Time    # Departure/Arrival To tabs
+    Run Keyword If    '${date_and_time.lower()}'=='true'    Tick Date & Time Checkbox
+    Run Keyword If    '${date_and_time.lower()}'=='true'    Get Date & Time Value    identifier=${tab_name}
+    ${create_passive}    Set Variable If    '${date_and_time.lower()}'=='true'    True    False
+    Set Test Variable    ${${tab_name}_create_passive}    ${create_passive}
+    # SELECT FILGHT
+    ${segments_list}    Get Variable Value    ${segments_list}    ${EMPTY}
+    ${segment_list_count}    Get Length    ${segments_list}
+    ${will_select_flight}    Evaluate    '${tab_name.lower()}'=='departure to' or '${tab_name.lower()}'=='ariival to'
+    ${segments_list}    Run Keyword If    ${segment_list_count}>0 and ${will_select_flight}==True    Get Air Segments From GDS
+    ...    ELSE    Set Variable    ${EMPTY}
+    Run Keyword If    ${segment_list_count}>0    Set Suite Variable    ${segments_list}
+    Comment    Run Keyword If    ${will_select_flight}==True    Get Current Segments From The PNR
+    Run Keyword If    ${will_select_flight}==True and ${segment_list_count}>0    Select Flight Value    ${flight_segment}
+    Run Keyword If    '${passenger_id}'!='${EMPTY}'    Set Passenger ID    ${passenger_id}
+    Get Location Value    identifier=${tab_name}
+    Get Description Value    identifier=${tab_name}
+
+Validate Passive Segments
+    [Arguments]    ${product}=${EMPTY}    ${vendor}=${EMPTY}    ${country}=${EMPTY}
+    ${selling_price}    Get Variable Value    ${selling_price}    ${EMPTY}
+    Should Not Be Empty    ${selling_price}    Context: Validate Passive Segments\Selling Price cannot be empty
+    ${date_and_time_departure_to}    Get Variable Value    ${date_and_time_departure_to}    ${EMPTY}
+    ${date_and_time_arrival_to}    Get Variable Value    ${date_and_time_arrival_to}    ${EMPTY}
+    Set Suite Variable    ${date_and_time_departure_to}
+    Set Suite Variable    ${date_and_time_arrival_to}
+    ${product}    Get Variable Value    ${product}    ${EMPTY}
+    ${vendor}    Get Variable Value    ${vendor}    ${EMPTY}
+    Should Not Be Empty    ${product}    Context: Validate Passive Segments\nProduct cannot be empty
+    Should Not Be Empty    ${vendor}    Context: Validate Passive Segments\Vendor cannot be empty
+    ${vendor_code_number}    Get Vendor Code    ${country}    ${product}    ${vendor}
+    Comment    Run Keyword If    ("${country}" == "SG" and "${product}" =="Car Transfer") or ("${country}" == "HK" and "${product}" =="Car Rental Prepaid") or ("${country}" == "HK" and "${product}" =="LIMOUSINE")    Get DateTime And Location For Passive Segment
+    Comment    Run Keyword If    ("${country}"=="HK" and "${product}"=="LIMOUSINE") and ("${date_and_time_departure_to}" !="${EMPTY}") and ("${date_and_time_arrival_to}" =="${EMPTY}")    Verify Specific Line Is Written In The PNR    ????    multi_line_search_flag=true    remove_spaces=true
+    ...    #RU1AHK1HKG${date}-/TYP-LIM/SUC-${vendor_code_number}/SUN-${vendor}/SUT-${contact_no}/STP-${location_value_departure_from}${description_value_departure_from}/SD-${date}/ST-${time}/EP-${location_value_departure_to}${description_value_departure_to}/TTL-${total_selling_price}HKD/TK-${eo_number}
+    Comment    Run Keyword If    ("${country}" == "HK" and "${product}" =="LIMOUSINE") and ("${date_and_time_departure_to}" =="${EMPTY}") and ("${date_and_time_arrival_to}" !="${EMPTY}")    Verify Specific Line Is Written In The PNR    RU1AHK1HKG${date}-/TYP-LIM/SUC-${vendor_code_number}/SUN-${vendor}/SUT-${contact_no}/STP-${location_value_arrival_from}${description_value_arrival_from}/SD-${date}/ST-${time}/EP-${location_value_arrival_to}${description_value_arrival_to}/TTL-${total_selling_price}HKD/TK-${eo_number}
+    #Departure Segment
+    Run Keyword If    '${product}'=='Car Transfer'    Verify Specific Line Is Written In The PNR    MIS 1A HK1 SIN ${current_date}-/TYP-TFR/SUC-${vendor_code_number}/SUN-${vendor}/SUT-${contact_no}/STP-${departure_from_location.upper()} ${departure_from_desc.upper()}/SD-SIN${departure_to_date}/ST-${departure_to_time}/EP-${departure_to_location.upper()} ${departure_to_desc.upper()}/TTL-${total_selling_price}SGD/TK-${eo_number}    multi_line_search_flag=true    remove_spaces=true
+    Comment    Run Keyword If    ("${country}" == "HK" and "${product}" =="Car Rental Prepaid")    Verify Specific Line Is Written In The PNR    RU1AHK1HKG${date}-/TYP-TFR/SUC-${vendor_code_number}/SUN-${vendor}/SUT-${contact_no}/STP-${location}${location_description}/SD-${date}/ST-${time}/EP-${location}${location_description}/TTL-${total_selling_price}HKD/TK-${eo_number}
+    Comment    Run Keyword If    ("${country}" == "HK" and "${product}" =="LIMOUSINE")    Verify Specific Line Is Written In The PNR    RU1AHK1HKG${date}-/TYP-LIM/SUC-${vendor_code_number}/SUN-${vendor}/SUT-${contact_no}/STP-${location}${location_description}/SD-${date}/ST-${time}/EP-${location}${location_description}/TTL-${total_selling_price}HKD/TK-${eo_number}
+    Comment    ${dep_date}    Run Keyword If    ("${country}" == "SG" and "${product}" =="Train Tickets") or ("${country}" == "HK" and "${product}" =="TRAIN TICKET") or ("${country}" == "SG" and "${product}" =="FERRY") or ("${country}" == "HK" and "${product}" =="FERRY TICKET")    Convert Date To Gds Format    ${depart_date}    %m/%d/%Y
+    ...    false
+    Comment    ${ret_date}    Run Keyword If    ("${country}" == "SG" and "${product}" =="Train Tickets") or ("${country}" == "HK" and "${product}" =="TRAIN TICKET") or ("${country}" == "SG" and "${product}" =="FERRY") or ("${country}" == "HK" and "${product}" =="FERRY TICKET")    Convert Date To Gds Format    ${return_date}    %m/%d/%Y
+    ...    false
+    Comment    Run Keyword If    ("${country}" == "HK" and "${product}" =="TRAIN TICKET")    Verify Specific Line Is Written In The PNR    RU1AHK1HKG${dep_date}-/TYP-TRN/SUC-${vendor_code_number}/SUN-${vendor}//SUT-${contact_no}/STS-HK/STP-${depart_origin}/SD-${dep_date}/EP-${depart_destination}/ED-${ret_date}/CL-${class_cabin}/TTL-${selling_price}${country}D/TK-${eo_number}
+    Comment    Run Keyword If    ("${country}" == "SG" and "${product}" =="Train Tickets")    Verify Specific Line Is Written In The PNR    RU1AHK1KEL${dep_date}-/TYP-TRN/SUC-${vendor_code_number}/SUN-${vendor}/SUT-${contact_no}/STS-HK/STP-${depart_origin}/SD-${dep_date}/EP-${depart_destination}/ED-${ret_date}/CL-${class_cabin}/TTL-${selling_price}${country}D/TK-${eo_number}
+    Comment    Run Keyword If    ("${country}" == "SG" and "${product}" =="FERRY")    Verify Specific Line Is Written In The PNR    RU1AHK1KEL${dep_date}-/TYP-SEA/SUC-${vendor_code_number}/SUN-${vendor}/SUT-${contact_no}/STS-HK/STP-${depart_origin}/SD-${dep_date}/EP-${depart_destination}/ED-${ret_date}/CL-${class_cabin}/TTL-${selling_price}${country}D/TK-${eo_number}
+    Comment    Run Keyword If    ("${country}" == "HK" and "${product}" =="FERRY TICKET")    Verify Specific Line Is Written In The PNR    RU1AHK1HKG${dep_date}-/TYP-SEA/SUC-${vendor_code_number}/SUN-${vendor}/SUT-${contact_no}/STS-HK/STP-${depart_origin}/SD-${dep_date}/EP-${depart_destination}/ED-${ret_date}/CL-${class_cabin}/TTL-${selling_price}${country}D/TK-${eo_number}
+    Comment    ${date1}=    Generate Date X Months From Now    3
+    Comment    ${date}    Run Keyword If    ("${country}" == "HK" and "${product}" =="DISCOUNT")    Convert Date To Gds Format    ${date1}    %d/%m/%Y
+    ...    is_year_needed=false
+    Comment    Run Keyword If    ("${country}" == "HK" and "${product}" =="DISCOUNT")    Verify Specific Line Is Written In The PNR    RU1AHK1HKG${date}/TYP-OTH/SUC-${vendor_code_number}/SUN-${vendor}/TTL-${total_selling_price}HKD/TK-${eo_number}/SI-DISCOUNT
+
+Get DateTime And Location For Passive Segment
+    Comment    ${date_time_departure_segment}    Set Variable If    ("${date_and_time_departure_to}" !="${EMPTY}" and "${date_and_time_arrival_to}" !="${EMPTY}")
+    ${date_time}    Set Variable If    ("${date_and_time_departure_to}" !="${EMPTY}" and "${date_and_time_arrival_to}" =="${EMPTY}")    ${date_and_time_departure_to}
+    ${date_time}    Set Variable If    ("${date_and_time_departure_to}" =="${EMPTY}" and "${date_and_time_arrival_to}" !="${EMPTY}")    ${date_and_time_arrival_to}
+    ${date_and_time_to}    Split String    ${date_time}    ${SPACE}
+    ${date_temp}    Set Variable    ${date_and_time_to[0]}
+    ${time_temp}    Set Variable    ${date_and_time_to[1]}
+    ${date}    Convert Date To Gds Format    ${date_temp}    %d/%m/%Y    is_year_needed=false
+    ${time}    Set Variable    ${time_temp.replace(":","")}
+    ${location}    Set Variable If    ("${date_and_time_departure_to}" !="${EMPTY}" and "${date_and_time_arrival_to}" =="${EMPTY}") or ("${date_and_time_departure_to}" !="${EMPTY}" and "${date_and_time_arrival_to}" !="${EMPTY}")    ${location_value_departure_to.upper()}    ${location_value_arrival_to.upper()}
+    ${location_description}    Set Variable If    ("${date_and_time_departure_to}" !="${EMPTY}" and "${date_and_time_arrival_to}" =="${EMPTY}") or ("${date_and_time_departure_to}" !="${EMPTY}" and "${date_and_time_arrival_to}" !="${EMPTY}")    ${description_value_departure_to}    ${description_value_arrival_to}
+    Set Suite Variable    ${date}
+    Set Suite Variable    ${time}
+    Set Suite Variable    ${location}
+    Set Suite Variable    ${location_description}
+
+Get Contact No from Vendor Info Tab
+    ${contact_no}    Get Control Text Value    [NAME:ContactNumberTextBox]
+    Set Suite Variable    ${contact_no}
+
+Get Service Info Car Tab Values
+    [Arguments]    ${tab_name}
+    ${tab_name}    Replace String    ${tab_name}    ${SPACE}    _
+    ${tab_name}    Set Variable    ${tab_name.lower()}
+    ${location_value}    Get Location Value    identifier=${tab_name}
+    ${desc_value}    Get Description Value    identifier=${tab_name}
+    Comment    Set Test Variable    ${location_value_${identifier.lower()}}    ${location_value}
+    # TAB'S LOCATION VALUE
+    Set Suite Variable    ${${tab_name}_location}    ${location_value}
+    Log    Keyword:Get Service Info Car Tab Values\n${tab_name} Location Value: ${${tab_name}_location}
+    # TAB'S DESC \ VALUE
+    Set Suite Variable    ${${tab_name}_desc}    ${desc_value}
+    Log    Keyword:Get Service Info Car Tab Values\n${tab_name} Description: ${${tab_name}_desc}
+    # TAB'S DATE AND TIME
+    ${date_and_time_checkbox}    Determine Multiple Object Name Based On Active Tab    DepartureDateTimeCheckBox,ArrivalDateTimeCheckBox    False
+    ${date_and_time_checkbox_visible}    Is Control Visible    ${date_and_time_checkbox}
+    ${date_time_picker}    Determine Multiple Object Name Based On Active Tab    DepartureDateTimePicker,ArrivalDateTimePicker    False
+    ${date_and_time_picker_visible}    Is Control Visible    ${date_time_picker}
+    ${checkbox_ticked}    Run Keyword If    ${date_and_time_checkbox_visible}==True    Get Checkbox Status    ${date_and_time_checkbox}
+    ${date_time}    Run Keyword If    ${date_and_time_picker_visible}==True    Get Control Text    ${date_time_picker}    convert_to_string=True
+    ...    ELSE    Set Variable    ${EMPTY}
+    ${date_and_time_list}    Run Keyword If    ${date_and_time_picker_visible}==True and ${checkbox_ticked}==True    Split String    ${date_time}    ${SPACE}
+    ${date_temp}    Run Keyword If    ${date_and_time_picker_visible}==True and ${checkbox_ticked}==True    Set Variable    ${date_and_time_list[0]}
+    ${time_temp}    Run Keyword If    ${date_and_time_picker_visible}==True and ${checkbox_ticked}==True    Set Variable    ${date_and_time_list[1]}
+    ${date}    Run Keyword If    ${date_and_time_picker_visible}==True and ${checkbox_ticked}==True    Convert Date To Gds Format    ${date_temp}    %d/%m/%Y    is_year_needed=false
+    ${time}    Run Keyword If    ${date_and_time_picker_visible}==True and ${checkbox_ticked}==True    Set Variable    ${time_temp.replace(":","")}
+    Set Suite Variable    ${${tab_name}_date}    ${date}
+    Set Suite Variable    ${${tab_name}_time}    ${time}
+    Log    Keyword:Get Service Info Car Tab Values\nDate: ${${tab_name}_date}
+    Log    Keyword:Get Service Info Car Tab Values\nTime: ${${tab_name}_time}
+
+Verify That Car Remarks Are Written In PNR When FOP is Cash Or Invoice
+    [Arguments]    ${product}    ${vendor}    ${fop}    ${country}
+    Verify Other Services Generic Accounting Remarks    ${product}    ${vendor}    ${fop}    ${country}
+    Comment    Verify Other Services Cash Or Invoice Fees Accounting Remarks Are Written    ${country}
+    ${gst_amount}    Get Variable Value    ${gst_amount}    ${EMPTY}
+    Run Keyword If    "${gst_amount}" != "${EMPTY}" and "${country}" == "SG"    Verify Specific Line Is Written In The PNR    RM *MSX/S${total_selling_price}/SF${total_selling_price}/C${commission}/G${gst_amount}/FS
+    Run Keyword If    "${gst_amount}" == "${EMPTY}" and "${country}" == "SG"    Verify Specific Line Is Written In The PNR    RM *MSX/S${total_selling_price}/SF${total_selling_price}/C${commission}/FS
+    Run Keyword If    "${country}" == "HK"    Verify Specific Line Is Written In The PNR    RM *MSX/A${total_selling_price}/SF${total_selling_price}/C${commission}/FS/FF40-${location_value_departure_from.upper()}-${location_value_departure_to.upper()}
+    Comment    Run Keyword If    "${country}" == "SG"    Verify Specific Line Is Written In The PNR    RM*MSX/FF40-${location_value_departure_from.upper()}-${location_value_departure_to.upper()}/FF41-${date_and_time_departure_to}
+    ${date_and_time}    Split String    ${date_and_time_departure_to}    ${SPACE}
+    ${date}    Set Variable    ${date_and_time[0]}
+    ${time}    Set Variable    ${date_and_time[1]}
+    ${date_to}    Convert Date To Gds Format    ${date}    %d/%m/%Y    is_year_needed=true
+    Run Keyword If    "${country}" == "SG"    Verify Specific Line Is Written In The PNR    RM*MSX/FF40-${location_value_departure_from.upper()}-${location_value_departure_to.upper()}/FF41-${date_to} ${time.replace(":","")}
+    Run Keyword If    "${country}" == "HK"    Verify Specific Line Is Written In The PNR    RM *MSX/FF41-${date_to} ${time.replace(":","")}/FF34-AB/FF35-OTH
+    Comment    Verify Multiple Remarks Are Written In The PNR    RM *MSX/FF34-AB/FF35-OTH/FF36-M/FF47-CWT
+    Run Keyword If    "${country}" == "SG"    Verify Specific Line Is Written In The PNR    RM *MSX/FF34-AB/FF35-OTH/FF36-M/FF47-CWT
+    Run Keyword If    "${country}" == "HK"    Verify Specific Line Is Written In The PNR    RM *MSX/FF36-M/FF47-CWT

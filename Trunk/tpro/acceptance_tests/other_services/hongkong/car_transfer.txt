@@ -1,0 +1,936 @@
+*** Settings ***
+Suite Setup
+Force Tags        car_transfer
+Resource          ../other_services_verification.txt
+Resource          ../other_services.txt
+
+*** Test Cases ***
+[NB OS HK] Verify That Service Info Fields of Car Transfer Behaves Correctly For Air, Car And Hotel Segments
+    [Tags]    horton    hk    US459    us1456    us1700    de554
+    Create PNR Using Cash As FOP    HK    True    True    True
+    Click Panel    Other Svcs
+    Select Product And Vendor    Car Rental Prepaid    FAR EAST RENT A CAR LTD
+    #us1620
+    Verify Form Of Payment Details Are Correct    Cash
+    #us1620
+    Verify Nett Cost Value Is Correct    0
+    Verify Commission Fee Value Is Correct    0
+    Verify Merchant Fee Value Is Correct    0
+    Verify Total Selling Price Value Is Correct    0
+    Click Tab In Other Services Panel    Departure From    #Departure From
+    Verify Location Value Is Correct    Airport
+    Verify Description Field Is Optional
+    Verify Location Dropdown Values Are Correct    Airport    Office    Home    Other
+    Verify Departure From Fields Are Displayed
+    Select Location Value    Other
+    Verify Other Text Field Is Displayed
+    Verify Description Field Is Mandatory
+    Set Description Value    Harold Test
+    Get Location Value    identifier=departure_from
+    Click Tab In Other Services Panel    Departure To    #Departure To
+    Verify Location Value Is Correct    Airport
+    Verify Description Field Is Optional
+    Verify Location Dropdown Values Are Correct    Airport    Office    Home    Other
+    Verify Departure To Fields Are Displayed
+    Verify Date & Time Is Disabled
+    Select Location Value    Other
+    Verify Other Text Field Is Displayed
+    Verify Description Field Is Mandatory
+    Select Location Value    Home
+    Verify Other Text Field Is Not Displayed
+    Verify Description Field Is Mandatory
+    Verify An Error Icon Is Displayed For Date & Time Of Departure To    Please enter Pickup or Return Date and Time
+    Set Description Value    Harold Test
+    Select Flight Value    ${EMPTY}
+    Get Location Value    identifier=departure_to
+    Get Date & Time Value    identifier=departure_to
+    Get Date And Time Checkbox Status    identifier=departure_to
+    Click Tab In Other Services Panel    Arrival From
+    Verify Location Value Is Correct    Airport
+    Verify Description Field Is Optional
+    Verify Location Dropdown Values Are Correct    Airport    Office    Home    Other
+    Verify Arrival From Fields Are Displayed
+    Select Location Value    Other
+    Verify Other Text Field Is Displayed
+    Verify Description Field Is Mandatory
+    Verify Date & Time Is Disabled
+    Verify An Error Icon Is Displayed For Date & Time Of Arrival From    Please enter Pickup or Return Date and Time
+    Tick Date & Time Checkbox
+    Select Flight Value    ${EMPTY}
+    Get Flight Value    identifier=arrival_from
+    Get Location Value    identifier=arrival_from
+    Get Date & Time Value    identifier=arrival_from
+    Get Date And Time Checkbox Status    identifier=arrival_from
+    Select Location Value    Office
+    Verify Other Text Field Is Not Displayed
+    Verify Description Value Is Correct    31st Floor Zuellig, Philippines, 2010
+    Get Location Value    identifier=arrival_from
+    Click Tab In Other Services Panel    Arrival To
+    Verify Location Value Is Correct    Airport
+    Verify Description Field Is Optional
+    Verify Location Dropdown Values Are Correct    Airport    Office    Home    Other
+    Verify Arrival To Fields Are Displayed    #Changes in car info
+    Select Location Value    Other
+    Verify Other Text Field Is Displayed
+    Verify Description Field Is Mandatory
+    Set Description Value    Harold Test
+    Get Location Value    identifier=arrival_to
+    Set Nett Cost    300
+    Set Selling Price    350
+    Get Nett Cost In Other Services
+    Get Selling Price
+    Get Commission
+    Get GST
+    Get Merchant Fee In Other Services
+    Get Total Selling Price
+    Get Other Services Form Of Payment Details    #us1322
+    Get Passenger ID Value
+    Get Checkbox Status of CWT Absorb For Mechant Fee
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    Car Rental Prepaid
+    Click Finish PNR
+    Click Panel    Other Svcs
+    Get Exchange Order Number    ct
+    Generate Data For Specific Product    False    P1    19    Car Rental Prepaid    CX    000505
+    ...    ${EMPTY}    New
+    Verify Exchange Order Record Is Displayed In The EO Grid    P1
+    Retrieve PNR Details From Amadeus
+    Verify PNR Is Successfully Created    False    Exchange Order(s) Transaction Successfully Saved!
+    Verify Other Services General Notepad Remarks    Car Rental Prepaid
+    Verify That Car Remarks Are Written In PNR When FOP is Cash Or Invoice    Car Rental Prepaid    FAR EAST RENT A CAR LTD    Cash    HK
+    Verify BA And TA Remarks    ${uid}
+    [Teardown]
+
+[HK AB CEO] Verify That Accounting Lines For Car Transfer Product Is Not Written When Cancelled
+    [Tags]    us1570
+    Retrieve PNR And Populate Amend Workflow    HK
+    Click Panel    Other Svcs
+    Cancel EO    ${eo_number_ct}    Service Info    HK
+    Click Finish PNR    Amend Booking For Verify That Accounting Lines For Car Transfer Product Is Not Written When Cancelled
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Accounting Lines For Car Transfer Product Is Not Written When Cancelled
+    Verify PNR Is Successfully Created    false    1 Exchange Order(s) Successfully Cancelled
+    Click Panel    Other Svcs
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Exchange Order Record Details Are Correct    HK    Car Rental Prepaid    FAR EAST RENT A CAR LTD    CX    ${EMPTY}    Cancelled
+    ...    is_new_eo=False    is_completed_date=False
+    Verify Other Services General Notepad Remarks
+    Verify That Car Remarks Are Not Written In PNR When FOP is Cash Or Invoice
+
+[AB OS HK] Verify That Service Info Fields of Car Transfer Behaves Correctly For Air, Car And Hotel Segments
+    [Tags]    horton    hk    US459    us1322    de486    de554
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Book Flight X Months From Now    MNLHKG/APR    SS1Y1    FXP/S7    8    6
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Client Info
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTA
+    Get Current Segments From The PNR
+    Click Panel    Client Info
+    Select Form Of Payment    KBTEST/MC************4445/D0526
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Click Panel    Other Svcs
+    Select Product And Vendor    Car Rental Prepaid    FIRST MARKETING
+    #us1620
+    Verify Form Of Payment Details Are Correct    KBTEST/MC************4445/D0526    Credit Card (CX)
+    #us1620
+    Click Tab In Other Services Panel    Departure From
+    Select Location Value    Other
+    Verify Other Text Field Is Displayed
+    Verify Departure From Fields Are Displayed
+    Set Other Value    j3j3Mown 1$ n0t mY taL3nt - k1nd@
+    Set Description Value    j3j3Mown 1$ n0t mY taL3nt - !@#$%^&*()@#$%^&*( - 36218763218763721
+    Set Tel Value    ABC1234@#$%^&*(
+    Select Location Value    Office
+    Verify Description Value Is Correct    31st Floor Zuellig, Philippines, 2010
+    Verify Tel Value Is Correct    ABC1234@#$%^&*(
+    Select Location Value    Airport
+    Verify Other Text Field Is Not Displayed
+    Verify Description Field Is Optional
+    Select Location Value    Other
+    Verify Other Text Field Is Displayed
+    Verify Other Value Is Correct    ${EMPTY}
+    Set Other Value    Other Text
+    Set Description Value    Description Text
+    Click Tab In Other Services Panel    Departure To
+    Select Location Value    Office
+    Verify Description Value Is Correct    31st Floor Zuellig, Philippines, 2010
+    Set Description Value    j3j3Mown 1$ n0t mY taL3nt - !@#$%^&*()@#$%^&*( - 36218763218763721
+    Select Location Value    Other
+    Verify Description Value Is Correct    ${EMPTY}
+    Select Location Value    Office
+    Verify Description Value Is Correct    31st Floor Zuellig, Philippines, 2010
+    Verify Flight Dropdown Values Are Correct
+    Verify Date & Time Is Disabled
+    Verify An Error Icon Is Displayed For Date & Time Of Departure To    Please enter Pickup or Return Date and Time
+    Select Flight Value    ${EMPTY}
+    Get Flight Value    identifier=departure_to
+    Click Tab In Other Services Panel    Arrival From
+    Select Location Value    Other
+    Set Other Value    j3j3Mown 1$ n0t mY taL3nt - k1nd@
+    Set Description Value    j3j3Mown 1$ n0t mY taL3nt - !@#$%^&*()@#$%^&*( - 36218763218763721
+    Select Location Value    Office
+    Verify Description Value Is Correct    31st Floor Zuellig, Philippines, 2010
+    Verify Flight Dropdown Values Are Correct    #Arrival from
+    Verify Date & Time Is Disabled    #Arrival from
+    Verify An Error Icon Is Displayed For Date & Time Of Arrival From    Please enter Pickup or Return Date and Time    #Arrival from
+    Tick Date & Time Checkbox    #Arrival from
+    Verify No Error Icon Is Displayed For Date & Time Of Arrival From    #Arrival from
+    Select Flight Value    ${EMPTY}    #Arrival from
+    Get Flight Value    identifier=arrival_from    #Arrival from
+    Select Location Value    Airport
+    Verify Other Text Field Is Not Displayed
+    Verify Description Field Is Optional
+    Select Location Value    Home
+    Verify Other Text Field Is Not Displayed
+    Verify Description Field Is Mandatory
+    Set Description Value    j3j3Mown 1$ n0t mY taL3nt - !@#$%^&*()@#$%^&*( - 36218763218763721
+    Click Tab In Other Services Panel    Arrival To
+    Select Location Value    Other
+    Set Other Value    j3j3Mown 1$ n0t mY taL3nt - k1nd@
+    Set Description Value    j3j3Mown 1$ n0t mY taL3nt - !@#$%^&*()@#$%^&*( - 36218763218763721
+    Set Tel Value    ABC1234@#$%^&*(    #Arrival To
+    Select Location Value    Office
+    Verify Description Value Is Correct    31st Floor Zuellig, Philippines, 2010
+    Click Tab In Other Services Panel    Departure To
+    Verify No Error Icon Is Displayed For Date & Time Of Departure To
+    Click Tab In Other Services Panel    Arrival From    #Arrival from
+    Untick Date & Time Checkbox
+    Verify An Error Icon Is Displayed For Date & Time Of Arrival From    Please enter Pickup or Return Date and Time
+    Click Tab In Other Services Panel    Departure To
+    Verify An Error Icon Is Displayed For Date & Time Of Departure To    Please enter Pickup or Return Date and Time
+    Tick Date & Time Checkbox
+    Get Location Value    identifier=departure_to
+    Get Date & Time Value    identifier=departure_to
+    Verify No Error Icon Is Displayed For Date & Time Of Departure To
+    Click Tab In Other Services Panel    Arrival From    #Arrival from
+    Verify No Error Icon Is Displayed For Date & Time Of Arrival From    #Arrival from
+    Click Service Info Tab
+    Set Vendor Contact    TestAutomation1
+    Set Nett Cost    200
+    Set Selling Price    250
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CX)    TEST CARD/AX***********0009/D0822/CVV****
+    Verify Commission Fee Value Is Correct    55
+    Verify Merchant Fee Value Is Correct    5
+    Verify Total Selling Price Value Is Correct    255
+    Set Passenger ID Value    P1
+    Get Passenger ID Value
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    PASSENGER IS VIP
+    Click Service Info Tab
+    Get Nett Cost In Other Services
+    Get Selling Price
+    Get Commission
+    Get GST
+    Get Merchant Fee In Other Services
+    Get Total Selling Price
+    Get Other Services Form Of Payment Details    #us1322
+    Get Checkbox Status of CWT Absorb For Mechant Fee
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    Car Rental Prepaid
+    Click Finish PNR    Amend Booking For Verify That Service Info Fields of Car Transfer Behaves Correctly For Air, Car And Hotel Segments
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Service Info Fields of Car Transfer Behaves Correctly For Air, Car And Hotel Segments
+    Verify PNR Is Successfully Created    False    Exchange Order(s) Transaction Successfully Saved!
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+
+[HK AOS] Verify That Service Info Fields of Car Transfer Behaves Correctly For Air, Car And Hotel Segments When FOP is CX
+    [Tags]    horton    us936    hk    us1322    de436    de554
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Other Svcs
+    Click Amend Eo    ${eo_number}
+    Click Tab In Other Services Panel    Service Info
+    Verify Vendor Contact Value Is Correct    TestAutomation1
+    Verify Nett Cost Value Is Correct    200
+    Verify Selling Price Value Is Correct    250
+    Verify Commission Fee Value Is Correct    55
+    Verify Merchant Fee Value Is Correct    5
+    Verify Total Selling Price Value Is Correct    255
+    #us1620
+    Verify Form Of Payment Details Are Correct    TEST CARD/AX***********0009/D0822/CVV****    Credit Card (CX)
+    #us1620
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    VI    4111111111111111    12    2020    #us1322
+    Click Tab In Other Services Panel    Departure From
+    Verify Departure From Tab Field Values    Other    Description Text    ABC1234@#$%^&*(
+    Get Location Value    identifier=departure_from
+    Click Tab In Other Services Panel    Departure To
+    Verify Departure To Tab Field Values    Office    31st Floor Zuellig, Philippines, 2010
+    Get Location Value    identifier=departure_to
+    Get Date & Time Value    identifier=departure_to
+    Get Date And Time Checkbox Status    identifier=departure_to
+    Click Tab In Other Services Panel    Arrival From
+    Verify Arrival From Tab Field Values    Home    j3j3Mown 1$ n0t mY taL3nt - !@#$%^&*()@#$%^&*( - 36218763218763721
+    Get Location Value    identifier=arrival_from
+    Get Date & Time Value    identifier=arrival_from    #Arrival From
+    Get Date And Time Checkbox Status    identifier=arrival_from    #Arrival From
+    Click Tab In Other Services Panel    Arrival To
+    Verify Arrival To Tab Field Values    Office    31st Floor Zuellig, Philippines, 2010    ABC1234@#$%^&*(
+    Get Location Value    identifier=arrival_to
+    Verify Exchange Order Number    ${eo_number}
+    Verify Passenger Id    P1
+    Click Vendor Info Tab
+    Verify Vendor Value Is Correct    FIRST MARKETING
+    Verify Address 1 Value Is Correct    OFFICE A & B,14/F, KAM WING COMM BLDG
+    Verify Address 2 Value Is Correct    28-30 MINDEN AVENUE
+    Verify City Value Is Correct    TSIMSHATSUI
+    Verify Country Value Is Correct    KOWLOON
+    Verify Email Value Is Correct    automationtest@cwt.com
+    Verify Fax No Value Is Correct    1111
+    Verify Credit Terms Values Is Correct    0
+    Verify Support Email Value Is Correct    automationtest@cwt.com
+    Click Remarks Tab
+    Verify Exchange Order Remarks Are Correct    PASSENGER IS VIP
+    Click Service Info Tab
+    Set Nett Cost    300
+    Set Selling Price    350
+    Verify Commission Fee Value Is Correct    57
+    Verify Merchant Fee Value Is Correct    7
+    Verify Total Selling Price Value Is Correct    357
+    Get Passenger ID Value
+    Get Nett Cost In Other Services
+    Get Selling Price
+    Get Commission
+    Get GST
+    Get Merchant Fee In Other Services
+    Get Total Selling Price
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details    #us1322
+    Get Checkbox Status of CWT Absorb For Mechant Fee
+    Click Update Button In EO Panel    Service Info
+    Click Finish PNR    Amend Booking For Verify That Service Info Fields of Car Transfer Behaves Correctly For Air, Car And Hotel Segments When FOP is CX
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Service Info Fields of Car Transfer Behaves Correctly For Air, Car And Hotel Segments When FOP is CX
+    Get Exchange Order Number
+    Retrieve PNR Details From Amadeus
+    Verify Other Services General Notepad Remarks
+    Verify That Car Remarks Are Written In PNR When FOP is CX    Car Rental Prepaid    FIRST MARKETING    HK    #us1322
+
+[OS HK] Verify That Service Info Fields of Car Transfer Behaves Correctly For Air, Car And Hotel Segments
+    [Tags]    horton    hk    US459    us1322    de436    de486
+    ...    de554
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Client Info
+    Manually Set Value In Form Of Payment    VI    4444333322221111    1226
+    #us1710
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    #us1710
+    #Previous Script EO
+    Click Panel    Other Svcs
+    Select Product And Vendor    LIMOUSINE    UOB-SNOWDEN CHAN
+    Set Vendor Contact    Test Automation
+    Set Nett Cost    taL3nt - k1nd@
+    Set Selling Price    j3j3Mown 1$ n0t
+    Verify An Error Icon Is Displayed For Selling Price    Not a valid decimal number
+    Verify An Error Icon Is Displayed For Nett Cost    Not a valid decimal number
+    Set Nett Cost    500
+    Set Selling Price    1500
+    #us1620
+    Verify Form Of Payment Details Are Correct    VI************1111/D1226    Credit Card (CX)
+    #us1620
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Cash    #us1322
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Compute Other Services Fees    0    2    country=HK
+    Verify Commission Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    VI    4444333322221111    12    2026    #us1322
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Compute Other Services Fees    0    2    country=HK
+    Verify Commission Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Tick CWT Absorb Checkbox For Merchant Fee
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Compute Other Services Fees    0    2    false    true    country=HK
+    Verify Commission Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Invoice    #us1322
+    Click Tab In Other Services Panel    Departure From
+    Select Location Value    Office
+    Get Location Value    identifier=departure_from
+    Verify Description Value Is Correct    31st Floor Zuellig, Philippines, 2010
+    Set Tel Value    9994442221
+    Click Tab In Other Services Panel    Departure To
+    Select Location Value    Office
+    Get Location Value    identifier=departure_to
+    Verify Description Value Is Correct    31st Floor Zuellig, Philippines, 2010
+    Select Flight Value
+    Get Flight Value    identifier=departure_to
+    Tick Date & Time Checkbox
+    Get Location Value    identifier=departure_to
+    Get Date & Time Value    identifier=departure_to
+    Get Date And Time Checkbox Status    identifier=departure_to
+    Click Tab In Other Services Panel    Arrival From
+    Select Location Value    Office
+    Select Flight Value    \    #Arrival From
+    Get Flight Value    identifier=arrival_from    #Arrival From
+    Tick Date & Time Checkbox    #Arrival From
+    Get Location Value    identifier=arrival_from
+    Get Date & Time Value    identifier=arrival_from    #Arrival From
+    Get Date And Time Checkbox Status    identifier=arrival_from    #Arrival From
+    Click Tab In Other Services Panel    Arrival To
+    Select Location Value    Office
+    Set Tel Value    9994442225    #Arrival To
+    Get Location Value    identifier=arrival_to
+    Set Passenger ID Value    P1
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    PASSENGER IS VIP
+    Click Service Info Tab
+    Get Nett Cost In Other Services
+    Get Selling Price
+    Get Commission
+    Get GST
+    Get Merchant Fee In Other Services
+    Get Total Selling Price
+    Get Other Services Form Of Payment Details    #us1322
+    Get Passenger ID Value
+    Get Checkbox Status of CWT Absorb For Mechant Fee
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    LIMOUSINE
+    Click Finish PNR    Amend Booking For Verify That Service Info Fields for Car Transfer Behaves Correctly For Air, Car And Hotel Segments
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Service Info Fields for Car Transfer Behaves Correctly For Air, Car And Hotel Segments
+    Verify PNR Is Successfully Created    FALSE    Exchange Order(s) Transaction Successfully Saved!
+    Click Panel    Other Svcs
+    Get Exchange Order Number    identifier=car
+    Retrieve PNR Details From Amadeus
+    Verify Other Services General Notepad Remarks
+    Verify That Car Remarks Are Written In PNR When FOP is Cash Or Invoice    LIMOUSINE    UOB-SNOWDEN CHAN    Invoice    HK
+
+[HK AOS] Verify That Service Info Fields of Car Transfer Behaves Correctly For Air, Car And Hotel Segments When FOP is Cash or Invoice
+    [Tags]    horton    us936    hk    us1322    de436    de554
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Other Svcs
+    Click Amend Eo    ${eo_number_car}
+    Click Service Info Tab
+    #us1620
+    Verify Form Of Payment Details Are Correct    Invoice
+    #us1620
+    Verify Vendor Contact Value Is Correct    Test Automation
+    Verify Nett Cost Value Is Correct    500
+    Verify Selling Price Value Is Correct    1500
+    Verify Commission Fee Value Is Correct    1000
+    Verify Merchant Fee Value Is Correct    0
+    Verify Total Selling Price Value Is Correct    1500
+    Comment    Verify Form Of Payment Details Are Correct    Cash
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Click Tab In Other Services Panel    Departure From
+    Verify Departure From Tab Field Values    Office    31st Floor Zuellig, Philippines, 2010    9994442221
+    Get Location Value    identifier=departure_from
+    Click Tab In Other Services Panel    Departure To
+    Verify Departure To Tab Field Values    Office    31st Floor Zuellig, Philippines, 2010
+    Get Location Value    identifier=departure_to
+    Get Date & Time Value    identifier=departure_to
+    Get Date And Time Checkbox Status    identifier=departure_to
+    Click Tab In Other Services Panel    Arrival From
+    Verify Arrival From Tab Field Values    Office    31st Floor Zuellig, Philippines, 2010
+    Get Location Value    identifier=arrival_from
+    Get Date & Time Value    identifier=arrival_from    #Arrival From
+    Get Date And Time Checkbox Status    identifier=arrival_from    #Arrival From
+    Click Tab In Other Services Panel    Arrival To
+    Verify Arrival To Tab Field Values    Office    31st Floor Zuellig, Philippines, 2010    9994442225
+    Get Location Value    identifier=arrival_to
+    Verify Exchange Order Number    ${eo_number}
+    Verify Passenger Id    P1
+    Click Vendor Info Tab
+    Comment    Verify Vendor Value Is Correct    Leadtime International Limousine Service Co. Ltd
+    Verify Vendor Value Is Correct    UOB-SNOWDEN CHAN
+    Comment    Verify Address 1 Value Is Correct    Unit 1410 14/F \ Hollywood Plaza
+    Verify Address 1 Value Is Correct    ${Empty}
+    Comment    Verify Address 2 Value Is Correct    610 Nathan Road Monkok
+    Verify Address 2 Value Is Correct    ${Empty}
+    Verify City Value Is Correct    HONG KONG
+    Comment    Verify City Value Is Correct    ${Empty}
+    Verify Country Value Is Correct    HONG KONG
+    Verify Email Value Is Correct    automationtest@cwt.com
+    Verify Fax No Value Is Correct    1111
+    Verify Credit Terms Values Is Correct    0
+    Verify Support Email Value Is Correct    automationtest@cwt.com
+    Click Remarks Tab
+    Verify Exchange Order Remarks Are Correct    PASSENGER IS VIP
+    Click Service Info Tab
+    Set Nett Cost    500
+    Set Selling Price    600
+    Verify Commission Fee Value Is Correct    100
+    Verify Merchant Fee Value Is Correct    0
+    Verify Total Selling Price Value Is Correct    600
+    Set Passenger ID Value    T1
+    Get Nett Cost In Other Services
+    Get Selling Price
+    Get Commission
+    Get GST
+    Get Merchant Fee In Other Services
+    Get Total Selling Price
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details    #us1322
+    Get Passenger ID Value
+    Get Checkbox Status of CWT Absorb For Mechant Fee
+    Click Tab In Other Services Panel    Departure From
+    Select Location Value    Other
+    Set Other Value    Other
+    Set Description Value    Description Text
+    Get Location Value    identifier=departure_from
+    Click Update Button In EO Panel    Service Info
+    Click Finish PNR    Amend Booking For Verify That Service Info Fields of Car Transfer Behaves Correctly For Air, Car And Hotel Segments When FOP is Cash or Invoice
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Service Info Fields of Car Transfer Behaves Correctly For Air, Car And Hotel Segments When FOP is Cash or Invoice
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details From Amadeus
+    Verify Other Services General Notepad Remarks
+    Verify That Car Remarks Are Written In PNR When FOP is Cash Or Invoice    LIMOUSINE    UOB-SNOWDEN CHAN    Invoice    HK
+
+[OS 2nd HK] Verify That Service Info Fields of Car Transfer Behaves Correctly For Air, Car And Hotel Segments
+    [Tags]    horton    hk    US459    us1322    valid_fail    de436
+    ...    de554
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Client Info
+    Select Form Of Payment    NonRef
+    #Previous Script EO
+    Click Panel    Other Svcs
+    Select Product And Vendor    LIMOUSINE    Vigor Limousines Services Ltd
+    Set Vendor Contact    Test Automation
+    Set Nett Cost    500.00
+    Set Selling Price    1500.99
+    #us1620
+    Verify Form Of Payment Details Are Correct    NonRef
+    #us1620
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    VI    4444333322221111    12    2026    #us1322
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Compute Other Services Fees    0    2    country=HK
+    Verify Commission Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Set Nett Cost    250
+    Set Selling Price    2500
+    Tick CWT Absorb Checkbox For Merchant Fee
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Compute Other Services Fees    0    2    false    true    country=HK
+    Verify Commission Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Set Nett Cost    3000
+    Set Selling Price    2500
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Cash
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Compute Other Services Fees    0    2    false    true    country=HK
+    Verify Commission Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Click Tab In Other Services Panel    Departure To
+    Select Location Value    Office
+    Verify Description Value Is Correct    31st Floor Zuellig, Philippines, 2010
+    Tick Date & Time Checkbox
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    VI    4444333322221111    12    2020    #us1322
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Booking For Verify That Service Info Fields of The Car Transfer Behaves Correctly For Air, Car And Hotel Segments
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Service Info Fields of The Car Transfer Behaves Correctly For Air, Car And Hotel Segments
+    Verify PNR Is Successfully Created    False    Exchange Order(s) Transaction Successfully Saved!
+    [Teardown]    Run Keyword And Ignore Error    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Amend Booking For Verify That Service Info Fields of Car Transfer Behaves Correctly For Air, Car And Hotel Segments
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Book Flight X Months From Now    MNLHKG/APR    SS1Y1    FXP/S7    8    6
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Client Info
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTA
+    Get Current Segments From The PNR
+    Click Panel    Client Info
+    Select Form Of Payment    KBTEST/MC************4445/D0526
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Click Panel    Other Svcs
+    Select Product And Vendor    Car Rental Prepaid    FIRST MARKETING
+    #us1620
+    Verify Form Of Payment Details Are Correct    KBTEST/MC************4445/D0526    Credit Card (CX)
+    #us1620
+    Click Tab In Other Services Panel    Departure From
+    Select Location Value    Other
+    Verify Other Text Field Is Displayed
+    Verify Departure From Fields Are Displayed
+    Set Other Value    j3j3Mown 1$ n0t mY taL3nt - k1nd@
+    Set Description Value    j3j3Mown 1$ n0t mY taL3nt - !@#$%^&*()@#$%^&*( - 36218763218763721
+    Set Tel Value    ABC1234@#$%^&*(
+    Select Location Value    Office
+    Verify Description Value Is Correct    31st Floor Zuellig, Philippines, 2010
+    Verify Tel Value Is Correct    ABC1234@#$%^&*(
+    Select Location Value    Airport
+    Verify Other Text Field Is Not Displayed
+    Verify Description Field Is Optional
+    Select Location Value    Other
+    Verify Other Text Field Is Displayed
+    Verify Other Value Is Correct    ${EMPTY}
+    Set Other Value    Other Text
+    Set Description Value    Description Text
+    Click Tab In Other Services Panel    Departure To
+    Select Location Value    Office
+    Verify Description Value Is Correct    31st Floor Zuellig, Philippines, 2010
+    Set Description Value    j3j3Mown 1$ n0t mY taL3nt - !@#$%^&*()@#$%^&*( - 36218763218763721
+    Select Location Value    Other
+    Verify Description Value Is Correct    ${EMPTY}
+    Select Location Value    Office
+    Verify Description Value Is Correct    31st Floor Zuellig, Philippines, 2010
+    Verify Flight Dropdown Values Are Correct
+    Verify Date & Time Is Disabled
+    Verify An Error Icon Is Displayed For Date & Time Of Departure To    Please enter Pickup or Return Date and Time
+    Select Flight Value    ${EMPTY}
+    Get Flight Value    identifier=departure_to
+    Click Tab In Other Services Panel    Arrival From
+    Select Location Value    Other
+    Set Other Value    j3j3Mown 1$ n0t mY taL3nt - k1nd@
+    Set Description Value    j3j3Mown 1$ n0t mY taL3nt - !@#$%^&*()@#$%^&*( - 36218763218763721
+    Select Location Value    Office
+    Verify Description Value Is Correct    31st Floor Zuellig, Philippines, 2010
+    Verify Flight Dropdown Values Are Correct    #Arrival from
+    Verify Date & Time Is Disabled    #Arrival from
+    Verify An Error Icon Is Displayed For Date & Time Of Arrival From    Please enter Pickup or Return Date and Time    #Arrival from
+    Tick Date & Time Checkbox    #Arrival from
+    Verify No Error Icon Is Displayed For Date & Time Of Arrival From    #Arrival from
+    Select Flight Value    ${EMPTY}    #Arrival from
+    Get Flight Value    identifier=arrival_from    #Arrival from
+    Select Location Value    Airport
+    Verify Other Text Field Is Not Displayed
+    Verify Description Field Is Optional
+    Select Location Value    Home
+    Verify Other Text Field Is Not Displayed
+    Verify Description Field Is Mandatory
+    Set Description Value    j3j3Mown 1$ n0t mY taL3nt - !@#$%^&*()@#$%^&*( - 36218763218763721
+    Click Tab In Other Services Panel    Arrival To
+    Select Location Value    Other
+    Set Other Value    j3j3Mown 1$ n0t mY taL3nt - k1nd@
+    Set Description Value    j3j3Mown 1$ n0t mY taL3nt - !@#$%^&*()@#$%^&*( - 36218763218763721
+    Set Tel Value    ABC1234@#$%^&*(    #Arrival To
+    Select Location Value    Office
+    Verify Description Value Is Correct    31st Floor Zuellig, Philippines, 2010
+    Click Tab In Other Services Panel    Departure To
+    Verify No Error Icon Is Displayed For Date & Time Of Departure To
+    Click Tab In Other Services Panel    Arrival From    #Arrival from
+    Untick Date & Time Checkbox
+    Verify An Error Icon Is Displayed For Date & Time Of Arrival From    Please enter Pickup or Return Date and Time
+    Click Tab In Other Services Panel    Departure To
+    Verify An Error Icon Is Displayed For Date & Time Of Departure To    Please enter Pickup or Return Date and Time
+    Tick Date & Time Checkbox
+    Get Location Value    identifier=departure_to
+    Get Date & Time Value    identifier=departure_to
+    Verify No Error Icon Is Displayed For Date & Time Of Departure To
+    Click Tab In Other Services Panel    Arrival From    #Arrival from
+    Verify No Error Icon Is Displayed For Date & Time Of Arrival From    #Arrival from
+    Click Service Info Tab
+    Set Vendor Contact    TestAutomation1
+    Set Nett Cost    200
+    Set Selling Price    250
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CX)    TEST CARD/AX***********0009/D0822/CVV****
+    Verify Commission Fee Value Is Correct    55
+    Verify Merchant Fee Value Is Correct    5
+    Verify Total Selling Price Value Is Correct    255
+    Set Passenger ID Value    P1
+    Get Passenger ID Value
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    PASSENGER IS VIP
+    Click Service Info Tab
+    Get Nett Cost In Other Services
+    Get Selling Price
+    Get Commission
+    Get GST
+    Get Merchant Fee In Other Services
+    Get Total Selling Price
+    Get Other Services Form Of Payment Details    #us1322
+    Get Checkbox Status of CWT Absorb For Mechant Fee
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    Car Rental Prepaid
+    Click Finish PNR    Amend Booking For Verify That Service Info Fields of Car Transfer Behaves Correctly For Air, Car And Hotel Segments
+
+Amend Booking For Verify That Service Info Fields of Car Transfer Behaves Correctly For Air, Car And Hotel Segments When FOP is CX
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Other Svcs
+    Click Amend Eo    ${eo_number}
+    Click Tab In Other Services Panel    Service Info
+    Verify Vendor Contact Value Is Correct    TestAutomation1
+    Verify Nett Cost Value Is Correct    200
+    Verify Selling Price Value Is Correct    250
+    Verify Commission Fee Value Is Correct    55
+    Verify Merchant Fee Value Is Correct    5
+    Verify Total Selling Price Value Is Correct    255
+    #us1620
+    Verify Form Of Payment Details Are Correct    TEST CARD/AX***********0009/D0822/CVV****    Credit Card (CX)
+    #us1620
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    VI    4111111111111111    12    2020    #us1322
+    Click Tab In Other Services Panel    Departure From
+    Verify Departure From Tab Field Values    Other    Description Text    ABC1234@#$%^&*(
+    Get Location Value    identifier=departure_from
+    Click Tab In Other Services Panel    Departure To
+    Verify Departure To Tab Field Values    Office    31st Floor Zuellig, Philippines, 2010
+    Get Location Value    identifier=departure_to
+    Get Date & Time Value    identifier=departure_to
+    Get Date And Time Checkbox Status    identifier=departure_to
+    Click Tab In Other Services Panel    Arrival From
+    Verify Arrival From Tab Field Values    Home    j3j3Mown 1$ n0t mY taL3nt - !@#$%^&*()@#$%^&*( - 36218763218763721
+    Get Location Value    identifier=arrival_from
+    Get Date & Time Value    identifier=arrival_from    #Arrival From
+    Get Date And Time Checkbox Status    identifier=arrival_from    #Arrival From
+    Click Tab In Other Services Panel    Arrival To
+    Verify Arrival To Tab Field Values    Office    31st Floor Zuellig, Philippines, 2010    ABC1234@#$%^&*(
+    Get Location Value    identifier=arrival_to
+    Verify Exchange Order Number    ${eo_number}
+    Verify Passenger Id    P1
+    Click Vendor Info Tab
+    Verify Vendor Value Is Correct    FIRST MARKETING
+    Verify Address 1 Value Is Correct    OFFICE A & B,14/F, KAM WING COMM BLDG
+    Verify Address 2 Value Is Correct    28-30 MINDEN AVENUE
+    Verify City Value Is Correct    TSIMSHATSUI
+    Verify Country Value Is Correct    KOWLOON
+    Verify Email Value Is Correct    automationtest@cwt.com
+    Verify Fax No Value Is Correct    1111
+    Verify Credit Terms Values Is Correct    0
+    Verify Support Email Value Is Correct    automationtest@cwt.com
+    Click Remarks Tab
+    Verify Exchange Order Remarks Are Correct    PASSENGER IS VIP
+    Click Service Info Tab
+    Set Nett Cost    300
+    Set Selling Price    350
+    Verify Commission Fee Value Is Correct    57
+    Verify Merchant Fee Value Is Correct    7
+    Verify Total Selling Price Value Is Correct    357
+    Get Passenger ID Value
+    Get Nett Cost In Other Services
+    Get Selling Price
+    Get Commission
+    Get GST
+    Get Merchant Fee In Other Services
+    Get Total Selling Price
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details    #us1322
+    Get Checkbox Status of CWT Absorb For Mechant Fee
+    Click Update Button In EO Panel    Service Info
+    Click Finish PNR    Amend Booking For Verify That Service Info Fields of Car Transfer Behaves Correctly For Air, Car And Hotel Segments When FOP is CX
+
+Amend Booking For Verify That Service Info Fields for Car Transfer Behaves Correctly For Air, Car And Hotel Segments
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Client Info
+    Manually Set Value In Form Of Payment    VI    4444333322221111    1226
+    #us1710
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    #us1710
+    #Previous Script EO
+    Click Panel    Other Svcs
+    Select Product And Vendor    LIMOUSINE    UOB-SNOWDEN CHAN
+    Set Vendor Contact    Test Automation
+    Set Nett Cost    taL3nt - k1nd@
+    Set Selling Price    j3j3Mown 1$ n0t
+    Verify An Error Icon Is Displayed For Selling Price    Not a valid decimal number
+    Verify An Error Icon Is Displayed For Nett Cost    Not a valid decimal number
+    Set Nett Cost    500
+    Set Selling Price    1500
+    #us1620
+    Verify Form Of Payment Details Are Correct    VI************1111/D1226    Credit Card (CX)
+    #us1620
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Cash    #us1322
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Compute Other Services Fees    0    2    country=HK
+    Verify Commission Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    VI    4444333322221111    12    2026    #us1322
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Compute Other Services Fees    0    2    country=HK
+    Verify Commission Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Tick CWT Absorb Checkbox For Merchant Fee
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Compute Other Services Fees    0    2    false    true    country=HK
+    Verify Commission Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Invoice    #us1322
+    Click Tab In Other Services Panel    Departure From
+    Select Location Value    Office
+    Get Location Value    identifier=departure_from
+    Verify Description Value Is Correct    31st Floor Zuellig, Philippines, 2010
+    Set Tel Value    9994442221
+    Click Tab In Other Services Panel    Departure To
+    Select Location Value    Office
+    Get Location Value    identifier=departure_to
+    Verify Description Value Is Correct    31st Floor Zuellig, Philippines, 2010
+    Select Flight Value
+    Get Flight Value    identifier=departure_to
+    Tick Date & Time Checkbox
+    Get Location Value    identifier=departure_to
+    Get Date & Time Value    identifier=departure_to
+    Get Date And Time Checkbox Status    identifier=departure_to
+    Click Tab In Other Services Panel    Arrival From
+    Select Location Value    Office
+    Select Flight Value    \    #Arrival From
+    Get Flight Value    identifier=arrival_from    #Arrival From
+    Tick Date & Time Checkbox    #Arrival From
+    Get Location Value    identifier=arrival_from
+    Get Date & Time Value    identifier=arrival_from    #Arrival From
+    Get Date And Time Checkbox Status    identifier=arrival_from    #Arrival From
+    Click Tab In Other Services Panel    Arrival To
+    Select Location Value    Office
+    Set Tel Value    9994442225    #Arrival To
+    Get Location Value    identifier=arrival_to
+    Set Passenger ID Value    P1
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    PASSENGER IS VIP
+    Click Service Info Tab
+    Get Nett Cost In Other Services
+    Get Selling Price
+    Get Commission
+    Get GST
+    Get Merchant Fee In Other Services
+    Get Total Selling Price
+    Get Other Services Form Of Payment Details    #us1322
+    Get Passenger ID Value
+    Get Checkbox Status of CWT Absorb For Mechant Fee
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    LIMOUSINE
+    Click Finish PNR    Amend Booking For Verify That Service Info Fields for Car Transfer Behaves Correctly For Air, Car And Hotel Segments
+
+Amend Booking For Verify That Service Info Fields of Car Transfer Behaves Correctly For Air, Car And Hotel Segments When FOP is Cash or Invoice
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Other Svcs
+    Click Amend Eo    ${eo_number_car}
+    Click Service Info Tab
+    #us1620
+    Verify Form Of Payment Details Are Correct    Invoice
+    #us1620
+    Verify Vendor Contact Value Is Correct    Test Automation
+    Verify Nett Cost Value Is Correct    500
+    Verify Selling Price Value Is Correct    1500
+    Verify Commission Fee Value Is Correct    1000
+    Verify Merchant Fee Value Is Correct    0
+    Verify Total Selling Price Value Is Correct    1500
+    Comment    Verify Form Of Payment Details Are Correct    Cash
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Click Tab In Other Services Panel    Departure From
+    Verify Departure From Tab Field Values    Office    31st Floor Zuellig, Philippines, 2010    9994442221
+    Get Location Value    identifier=departure_from
+    Click Tab In Other Services Panel    Departure To
+    Verify Departure To Tab Field Values    Office    31st Floor Zuellig, Philippines, 2010
+    Get Location Value    identifier=departure_to
+    Get Date & Time Value    identifier=departure_to
+    Get Date And Time Checkbox Status    identifier=departure_to
+    Click Tab In Other Services Panel    Arrival From
+    Verify Arrival From Tab Field Values    Office    31st Floor Zuellig, Philippines, 2010
+    Get Location Value    identifier=arrival_from
+    Get Date & Time Value    identifier=arrival_from    #Arrival From
+    Get Date And Time Checkbox Status    identifier=arrival_from    #Arrival From
+    Click Tab In Other Services Panel    Arrival To
+    Verify Arrival To Tab Field Values    Office    31st Floor Zuellig, Philippines, 2010    9994442225
+    Get Location Value    identifier=arrival_to
+    Verify Exchange Order Number    ${eo_number}
+    Verify Passenger Id    P1
+    Click Vendor Info Tab
+    Comment    Verify Vendor Value Is Correct    Leadtime International Limousine Service Co. Ltd
+    Verify Vendor Value Is Correct    UOB-SNOWDEN CHAN
+    Comment    Verify Address 1 Value Is Correct    Unit 1410 14/F \ Hollywood Plaza
+    Verify Address 1 Value Is Correct    ${Empty}
+    Comment    Verify Address 2 Value Is Correct    610 Nathan Road Monkok
+    Verify Address 2 Value Is Correct    ${Empty}
+    Verify City Value Is Correct    HONG KONG
+    Comment    Verify City Value Is Correct    ${Empty}
+    Verify Country Value Is Correct    HONG KONG
+    Verify Email Value Is Correct    automationtest@cwt.com
+    Verify Fax No Value Is Correct    1111
+    Verify Credit Terms Values Is Correct    0
+    Verify Support Email Value Is Correct    automationtest@cwt.com
+    Click Remarks Tab
+    Verify Exchange Order Remarks Are Correct    PASSENGER IS VIP
+    Click Service Info Tab
+    Set Nett Cost    500
+    Set Selling Price    600
+    Verify Commission Fee Value Is Correct    100
+    Verify Merchant Fee Value Is Correct    0
+    Verify Total Selling Price Value Is Correct    600
+    Set Passenger ID Value    T1
+    Get Nett Cost In Other Services
+    Get Selling Price
+    Get Commission
+    Get GST
+    Get Merchant Fee In Other Services
+    Get Total Selling Price
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details    #us1322
+    Get Passenger ID Value
+    Get Checkbox Status of CWT Absorb For Mechant Fee
+    Click Tab In Other Services Panel    Departure From
+    Select Location Value    Other
+    Set Other Value    Other
+    Set Description Value    Description Text
+    Get Location Value    identifier=departure_from
+    Click Update Button In EO Panel    Service Info
+    Click Finish PNR    Amend Booking For Verify That Service Info Fields of Car Transfer Behaves Correctly For Air, Car And Hotel Segments When FOP is Cash or Invoice
+
+Amend Booking For Verify That Service Info Fields of The Car Transfer Behaves Correctly For Air, Car And Hotel Segments
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Client Info
+    Select Form Of Payment    NonRef
+    #Previous Script EO
+    Click Panel    Other Svcs
+    Select Product And Vendor    LIMOUSINE    Vigor Limousines Services Ltd
+    Set Vendor Contact    Test Automation
+    Set Nett Cost    500.00
+    Set Selling Price    1500.99
+    #us1620
+    Verify Form Of Payment Details Are Correct    NonRef
+    #us1620
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    VI    4444333322221111    12    2026    #us1322
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Compute Other Services Fees    0    2    country=HK
+    Verify Commission Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Set Nett Cost    250
+    Set Selling Price    2500
+    Tick CWT Absorb Checkbox For Merchant Fee
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Compute Other Services Fees    0    2    false    true    country=HK
+    Verify Commission Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Set Nett Cost    3000
+    Set Selling Price    2500
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Cash
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Compute Other Services Fees    0    2    false    true    country=HK
+    Verify Commission Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Click Tab In Other Services Panel    Departure To
+    Select Location Value    Office
+    Verify Description Value Is Correct    31st Floor Zuellig, Philippines, 2010
+    Tick Date & Time Checkbox
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    VI    4444333322221111    12    2020    #us1322
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Booking For Verify That Service Info Fields of The Car Transfer Behaves Correctly For Air, Car And Hotel Segments
+
+Amend Booking For Verify That Accounting Lines For Car Transfer Product Is Not Written When Cancelled
+    Retrieve PNR And Populate Amend Workflow    HK
+    Click Panel    Other Svcs
+    Cancel EO    ${eo_number_ct}    Service Info    HK
+    Click Finish PNR    Amend Booking For Verify That Accounting Lines For Car Transfer Product Is Not Written When Cancelled

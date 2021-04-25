@@ -1,0 +1,71 @@
+*** Settings ***
+Resource          ../cust_refs_verification.txt
+
+*** Test Cases ***
+[NB] Verify That DefaultValue From CDR Table Will Default In Cust Refs Panel
+    [Tags]    us4782    17.8    not_ready
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    de-DE    AutomationDE
+    Select GDS    Amadeus
+    Set Client And Traveler    Amadeus DE 16 - Auto ¦ US4782    AutoOneEight    LokiTravTwo
+    Click New Booking
+    Book Flight X Months From Now    CDGLHR/AAF    SS1Y1    FXP    6
+    Click Read Booking
+    Click Panel    Cust Refs
+    Verify CDR Value Is Correct    Employee ID    TEST123
+    Verify CDR Value Is Correct    TripReason    AUTOTEST
+    Set CDR Value    Employee ID    ${EMPTY}
+    Set CDR Value    TripReason    ${EMPTY}
+    Tick Not Known At Time Of Booking
+    Populate Fare Tab With Default Values    Fare 1
+    Populate Delivery Panel Without On Hold Reason
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Specific Line Is Not Written In The PNR    *0601*TEST123
+    Verify Specific Line Is Not Written In The PNR    *0602*AUTOTEST
+    Click Clear All
+
+[AB] Verify That DefaultValue From CDR Table Will Default In Cust Refs Panel
+    [Tags]    us4782    17.8    not_ready
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Click Panel    Cust Refs
+    Verify CDR Value Is Correct    Employee ID    TEST123
+    Verify CDR Value Is Correct    TripReason    AUTOTEST
+    Set CDR Value    Employee ID    ${EMPTY}
+    Set CDR Value    TripReason    ${EMPTY}
+    Tick Not Known At Time Of Booking
+    Populate Fare Tab With Default Values    Fare 1
+    Populate Delivery Panel Without On Hold Reason
+    Click Finish PNR
+    Re-Execute Amend Booking Worfklow For CDR If Simultaneous Change Error Is Displayed
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Specific Line Is Not Written In The PNR    *0601*TEST123
+    Verify Specific Line Is Not Written In The PNR    *0602*AUTOTEST
+    Click Clear All
+
+[QA] Verify That DefaultValue From CDR Table Will Default In Cust Refs Panel
+    [Tags]    us4782    17.8    not_ready
+    Retrieve PNR    ${current_pnr}
+    Verify Quick Amend Is Visible
+    Verify Quick Amend Spiel Is Visible    Diese Buchung ist auf Status ‘Warten auf Kundenreferenzen‘, sparen sie Zeit und benutzen sie den ‚Quick Amend‘ Knopf um fehlende Daten einzugeben und die Buchung abzuschließen!
+    Click Quick Amend With Timestamp
+    Verify Actual Panel Equals To Expected Panel    CUST REFS    DELIVERY    RECAP
+    Click Panel    Cust Refs
+    Verify CDR Value Is Correct    Employee ID    TEST123
+    Verify CDR Value Is Correct    TripReason    AUTOTEST
+    Verify Cust Refs Not Known Checkbox Is Unticked And Disabled
+    Click Panel    Delivery
+    Verify Reasons For Placing Booking On Hold Section In Delivery Panel Is Disabled
+    Verify On Hold Booking Reason Is Unchecked    Awaiting Customer References
+    Populate Delivery Panel Without On Hold Reason
+    Click Finish PNR
+    Re-Execute Quick Amend If Simultaneous Change Error Is Displayed
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Specific Line Is Not Written In The PNR    RMM ONHOLD:FEHLENDE ZUSATZDATEN
+    Verify Specific Line Is Written In The PNR    *0601*TEST123
+    Verify Specific Line Is Written In The PNR    *0602*AUTOTEST
+    Retrieve PNR    ${current_pnr}
+    Verify Quick Amend Is Not Visible
+    Click Clear All
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}

@@ -1,0 +1,375 @@
+vuser_end.c(20): Logging off	[MsgId: MMSG0]
+12/11/2018 23:52:01 vuser_end.c(20): (14356:10784) - Calling Logoff()	[MsgId: MMSG0]
+12/11/2018 23:52:01 vuser_end.c(20): (14356:10784) - WaitForEvent: Initializing wait event, time=60000, end time=35982568	[MsgId: MMSG0]
+12/11/2018 23:52:01 vuser_end.c(20): (14356:10784) - Foreground window = 328592
+	[MsgId: MMSG0]
+12/11/2018 23:52:02 NewBooking.c(33): (14356:12892) - Destroy window: "Progress Information"	[MsgId: MMSG0]
+12/11/2018 23:52:02 NewBooking.c(33): (14356:12892) - removing "Progress Information" from LogicNameMap	[MsgId: MMSG0]
+12/11/2018 23:52:02 vuser_end.c(20): (14356:10784) - Activate window: "Administrator: C:\Windows\system32\cmd.exe"	[MsgId: MMSG0]
+12/11/2018 23:52:02 vuser_end.c(20): (14356:10784) - Foreground window = 262872
+	[MsgId: MMSG0]
+12/11/2018 23:52:02 vuser_end.c(20): (14356:10784) - Foreground window = 131694
+	[MsgId: MMSG0]
+12/11/2018 23:52:02 vuser_end.c(20): (14356:10784) - Destroy window: "Power Express V18.10.63.0  [SVCSYEXTEST8 logged in as UEXR493 "	[MsgId: MMSG0]
+12/11/2018 23:52:02 vuser_end.c(20): (14356:10784) - removing "Power Express V18.10.63.0  [SVCSYEXTEST8 logged in as UEXR493 " from LogicNameMap	[MsgId: MMSG0]
+12/11/2018 23:52:02 vuser_end.c(20): (14356:10784) - Destroy window: "Administrator: C:\Windows\system32\cmd.exe"	[MsgId: MMSG0]
+12/11/2018 23:52:02 vuser_end.c(20): (14356:10784) - removing "Administrator: C:\Windows\system32\cmd.exe" from LogicNameMap	[MsgId: MMSG0]
+12/11/2018 23:52:02 vuser_end.c(20): (14356:10784) - Foreground window = 131362
+	[MsgId: MMSG0]
+12/11/2018 23:52:02 vuser_end.c(20): (14356:10784) - Activate window: "HKGWL2102 - Search Results in Libraries"	[MsgId: MMSG0]
+12/11/2018 23:52:02 vuser_end.c(20): (14356:10784) - Foreground window = 197226
+	[MsgId: MMSG0]
+12/11/2018 23:52:03 NewBooking.c(33): (14356:13984) - "Administrator: C:\Windows\system32\cmd.exe" is not currently in map, adding it now	[MsgId: MMSG0]
+12/11/2018 23:52:03 NewBooking.c(33): (14356:13984) - Caption change: "Administrator: C:\Windows\system32\cmd.exe - call  pybot --tes" ---> "Administrator: C:\Windows\system32\cmd.exe" = "Administrator: C:\Windows\system32\cmd.exe"	[MsgId: MMSG0]
+12/11/2018 23:52:03 vuser_end.c(20): (14356:10784) - Foreground window = 0
+	[MsgId: MMSG0]
+12/11/2018 23:52:03 vuser_end.c(20): (14356:10784) - Activate window: "HKGWL2102 - Search Results in Libraries"	[MsgId: MMSG0]
+12/11/2018 23:52:03 vuser_end.c(20): (14356:10784) - Foreground window = 197226
+	[MsgId: MMSG0]
+12/11/2018 23:52:03 vuser_end.c(20): (14356:10784) - Foreground window = 131410
+	[MsgId: MMSG0]
+12/11/2018 23:52:03 vuser_end.c(20): (14356:10784) - Activate window: "HKGWL2102 - Search Results in Libraries"	[MsgId: MMSG0]
+12/11/2018 23:52:03 vuser_end.c(20): (14356:10784) - Foreground window = 197226
+	[MsgId: MMSG0]
+12/11/2018 23:52:03 vuser_end.c(20): (14356:10784) - Foreground window = 0
+	[MsgId: MMSG0]
+12/11/2018 23:52:03 vuser_end.c(20): (14356:10784) - Destroy window: "Desktop"	[MsgId: MMSG0]
+12/11/2018 23:52:03 vuser_end.c(20): (14356:10784) - removing "Desktop" from LogicNameMap	[MsgId: MMSG0]
+12/11/2018 23:52:03 vuser_end.c(20): (14356:10784) - Destroy window: "Start"	[MsgId: MMSG0]
+12/11/2018 23:52:03 vuser_end.c(20): (14356:10784) - removing "Start" from LogicNameMap	[MsgId: MMSG0]
+12/11/2018 23:52:03 vuser_end.c(20): (14356:10784) - Destroy window: "Shell_TrayWnd"	[MsgId: MMSG0]
+12/11/2018 23:52:03 vuser_end.c(20): (14356:10784) - removing "Shell_TrayWnd" from LogicNameMap	[MsgId: MMSG0]
+12/11/2018 23:52:04 vuser_end.c(20): (14356:10784) - Destroy window: "HKGWL2102 - Search Results in Libraries"	[MsgId: MMSG0]
+12/11/2018 23:52:04 vuser_end.c(20): (14356:10784) - removing "HKGWL2102 - Search Results in Libraries" from LogicNameMap	[MsgId: MMSG0]
+12/11/2018 23:52:04 vuser_end.c(20): (14356:10784) - Foreground window = 65612
+	[MsgId: MMSG0]
+12/11/2018 23:52:04 vuser_end.c(20): (14356:10784) - Foreground window = 0
+	[MsgId: MMSG0]
+12/11/2018 23:52:05 vuser_end.c(20): (14356:10784) - Inside OnDisconnectEvent()	[MsgId: MMSG0]
+12/11/2018 23:52:05 vuser_end.c(20): (14356:10784) - Number of currently used GDI handles on this machine = 7887	[MsgId: MMSG0]
+12/11/2018 23:52:05 vuser_end.c(20): (14356:10784) - Running Citrix processes:
+	concentr.exe, pid 6360, GDI handles in use: 43
+	receiver.exe, pid 7924, GDI handles in use: 46
+	wfica32.exe, pid 15148, GDI handles in use: 135
+	wfica32.exe, pid 18388, GDI handles in use: 154
+	wfica32.exe, pid 14572, GDI handles in use: 99
+	wfica32.exe, pid 17620, GDI handles in use: 148
+	wfica32.exe, pid 13324, GDI handles in use: 106
+	wfica32.exe, pid 14636, GDI handles in use: 86
+	wfica32.exe, pid 12372, GDI handles in use: 68
+	wfica32.exe, pid 9424, GDI handles in use: 62
+	wfica32.exe, pid 14044, GDI handles in use: 45
+	[MsgId: MMSG0]
+12/11/2018 23:52:05 vuser_end.c(20): (14356:10784) - Got Disconnect event	[MsgId: MMSG0]
+12/11/2018 23:52:05 vuser_end.c(20): (14356:10784) - Wake Up and check new event.	[MsgId: MMSG0]
+12/11/2018 23:52:05 vuser_end.c(20): (14356:10784) - WaitForEvent result = 0	[MsgId: MMSG0]
+12/11/2018 23:52:05 vuser_end.c(20): (14356:10784) - Already disconnected, no need to logoff again	[MsgId: MMSG0]
+vuser_end.c(22): Notify: Transaction "Citrix Logout" ended with a "Pass" status (Duration: 5.5199 Wasted Time: 0.0000).	[MsgId: MMSG-16871]
+Ending action vuser_end.	[MsgId: MMSG-15918]
+Vuser Terminated.	[MsgId: MMSG-15963]
+12/11/2018 23:52:05 (14356:10784) - Already disconnected, no need to disconnect again	[MsgId: MMSG0]
+Vuser 6 (thread 10784), ended OK."	[MsgId: MMSG-10695]
+12/11/2018 23:52:45 NewBooking.c(33): (14356:12892) - "Progress Information" is not currently in map, adding it now	[MsgId: MMSG0]
+12/11/2018 23:52:45 NewBooking.c(33): (14356:12892) - Create window name="Progress Information" flag=0 style=381681664 ext_style=327937 ID=328542
+	[MsgId: MMSG0]
+12/11/2018 23:52:45 NewBooking.c(33): (14356:12892) - Created window: "Progress Information"  at (257, 189)	[MsgId: MMSG0]
+12/11/2018 23:52:45 NewBooking.c(33): (14356:12892) - Activate window: "Progress Information"	[MsgId: MMSG0]
+12/11/2018 23:52:45 NewBooking.c(33): (14356:12892) - Foreground window = 328542
+	[MsgId: MMSG0]
+12/11/2018 23:52:47 NewBooking.c(33): (14356:12892) - Activate window: "Power Express V18.10.63.0  [SVCSYEXTEST12 logged in as UEXR493"	[MsgId: MMSG0]
+12/11/2018 23:52:47 NewBooking.c(33): (14356:12892) - Foreground window = 197262
+	[MsgId: MMSG0]
+12/11/2018 23:52:48 NewBooking.c(33): (14356:12892) - Activate window: "Progress Information"	[MsgId: MMSG0]
+12/11/2018 23:52:48 NewBooking.c(33): (14356:12892) - Foreground window = 328542
+	[MsgId: MMSG0]
+12/11/2018 23:52:50 NewBooking.c(33): (14356:12892) - Activate window: "Power Express V18.10.63.0  [SVCSYEXTEST12 logged in as UEXR493"	[MsgId: MMSG0]
+12/11/2018 23:52:50 NewBooking.c(33): (14356:12892) - Foreground window = 197262
+	[MsgId: MMSG0]
+12/11/2018 23:52:51 NewBooking.c(33): (14356:12892) - Activate window: "Progress Information"	[MsgId: MMSG0]
+12/11/2018 23:52:51 NewBooking.c(33): (14356:12892) - Foreground window = 328542
+	[MsgId: MMSG0]
+12/11/2018 23:52:51 NewBooking.c(33): (14356:12892) - Activate window: "Power Express V18.10.63.0  [SVCSYEXTEST12 logged in as UEXR493"	[MsgId: MMSG0]
+12/11/2018 23:52:51 NewBooking.c(33): (14356:12892) - Foreground window = 197262
+	[MsgId: MMSG0]
+12/11/2018 23:52:51 NewBooking.c(33): (14356:12892) - Destroy window: "Progress Information"	[MsgId: MMSG0]
+12/11/2018 23:52:51 NewBooking.c(33): (14356:12892) - removing "Progress Information" from LogicNameMap	[MsgId: MMSG0]
+NewBooking.c(35): Notify: Transaction "Creating PNR" ended with a "Pass" status (Duration: 468.2043 Think Time: 437.9968).	[MsgId: MMSG-16872]
+Ending action NewBooking.	[MsgId: MMSG-15918]
+Ending iteration 1.	[MsgId: MMSG-15965]
+Ending Vuser...	[MsgId: MMSG-15966]
+Starting action vuser_end.	[MsgId: MMSG-15919]
+vuser_end.c(4): web_add_header("Csrf-Token") started  	[MsgId: MMSG-26355]
+vuser_end.c(4): Notify: Parameter Substitution: parameter "CsrfToken" =  "CFC36EC5124A554DA1E326304B41BD58"	[MsgId: MMSG-13992]
+vuser_end.c(4): web_add_header("Csrf-Token") was successful  	[MsgId: MMSG-26392]
+vuser_end.c(7): Notify: Transaction "Citrix Logout" started.	[MsgId: MMSG-16999]
+vuser_end.c(9): web_custom_request("Logoff") started  	[MsgId: MMSG-26355]
+vuser_end.c(9): Connection to emea.cwtdesktop.pilot.int.carlsonwagonlit.com:443 closed after being inactive for 616 seconds, exceeding the "HTTP Keep-Alive timeout" Runtime Setting (60 seconds). URL="https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/Authentication/Logoff"  	[MsgId: MMSG-27648]
+vuser_end.c(9): web_custom_request("Logoff") was successful, 0 body bytes, 585 header bytes  	[MsgId: MMSG-26386]
+vuser_end.c(20): Logging off	[MsgId: MMSG0]
+12/11/2018 23:53:20 vuser_end.c(20): (14356:15448) - Calling Logoff()	[MsgId: MMSG0]
+12/11/2018 23:53:20 vuser_end.c(20): (14356:15448) - WaitForEvent: Initializing wait event, time=60000, end time=36062019	[MsgId: MMSG0]
+12/11/2018 23:53:21 vuser_end.c(20): (14356:15448) - Activate window: "Administrator: C:\Windows\system32\cmd.exe - call  pybot --tes"	[MsgId: MMSG0]
+12/11/2018 23:53:21 vuser_end.c(20): (14356:15448) - Foreground window = 262242
+	[MsgId: MMSG0]
+12/11/2018 23:53:21 vuser_end.c(20): (14356:15448) - Destroy window: "Power Express"	[MsgId: MMSG0]
+12/11/2018 23:53:21 vuser_end.c(20): (14356:15448) - removing "Power Express" from LogicNameMap	[MsgId: MMSG0]
+12/11/2018 23:53:21 vuser_end.c(20): (14356:15448) - Destroy window: "Progress Information"	[MsgId: MMSG0]
+12/11/2018 23:53:21 vuser_end.c(20): (14356:15448) - removing "Progress Information" from LogicNameMap	[MsgId: MMSG0]
+12/11/2018 23:53:21 vuser_end.c(20): (14356:15448) - Destroy window: "Power Express V18.10.63.0  [SVCSYEXTEST9 logged in as UEXR493 "	[MsgId: MMSG0]
+12/11/2018 23:53:21 vuser_end.c(20): (14356:15448) - removing "Power Express V18.10.63.0  [SVCSYEXTEST9 logged in as UEXR493 " from LogicNameMap	[MsgId: MMSG0]
+12/11/2018 23:53:21 vuser_end.c(20): (14356:15448) - Foreground window = 0
+	[MsgId: MMSG0]
+12/11/2018 23:53:21 vuser_end.c(20): (14356:15448) - Destroy window: "Administrator: C:\Windows\system32\cmd.exe - call  pybot --tes"	[MsgId: MMSG0]
+12/11/2018 23:53:21 vuser_end.c(20): (14356:15448) - removing "Administrator: C:\Windows\system32\cmd.exe - call  pybot --tes" from LogicNameMap	[MsgId: MMSG0]
+12/11/2018 23:53:21 vuser_end.c(20): (14356:15448) - Destroy window: "HKGWL2102 - Amadeus Selling Platform Connect - Google Chrome"	[MsgId: MMSG0]
+12/11/2018 23:53:21 vuser_end.c(20): (14356:15448) - removing "HKGWL2102 - Amadeus Selling Platform Connect - Google Chrome" from LogicNameMap	[MsgId: MMSG0]
+12/11/2018 23:53:21 vuser_end.c(20): (14356:15448) - Foreground window = 0
+	[MsgId: MMSG0]
+12/11/2018 23:53:22 vuser_end.c(20): (14356:15448) - Foreground window = 65582
+	[MsgId: MMSG0]
+12/11/2018 23:53:22 vuser_end.c(20): (14356:15448) - Foreground window = 0
+	[MsgId: MMSG0]
+12/11/2018 23:53:22 vuser_end.c(20): (14356:15448) - Destroy window: "Shell_TrayWnd"	[MsgId: MMSG0]
+12/11/2018 23:53:22 vuser_end.c(20): (14356:15448) - removing "Shell_TrayWnd" from LogicNameMap	[MsgId: MMSG0]
+12/11/2018 23:53:22 vuser_end.c(20): (14356:15448) - Destroy window: "Desktop"	[MsgId: MMSG0]
+12/11/2018 23:53:22 vuser_end.c(20): (14356:15448) - removing "Desktop" from LogicNameMap	[MsgId: MMSG0]
+12/11/2018 23:53:22 vuser_end.c(20): (14356:15448) - Destroy window: "Start"	[MsgId: MMSG0]
+12/11/2018 23:53:22 vuser_end.c(20): (14356:15448) - removing "Start" from LogicNameMap	[MsgId: MMSG0]
+12/11/2018 23:53:23 vuser_end.c(20): (14356:15448) - Foreground window = 65610
+	[MsgId: MMSG0]
+12/11/2018 23:53:23 vuser_end.c(20): (14356:15448) - Foreground window = 0
+	[MsgId: MMSG0]
+12/11/2018 23:53:23 vuser_end.c(20): (14356:15448) - Inside OnDisconnectEvent()	[MsgId: MMSG0]
+12/11/2018 23:53:23 vuser_end.c(20): (14356:15448) - Number of currently used GDI handles on this machine = 7927	[MsgId: MMSG0]
+12/11/2018 23:53:23 vuser_end.c(20): (14356:15448) - Running Citrix processes:
+	concentr.exe, pid 6360, GDI handles in use: 43
+	receiver.exe, pid 7924, GDI handles in use: 46
+	wfica32.exe, pid 18388, GDI handles in use: 157
+	wfica32.exe, pid 14572, GDI handles in use: 99
+	wfica32.exe, pid 17620, GDI handles in use: 154
+	wfica32.exe, pid 13324, GDI handles in use: 154
+	wfica32.exe, pid 14636, GDI handles in use: 94
+	wfica32.exe, pid 12372, GDI handles in use: 92
+	wfica32.exe, pid 9424, GDI handles in use: 80
+	wfica32.exe, pid 14044, GDI handles in use: 58
+	wfica32.exe, pid 11152, GDI handles in use: 45
+	[MsgId: MMSG0]
+12/11/2018 23:53:23 vuser_end.c(20): (14356:15448) - Got Disconnect event	[MsgId: MMSG0]
+12/11/2018 23:53:24 vuser_end.c(20): (14356:15448) - Wake Up and check new event.	[MsgId: MMSG0]
+12/11/2018 23:53:24 vuser_end.c(20): (14356:15448) - WaitForEvent result = 0	[MsgId: MMSG0]
+12/11/2018 23:53:24 vuser_end.c(20): (14356:15448) - Already disconnected, no need to logoff again	[MsgId: MMSG0]
+vuser_end.c(22): Notify: Transaction "Citrix Logout" ended with a "Pass" status (Duration: 4.7828 Wasted Time: 0.0000).	[MsgId: MMSG-16871]
+Ending action vuser_end.	[MsgId: MMSG-15918]
+Vuser Terminated.	[MsgId: MMSG-15963]
+12/11/2018 23:53:24 (14356:15448) - Already disconnected, no need to disconnect again	[MsgId: MMSG0]
+Vuser 7 (thread 15448), ended OK."	[MsgId: MMSG-10695]
+12/11/2018 23:53:48 NewBooking.c(33): (14356:12892) - "Progress Information" is not currently in map, adding it now	[MsgId: MMSG0]
+12/11/2018 23:53:48 NewBooking.c(33): (14356:12892) - Create window name="Progress Information" flag=0 style=381681664 ext_style=327937 ID=328542
+	[MsgId: MMSG0]
+12/11/2018 23:53:48 NewBooking.c(33): (14356:12892) - Created window: "Progress Information"  at (257, 189)	[MsgId: MMSG0]
+12/11/2018 23:53:48 NewBooking.c(33): (14356:12892) - Activate window: "Progress Information"	[MsgId: MMSG0]
+12/11/2018 23:53:48 NewBooking.c(33): (14356:12892) - Foreground window = 328542
+	[MsgId: MMSG0]
+12/11/2018 23:53:50 NewBooking.c(33): (14356:12892) - Activate window: "Power Express V18.10.63.0  [SVCSYEXTEST12 logged in as UEXR493"	[MsgId: MMSG0]
+12/11/2018 23:53:50 NewBooking.c(33): (14356:12892) - Foreground window = 197262
+	[MsgId: MMSG0]
+12/11/2018 23:53:55 NewBooking.c(33): (14356:12892) - Activate window: "Progress Information"	[MsgId: MMSG0]
+12/11/2018 23:53:55 NewBooking.c(33): (14356:12892) - Foreground window = 328542
+	[MsgId: MMSG0]
+12/11/2018 23:54:05 NewBooking.c(33): (14356:12892) - Activate window: "Power Express V18.10.63.0  [SVCSYEXTEST12 logged in as UEXR493"	[MsgId: MMSG0]
+12/11/2018 23:54:05 NewBooking.c(33): (14356:12892) - Foreground window = 197262
+	[MsgId: MMSG0]
+12/11/2018 23:54:09 NewBooking.c(33): (14356:12892) - "Power Express V18.10.63.0  [SVCSYEXTEST12 logged in as UEXR493" is currently in map, adding a suffix	[MsgId: MMSG0]
+12/11/2018 23:54:09 NewBooking.c(33): (14356:12892) - Create window name="Power Express V18.10.63.0  [SVCSYEXTEST12 logged in as UEXR493_2" flag=0 style=382337024 ext_style=327937 ID=132566
+	[MsgId: MMSG0]
+12/11/2018 23:54:09 NewBooking.c(33): (14356:12892) - Created window: "Power Express V18.10.63.0  [SVCSYEXTEST12 logged in as UEXR493_2"  at (0, 0)	[MsgId: MMSG0]
+12/11/2018 23:54:09 NewBooking.c(33): (14356:12892) - Activate window: "Power Express V18.10.63.0  [SVCSYEXTEST12 logged in as UEXR493_2"	[MsgId: MMSG0]
+12/11/2018 23:54:09 NewBooking.c(33): (14356:12892) - Foreground window = 132566
+	[MsgId: MMSG0]
+12/11/2018 23:54:09 NewBooking.c(33): (14356:12892) - "Progress Information" is currently in map, adding a suffix	[MsgId: MMSG0]
+12/11/2018 23:54:09 NewBooking.c(33): (14356:12892) - Create window name="Progress Information_2" flag=1 style=381681664 ext_style=327937 ID=132574
+	[MsgId: MMSG0]
+12/11/2018 23:54:09 NewBooking.c(33): (14356:12892) - Created window: "Progress Information_2"  at (257, 189)	[MsgId: MMSG0]
+12/11/2018 23:54:11 NewBooking.c(33): (14356:12892) - Destroy window: "Progress Information_2"	[MsgId: MMSG0]
+12/11/2018 23:54:11 NewBooking.c(33): (14356:12892) - not removing "Progress Information" from LogicNameMap, but decreasing its count to 1	[MsgId: MMSG0]
+12/11/2018 23:54:11 NewBooking.c(33): (14356:12892) - Destroy window: "Progress Information"	[MsgId: MMSG0]
+12/11/2018 23:54:11 NewBooking.c(33): (14356:12892) - removing "Progress Information" from LogicNameMap	[MsgId: MMSG0]
+12/11/2018 23:54:11 NewBooking.c(33): (14356:12892) - Activate window: "Power Express V18.10.63.0  [SVCSYEXTEST12 logged in as UEXR493"	[MsgId: MMSG0]
+12/11/2018 23:54:11 NewBooking.c(33): (14356:12892) - Foreground window = 197262
+	[MsgId: MMSG0]
+12/11/2018 23:54:11 NewBooking.c(33): (14356:12892) - Destroy window: "Power Express V18.10.63.0  [SVCSYEXTEST12 logged in as UEXR493_2"	[MsgId: MMSG0]
+12/11/2018 23:54:11 NewBooking.c(33): (14356:12892) - not removing "Power Express V18.10.63.0  [SVCSYEXTEST12 logged in as UEXR493" from LogicNameMap, but decreasing its count to 1	[MsgId: MMSG0]
+12/11/2018 23:54:11 NewBooking.c(33): (14356:12892) - Foreground window = 328542
+	[MsgId: MMSG0]
+12/11/2018 23:54:11 NewBooking.c(33): (14356:12892) - Activate window: "Power Express V18.10.63.0  [SVCSYEXTEST12 logged in as UEXR493"	[MsgId: MMSG0]
+12/11/2018 23:54:11 NewBooking.c(33): (14356:12892) - Foreground window = 197262
+	[MsgId: MMSG0]
+NewBooking.c(35): Notify: Transaction "Creating PNR" ended with a "Pass" status (Duration: 468.0812 Think Time: 437.9993).	[MsgId: MMSG-16872]
+Ending action NewBooking.	[MsgId: MMSG-15918]
+Ending iteration 1.	[MsgId: MMSG-15965]
+Ending Vuser...	[MsgId: MMSG-15966]
+Starting action vuser_end.	[MsgId: MMSG-15919]
+vuser_end.c(4): web_add_header("Csrf-Token") started  	[MsgId: MMSG-26355]
+vuser_end.c(4): Notify: Parameter Substitution: parameter "CsrfToken" =  "850A7E5D51F194A34E8518A3D276B805"	[MsgId: MMSG-13992]
+vuser_end.c(4): web_add_header("Csrf-Token") was successful  	[MsgId: MMSG-26392]
+vuser_end.c(7): Notify: Transaction "Citrix Logout" started.	[MsgId: MMSG-16999]
+vuser_end.c(9): web_custom_request("Logoff") started  	[MsgId: MMSG-26355]
+vuser_end.c(9): Connection to emea.cwtdesktop.pilot.int.carlsonwagonlit.com:443 closed after being inactive for 645 seconds, exceeding the "HTTP Keep-Alive timeout" Runtime Setting (60 seconds). URL="https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/Authentication/Logoff"  	[MsgId: MMSG-27648]
+vuser_end.c(9): web_custom_request("Logoff") was successful, 0 body bytes, 585 header bytes  	[MsgId: MMSG-26386]
+vuser_end.c(20): Logging off	[MsgId: MMSG0]
+12/11/2018 23:54:51 vuser_end.c(20): (14356:13984) - Calling Logoff()	[MsgId: MMSG0]
+12/11/2018 23:54:51 vuser_end.c(20): (14356:13984) - WaitForEvent: Initializing wait event, time=60000, end time=36152843	[MsgId: MMSG0]
+12/11/2018 23:54:52 vuser_end.c(20): (14356:13984) - Activate window: "HKGWL2102 - Amadeus Selling Platform Connect - Google Chrome"	[MsgId: MMSG0]
+12/11/2018 23:54:52 vuser_end.c(20): (14356:13984) - Foreground window = 262738
+	[MsgId: MMSG0]
+12/11/2018 23:54:52 vuser_end.c(20): (14356:13984) - Destroy window: "User Profile Selection"	[MsgId: MMSG0]
+12/11/2018 23:54:52 vuser_end.c(20): (14356:13984) - removing "User Profile Selection" from LogicNameMap	[MsgId: MMSG0]
+12/11/2018 23:54:52 vuser_end.c(20): (14356:13984) - Destroy window: "Power Express"	[MsgId: MMSG0]
+12/11/2018 23:54:52 vuser_end.c(20): (14356:13984) - removing "Power Express" from LogicNameMap	[MsgId: MMSG0]
+12/11/2018 23:54:52 vuser_end.c(20): (14356:13984) - Destroy window: "Administrator: C:\Windows\system32\cmd.exe"	[MsgId: MMSG0]
+12/11/2018 23:54:52 vuser_end.c(20): (14356:13984) - removing "Administrator: C:\Windows\system32\cmd.exe" from LogicNameMap	[MsgId: MMSG0]
+12/11/2018 23:54:52 vuser_end.c(20): (14356:13984) - Foreground window = 0
+	[MsgId: MMSG0]
+12/11/2018 23:54:52 vuser_end.c(20): (14356:13984) - Destroy window: "HKGWL2102 - Amadeus Selling Platform Connect - Google Chrome"	[MsgId: MMSG0]
+12/11/2018 23:54:52 vuser_end.c(20): (14356:13984) - removing "HKGWL2102 - Amadeus Selling Platform Connect - Google Chrome" from LogicNameMap	[MsgId: MMSG0]
+12/11/2018 23:54:52 vuser_end.c(20): (14356:13984) - Foreground window = 65968
+	[MsgId: MMSG0]
+12/11/2018 23:54:52 vuser_end.c(20): (14356:13984) - Foreground window = 0
+	[MsgId: MMSG0]
+12/11/2018 23:54:52 vuser_end.c(20): (14356:13984) - Foreground window = 65598
+	[MsgId: MMSG0]
+12/11/2018 23:54:52 vuser_end.c(20): (14356:13984) - Foreground window = 0
+	[MsgId: MMSG0]
+12/11/2018 23:54:52 vuser_end.c(20): (14356:13984) - Foreground window = 0
+	[MsgId: MMSG0]
+12/11/2018 23:54:52 vuser_end.c(20): (14356:13984) - Foreground window = 65582
+	[MsgId: MMSG0]
+12/11/2018 23:54:52 vuser_end.c(20): (14356:13984) - Foreground window = 0
+	[MsgId: MMSG0]
+12/11/2018 23:54:52 vuser_end.c(20): (14356:13984) - Destroy window: "Desktop"	[MsgId: MMSG0]
+12/11/2018 23:54:52 vuser_end.c(20): (14356:13984) - removing "Desktop" from LogicNameMap	[MsgId: MMSG0]
+12/11/2018 23:54:52 vuser_end.c(20): (14356:13984) - Destroy window: "Start"	[MsgId: MMSG0]
+12/11/2018 23:54:52 vuser_end.c(20): (14356:13984) - removing "Start" from LogicNameMap	[MsgId: MMSG0]
+12/11/2018 23:54:52 vuser_end.c(20): (14356:13984) - Destroy window: "Shell_TrayWnd"	[MsgId: MMSG0]
+12/11/2018 23:54:52 vuser_end.c(20): (14356:13984) - removing "Shell_TrayWnd" from LogicNameMap	[MsgId: MMSG0]
+12/11/2018 23:54:54 vuser_end.c(20): (14356:13984) - Inside OnDisconnectEvent()	[MsgId: MMSG0]
+12/11/2018 23:54:54 vuser_end.c(20): (14356:13984) - Number of currently used GDI handles on this machine = 7977	[MsgId: MMSG0]
+12/11/2018 23:54:54 vuser_end.c(20): (14356:13984) - Running Citrix processes:
+	concentr.exe, pid 6360, GDI handles in use: 43
+	receiver.exe, pid 7924, GDI handles in use: 46
+	wfica32.exe, pid 14572, GDI handles in use: 99
+	wfica32.exe, pid 17620, GDI handles in use: 178
+	wfica32.exe, pid 13324, GDI handles in use: 184
+	wfica32.exe, pid 14636, GDI handles in use: 124
+	wfica32.exe, pid 12372, GDI handles in use: 100
+	wfica32.exe, pid 9424, GDI handles in use: 104
+	wfica32.exe, pid 14044, GDI handles in use: 83
+	wfica32.exe, pid 11152, GDI handles in use: 62
+	wfica32.exe, pid 13024, GDI handles in use: 45
+	[MsgId: MMSG0]
+12/11/2018 23:54:54 vuser_end.c(20): (14356:13984) - Got Disconnect event	[MsgId: MMSG0]
+12/11/2018 23:54:55 vuser_end.c(20): (14356:13984) - Wake Up and check new event.	[MsgId: MMSG0]
+12/11/2018 23:54:55 vuser_end.c(20): (14356:13984) - WaitForEvent result = 0	[MsgId: MMSG0]
+12/11/2018 23:54:55 vuser_end.c(20): (14356:13984) - Already disconnected, no need to logoff again	[MsgId: MMSG0]
+vuser_end.c(22): Notify: Transaction "Citrix Logout" ended with a "Pass" status (Duration: 4.4606 Wasted Time: 0.0000).	[MsgId: MMSG-16871]
+Ending action vuser_end.	[MsgId: MMSG-15918]
+Vuser Terminated.	[MsgId: MMSG-15963]
+12/11/2018 23:54:55 (14356:13984) - Already disconnected, no need to disconnect again	[MsgId: MMSG0]
+Vuser 8 (thread 13984), ended OK."	[MsgId: MMSG-10695]
+12/11/2018 23:55:54 NewBooking.c(33): (14356:12892) - "Progress Information" is not currently in map, adding it now	[MsgId: MMSG0]
+12/11/2018 23:55:54 NewBooking.c(33): (14356:12892) - Create window name="Progress Information" flag=0 style=381681664 ext_style=327937 ID=328542
+	[MsgId: MMSG0]
+12/11/2018 23:55:54 NewBooking.c(33): (14356:12892) - Created window: "Progress Information"  at (257, 189)	[MsgId: MMSG0]
+12/11/2018 23:55:55 NewBooking.c(33): (14356:12892) - Activate window: "Progress Information"	[MsgId: MMSG0]
+12/11/2018 23:55:55 NewBooking.c(33): (14356:12892) - Foreground window = 328542
+	[MsgId: MMSG0]
+NewBooking.c(35): Notify: Transaction "Creating PNR" ended with a "Pass" status (Duration: 468.4786 Think Time: 437.9976).	[MsgId: MMSG-16872]
+Ending action NewBooking.	[MsgId: MMSG-15918]
+Ending iteration 1.	[MsgId: MMSG-15965]
+Ending Vuser...	[MsgId: MMSG-15966]
+Starting action vuser_end.	[MsgId: MMSG-15919]
+vuser_end.c(4): web_add_header("Csrf-Token") started  	[MsgId: MMSG-26355]
+vuser_end.c(4): Notify: Parameter Substitution: parameter "CsrfToken" =  "4D6AE6BB203E7BB1E26A4D14FA061BA3"	[MsgId: MMSG-13992]
+vuser_end.c(4): web_add_header("Csrf-Token") was successful  	[MsgId: MMSG-26392]
+vuser_end.c(7): Notify: Transaction "Citrix Logout" started.	[MsgId: MMSG-16999]
+vuser_end.c(9): web_custom_request("Logoff") started  	[MsgId: MMSG-26355]
+vuser_end.c(9): Connection to emea.cwtdesktop.pilot.int.carlsonwagonlit.com:443 closed after being inactive for 640 seconds, exceeding the "HTTP Keep-Alive timeout" Runtime Setting (60 seconds). URL="https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/Authentication/Logoff"  	[MsgId: MMSG-27648]
+vuser_end.c(9): web_custom_request("Logoff") was successful, 0 body bytes, 585 header bytes  	[MsgId: MMSG-26386]
+vuser_end.c(20): Logging off	[MsgId: MMSG0]
+12/11/2018 23:56:01 vuser_end.c(20): (14356:12892) - Calling Logoff()	[MsgId: MMSG0]
+12/11/2018 23:56:01 vuser_end.c(20): (14356:12892) - WaitForEvent: Initializing wait event, time=60000, end time=36222841	[MsgId: MMSG0]
+12/11/2018 23:56:02 vuser_end.c(20): (14356:12892) - "Power Express" is not currently in map, adding it now	[MsgId: MMSG0]
+12/11/2018 23:56:02 vuser_end.c(20): (14356:12892) - Create window name="Power Express" flag=0 style=381681664 ext_style=327945 ID=131164
+	[MsgId: MMSG0]
+12/11/2018 23:56:02 vuser_end.c(20): (14356:12892) - Created window: "Power Express"  at (212, 342)	[MsgId: MMSG0]
+12/11/2018 23:56:02 vuser_end.c(20): (14356:12892) - Activate window: "Power Express"	[MsgId: MMSG0]
+12/11/2018 23:56:02 vuser_end.c(20): (14356:12892) - Foreground window = 131164
+	[MsgId: MMSG0]
+12/11/2018 23:56:02 vuser_end.c(20): (14356:12892) - Activate window: "Progress Information"	[MsgId: MMSG0]
+12/11/2018 23:56:02 vuser_end.c(20): (14356:12892) - Foreground window = 328542
+	[MsgId: MMSG0]
+12/11/2018 23:56:02 vuser_end.c(20): (14356:12892) - Activate window: "Power Express"	[MsgId: MMSG0]
+12/11/2018 23:56:02 vuser_end.c(20): (14356:12892) - Foreground window = 131164
+	[MsgId: MMSG0]
+12/11/2018 23:56:04 vuser_end.c(20): (14356:12892) - Activate window: "Progress Information"	[MsgId: MMSG0]
+12/11/2018 23:56:04 vuser_end.c(20): (14356:12892) - Foreground window = 328542
+	[MsgId: MMSG0]
+12/11/2018 23:56:04 vuser_end.c(20): (14356:12892) - Activate window: "HKGWL2102 - Amadeus Selling Platform Connect - Google Chrome"	[MsgId: MMSG0]
+12/11/2018 23:56:04 vuser_end.c(20): (14356:12892) - Foreground window = 262762
+	[MsgId: MMSG0]
+12/11/2018 23:56:04 vuser_end.c(20): (14356:12892) - Destroy window: "Power Express"	[MsgId: MMSG0]
+12/11/2018 23:56:04 vuser_end.c(20): (14356:12892) - removing "Power Express" from LogicNameMap	[MsgId: MMSG0]
+12/11/2018 23:56:04 vuser_end.c(20): (14356:12892) - Destroy window: "Progress Information"	[MsgId: MMSG0]
+12/11/2018 23:56:04 vuser_end.c(20): (14356:12892) - removing "Progress Information" from LogicNameMap	[MsgId: MMSG0]
+12/11/2018 23:56:04 vuser_end.c(20): (14356:12892) - Destroy window: "Power Express V18.10.63.0  [SVCSYEXTEST12 logged in as UEXR493"	[MsgId: MMSG0]
+12/11/2018 23:56:04 vuser_end.c(20): (14356:12892) - removing "Power Express V18.10.63.0  [SVCSYEXTEST12 logged in as UEXR493" from LogicNameMap	[MsgId: MMSG0]
+12/11/2018 23:56:04 vuser_end.c(20): (14356:12892) - Destroy window: "Administrator: C:\Windows\system32\cmd.exe - call  pybot --tes"	[MsgId: MMSG0]
+12/11/2018 23:56:04 vuser_end.c(20): (14356:12892) - removing "Administrator: C:\Windows\system32\cmd.exe - call  pybot --tes" from LogicNameMap	[MsgId: MMSG0]
+12/11/2018 23:56:04 vuser_end.c(20): (14356:12892) - Foreground window = 0
+	[MsgId: MMSG0]
+12/11/2018 23:56:04 vuser_end.c(20): (14356:12892) - Destroy window: "HKGWL2102 - Amadeus Selling Platform Connect - Google Chrome"	[MsgId: MMSG0]
+12/11/2018 23:56:04 vuser_end.c(20): (14356:12892) - removing "HKGWL2102 - Amadeus Selling Platform Connect - Google Chrome" from LogicNameMap	[MsgId: MMSG0]
+12/11/2018 23:56:04 vuser_end.c(20): (14356:12892) - Foreground window = 131142
+	[MsgId: MMSG0]
+12/11/2018 23:56:05 vuser_end.c(20): (14356:12892) - Foreground window = 0
+	[MsgId: MMSG0]
+12/11/2018 23:56:05 vuser_end.c(20): (14356:12892) - Foreground window = 131356
+	[MsgId: MMSG0]
+12/11/2018 23:56:05 vuser_end.c(20): (14356:12892) - Foreground window = 66092
+	[MsgId: MMSG0]
+12/11/2018 23:56:05 vuser_end.c(20): (14356:12892) - Foreground window = 0
+	[MsgId: MMSG0]
+12/11/2018 23:56:05 vuser_end.c(20): (14356:12892) - Destroy window: "Desktop"	[MsgId: MMSG0]
+12/11/2018 23:56:05 vuser_end.c(20): (14356:12892) - removing "Desktop" from LogicNameMap	[MsgId: MMSG0]
+12/11/2018 23:56:05 vuser_end.c(20): (14356:12892) - Destroy window: "Start"	[MsgId: MMSG0]
+12/11/2018 23:56:05 vuser_end.c(20): (14356:12892) - removing "Start" from LogicNameMap	[MsgId: MMSG0]
+12/11/2018 23:56:05 vuser_end.c(20): (14356:12892) - Destroy window: "Shell_TrayWnd"	[MsgId: MMSG0]
+12/11/2018 23:56:05 vuser_end.c(20): (14356:12892) - removing "Shell_TrayWnd" from LogicNameMap	[MsgId: MMSG0]
+12/11/2018 23:56:06 vuser_end.c(20): (14356:12892) - Foreground window = 65598
+	[MsgId: MMSG0]
+12/11/2018 23:56:06 vuser_end.c(20): (14356:12892) - Foreground window = 0
+	[MsgId: MMSG0]
+12/11/2018 23:56:07 vuser_end.c(20): (14356:12892) - Inside OnDisconnectEvent()	[MsgId: MMSG0]
+12/11/2018 23:56:07 vuser_end.c(20): (14356:12892) - Number of currently used GDI handles on this machine = 8072	[MsgId: MMSG0]
+12/11/2018 23:56:07 vuser_end.c(20): (14356:12892) - Running Citrix processes:
+	concentr.exe, pid 6360, GDI handles in use: 43
+	receiver.exe, pid 7924, GDI handles in use: 46
+	wfica32.exe, pid 17620, GDI handles in use: 190
+	wfica32.exe, pid 13324, GDI handles in use: 202
+	wfica32.exe, pid 14636, GDI handles in use: 124
+	wfica32.exe, pid 12372, GDI handles in use: 145
+	wfica32.exe, pid 9424, GDI handles in use: 112
+	wfica32.exe, pid 14044, GDI handles in use: 108
+	wfica32.exe, pid 11152, GDI handles in use: 74
+	wfica32.exe, pid 13024, GDI handles in use: 68
+	wfica32.exe, pid 15720, GDI handles in use: 45
+	[MsgId: MMSG0]
+12/11/2018 23:56:07 vuser_end.c(20): (14356:12892) - Got Disconnect event	[MsgId: MMSG0]
+12/11/2018 23:56:07 vuser_end.c(20): (14356:12892) - Wake Up and check new event.	[MsgId: MMSG0]
+12/11/2018 23:56:07 vuser_end.c(20): (14356:12892) - WaitForEvent result = 0	[MsgId: MMSG0]
+12/11/2018 23:56:07 vuser_end.c(20): (14356:12892) - Already disconnected, no need to logoff again	[MsgId: MMSG0]
+vuser_end.c(22): Notify: Transaction "Citrix Logout" ended with a "Pass" status (Duration: 7.2703).	[MsgId: MMSG-16873]
+Ending action vuser_end.	[MsgId: MMSG-15918]
+Vuser Terminated.	[MsgId: MMSG-15963]
+12/11/2018 23:56:07 (14356:12892) - Already disconnected, no need to disconnect again	[MsgId: MMSG0]
+Vuser 9 (thread 12892), ended OK."	[MsgId: MMSG-10695]

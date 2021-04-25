@@ -1,0 +1,655 @@
+[API Trapper      ( 1b8:1b98)] Recording in 32-bit mode: C:\Program Files (x86)\Internet Explorer\iexplore.exe
+[API Trapper      (1890:1638)] Recording in 64-bit mode: D:\Program Files (x86)\HPE\LoadRunner\bin\mediator_x64.exe
+[API Trapper      (103c: 680)] Recording in 64-bit mode: C:\Program Files\Internet Explorer\IEXPLORE.EXE
+[API Trapper      ( c58:13d8)] Recording in 32-bit mode: D:\Program Files (x86)\HPE\LoadRunner\bin\mediator.exe
+[API Trapper      (1be8: f38)] Recording in 32-bit mode: C:\Program Files (x86)\Internet Explorer\IEXPLORE.EXE
+[Network Analyzer (1be8:1748)] ------------------------------------------------------------------------------------------
+[Network Analyzer (1be8:1748)] Load Network Traffic Analyzers:
+[Network Analyzer (1be8:1748)]     Analyzer Module: Citrix_ICA (value=GetCitrixProtocolAnalyzer:CitrixAnalyzer.dll)
+[Network Analyzer (1be8:1748)]     + Network Analyzer: CitrixAnalyzer.dll @ GetCitrixProtocolAnalyzer Loaded!
+[Network Analyzer (1be8:1748)]     Analyzer Module: WPLUS (value=)
+[Network Analyzer (1be8:1748)]     Analyzer Module: WebBase (value=GetHttpProtocolAnalyzer:api_http_filter.dll)
+[Network Analyzer (1be8:1748)]     + Network Analyzer: api_http_filter.dll @ GetHttpProtocolAnalyzer Loaded!
+[Network Analyzer (1be8:1748)]     + Interception Auditors: WinInetWplusInterceptionAudit:api_http_filter.dll
+[Network Analyzer (1be8:1748)]     Analyzer Module: QTWeb (value=GetWebSocketProtocolAnalyzer:WebSocketAnalyzer.dll)
+[Network Analyzer (1be8:1748)]     + Network Analyzer: WebSocketAnalyzer.dll @ GetWebSocketProtocolAnalyzer Loaded!
+[Network Analyzer (1be8:1748)]     Analyzer Module: local_server (value=)
+[Network Analyzer (1be8:1748)] ------------------------------------------------------------------------------------------
+[Network Analyzer (1be8:15cc)] Address lookup for VWEDC1PL00269 = 10.200.160.20
+[Network Analyzer (1be8:1748)] Address lookup for VWEDC1PL00269 = 10.200.160.20
+[Network Analyzer (1be8:1748)] Request Connection: Remote Server @ 10.180.119.5:443   (Service=)  (Sid=  1)  PROXIED!
+[Network Analyzer (1be8: dbc)]   (Sid:  1) Negotiate Proxy -> Server SSL Handshake (ssl:TLSv1, ciphers:AES256-SHA)
+[Network Analyzer (1be8: eb0)] Address lookup for VWEDC1PL00269 = 10.200.160.20
+[Network Analyzer (1be8: eb0)] Request Connection: Remote Server @ 93.184.220.29:80   (Service=)  (Sid=  2)  PROXIED!
+[Web Request      (1be8:15cc)] "GET /MFEwTzBNMEswSTAJBgUrDgMCGgUABBQY%2BIWplxzce%2B%2BGCW0BmDyo%2BZ8lVgQUJPIuTg%2B9yvc%2BKVXKco1ph1ZE6XoCEAwzyRC%2BFsNMykOQRkHsbrU%3D"   
+[Network Analyzer (1be8:15cc)]   (Sid:  2) Client -> Server @ : 247 bytes (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  2) Server -> Client : 765 bytes  (Service=HTTP)
+[Web Request      (1be8:15cc)] "GET /MFEwTzBNMEswSTAJBgUrDgMCGgUABBQY%2BIWplxzce%2B%2BGCW0BmDyo%2BZ8lVgQUJPIuTg%2B9yvc%2BKVXKco1ph1ZE6XoCEAwzyRC%2BFsNMykOQRkHsbrU%3D"   
+[Network Analyzer (1be8:15cc)]   (Sid:  2) Client -> Server @ : 290 bytes (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  2) Server -> Client : 788 bytes  (Service=HTTP)
+[Network Analyzer (1be8: eb0)] Address lookup for VWEDC1PL00269 = 10.200.160.20
+[Network Analyzer (1be8: eb0)] Request Connection: Remote Server @ 93.184.220.29:80   (Service=)  (Sid=  3)  PROXIED!
+[Network Analyzer (103c:15ac)] ------------------------------------------------------------------------------------------
+[Network Analyzer (103c:15ac)] Load Network Traffic Analyzers:
+[Network Analyzer (103c:15ac)]     Analyzer Module: Citrix_ICA (value=)
+[Network Analyzer (103c:15ac)]     Analyzer Module: WPLUS (value=)
+[Network Analyzer (103c:15ac)]     Analyzer Module: WebBase (value=GetHttpProtocolAnalyzer:api_http_filter_x64.dll)
+[Network Analyzer (103c:15ac)]     + Network Analyzer: api_http_filter_x64.dll @ GetHttpProtocolAnalyzer Loaded!
+[Network Analyzer (103c:15ac)]     + Interception Auditors: WinInetWplusInterceptionAudit:api_http_filter_x64.dll
+[Network Analyzer (103c:15ac)]     Analyzer Module: QTWeb (value=GetWebSocketProtocolAnalyzer:WebSocketAnalyzer_x64.dll)
+[Network Analyzer (103c:15ac)]     + Network Analyzer: WebSocketAnalyzer_x64.dll @ GetWebSocketProtocolAnalyzer Loaded!
+[Network Analyzer (103c:15ac)]     Analyzer Module: local_server (value=)
+[Network Analyzer (103c:15ac)] ------------------------------------------------------------------------------------------
+[Network Analyzer (103c:18c0)] Address lookup for VWEDC1PL00269 = 10.200.160.20
+[Network Analyzer (103c:1bcc)] Address lookup for VWEDC1PL00269 = 10.200.160.20
+[Network Analyzer (103c:15ac)] Address lookup for VWEDC1PL00269 = 10.200.160.20
+[Network Analyzer (103c:1bcc)] Request Connection: Remote Server @ 13.107.21.200:443   (Service=)  (Sid=  1)  PROXIED!
+[Network Analyzer (103c:15ac)] Request Connection: Remote Server @ 13.107.21.200:443   (Service=)  (Sid=  2)  PROXIED!
+[Web Request      (1be8:15cc)] "GET /RapidSSLRSACA2018.crl"   
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Client -> Server @ : 137 bytes (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 1460 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 9572 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 4380 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 1300 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 8760 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 6492 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 2920 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 228 bytes  (Service=HTTP)
+[Web Request      (1be8:15cc)] "GET /RapidSSLRSACA2018.crl"   
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Client -> Server @ : 180 bytes (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 2920 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 5032 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 2920 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 12332 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 5840 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Server -> Client : 6068 bytes  (Service=HTTP)
+[Net An. Error    (1be8: dbc)] SSLAccept(ssl_id = 126164176 = 07851CD0) Failed, ctx = 0786E230, err = "SSLv3 read client key exchange A", err code = 5, err msg= "error:00000005:lib(0):func(0):DH lib
+" 
+[Net An. Error    (1be8: dbc)]   (Sid:  1) Negotiate Client -> Proxy SSL Handshake Failed!!!
+[Network Analyzer (103c:1ae0)]   (Sid:  2) Negotiate Proxy -> Server SSL Handshake (ssl:TLSv1.1, ciphers:ECDHE-RSA-AES256-SHA)
+[Network Analyzer (103c:1aa0)]   (Sid:  1) Negotiate Proxy -> Server SSL Handshake (ssl:TLSv1.1, ciphers:ECDHE-RSA-AES256-SHA)
+[Network Analyzer (103c:1b70)] Address lookup for VWEDC1PL00269 = 10.200.160.20
+[Network Analyzer (103c:1b70)] Request Connection: Remote Server @ 104.18.25.243:80   (Service=)  (Sid=  3)  PROXIED!
+[Network Analyzer (1be8:15cc)]   (Sid:  1) Connection Terminated (by Client)
+[Network Analyzer (1be8:1748)] Address lookup for VWEDC1PL00269 = 10.200.160.20
+[Network Analyzer (1be8:1748)] Request Connection: Remote Server @ 10.180.119.5:443   (Service=)  (Sid=  4)  PROXIED!
+[Web Request      (103c:18c0)] "GET /MFQwUjBQME4wTDAJBgUrDgMCGgUABBQY%2BIWplxzce%2B%2BGCW0BmDyo%2BZ8lVgQUJPIuTg%2B9yvc%2BKVXKco1ph1ZE6XoCEy0AADKZ1wcdt9FwikIAAAAAMpk%3D"   
+[Network Analyzer (103c:18c0)]   (Sid:  3) Client -> Server @ : 245 bytes (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  3) Server -> Client : 2563 bytes  (Service=HTTP)
+[Web Request      (103c:18c0)] "GET /MFQwUjBQME4wTDAJBgUrDgMCGgUABBQY%2BIWplxzce%2B%2BGCW0BmDyo%2BZ8lVgQUJPIuTg%2B9yvc%2BKVXKco1ph1ZE6XoCEy0AADKZ1wcdt9FwikIAAAAAMpk%3D"   
+[Network Analyzer (103c:18c0)]   (Sid:  3) Client -> Server @ : 288 bytes (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  3) Server -> Client : 2559 bytes  (Service=HTTP)
+[Network Analyzer (103c: de0)] Address lookup for VWEDC1PL00269 = 10.200.160.20
+[Network Analyzer (103c: de0)] Request Connection: Remote Server @ 152.199.19.160:80   (Service=)  (Sid=  4)  PROXIED!
+[Network Analyzer (1be8:1914)]   (Sid:  4) Negotiate Proxy -> Server SSL Handshake (ssl:TLSv1, ciphers:AES256-SHA)
+[Network Analyzer (1be8:1914)]   (Sid:  4) Negotiate Client -> Proxy SSL Handshake (ssl:TLSv1.2, ciphers:ECDHE-RSA-AES256-SHA384)
+[Web Request      (103c:18c0)] "GET /pki/mscorp/crl/Microsoft%20IT%20TLS%20CA%205.crl"   
+[Network Analyzer (103c:18c0)]   (Sid:  4) Client -> Server @ : 167 bytes (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 2920 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Web Request      (1be8:15cc)] "GET /Citrix/InternalWeb/"   
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Client -> Server @ : 297 bytes (SSL)(Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 6484 bytes  (Service=HTTP)
+[Web Request      (103c:18c0)] "GET /pki/mscorp/crl/Microsoft%20IT%20TLS%20CA%205.crl"   
+[Network Analyzer (103c:18c0)]   (Sid:  4) Client -> Server @ : 210 bytes (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 1460 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 7944 bytes  (Service=HTTP)
+[Network Analyzer (103c: de0)] Address lookup for VWEDC1PL00269 = 10.200.160.20
+[Network Analyzer (103c: de0)] Request Connection: Remote Server @ 84.53.133.10:80   (Service=)  (Sid=  5)  PROXIED!
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 3952 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 2713 bytes (SSL) (Service=HTTP)
+[Web Request      (1be8:15cc)] "GET /Citrix/InternalWeb/receiver/images/common/wspinner@2x_26FCB0A3548E30DC.gif"   
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Client -> Server @ : 447 bytes (SSL)(Service=HTTP)
+[Network Analyzer (1be8: eb0)] Address lookup for VWEDC1PL00269 = 10.200.160.20
+[Network Analyzer (1be8:11f8)] Address lookup for VWEDC1PL00269 = 10.200.160.20
+[Network Analyzer (1be8:1748)] Address lookup for VWEDC1PL00269 = 10.200.160.20
+[Network Analyzer (1be8:18c4)] Address lookup for VWEDC1PL00269 = 10.200.160.20
+[Network Analyzer (1be8:197c)] Address lookup for VWEDC1PL00269 = 10.200.160.20
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 2620 bytes (SSL) (Service=HTTP)
+[Web Request      (1be8:15cc)] "GET /Citrix/InternalWeb/receiver/js/external/velocity.min_B218502A82F66680.js"   
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Client -> Server @ : 428 bytes (SSL)(Service=HTTP)
+[Network Analyzer (1be8: eb0)] Request Connection: Remote Server @ 10.180.119.5:443   (Service=)  (Sid=  5)  PROXIED!
+[Network Analyzer (1be8:11f8)] Request Connection: Remote Server @ 10.180.119.5:443   (Service=)  (Sid=  6)  PROXIED!
+[Network Analyzer (1be8:1748)] Request Connection: Remote Server @ 10.180.119.5:443   (Service=)  (Sid=  7)  PROXIED!
+[Network Analyzer (1be8:18c4)] Request Connection: Remote Server @ 10.180.119.5:443   (Service=)  (Sid=  8)  PROXIED!
+[Network Analyzer (1be8:197c)] Request Connection: Remote Server @ 10.180.119.5:443   (Service=)  (Sid=  9)  PROXIED!
+[Web Request      (103c:18c0)] "GET /pki/mscorp/crl/Microsoft%20IT%20TLS%20CA%205.crl"   
+[Network Analyzer (103c:18c0)]   (Sid:  5) Client -> Server @ : 165 bytes (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 4380 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 9572 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 2920 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 2920 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 2920 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 6658 bytes (SSL) (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 2920 bytes  (Service=HTTP)
+[Web Request      (1be8:15cc)] "GET /Citrix/InternalWeb/receiver/css/ctxs.large-ui.min_62D11B01D15101DA.css"   
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Client -> Server @ : 406 bytes (SSL)(Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 2920 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 2920 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 2920 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 2920 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 2920 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 2920 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 2920 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 2920 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 2920 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 2920 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 2920 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 1460 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 1460 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 2920 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 2920 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 5840 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 2604 bytes  (Service=HTTP)
+[Web Request      (103c:18c0)] "GET /pki/mscorp/crl/Microsoft%20IT%20TLS%20CA%205.crl"   
+[Network Analyzer (103c:18c0)]   (Sid:  5) Client -> Server @ : 208 bytes (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 1460 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 16060 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 5840 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 2444 bytes  (Service=HTTP)
+[Net An. Error    (103c:1aa0)] SSLAccept(ssl_id = 855801194064 = 000000C741B9E650) Failed, ctx = 000000C741B9E010, err = "SSLv3 read client key exchange A", err code = 5, err msg= "error:00000005:lib(0):func(0):DH lib
+" 
+[Net An. Error    (103c:1aa0)]   (Sid:  1) Negotiate Client -> Proxy SSL Handshake Failed!!!
+[Net An. Error    (103c:1ae0)] SSLAccept(ssl_id = 855801193264 = 000000C741B9E330) Failed, ctx = 000000C741B9E010, err = "SSLv3 read client key exchange A", err code = 5, err msg= "error:00000005:lib(0):func(0):DH lib
+" 
+[Net An. Error    (103c:1ae0)]   (Sid:  2) Negotiate Client -> Proxy SSL Handshake Failed!!!
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8: b30)]   (Sid:  5) Negotiate Proxy -> Server SSL Handshake (ssl:TLSv1, ciphers:AES256-SHA)
+[Network Analyzer (103c:1b70)] Address lookup for VWEDC1PL00269 = 10.200.160.20
+[Network Analyzer (103c:1bcc)] Address lookup for VWEDC1PL00269 = 10.200.160.20
+[Network Analyzer (103c:18c0)]   (Sid:  1) Connection Terminated (by Client)
+[Network Analyzer (103c:18c0)]   (Sid:  2) Connection Terminated (by Client)
+[Network Analyzer (103c:1b70)] Request Connection: Remote Server @ 13.107.21.200:443   (Service=)  (Sid=  6)  PROXIED!
+[Network Analyzer (103c:1bcc)] Request Connection: Remote Server @ 13.107.21.200:443   (Service=)  (Sid=  7)  PROXIED!
+[Network Analyzer (103c:1884)]   (Sid:  6) Negotiate Proxy -> Server SSL Handshake (ssl:TLSv1.1, ciphers:ECDHE-RSA-AES256-SHA)
+[Network Analyzer (103c:1884)]   (Sid:  6) Negotiate Client -> Proxy SSL Handshake (ssl:TLSv1.2, ciphers:ECDHE-RSA-AES256-SHA384)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 3682 bytes (SSL) (Service=HTTP)
+[Web Request      (1be8:15cc)] "GET /Citrix/InternalWeb/custom/style.css"   
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Client -> Server @ : 371 bytes (SSL)(Service=HTTP)
+[Network Analyzer (1be8: b30)]   (Sid:  5) Negotiate Client -> Proxy SSL Handshake (ssl:TLSv1.2, ciphers:ECDHE-RSA-AES256-SHA384)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 1075 bytes (SSL) (Service=HTTP)
+[Web Request      (1be8:15cc)] "GET /Citrix/InternalWeb/receiver/js/external/jquery-1.12.4.min_618538B4AB9639D4.js"   
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Client -> Server @ : 433 bytes (SSL)(Service=HTTP)
+[Web Request      (1be8:15cc)] "GET /Citrix/InternalWeb/receiver/images/1x/actionSprite_531B7A6FF85CA98E.png"   
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Client -> Server @ : 444 bytes (SSL)(Service=HTTP)
+[Network Analyzer (1be8: f54)]   (Sid:  6) Negotiate Proxy -> Server SSL Handshake (ssl:TLSv1, ciphers:AES256-SHA)
+[Network Analyzer (1be8: f54)]   (Sid:  6) Negotiate Client -> Proxy SSL Handshake (ssl:TLSv1.2, ciphers:ECDHE-RSA-AES256-SHA384)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 2791 bytes (SSL) (Service=HTTP)
+[Web Request      (1be8:15cc)] "GET /Citrix/InternalWeb/receiver/js/external/jquery-ui-v1.11.4.min_17D0B6DEFA33B91A.js"   
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Client -> Server @ : 437 bytes (SSL)(Service=HTTP)
+[Web Request      (1be8:15cc)] "GET /Citrix/InternalWeb/receiver/images/1x/folder_template_C13BB96DEBC9F30F.png"   
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Client -> Server @ : 447 bytes (SSL)(Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 828 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 6754 bytes (SSL) (Service=HTTP)
+[Web Request      (1be8:15cc)] "GET /Citrix/InternalWeb/receiver/images/1x/CitrixReceiver_WebScreen_CBE548FB8FEE049E.png"   
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Client -> Server @ : 456 bytes (SSL)(Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 3952 bytes (SSL) (Service=HTTP)
+[Web Request      (103c:18c0)] "GET /favicon.ico"   
+[Network Analyzer (103c:18c0)]   (Sid:  6) Client -> Server @ : 220 bytes (SSL)(Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  6) Server -> Client : 582 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 3873 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 2787 bytes (SSL) (Service=HTTP)
+[Web Request      (1be8:15cc)] "GET /Citrix/InternalWeb/receiver/images/common/ReceiverFullScreenBackground_46E559C0E6B5A27B.jpg"   
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Client -> Server @ : 464 bytes (SSL)(Service=HTTP)
+[Network Analyzer (103c:17e8)]   (Sid:  7) Negotiate Proxy -> Server SSL Handshake (ssl:TLSv1.1, ciphers:ECDHE-RSA-AES256-SHA)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Web Request      (1be8:15cc)] "GET /Citrix/InternalWeb/receiver/js/external/slick.min_FEB62CC230E2BA2A.js"   
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Client -> Server @ : 425 bytes (SSL)(Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 3952 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:1b1c)]   (Sid:  7) Negotiate Proxy -> Server SSL Handshake (ssl:TLSv1, ciphers:AES256-SHA)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:1b1c)]   (Sid:  7) Negotiate Client -> Proxy SSL Handshake (ssl:TLSv1.2, ciphers:ECDHE-RSA-AES256-SHA384)
+[Network Analyzer (103c:17e8)]   (Sid:  7) Negotiate Client -> Proxy SSL Handshake (ssl:TLSv1.2, ciphers:ECDHE-RSA-AES256-SHA384)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 1976 bytes (SSL) (Service=HTTP)
+[Web Request      (1be8:15cc)] "GET /Citrix/InternalWeb/receiver/js/external/jquery.ui.touch-punch.min_94EA8262E7FD35F4.js"   
+[Network Analyzer (1be8:15cc)]   (Sid:  7) Client -> Server @ : 441 bytes (SSL)(Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 1191 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Web Request      (1be8:15cc)] "GET /Citrix/InternalWeb/receiver/js/ctxs.core.min_33B1CC992A07D57E.js"   
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Client -> Server @ : 420 bytes (SSL)(Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 1345 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 777 bytes (SSL) (Service=HTTP)
+[Web Request      (1be8:15cc)] "GET /Citrix/InternalWeb/receiver/js/ctxs.webui.min_91463D1B79731411.js"   
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Client -> Server @ : 421 bytes (SSL)(Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  7) Server -> Client : 1719 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:1184)]   (Sid:  8) Negotiate Proxy -> Server SSL Handshake (ssl:TLSv1, ciphers:AES256-SHA)
+[Network Analyzer (1be8:1184)]   (Sid:  8) Negotiate Client -> Proxy SSL Handshake (ssl:TLSv1.2, ciphers:ECDHE-RSA-AES256-SHA384)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Web Request      (1be8:15cc)] "GET /Citrix/InternalWeb/receiver/js/external/hammer.v2.0.8.min_F699A1E56189259A.js"   
+[Network Analyzer (1be8:15cc)]   (Sid:  8) Client -> Server @ : 433 bytes (SSL)(Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 3952 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 3952 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  8) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  8) Server -> Client : 6968 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 3952 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 3952 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  8) Server -> Client : 7128 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:1354)]   (Sid:  9) Negotiate Proxy -> Server SSL Handshake (ssl:TLSv1, ciphers:AES256-SHA)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 4548 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:1354)]   (Sid:  9) Negotiate Client -> Proxy SSL Handshake (ssl:TLSv1.2, ciphers:ECDHE-RSA-AES256-SHA384)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 3952 bytes (SSL) (Service=HTTP)
+[Web Request      (1be8:15cc)] "GET /Citrix/InternalWeb/receiver/js/external/jquery.dotdotdot.min_08EE54CBA886AD0A.js"   
+[Network Analyzer (1be8:15cc)]   (Sid:  9) Client -> Server @ : 436 bytes (SSL)(Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 4304 bytes (SSL) (Service=HTTP)
+[Web Request      (103c:18c0)] "GET /favicon.ico"   
+[Network Analyzer (103c:18c0)]   (Sid:  7) Client -> Server @ : 220 bytes (SSL)(Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  7) Server -> Client : 582 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  9) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  9) Server -> Client : 104 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 3952 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 3952 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 3952 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 3952 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 1976 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 2137 bytes (SSL) (Service=HTTP)
+[Web Request      (1be8:15cc)] "GET /Citrix/InternalWeb/custom/script.js"   
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Client -> Server @ : 391 bytes (SSL)(Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 1294 bytes (SSL) (Service=HTTP)
+[Web Request      (1be8:15cc)] "GET /Citrix/InternalWeb/custom/strings.en.js"   
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Client -> Server @ : 395 bytes (SSL)(Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 514 bytes (SSL) (Service=HTTP)
+[Web Request      (1be8:15cc)] "GET /Citrix/InternalWeb/receiver/images/1x/viewSprite_B2F322BDCB824FAF.png"   
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Client -> Server @ : 442 bytes (SSL)(Service=HTTP)
+[Web Request      (1be8:15cc)] "POST /Citrix/InternalWeb/Home/Configuration"   
+[Network Analyzer (1be8:15cc)]   (Sid:  9) Client -> Server @ : 505 bytes (SSL)(Service=HTTP)
+[Web Request      (1be8:15cc)] "GET /Citrix/InternalWeb/receiver/images/common/favicon_9B19689CB70C681E.ico"   
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Client -> Server @ : 290 bytes (SSL)(Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 3563 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  9) Server -> Client : 1834 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 6079 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:1748)] Address lookup for VWEDC1PL00269 = 10.200.160.20
+[Network Analyzer (1be8:1748)] Request Connection: Remote Server @ 93.184.220.29:80   (Service=)  (Sid= 10)  PROXIED!
+[Web Request      (1be8:15cc)] "GET /MFEwTzBNMEswSTAJBgUrDgMCGgUABBSnR4FoxLLkI7vkvsUIFlZt%2BlGH3gQUWsS5eyoKo6XqcQPAYPkt9mV1DlgCEAf7yHcep3bjF48qAqSNYSs%3D"   
+[Network Analyzer (1be8:15cc)]   (Sid: 10) Client -> Server @ : 233 bytes (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid: 10) Server -> Client : 788 bytes  (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Client -> Server @ : 747 bytes (SSL)(Service=HTTP)
+[Web Request      (1be8:15cc)] "POST /Citrix/InternalWeb/Resources/List"   
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Client -> Server @ : 35 bytes (SSL)(Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 563 bytes (SSL) (Service=HTTP)
+[Web Request      (1be8:15cc)] "POST /Citrix/InternalWeb/Authentication/GetAuthMethods"   
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Client -> Server @ : 724 bytes (SSL)(Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 490 bytes (SSL) (Service=HTTP)
+[Web Request      (1be8:15cc)] "POST /Citrix/InternalWeb/ExplicitAuth/Login"   
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Client -> Server @ : 946 bytes (SSL)(Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 935 bytes (SSL) (Service=HTTP)
+[Web Request      (1be8:15cc)] "GET /Citrix/InternalWeb/receiver/images/common/authspinner_B0BCD339560CA593.gif"   
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Client -> Server @ : 609 bytes (SSL)(Service=HTTP)
+[Web Request      (1be8:15cc)] "GET /Citrix/InternalWeb/receiver/images/1x/CitrixStoreFront_auth_14B96BFF2B0A6FF8.png"   
+[Network Analyzer (1be8:15cc)]   (Sid:  9) Client -> Server @ : 615 bytes (SSL)(Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 1460 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  9) Server -> Client : 6300 bytes (SSL) (Service=HTTP)
+[Network Analyzer (103c:1b70)] Address lookup for VWEDC1PL00269 = 10.200.160.20
+[Network Analyzer (103c: 914)] Address lookup for VWEDC1PL00269 = 10.200.160.20
+[Network Analyzer (103c:1b70)] Request Connection: Remote Server @ 152.199.19.161:443   (Service=)  (Sid=  8)  PROXIED!
+[Network Analyzer (103c: 914)] Request Connection: Remote Server @ 152.199.19.161:443   (Service=)  (Sid=  9)  PROXIED!
+[Network Analyzer (103c:10d8)]   (Sid:  8) Negotiate Proxy -> Server SSL Handshake (ssl:TLSv1.1, ciphers:ECDHE-RSA-AES256-SHA)
+[Web Request      (103c:18c0)] "GET /MFQwUjBQME4wTDAJBgUrDgMCGgUABBQY%2BIWplxzce%2B%2BGCW0BmDyo%2BZ8lVgQUJPIuTg%2B9yvc%2BKVXKco1ph1ZE6XoCEyAAAnDMbSUzbKCBs1kAAAACcMw%3D"   
+[Network Analyzer (103c:18c0)]   (Sid:  3) Client -> Server @ : 245 bytes (Service=HTTP)
+[Network Analyzer (103c: a5c)]   (Sid:  9) Negotiate Proxy -> Server SSL Handshake (ssl:TLSv1.1, ciphers:ECDHE-RSA-AES256-SHA)
+[Network Analyzer (103c:18c0)]   (Sid:  3) Server -> Client : 2563 bytes  (Service=HTTP)
+[Web Request      (103c:18c0)] "GET /MFQwUjBQME4wTDAJBgUrDgMCGgUABBQY%2BIWplxzce%2B%2BGCW0BmDyo%2BZ8lVgQUJPIuTg%2B9yvc%2BKVXKco1ph1ZE6XoCEyAAAnDMbSUzbKCBs1kAAAACcMw%3D"   
+[Network Analyzer (103c:18c0)]   (Sid:  3) Client -> Server @ : 288 bytes (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  3) Server -> Client : 2559 bytes  (Service=HTTP)
+[Web Request      (103c:18c0)] "GET /pki/mscorp/crl/Microsoft%20IT%20TLS%20CA%202.crl"   
+[Network Analyzer (103c:18c0)]   (Sid:  4) Client -> Server @ : 167 bytes (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 2920 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 8200 bytes  (Service=HTTP)
+[Web Request      (103c:18c0)] "GET /pki/mscorp/crl/Microsoft%20IT%20TLS%20CA%202.crl"   
+[Network Analyzer (103c:18c0)]   (Sid:  4) Client -> Server @ : 210 bytes (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 1460 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 9660 bytes  (Service=HTTP)
+[Web Request      (103c:18c0)] "GET /pki/mscorp/crl/Microsoft%20IT%20TLS%20CA%202.crl"   
+[Network Analyzer (103c:18c0)]   (Sid:  5) Client -> Server @ : 165 bytes (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 1460 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 9676 bytes  (Service=HTTP)
+[Web Request      (103c:18c0)] "GET /pki/mscorp/crl/Microsoft%20IT%20TLS%20CA%202.crl"   
+[Network Analyzer (103c:18c0)]   (Sid:  5) Client -> Server @ : 208 bytes (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 2920 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 8216 bytes  (Service=HTTP)
+[Net An. Error    (103c: a5c)] SSLAccept(ssl_id = 855804124304 = 000000C741E69C90) Failed, ctx = 000000C741B9E330, err = "SSLv3 read client key exchange A", err code = 5, err msg= "error:00000005:lib(0):func(0):DH lib
+" 
+[Net An. Error    (103c:10d8)] SSLAccept(ssl_id = 855804127504 = 000000C741E6A910) Failed, ctx = 000000C741B9E330, err = "SSLv3 read client key exchange A", err code = 5, err msg= "error:00000005:lib(0):func(0):DH lib
+" 
+[Net An. Error    (103c: a5c)]   (Sid:  9) Negotiate Client -> Proxy SSL Handshake Failed!!!
+[Net An. Error    (103c:10d8)]   (Sid:  8) Negotiate Client -> Proxy SSL Handshake Failed!!!
+[Network Analyzer (103c:18c0)]   (Sid:  8) Connection Terminated (by Client)
+[Network Analyzer (103c:18c0)]   (Sid:  9) Connection Terminated (by Client)
+[Network Analyzer (103c: 914)] Address lookup for VWEDC1PL00269 = 10.200.160.20
+[Network Analyzer (103c: 914)] Request Connection: Remote Server @ 152.199.19.161:443   (Service=)  (Sid= 10)  PROXIED!
+[Network Analyzer (103c:1820)]   (Sid: 10) Negotiate Proxy -> Server SSL Handshake (ssl:TLSv1.1, ciphers:ECDHE-RSA-AES256-SHA)
+[Network Analyzer (103c:1820)]   (Sid: 10) Negotiate Client -> Proxy SSL Handshake (ssl:TLSv1.2, ciphers:ECDHE-RSA-AES256-SHA384)
+[Web Request      (103c:18c0)] "GET /IE11/1479242656000/iecompatviewlist.xml"   
+[Network Analyzer (103c:18c0)]   (Sid: 10) Client -> Server @ : 365 bytes (SSL)(Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid: 10) Server -> Client : 467 bytes (SSL) (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid: 10) Server -> Client : 16383 bytes (SSL) (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid: 10) Server -> Client : 16383 bytes (SSL) (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid: 10) Server -> Client : 710 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  9) Client -> Server @ : 1019 bytes (SSL)(Service=HTTP)
+[Web Request      (1be8:15cc)] "GET /Citrix/InternalWeb/receiver/images/1x/spinner_white_auth_button_53FD5A337A529DA7.gif"   
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Client -> Server @ : 619 bytes (SSL)(Service=HTTP)
+[Web Request      (1be8:15cc)] "POST /Citrix/InternalWeb/ExplicitAuth/LoginAttempt"   
+[Network Analyzer (1be8:15cc)]   (Sid:  9) Client -> Server @ : 107 bytes (SSL)(Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 2466 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  9) Server -> Client : 590 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  9) Client -> Server @ : 827 bytes (SSL)(Service=HTTP)
+[Web Request      (1be8:15cc)] "POST /Citrix/InternalWeb/Resources/List"   
+[Network Analyzer (1be8:15cc)]   (Sid:  9) Client -> Server @ : 35 bytes (SSL)(Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  9) Server -> Client : 887 bytes (SSL) (Service=HTTP)
+[Web Request      (1be8:15cc)] "GET /Citrix/InternalWeb/receiver/images/common/icon_loading_9A0623127A028FEB.png"   
+[Network Analyzer (1be8:15cc)]   (Sid:  9) Client -> Server @ : 655 bytes (SSL)(Service=HTTP)
+[Web Request      (1be8:15cc)] "POST /Citrix/InternalWeb/Authentication/GetUserName"   
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Client -> Server @ : 751 bytes (SSL)(Service=HTTP)
+[Web Request      (1be8:15cc)] "GET /Citrix/InternalWeb/Resources/Icon/L0NpdHJpeC9JbnRlcm5hbC9yZXNvdXJjZXMvdjIvTTNkT01VZE5Sa1YwVDBkMGEwTnJZVEkzY2xoMGJrTjJRMWRTVDFsU2RUaFdTVlZCVFdaU1ZsUmlkejAtL2ltYWdl?size=128"   
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Client -> Server @ : 751 bytes (SSL)(Service=HTTP)
+[Web Request      (1be8:15cc)] "GET /Citrix/InternalWeb/receiver/images/1x/CitrixReceiverLogo_Home_5C24BCEC5A182425.png"   
+[Network Analyzer (1be8:15cc)]   (Sid:  8) Client -> Server @ : 662 bytes (SSL)(Service=HTTP)
+[Web Request      (1be8:15cc)] "GET /Citrix/InternalWeb/receiver/images/1x/search_close_BC5A22358E58905F.png"   
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Client -> Server @ : 651 bytes (SSL)(Service=HTTP)
+[Web Request      (1be8:15cc)] "GET /Citrix/InternalWeb/receiver/images/1x/spinner_5CF0D1C8A76AAC8E.png"   
+[Network Analyzer (1be8:15cc)]   (Sid:  7) Client -> Server @ : 646 bytes (SSL)(Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  9) Server -> Client : 749 bytes (SSL) (Service=HTTP)
+[Web Request      (1be8:15cc)] "GET /Citrix/InternalWeb/receiver/images/1x/ico_search_E84E3D63D821F80D.png"   
+[Network Analyzer (1be8:15cc)]   (Sid:  9) Client -> Server @ : 649 bytes (SSL)(Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  8) Server -> Client : 4583 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Server -> Client : 849 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Server -> Client : 325 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  7) Server -> Client : 2425 bytes (SSL) (Service=HTTP)
+[Web Request      (1be8:15cc)] "POST /Citrix/InternalWeb/ExplicitAuth/AllowSelfServiceAccountManagement"   
+[Network Analyzer (1be8:15cc)]   (Sid:  7) Client -> Server @ : 786 bytes (SSL)(Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  9) Server -> Client : 963 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  7) Server -> Client : 476 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 7204 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 1342 bytes (SSL) (Service=HTTP)
+[Web Request      (1be8:15cc)] "GET /Citrix/InternalWeb/Resources/LaunchIca/RGVmYXVsdEFnZ3JlZ2F0aW9uR3JvdXAuXEFQQUMgTG9hZCBUZXN0aW5n.ica?CsrfToken=9D80BF732A2A03FDA92A705B86EE7FEE&IsUsingHttps=Yes&displayNameDesktopTitle=APAC%20Load%20Testing&launchId=1548145663063"   
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Client -> Server @ : 795 bytes (SSL)(Service=HTTP)
+[Web Request      (1be8:15cc)] "GET /Citrix/InternalWeb/receiver/images/1x/ico_desktop_ready_482FD91B201F2A55.png"   
+[Network Analyzer (1be8:15cc)]   (Sid:  7) Client -> Server @ : 656 bytes (SSL)(Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Server -> Client : 1144 bytes (SSL) (Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  7) Server -> Client : 883 bytes (SSL) (Service=HTTP)
+[Citrix Recorder  ( f60:168c)] CitrixClientImpl.dll version: 12.55.911.0
+[Citrix Recorder  ( f60:168c)] Running Citrix processes:
+	concentr.exe, pid 5944, GDI handles in use: 41
+	receiver.exe, pid 3812, GDI handles in use: 44
+[Citrix Recorder  ( f60:168c)] Modifying ICA file with commands "ConnectionBar=0	TWIMode=Off": done with status 0 (SUCCESS).
+[Citrix Recorder  ( f60:168c)] ctrx_set_connect_opt("ICAFILE", "");
+[Citrix Recorder  ( f60:168c)] client resolution = 1364x768, client color depth = 32 bits
+[Citrix Recorder  ( f60:168c)] Foreground window = 65580
+[Citrix Recorder  ( f60:168c)] ctrx_create_window "Windows Logon" flag=1 style=-1778384896 ext_style=0 id=65568
+[Network Analyzer (103c: e48)] Address lookup for VWEDC1PL00269 = 10.200.160.20
+[Network Analyzer (103c: 914)] Address lookup for VWEDC1PL00269 = 10.200.160.20
+[Network Analyzer (103c: e48)] Request Connection: Remote Server @ 204.79.197.200:443   (Service=)  (Sid= 11)  PROXIED!
+[Network Analyzer (103c: 914)] Request Connection: Remote Server @ 204.79.197.200:443   (Service=)  (Sid= 12)  PROXIED!
+[Network Analyzer (103c:17dc)]   (Sid: 11) Negotiate Proxy -> Server SSL Handshake (ssl:TLSv1.1, ciphers:ECDHE-RSA-AES256-SHA)
+[Web Request      (103c:18c0)] "GET /MFQwUjBQME4wTDAJBgUrDgMCGgUABBQY%2BIWplxzce%2B%2BGCW0BmDyo%2BZ8lVgQUJPIuTg%2B9yvc%2BKVXKco1ph1ZE6XoCEy0AADKZ1wcdt9FwikIAAAAAMpk%3D"   
+[Network Analyzer (103c:18c0)]   (Sid:  3) Client -> Server @ : 245 bytes (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  3) Server -> Client : 1460 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  3) Server -> Client : 1099 bytes  (Service=HTTP)
+[Web Request      (103c:18c0)] "GET /MFQwUjBQME4wTDAJBgUrDgMCGgUABBQY%2BIWplxzce%2B%2BGCW0BmDyo%2BZ8lVgQUJPIuTg%2B9yvc%2BKVXKco1ph1ZE6XoCEy0AADKZ1wcdt9FwikIAAAAAMpk%3D"   
+[Network Analyzer (103c:18c0)]   (Sid:  3) Client -> Server @ : 288 bytes (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  3) Server -> Client : 1460 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  3) Server -> Client : 1099 bytes  (Service=HTTP)
+[Network Analyzer (103c:1900)]   (Sid: 12) Negotiate Proxy -> Server SSL Handshake (ssl:TLSv1.1, ciphers:ECDHE-RSA-AES256-SHA)
+[Web Request      (103c:18c0)] "GET /pki/mscorp/crl/Microsoft%20IT%20TLS%20CA%205.crl"   
+[Network Analyzer (103c:18c0)]   (Sid:  4) Client -> Server @ : 167 bytes (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 1460 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 7944 bytes  (Service=HTTP)
+[Web Request      (103c:18c0)] "GET /pki/mscorp/crl/Microsoft%20IT%20TLS%20CA%205.crl"   
+[Network Analyzer (103c:18c0)]   (Sid:  4) Client -> Server @ : 210 bytes (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 2920 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  4) Server -> Client : 6484 bytes  (Service=HTTP)
+[Web Request      (103c:18c0)] "GET /pki/mscorp/crl/Microsoft%20IT%20TLS%20CA%205.crl"   
+[Network Analyzer (103c:18c0)]   (Sid:  5) Client -> Server @ : 165 bytes (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 1460 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 7960 bytes  (Service=HTTP)
+[Web Request      (103c:18c0)] "GET /pki/mscorp/crl/Microsoft%20IT%20TLS%20CA%205.crl"   
+[Network Analyzer (103c:18c0)]   (Sid:  5) Client -> Server @ : 208 bytes (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 1460 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 16384 bytes  (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  5) Server -> Client : 7960 bytes  (Service=HTTP)
+[Net An. Error    (103c:17dc)] SSLAccept(ssl_id = 855801614736 = 000000C741C05190) Failed, ctx = 000000C741B9E010, err = "SSLv3 read client key exchange A", err code = 5, err msg= "error:00000005:lib(0):func(0):DH lib
+" 
+[Net An. Error    (103c:1900)] SSLAccept(ssl_id = 855801605136 = 000000C741C02C10) Failed, ctx = 000000C741B9E010, err = "SSLv3 read client key exchange A", err code = 5, err msg= "error:00000005:lib(0):func(0):DH lib
+" 
+[Net An. Error    (103c:17dc)]   (Sid: 11) Negotiate Client -> Proxy SSL Handshake Failed!!!
+[Net An. Error    (103c:1900)]   (Sid: 12) Negotiate Client -> Proxy SSL Handshake Failed!!!
+[Network Analyzer (103c:18c0)]   (Sid: 11) Connection Terminated (by Client)
+[Network Analyzer (103c:18c0)]   (Sid: 12) Connection Terminated (by Client)
+[Network Analyzer (103c:1bcc)] Address lookup for VWEDC1PL00269 = 10.200.160.20
+[Network Analyzer (103c:1bcc)] Request Connection: Remote Server @ 204.79.197.200:443   (Service=)  (Sid= 13)  PROXIED!
+[Network Analyzer (103c:150c)]   (Sid: 13) Negotiate Proxy -> Server SSL Handshake (ssl:TLSv1.1, ciphers:ECDHE-RSA-AES256-SHA)
+[Network Analyzer (103c:150c)]   (Sid: 13) Negotiate Client -> Proxy SSL Handshake (ssl:TLSv1.2, ciphers:ECDHE-RSA-AES256-SHA384)
+[Web Request      (103c:18c0)] "GET /iedomainsuggestions/ie11/suggestions.en-US"   
+[Network Analyzer (103c:18c0)]   (Sid: 13) Client -> Server @ : 368 bytes (SSL)(Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid: 13) Server -> Client : 4032 bytes (SSL) (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid: 13) Server -> Client : 8192 bytes (SSL) (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid: 13) Server -> Client : 6490 bytes (SSL) (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid:  6) Connection Terminated (by Server)
+[Citrix Recorder  ( f60:168c)] ctrx_wait_for_event("LOGON");
+[Citrix Recorder  ( f60:168c)] Foreground window = 0
+[Citrix Recorder  ( f60:168c)] ctrx_delete_window "Windows Logon" 
+[Citrix Recorder  ( f60:168c)] Start notification arrived from the Agent, Agent version = "12.60.971.0";
+[Citrix Recorder  ( f60:168c)] Start notification from the Agent is "Start12.60.971.0DEP:0,CAPS:LOGOFF,Host:VWSNG1IR01006,AGENTPID:11208";
+[Citrix Recorder  ( f60:168c)] Informational: DEP is "OFF" on the Citrix server;
+[Citrix Recorder  ( f60:168c)] Citrix Agent PID is 11208;
+[Citrix Recorder  ( f60:168c)] Foreground window = 65746
+[Citrix Recorder  ( f60:168c)] ctrx_create_window "Desktop" flag=0 style=-1778384896 ext_style=128 id=65890
+[Citrix Recorder  ( f60:168c)] ctrx_create_window "Start" flag=1 style=-1811936256 ext_style=524424 id=65750
+[Citrix Recorder  ( f60:168c)] Foreground window = 65890
+[Network Analyzer (103c:18c0)]   (Sid:  7) Connection Terminated (by Server)
+[Citrix Recorder  ( f60:168c)] ctrx_logoff("CTRX_NORMAL_LOGOFF");
+[Network Analyzer (103c:18c0)]   (Sid:  3) Connection Terminated (by Server)
+[Network Analyzer (1be8:15cc)]   (Sid:  9) Connection Terminated (by Client)
+[Network Analyzer (1be8:15cc)]   (Sid:  5) Connection Terminated (by Client)
+[Network Analyzer (1be8:15cc)]   (Sid:  4) Connection Terminated (by Client)
+[Network Analyzer (1be8:15cc)]   (Sid:  8) Connection Terminated (by Client)
+[Network Analyzer (1be8:15cc)]   (Sid:  7) Connection Terminated (by Client)
+[Network Analyzer (1be8:15cc)]   (Sid:  6) Connection Terminated (by Client)
+[Network Analyzer (1be8:1a38)] Address lookup for VWEDC1PL00269 = 10.200.160.20
+[Network Analyzer (103c:18c0)]   (Sid: 10) Connection Terminated (by Client)
+[Network Analyzer (1be8:1a38)] Request Connection: Remote Server @ 10.180.119.5:443   (Service=)  (Sid= 11)  PROXIED!
+[Network Analyzer (1be8:180c)]   (Sid: 11) Negotiate Proxy -> Server SSL Handshake (ssl:TLSv1, ciphers:AES256-SHA)
+[Network Analyzer (1be8:180c)]   (Sid: 11) Negotiate Client -> Proxy SSL Handshake (ssl:TLSv1.2, ciphers:ECDHE-RSA-AES256-SHA384)
+[Web Request      (1be8:15cc)] "POST /Citrix/InternalWeb/Authentication/Logoff"   
+[Network Analyzer (1be8:15cc)]   (Sid: 11) Client -> Server @ : 791 bytes (SSL)(Service=HTTP)
+[Network Analyzer (1be8:15cc)]   (Sid:  2) Connection Terminated (by Client)
+[Network Analyzer (1be8:15cc)]   (Sid:  3) Connection Terminated (by Client)
+[Network Analyzer (1be8:15cc)]   (Sid: 10) Connection Terminated (by Client)
+[Network Analyzer (1be8:15cc)]   (Sid: 11) Server -> Client : 591 bytes (SSL) (Service=HTTP)
+[Network Analyzer (103c:18c0)]   (Sid: 13) Connection Terminated (by Server)

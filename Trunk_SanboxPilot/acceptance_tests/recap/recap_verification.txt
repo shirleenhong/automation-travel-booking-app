@@ -1,0 +1,20 @@
+*** Settings ***
+Resource          ../../resources/common/global_resources.txt
+
+*** Keywords ***
+Verify Masked Credit Card Is Displayed By Default In Recap Panel
+    [Arguments]    ${expected_masked_cc}
+    ${actual_masked_cc}    Get Control Text Value    [NAME:ctxtFormOfPayment]
+    Verify Actual Value Matches Expected Value    ${actual_masked_cc}    ${expected_masked_cc}
+    [Teardown]    Take Screenshot
+
+Verify No PNR Is Created
+    Verify Control Object Text Value Is Correct    [NAME:ctxtLocator]    ${EMPTY}    PNR should not be created
+    [Teardown]    Take Screenshot
+
+Verify Unmasked Credit Card Has Correct Details In Recap Panel
+    [Arguments]    ${expected_unmasked_cc}
+    Click Control Button    [NAME:cmdEditFormOfPayment]
+    ${actual_unmasked_cc}    Get Control Text Value    [NAME:ctxtFormOfPayment]
+    Verify Actual Value Matches Expected Value    ${actual_unmasked_cc}    ${expected_unmasked_cc}
+    [Teardown]    Take Screenshot

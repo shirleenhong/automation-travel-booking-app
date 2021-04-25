@@ -1,0 +1,546 @@
+*** Settings ***
+Documentation     These user stories below are the reference for the Visa \ Handling implementation:
+...
+...               US869: [SG] Create Visa Handling Other Service Transaction
+...
+...               US466: [Continued] [SG] Create Visa Handling Other Service Transaction
+...
+...               DE202: [18.10][APAC][Other Services][Service Info] EO number is generated and Remarks are written/updated even when the PNR is not created successfully
+...
+...
+...               US1357: [18.10][SG][UAT][Other Services][APAC Services] Merchant Fee should not be applied to specific Products
+Force Tags        visa_handling
+Resource          ../other_services.txt
+
+*** Test Cases ***
+[NB OS] Verify That Visa Handling Behave Correctly In Other Services Panel And Written In The PNR When FOP Type Is CX
+    [Tags]    us466    de202    us1322    US1456    us1456    de356
+    ...    us1620    us1816    team_chiu    de486
+    Create PNR Using Credit Card As FOP    SG    air_segment=True    fop_dropdown_value=BTA VI/VI***********0235/D0623/CVV***
+    Click Panel    Other Svcs
+    Select Product And Vendor    Visa Handling Fee    Carlson Wagonlit GST
+    Populate Service Info Cost Details    Vendor Contact    800.00    1000.00
+    Verify Form Of Payment Details Are Correct    BTA VI/VI***********0235/D0623/CVV***    Credit Card (CX)
+    Get Other Services Form Of Payment Details
+    Get Other Services Cost Details
+    Compute Other Services Fees    7    2    false    false    country=SG
+    Verify Computation For Commision, GST Value, Merchant Fee ANd Total Selling Price
+    Tick CWT Absorb Checkbox For GST
+    Get Other Services Cost Details
+    Compute Other Services Fees    7    2    true    false    country=SG
+    Verify Computation For Commision, GST Value, Merchant Fee ANd Total Selling Price
+    Untick CWT Absorb Checkbox For GST
+    Tick CWT Absorb Checkbox For Merchant Fee
+    Get Other Services Cost Details
+    Compute Other Services Fees    7    2    false    true    country=SG
+    Verify Computation For Commision, GST Value, Merchant Fee ANd Total Selling Price
+    Tick CWT Absorb Checkbox For GST
+    Get Other Services Cost Details
+    Compute Other Services Fees    7    2    true    true    country=SG
+    Verify Computation For Commision, GST Value, Merchant Fee ANd Total Selling Price
+    Populate Visa Processing Country Details    Singapore    Other    Single    Month(s)    Normal    0137563466343
+    Set Validity Number    1
+    Set Processing Days    12
+    Set Passenger ID Value    99
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Tab In Other Services Panel    Visa Info
+    Get Other Services Cost Details
+    Get Other Service Visa Processing Country Details
+    Click Add Button In EO Panel    Visa Info
+    Verify EO Product Added On EO Grid    Visa Handling Fee
+    Click Finish PNR
+    Click Panel    Other Svcs
+    Verify EO Status For Third Party Vendor    Completed    1
+    Get Exchange Order Number
+    Retrieve PNR Details from Amadeus    command=RTY
+    Verify Other Services Visa Handling Accounting General Remarks    Visa Handling Fee    Carlson Wagonlit GST    Credit Card (CX)    SG
+    Verify Other Services Credit Card Fees Accounting Remarks Are Written    448488674100235    VI    06    2023    Credit Card (CX)    SG
+    ...    product_name=Visa Handling Fee
+    Verify BA And TA Remarks    ${uid}
+    [Teardown]
+
+[AB OS] Verify That Visa Handling Behave Correctly In Other Services Panel And Written In The PNR When FOP Type Is Cash Or Invoice
+    [Tags]    us466    us1322    us1462    de356    us1620    us1816
+    ...    team_chiu
+    Retrieve PNR And Populate Amend Workflow    fop_dropdown_value=Cash
+    Click Panel    Client Info
+    Select Form Of Payment    Cash
+    Click Panel    Other Svcs
+    Select Product And Vendor    Visa Handling Fee    Carlson Wagonlit GST
+    Populate Service Info Cost Details    Vendor Contact    250.00    800.00
+    Verify Form Of Payment Details Are Correct    Cash
+    Get Other Services Form Of Payment Details
+    Get Other Services Cost Details
+    Compute Other Services Fees    7    2    country=SG
+    Verify Computation For Commision, GST Value, Merchant Fee ANd Total Selling Price
+    Tick CWT Absorb Checkbox For GST
+    Get Other Services Cost Details
+    Compute Other Services Fees    7    2    true    false    country=SG
+    Verify Computation For Commision, GST Value, Merchant Fee ANd Total Selling Price
+    Populate Visa Processing Country Details    Singapore    Business    Single    Day(s)    Normal    0123456
+    Set Validity Number    1
+    Set Processing Days    12
+    Set Passenger ID Value    99
+    Get Other Service Visa Processing Country Details
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Add Button In EO Panel    Visa Info
+    Verify EO Product Added On EO Grid    Visa Handling Fee
+    Click Finish PNR    Amend Booking For Verify That Visa Handling Behave Correctly In Other Services Panel And Written In The PNR When FOP Type Is Cash Or Invoice
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Visa Handling Behave Correctly In Other Services Panel And Written In The PNR When FOP Type Is Cash Or Invoice
+    Click Panel    Other Svcs
+    Get Exchange Order Number    identifier=visa_handling1
+    Retrieve PNR Details From Amadeus    command=RTY
+    Verify Other Services Visa Handling Accounting General Remarks    Visa Handling Fee    Carlson Wagonlit GST    Invoice    SG
+    Verify Other Services Cash Or Invoice Fees Accounting Remarks Are Written    SG    Visa Handling Fee
+
+[AB CEO] Verify That Visa Handling Fee Accounting Remarks Are Not Written In PNR When FOP Is Cash Or Invoice And EO Product Is Cancelled
+    [Tags]    US1570    us1816    team_chiu
+    Retrieve PNR And Populate Amend Workflow    SG
+    Click Panel    Other Svcs
+    Cancel EO    ${eo_number_visa_handling1}    Visa Info    SG
+    Click Finish PNR    Amend Booking For Verify That Visa Handling Fee Accounting Remarks Are Not Written In PNR When FOP Is Cash Or Invoice And EO Product Is Cancelled
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Visa Handling Fee Accounting Remarks Are Not Written In PNR When FOP Is Cash Or Invoice And EO Product Is Cancelled
+    Verify PNR Is Successfully Created    False    1 Exchange Order(s) Successfully Cancelled!
+    Click Panel    Other Svcs
+    Verify Exchange Order Is Cancelled In EO Grid    ${eo_number_visa_handling1}
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Visa Handling Fee Remarks Are Not Written In PNR    Visa Handling Fee    Invoice
+    Verify Exchange Order Record Details Are Correct    SG    Visa Handling Fee    Carlson Wagonlit GST    VI    ${EMPTY}    Cancelled
+    ...    is_new_eo=False
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB OS SG] Verify That Visa Handling Behave Correctly In Other Services Panel And Written In The PNR When FOP Type Is CX
+    [Documentation]    due to FOP is masked in the PNR
+    [Tags]    horton    US466    us1322    US1456    de356    us1620
+    ...    us1816    team_chiu    de486
+    Create PNR Using Credit Card As FOP    SG    air_segment=True    fop_dropdown_value=BTA VI/VI***********0235/D0623/CVV***
+    Click Panel    Other Svcs
+    Select Product And Vendor    Visa Handling Fee    Carlson Wagonlit GST
+    Populate Service Info Cost Details    Vendor Contact    800.00    1000.00
+    Verify Form Of Payment Details Are Correct    BTA VI/VI***********0235/D0623/CVV***    Credit Card (CX)
+    Get Nett Cost In Other Services
+    Get Selling Price
+    Get Total Selling Price
+    Get Form Of Payment
+    Get Other Services Cost Details
+    Compute Other Services Fees    7    2
+    Verify Commission Fee Value Is Correct
+    Verify GST Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Tick CWT Absorb Checkbox For GST
+    Get Selling Price
+    Get Total Selling Price
+    Get Other Services Cost Details
+    Compute Other Services Fees    7    2    true
+    Verify Commission Fee Value Is Correct
+    Verify GST Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Untick CWT Absorb Checkbox For GST
+    Tick CWT Absorb Checkbox For Merchant Fee
+    Get Selling Price
+    Get Total Selling Price
+    Get Other Services Cost Details
+    Compute Other Services Fees    7    2    false    true
+    Verify Commission Fee Value Is Correct
+    Verify GST Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Tick CWT Absorb Checkbox For GST
+    Get Selling Price
+    Get Total Selling Price
+    Get Other Services Cost Details
+    Compute Other Services Fees    7    2    true    true
+    Verify Commission Fee Value Is Correct
+    Verify GST Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Populate Service Info Cost Details    Vendor Contact    344.23    566.00
+    Populate Visa Processing Country Details    Singapore    Other    Single    Month(s)    Normal    0123456
+    Set Passenger ID Value    99
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Get Other Service Visa Processing Country Details
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Itinerary Remarks    PLEASE VERIFY VISA TYPE AND VALIDITY
+    Click Add Button In EO Panel    Visa Info
+    Verify EO Product Added On EO Grid    Visa Handling Fee
+    Click Finish PNR
+    Click Panel    Other Svcs
+    Get Exchange Order Number    identifier=handling
+    #to be included in Amend
+    Generate Data For Specific Product    False    P1    37    Visa Handling Fee    VI    021238
+    ...    ${EMPTY}    New
+    Verify Pdf Button Opens The Pdf    1
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Visa Handling Remarks Are Written When FOP Is Credit Card In The PNR    Visa Handling Fee    37    021238
+    Verify Specific Remark Is Written In The PNR    RIR PLEASE VERIFY VISA TYPE AND VALIDITY
+
+[AB AOS] Verify That Visa Handling Behave Correctly In Other Services Panel And Written In The PNR When FOP Type Is CX
+    [Tags]    horton    us832    us1322    us1462    de356    us1620
+    ...    us1816    team_chiu
+    Retrieve PNR And Populate Amend Workflow    SG    fop_dropdown_value=BTA CARD/CA************1114/D0828/CVV****
+    Click Panel    Other Svcs
+    Click Amend EO    ${eo_number_handling}
+    Verify Form Of Payment Details Are Correct    BTA VI/VI***********0235/D0623/CVV***    Credit Card (CX)
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Get Other Service Visa Processing Country Details
+    Verify Vendor Contact Value Is Correct    Vendor Contact
+    Verify Nett Cost Value Is Correct    344.23
+    Verify Selling Price Value Is Correct    566.00
+    Verify Commission Fee Value Is Correct    184.74
+    Verify GST Value Is Correct    0.00
+    Verify Merchant Fee Value Is Correct    0.00
+    Verify Total Selling Price Value Is Correct    528.97
+    Verify Visa Processing Country Details    Singapore    Other    Single    Month(s)    Normal    99
+    ...    0123456
+    Click Tab In Other Services Panel    Vendor Info
+    Verify Vendor Value Is Correct    Carlson Wagonlit GST
+    Verify Address 1 Value Is Correct    INTERCOMPANY - TRADE
+    Verify Address 2 Value Is Correct
+    Verify City Value Is Correct    SIN
+    Verify Country Value Is Correct
+    Verify Email Value Is Correct    automationtest@cwt.com
+    Verify Contact No Value Is Correct
+    Verify Fax No Value Is Correct    1111
+    Verify Credit Terms Values Is Correct    0
+    Verify Support Email Value Is Correct    automationtest@cwt.com
+    Click Tab In Other Services Panel    Visa Info
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    AX    371449635398431    12    2027
+    Get Other Services Form Of Payment Details
+    Click Add Button In EO Panel    Visa Info
+    Verify EO Product Added On EO Grid    Visa Handling Fee
+    Click Finish PNR    Amend Booking For Verify That Visa Handling Behave Correctly In Other Services Panel And Written In The PNR When FOP Type Is CX For AOS
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Visa Handling Behave Correctly In Other Services Panel And Written In The PNR When FOP Type Is CX For AOS
+    Click Panel    Other Svcs
+    Get Exchange Order Number    identifier=visa_handling2
+    Generate Data For Specific Product    False    P1    37    Visa Handling Fee    VI    021238
+    ...    ${EMPTY}    New
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Visa Handling Remarks Are Not Written When FOP Is Credit Card In The PNR
+    Verify Visa Handling Remarks Are Written When FOP Is Credit Card In The PNR    Visa Handling Fee    37    021238
+
+[AB OS SG] Verify That Visa Handling Behave Correctly In Other Services Panel And Written In The PNR When FOP Type Is CX
+    [Tags]    horton    US466    us1322    us1462    de356    us1620
+    ...    us1816    team_chiu    de486
+    Retrieve PNR And Populate Amend Workflow    SG    fop_dropdown_value=BTA CARD/CA************1114/D0828/CVV****
+    Click Panel    Other Svcs
+    Select Product And Vendor    Visa Handling Fee    Carlson Wagonlit GST
+    Set Nett Cost    250.00
+    Set Selling Price    800.00
+    Verify Form Of Payment Details Are Correct    BTA CARD/CA************1114/D0828/CVV****    Credit Card (CX)
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Compute Other Services Fees    7    2    false    true
+    Verify Commission Fee Value Is Correct
+    Verify GST Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Tick CWT Absorb Checkbox For GST
+    Get Other Services Cost Details
+    Compute Other Services Fees    7    2    true    true
+    Verify Commission Fee Value Is Correct
+    Verify GST Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Untick CWT Absorb Checkbox For GST
+    Tick CWT Absorb Checkbox For Merchant Fee
+    Get Other Services Cost Details
+    Compute Other Services Fees    7    2    false    true
+    Verify Commission Fee Value Is Correct
+    Verify GST Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Tick CWT Absorb Checkbox For GST
+    Get Other Services Cost Details
+    Compute Other Services Fees    7    2    true    true
+    Verify Commission Fee Value Is Correct
+    Verify GST Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Set Nett Cost    0.
+    Get Other Services Cost Details
+    Compute Other Services Fees    7    2    true    true
+    Verify Commission Fee Value Is Correct
+    Verify GST Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Set Nett Cost    250.00
+    Set Selling Price    0.
+    Get Other Services Cost Details
+    Compute Other Services Fees    7    2    true    true
+    Verify Commission Fee Value Is Correct
+    Verify GST Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Set Selling Price    800.00
+    Get Other Services Cost Details
+    Compute Other Services Fees    7    2    true    true
+    Verify Commission Fee Value Is Correct
+    Verify GST Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Populate Visa Cost Tab
+    Comment    Unmask Credit Card Number
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Get Other Service Visa Processing Country Details
+    Click Remarks Tab
+    Select Itinerary Remarks    PLEASE VERIFY VISA TYPE AND VALIDITY
+    Click Add Button In EO Panel    Visa Info
+    Click Finish PNR    Amend Booking For Verify That Visa Handling Behave Correctly In Other Services Panel And Written In The PNR When FOP Type Is CX
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Visa Handling Behave Correctly In Other Services Panel And Written In The PNR When FOP Type Is CX
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Visa Handling Remarks Are Written When FOP Is Credit Card In The PNR    Visa Handling Fee    37    021238
+    Verify Specific Remark Is Written In The PNR    RIR PLEASE VERIFY VISA TYPE AND VALIDITY
+
+[AB OS SG] Verify That Visa Handling Behave Correctly In Other Services Panel And Written In The PNR When FOP Type Is Cash Or Invoice
+    [Tags]    horton    US466    us1322    us1462    de356    us1620
+    ...    us1816    team_chiu
+    Retrieve PNR And Populate Amend Workflow    fop_dropdown_value=Invoice
+    Click Panel    Client Info
+    Select Form Of Payment    Invoice
+    Click Panel    Other Svcs
+    Select Product And Vendor    Visa Handling Fee    Carlson Wagonlit GST
+    Set Nett Cost    250.00
+    Set Selling Price    800.00
+    Verify Form Of Payment Details Are Correct    Invoice
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Compute Other Services Fees    7    2
+    Verify Commission Fee Value Is Correct
+    Verify GST Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Tick CWT Absorb Checkbox For GST
+    Get Other Services Cost Details
+    Compute Other Services Fees    7    2    true
+    Verify Commission Fee Value Is Correct
+    Verify GST Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Untick CWT Absorb Checkbox For GST
+    Tick CWT Absorb Checkbox For Merchant Fee
+    Get Other Services Cost Details
+    Compute Other Services Fees    7    2    false    true
+    Verify Commission Fee Value Is Correct
+    Verify GST Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Tick CWT Absorb Checkbox For GST
+    Get Other Services Cost Details
+    Compute Other Services Fees    7    2    true    true
+    Verify Commission Fee Value Is Correct
+    Verify GST Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Populate Visa Processing Country Details    Singapore    Other    Single    Month(s)    Normal    0123456
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Get Other Service Visa Processing Country Details
+    Click Remarks Tab
+    Select Itinerary Remarks    PLEASE VERIFY VISA TYPE AND VALIDITY
+    Click Add Button In EO Panel    Visa Info
+    Verify EO Product Added On EO Grid    Visa Handling Fee
+    Click Finish PNR    Amend Booking For Verify That Visa Handling Behave Correctly In Other Services Panel And Written In The PNR When FOP Type Is Cash Or Invoice For OS
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Visa Handling Behave Correctly In Other Services Panel And Written In The PNR When FOP Type Is Cash Or Invoice For OS
+    Click Panel    Other Svcs
+    Get Exchange Order Number    identifier=handling
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Visa Handling Remarks Are Written When FOP Is Cash Or Invoice In The PNR    Visa Handling Fee    37    021238
+    Verify Specific Remark Is Written In The PNR    RIR PLEASE VERIFY VISA TYPE AND VALIDITY
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Amend Booking For Verify That Visa Handling Behave Correctly In Other Services Panel And Written In The PNR When FOP Type Is Cash Or Invoice For OS
+    Retrieve PNR And Populate Amend Workflow    fop_dropdown_value=Cash
+    Click Panel    Client Info
+    Select Form Of Payment    Cash
+    Click Panel    Other Svcs
+    Select Product And Vendor    Visa Handling Fee    Carlson Wagonlit GST
+    Populate Service Info Cost Details    Vendor Contact    250.00    800.00
+    Verify Form Of Payment Details Are Correct    Cash
+    Get Other Services Form Of Payment Details
+    Get Other Services Cost Details
+    Compute Other Services Fees    7    2    country=SG
+    Verify Computation For Commision, GST Value, Merchant Fee ANd Total Selling Price
+    Tick CWT Absorb Checkbox For GST
+    Get Other Services Cost Details
+    Compute Other Services Fees    7    2    true    false    country=SG
+    Verify Computation For Commision, GST Value, Merchant Fee ANd Total Selling Price
+    Populate Visa Processing Country Details    Singapore    Other    Single    Month(s)    Normal    0123456
+    Set Validity Number    1
+    Set Processing Days    12
+    Set Passenger ID Value    99
+    Get Other Service Visa Processing Country Details
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Add Button In EO Panel    Visa Info
+    Verify EO Product Added On EO Grid    Visa Handling Fee
+    Click Finish PNR    Amend Booking For Verify That Visa Handling Behave Correctly In Other Services Panel And Written In The PNR When FOP Type Is Cash Or Invoice For OS
+
+Amend Booking For Verify That Visa Handling Behave Correctly In Other Services Panel And Written In The PNR When FOP Type Is CX For AOS
+    Retrieve PNR And Populate Amend Workflow    SG    fop_dropdown_value=BTA CARD/CA************1114/D0828/CVV****
+    Click Panel    Other Svcs
+    Click Amend EO    ${eo_number_handling}
+    Verify Form Of Payment Details Are Correct    BTA VI/VI***********0235/D0623/CVV***
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CX)    ${EMPTY}
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Get Other Service Visa Processing Country Details
+    Verify Vendor Contact Value Is Correct    Vendor Contact
+    Verify Nett Cost Value Is Correct    344.23
+    Verify Selling Price Value Is Correct    566.00
+    Verify Commission Fee Value Is Correct    184.74
+    Verify GST Value Is Correct    0.00
+    Verify Merchant Fee Value Is Correct    0.00
+    Verify Total Selling Price Value Is Correct    528.97
+    Verify Visa Processing Country Details    Singapore    Other    Single    Month(s)    Normal    99
+    ...    0123456
+    Click Tab In Other Services Panel    Vendor Info
+    Verify Vendor Value Is Correct    Carlson Wagonlit GST
+    Verify Address 1 Value Is Correct    INTERCOMPANY - TRADE
+    Verify Address 2 Value Is Correct
+    Verify City Value Is Correct    SIN
+    Verify Country Value Is Correct
+    Verify Email Value Is Correct    automationtest@cwt.com
+    Verify Contact No Value Is Correct
+    Verify Fax No Value Is Correct    1111
+    Verify Credit Terms Values Is Correct    0
+    Verify Support Email Value Is Correct    automationtest@cwt.com
+    Click Tab In Other Services Panel    Visa Info
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    AX    371449635398431    12    2027
+    Get Other Services Form Of Payment Details
+    Click Add Button In EO Panel    Visa Info
+    Verify EO Product Added On EO Grid    Visa Handling Fee
+    Click Finish PNR    Amend Booking For Verify That Visa Handling Behave Correctly In Other Services Panel And Written In The PNR When FOP Type Is CX For AOS
+
+Amend Booking For Verify That Visa Handling Behave Correctly In Other Services Panel And Written In The PNR When FOP Type Is CX
+    Retrieve PNR And Populate Amend Workflow    SG    fop_dropdown_value=BTA CARD/CA************1114/D0828/CVV****
+    Click Panel    Other Svcs
+    Select Product And Vendor    Visa Handling Fee    Carlson Wagonlit GST
+    Set Nett Cost    250.00
+    Set Selling Price    800.00
+    Verify Form Of Payment Details Are Correct    BTA CARD/CA************1114/D0828/CVV****    Credit Card (CX)
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Compute Other Services Fees    7    2    false    true
+    Verify Commission Fee Value Is Correct
+    Verify GST Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Tick CWT Absorb Checkbox For GST
+    Get Other Services Cost Details
+    Compute Other Services Fees    7    2    true    true
+    Verify Commission Fee Value Is Correct
+    Verify GST Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Untick CWT Absorb Checkbox For GST
+    Tick CWT Absorb Checkbox For Merchant Fee
+    Get Other Services Cost Details
+    Compute Other Services Fees    7    2    false    true
+    Verify Commission Fee Value Is Correct
+    Verify GST Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Tick CWT Absorb Checkbox For GST
+    Get Other Services Cost Details
+    Compute Other Services Fees    7    2    true    true
+    Verify Commission Fee Value Is Correct
+    Verify GST Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Set Nett Cost    0.
+    Get Other Services Cost Details
+    Compute Other Services Fees    7    2    true    true
+    Verify Commission Fee Value Is Correct
+    Verify GST Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Set Nett Cost    250.00
+    Set Selling Price    0.
+    Get Other Services Cost Details
+    Compute Other Services Fees    7    2    true    true
+    Verify Commission Fee Value Is Correct
+    Verify GST Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Set Selling Price    800.00
+    Get Other Services Cost Details
+    Compute Other Services Fees    7    2    true    true
+    Verify Commission Fee Value Is Correct
+    Verify GST Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Populate Visa Cost Tab
+    Comment    Unmask Credit Card Number
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Get Other Service Visa Processing Country Details
+    Click Remarks Tab
+    Select Itinerary Remarks    PLEASE VERIFY VISA TYPE AND VALIDITY
+    Click Add Button In EO Panel    Visa Info
+    Click Finish PNR    Amend Booking For Verify That Visa Handling Behave Correctly In Other Services Panel And Written In The PNR When FOP Type Is CX
+
+Amend Booking For Verify That Visa Handling Behave Correctly In Other Services Panel And Written In The PNR When FOP Type Is Cash Or Invoice
+    Retrieve PNR And Populate Amend Workflow    fop_dropdown_value=Invoice
+    Click Panel    Client Info
+    Select Form Of Payment    Invoice
+    Click Panel    Other Svcs
+    Select Product And Vendor    Visa Handling Fee    Carlson Wagonlit GST
+    Set Nett Cost    250.00
+    Set Selling Price    800.00
+    Verify Form Of Payment Details Are Correct    Invoice
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Compute Other Services Fees    7    2
+    Verify Commission Fee Value Is Correct
+    Verify GST Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Tick CWT Absorb Checkbox For GST
+    Get Other Services Cost Details
+    Compute Other Services Fees    7    2    true
+    Verify Commission Fee Value Is Correct
+    Verify GST Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Untick CWT Absorb Checkbox For GST
+    Tick CWT Absorb Checkbox For Merchant Fee
+    Get Other Services Cost Details
+    Compute Other Services Fees    7    2    false    true
+    Verify Commission Fee Value Is Correct
+    Verify GST Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Tick CWT Absorb Checkbox For GST
+    Get Other Services Cost Details
+    Compute Other Services Fees    7    2    true    true
+    Verify Commission Fee Value Is Correct
+    Verify GST Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Populate Visa Processing Country Details    Singapore    Other    Single    Month(s)    Normal    0123456
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Get Other Service Visa Processing Country Details
+    Click Remarks Tab
+    Select Itinerary Remarks    PLEASE VERIFY VISA TYPE AND VALIDITY
+    Click Add Button In EO Panel    Visa Info
+    Verify EO Product Added On EO Grid    Visa Handling Fee
+    Click Finish PNR    Amend Booking For Verify That Visa Handling Behave Correctly In Other Services Panel And Written In The PNR When FOP Type Is Cash Or Invoice
+
+Amend Booking For Verify That Visa Handling Fee Accounting Remarks Are Not Written In PNR When FOP Is Cash Or Invoice And EO Product Is Cancelled
+    Retrieve PNR And Populate Amend Workflow    SG
+    Click Panel    Other Svcs
+    Cancel EO    ${eo_number_visa_handling1}    Visa Info    SG
+    Click Finish PNR    Amend Booking For Verify That Visa Handling Fee Accounting Remarks Are Not Written In PNR When FOP Is Cash Or Invoice And EO Product Is Cancelled

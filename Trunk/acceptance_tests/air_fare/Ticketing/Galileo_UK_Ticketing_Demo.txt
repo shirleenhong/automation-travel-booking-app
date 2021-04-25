@@ -1,0 +1,4 @@
+*** Settings ***
+Resource          ../../../resources/common/global_resources.txt
+
+*** Test Cases ***

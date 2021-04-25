@@ -1,0 +1,157 @@
+*** Settings ***
+Resource          ../../../resources/common/global_resources.txt
+Library           openpyxl
+Resource          ../../acceptance_tests/cust_refs/cust_refs_verification.txt
+
+*** Test Cases ***
+Verify CDR Data
+    [Tags]    not_ready
+    @{client_account_number_list}    Create List    '0049001004'    '0049001006'    '0049001013 '    '0049001008'    '0049001001'
+    ...    '0049001014'    '0049001003'    '0049001005'    '0049001007'    '0049001010'    '0049001011 '
+    ...    '0049001012 '
+    ${client_account_number}    Evaluate    ",".join(${client_account_number_list})
+    ${country}    Set Variable    SG
+    ${source_sys_code}    Set Variable    SG2
+    ${query_string}    Set Variable    SELECT '${country}-${source_sys_code}:' + cdr.ClientAccountNumber + ':' + CAST(cdr.SequenceNumber as varchar(10)) as ClientDefinedReferenceItemId, cdr.ClientAccountNumber, cdr.DisplayName, cdr.DisplayNameAlias, cdr.TagName, cdr.MinLength, cdr.MaxLength, cdr.EntryFormat, cdr.SequenceNumber, cdr.MandatoryFlag, cdr.TableDrivenFlag, ff.DefaultRemark FROM ClientDefinedReferenceItemPNROutput ff LEFT JOIN ClientDefinedReferenceItem cdr ON ff.ClientDefinedReferenceItemId = cdr.ClientDefinedReferenceItemId WHERE cdr.ClientAccountNumber IN (${client_account_number})order by cdr.ClientDefinedReferenceItemId
+    ${database_result}    Execute Query Pilot    ${query_string}
+    Set Test Variable    ${database_result}
+    ${excel_data}    Read Excel Files    ${TESTDATA_PATH}\\US1849_Visa+Inc_SG_Patch_reference.xlsx    CDR
+    Set Test Variable    ${excel_data}
+    Verify Data
+    [Teardown]    Disconnect From Database
+
+Verify Servicing Options Data
+    [Tags]    not_ready
+    @{client_sub_unit_guid_list}    Create List    '14:243DDE'    '14:243DD5'    '14:24DBCA'    '14:243DE0'    '14:243DDC'
+    ...    '14:24DBCB'    '14:243DD1'    '14:243DD4'    '14:243DD8'    '14:243DDB'    '14:243DDA'
+    ...    '14:243DD7'
+    ${client_sub_unit_guid}    Evaluate    ",".join(${client_sub_unit_guid_list})
+    ${country}    Set Variable    SG
+    ${user_story}    Set Variable    US1849
+    ${query_string}    Set Variable    SELECT sub.ClientSubUnitGuid,csu.ClientSubUnitName,so.ServicingOptionId,so.ServicingOptionName,item.ServicingOptionItemValue,item.ServicingOptionItemInstruction FROM ServicingOptionItem item LEFT JOIN ServicingOptionGroupClientSubUnit sub ON item.ServicingOptionGroupId = sub.ServicingOptionGroupId LEFT JOIN ServicingOption so ON so.servicingoptionid = item.servicingoptionid LEFT JOIN ClientSubunit csu ON sub.ClientSubunitGuid = csu.ClientSubunitGuid WHERE sub.ClientSubUnitGuid IN (${client_sub_unit_guid}) AND item.CreationUserIdentifier = 'Power Express APAC 18.11 ${country} - ${user_story}' Order By sub.ClientSubUnitGuid, so.ServicingOptionId
+    ${database_result}    Execute Query Pilot    ${query_string}
+    Set Test Variable    ${database_result}
+    ${excel_data}    Read Excel Files    ${TESTDATA_PATH}\\US1849_Visa+Inc_SG_Patch_reference.xlsx    SO
+    Set Test Variable    ${excel_data}
+    Verify Data
+    [Teardown]    Disconnect From Database
+
+Verify Transaction Fee Data
+    [Tags]    not_ready
+    @{client_sub_unit_guid_list}    Create List    '14:243DDE'    '14:243DD5'    '14:24DBCA'    '14:243DE0'    '14:243DDC'
+    ...    '14:24DBCB'    '14:243DD1'    '14:243DD4'    '14:243DD8'    '14:243DDB'    '14:243DDA'
+    ...    '14:243DD7'    '14:243DDE'
+    ${client_sub_unit_guid}    Evaluate    ",".join(${client_sub_unit_guid_list})
+    ${country}    Set Variable    SG
+    ${user_story}    Set Variable    US1849
+    ${query_string}    Set Variable    SELECT sub.ClientSubunitGuid, csu.ClientSubUnitName,csu.ClientSubUnitName + '_ClientSubUnit_TransactionFee' as ClientFeeGroupName,csu.ClientSubUnitName + '_Offline Intl-' + SUBSTRING(CAST(FeeAmount as varchar(10)), 1, 3) + '_' + CAST(ROW_NUMBER() OVER(PARTITION BY sub.ClientSubunitGuid ORDER BY csu.ClientSubUnitName) as varchar(10)) as 'TransactionFeeDescription', tf.TravelIndicator, tf.BookingSourceCode, tf.BookingOriginationCode, tf.ChargeTypeCode,tf.TransactionTypeCode,tf.FeeCategory,tf.FeeAmount as 'TransactionFee',tf.FeePercent as 'TransactionPergent', tf.FeeCurrencyCode FROM TransactionFee tf LEFT JOIN TransactionFeeClientFeeGroup tfg ON tfg.TransactionFeeId = tf.TransactionFeeId LEFT JOIN ClientFeeGroupClientSubUnit sub ON sub.ClientFeeGroupId = tfg.ClientFeeGroupId LEFT JOIN ClientSubunit csu ON sub.ClientSubunitGuid = csu.ClientSubunitGuid WHERE sub.ClientSubUnitGuid IN (${client_sub_unit_guid}) AND tf.CreationUserIdentifier = 'Power Express APAC 18.11 ${country} - ${user_story}' order by sub.ClientSubunitGuid
+    ${database_result}    Execute Query Pilot    ${query_string}
+    Set Test Variable    ${database_result}
+    ${excel_data}    Read Excel Files    ${TESTDATA_PATH}\\US1849_Visa+Inc_SG_Patch_reference.xlsx    Transaction Fee
+    Set Test Variable    ${excel_data}
+    Verify Data
+
+Verify Reason Code Data
+    [Tags]    not_ready
+    @{client_sub_unit_guid_list}    Create List    '14:243DD4'    '14:243DD1'    '14:243DD5'    '14:243DD7'    '14:243DD8'
+    ...    '14:243DDA'    '14:243DDB'    '14:243DDC'    '14:243DDE'    '14:243DE0'    '14:24DBCA'
+    ...    '14:24DBCB'
+    ${client_sub_unit_guid}    Evaluate    ",".join(${client_sub_unit_guid_list})
+    ${country}    Set Variable    SG
+    ${user_story}    Set Variable    US1849
+    ${query_string}    Set Variable    SELECT csu.ClientSubunitName,CASE item.ProductId WHEN 1 THEN csu.ClientSubunitName + '_Air_ReasonCode'WHEN 2 THEN csu.ClientSubunitName + '_Hotel_ReasonCode' WHEN 3 THEN csu.ClientSubunitName + '_Car_ReasonCode' END as GroupName,CASE item.ProductId WHEN 1 THEN 'Air' WHEN 2 THEN 'Hotel' WHEN 3 THEN 'Car' END as ProductName,CASE item.ReasonCodeTypeId WHEN 1 THEN 'Realised' WHEN 2 THEN 'Missed' END as ReasonCodeType,item.ReasonCode,des.ReasonCodeAlternativeDescription as Description, item.CreationUserIdentifier FROM ReasonCodeItem item LEFT JOIN ReasonCodeGroup rcg ON rcg.ReasonCodeGroupId = item.ReasonCodeGroupId LEFT JOIN ReasonCodeGroupClientSubUnit sub ON sub.ReasonCodeGroupId = rcg.ReasonCodeGroupId LEFT JOIN ReasonCodeAlternativeDescription des on des.ReasonCodeItemId = item.ReasonCodeItemId LEFT JOIN ClientSubunit csu ON sub.ClientSubunitGuid = csu.ClientSubunitGuid WHERE sub.ClientSubUnitGuid IN (${client_sub_unit_guid}) AND item.CreationUserIdentifier = 'Power Express APAC 18.11 ${country} - ${user_story}' order by csu.ClientSubunitName
+    ${database_result}    Execute Query Pilot    ${query_string}
+    Set Test Variable    ${database_result}
+    ${excel_data}    Read Excel Files    ${TESTDATA_PATH}\\US1849_Visa+Inc_SG_Patch_reference.xlsx    Reason Codes
+    Set Test Variable    ${excel_data}
+    Verify Data
+
+Data Validation UI
+    Open Power Express And Retrieve Profile    ${version}    sandboxpilot    U026CXB    en-GB    ${EMPTY}    APAC E2E - Hong Kong
+    ...    Amadeus
+    Set Client And Traveler    APAC E2E ¦ APAC HK - LYONDELLBASELL 406    BEAR    AUTOMATION
+    Click New Booking
+    Click Panel    Client Info
+    Select Form Of Payment    Invoice
+    Verify SO Values    SG
+    Verify CDR Values
+    Enter CDR Values
+    Verify CDR Accounting Remarks For Air Are Written    SG    Update PNR
+    Book Air Segment Using Default Values    SG
+    Book Passive Car Segment X Months From Now    SIN    6    22    6    23    2
+    ...    150    SGD
+    Click Read Booking
+
+*** Keywords ***
+Connect To Test DB Pilot
+    [Arguments]    ${schema}=Desktop_SyEx_Pilot
+    Comment    ${dbusername}=    RSALibrary.B 64 Decode    ${dbusername}
+    Comment    ${dbpassword}=    RSALibrary.B 64 Decode    ${dbpassword}
+    DatabaseLibrary.Connect To Database    mssql    ${schema}    U002KMB    ${dbpassword}    SWNV02DS01084    ${dbport}
+    Log    ${schema}
+
+Execute Query Pilot
+    [Arguments]    ${sql_query}
+    Connect To Syex Sandbox Pilot Database
+    ${queryResults}    Query    ${sql_query}
+    Log    ${queryResults}
+    Should Not Be Empty    ${queryResults}    msg=No Result Returned
+    [Return]    ${queryResults}
+
+Connect To Syex Sandbox Pilot Database
+    [Arguments]    ${schema}=Desktop_Sandbox_Pilot
+    Set Log Level    NONE
+    DatabaseLibrary.Connect To Database    pymssql    ${schema}    ExpressAutomation    Expr355Aut0_eal1    ${dbhost_sandboxpilot}    ${dbport}
+    Comment    Connect To Database Using Custom Params    pymssql    host='SWNV02DS01084', database='${schema}',user='U002KMB',port=${dbport},Trusted_Connection='yes'
+    Set Log Level    INFO
+
+Verify Data
+    Lists Should Be Equal    ${excel_data[0]}    ${database_result[0]}
+    Lists Should Be Equal    ${excel_data[1]}    ${database_result[1]}
+    Lists Should Be Equal    ${excel_data[2]}    ${database_result[2]}
+    Lists Should Be Equal    ${excel_data[3]}    ${database_result[3]}
+    Lists Should Be Equal    ${excel_data[4]}    ${database_result[4]}
+    Lists Should Be Equal    ${excel_data[5]}    ${database_result[5]}
+    Lists Should Be Equal    ${excel_data[6]}    ${database_result[6]}
+    Lists Should Be Equal    ${excel_data[7]}    ${database_result[7]}
+    Lists Should Be Equal    ${excel_data[8]}    ${database_result[8]}
+    Lists Should Be Equal    ${excel_data[9]}    ${database_result[9]}
+    Lists Should Be Equal    ${excel_data[10]}    ${database_result[10]}
+    Lists Should Be Equal    ${excel_data[11]}    ${database_result[11]}
+
+Verify SO Values
+    [Arguments]    ${country}
+    @{sos}    Get Service Option Values    True
+    Verify Dictionary Is In List Of Dictionary    Itinerary Product    CWT Itinerary    @{sos}
+    Verify Dictionary Is In List Of Dictionary    Acceptable Form of Payment    Company BTA/Lodge Card    @{sos}
+    Verify Dictionary Is In List Of Dictionary    Acceptable Form of Payment    Invoice    @{sos}
+    Verify Dictionary Is In List Of Dictionary    Acceptable Form of Payment    Individual Corporate Card    @{sos}
+    Verify Dictionary Is In List Of Dictionary    Hide Cancel Booking Button    Yes    @{sos}
+    Verify Dictionary Is In List Of Dictionary    Hide Create Shell Button    Yes    @{sos}
+    Verify Dictionary Is In List Of Dictionary    Fare Types    CAT 35 Fare    @{sos}
+    Verify Dictionary Is In List Of Dictionary    Fare Types    Published Fare    @{sos}
+    Verify Dictionary Is In List Of Dictionary    Fare Types    Corporate fare    @{sos}
+    Verify Dictionary Is In List Of Dictionary    Fare Types    Nett Remit Fare    @{sos}
+    Verify Dictionary Is In List Of Dictionary    Client Fee Geographical Regions    INTL    @{sos}
+    Run Keyword If    '${country}'=='HK'    Verify Dictionary Is In List Of Dictionary    Air Panel - Fuel Surcharge Amount    30    @{sos}
+
+Verify CDR Field Is Visible
+    [Arguments]    ${cdr_field_description}
+    ${cdr_dict}    Determine CDR Description And Index
+    Dictionary Should Contain Key    ${cdr_dict}    ${cdr_field_description}
+
+Verify CDR Values
+    Verify CDR Field Is Visible    Company Code
+    Verify CDR Field Is Visible    Cost Center
+    Verify CDR Field Is Visible    Employee ID
+    Verify CDR Field Is Visible    Employee SAP Name
+    Verify CDR Field Is Visible    EVP/SVP Name
+    Verify CDR Field Is Visible    HR Division Name
+
+Enter CDR Values
+    Set CDR Value    Company Code    t43f
+    Set CDR Value    Cost Center    3
+    Set CDR Value    Employee ID    1
+    Set CDR Value    Employee SAP Name    tr
+    Set CDR Value    EVP/SVP Name    3
+    Set CDR Value    HR Division Name    1

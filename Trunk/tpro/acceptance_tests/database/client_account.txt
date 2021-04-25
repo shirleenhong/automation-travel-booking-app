@@ -1,0 +1,17 @@
+*** Settings ***
+Resource          ../../../resources/common/global_resources.txt
+
+*** Test Cases ***
+Sample
+    ${query_string}    Set Variable    select * from ClientDefinedReferenceItem where ClientAccountNumber='3168001'
+    ${results}    Execute Query    ${query_string}    Desktop_Test
+    Log List    ${results}
+    Length Should Be    ${results}    9
+    Verify Row Values    ${results}    0    3168001    Division    APAC CDR Load
+    Verify Row Values    ${results}    1    3168001    Cost Centre    APAC CDR Load
+
+*** Keywords ***
+Verify Row Values
+    [Arguments]    ${query_results}    ${row_number}=0    @{expected_values}
+    : FOR    ${cell}    IN    @{expected_values}
+    \    List Should Contain Value    ${query_results[${row_number}]}    ${cell}

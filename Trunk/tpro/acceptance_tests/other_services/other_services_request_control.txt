@@ -1,0 +1,322 @@
+*** Settings ***
+Resource          ../../../resources/common/global_resources.txt
+
+*** Keywords ***
+Convert Date To GDS Format For India
+    [Arguments]    ${date_dd/mmm/yyyy}
+    [Documentation]    Sample Input: \ 09/Sep/2018
+    ...    SAmple Output: 09SEP18
+    ${date}    Split String    ${date_dd/mmm/yyyy}    /
+    ${day}    Get From List    ${date}    0
+    ${len}    Get Length    ${day}
+    ${day}    Set Variable If    ${len}==1    0${day}    ${day}
+    ${month}    Get From List    ${date}    1
+    ${month}    Convert To Uppercase    ${month}
+    ${year}    Get From List    ${date}    2
+    ${year}    Get Substring    ${year}    -2
+    ${date}    Convert To String    ${day.strip()}${month.strip()}${year.strip()}
+    Set Suite Variable    ${date}
+    ${date_dd_mmm}    Convert To String    ${day.strip()}${month.strip()}
+    Set Suite Variable    ${date_dd_mmm}
+
+Get Request Tab Field Values When Product Is Visa
+    [Arguments]    ${product}    ${identifier}
+    [Documentation]    Use this keyword to get all Request field values for the following Products: Visa Fee, Visa DD or Visa Handling Fee
+    Wait Until Control Object Is Visible    [NAME:OtherServicesTabControl]
+    Get Product
+    Get Vendor
+    Get Document
+    Get Country In Request
+    Get Doc Type
+    Get Date Of Application
+    Get Internal Remarks
+    Get Entries
+    Get Validity
+    Get Validity UOM
+    Get Processing Type
+    Run Keyword If    "${product.lower()}"=="visa handling fee"    Get Demand Draft Required
+    Run Keyword If    "${product.lower()}"=="visa handling fee"    Get Demand Draft Number
+    Run Keyword If    "${product.lower()}"=="visa handling fee"    Get Validity Custom Field
+    @{custom_fields}    Run Keyword If    "${product.lower()}"=="visa handling fee"    Create List    ${demand_draft_required}    ${demand_draft_number}    ${validity_custom_field}
+    ...    ELSE    Create List    ${EMPTY}
+    Log    Creating list ...
+    @{visa}    Create List    ${product}    ${vendor}    ${document}    ${country_visa}    ${doc_type}
+    ...    ${date_of_application}    ${internal_remarks}    ${entries}    ${validity}    ${validity_uom}    ${processing_type}
+    ${visa_collection}    Combine Lists    ${visa}    ${custom_fields}
+    ${visa_collection}    Remove Empty Value From List    ${visa_collection}
+    Set Suite Variable    ${visa_collection${identifier}}    ${visa_collection}
+    Log    ${visa_collection${identifier}}
+
+Populate Request Tab Fields For Transaction Charges And Train Products
+    [Arguments]    ${date_value}    ${time_value}    ${origin}    ${destination}    ${train_number}    ${name}
+    ...    ${class_or_cabin}    ${origin_line}=${EMPTY}    ${destination_line}=${EMPTY}
+    [Documentation]    For Date pass the value in the form of \ Format: dd/mm/yyyy
+    ...    Ex: ${date_value}=" 06/12/2018"
+    ...
+    ...    For Time pass the value
+    ...    Ex: ${date_value}="1:22:45 "
+    ...    Time Condition : preceeding Zero not allowed by Robot Framework
+    ...    Input:
+    ...    Ex: Time --> \ \ " 8:10:45" \ Preceeding Zero is not allowed for Hours, Ex: "08"
+    Set Date    ${date_value}
+    Set Time    ${time_value}
+    Populate Origin    ${origin}    ${origin_line}
+    Populate Destination    ${destination}    ${destination_line}
+    Set Train Number    ${train_number}
+    Set Name    ${name}
+    Set Class/Cabin    ${class_or_cabin}
+
+Set Date
+    [Arguments]    ${date_value}
+    @{date}    Split String    ${date_value}    /
+    ${day} =    Set Variable    ${date[0]}
+    ${month} =    Set Variable    ${date[1]}
+    ${year} =    Set Variable    ${date[2]}
+    ${object_name}    Determine Multiple Object Name Based On Active Tab    DatePickerControl,dtpDate,DatePicker    False
+    Populate Date    ${day}    ${month}    ${year}    ${object_name}
+    Send    {TAB}
+
+Set Time
+    [Arguments]    ${time_value}
+    [Documentation]    Input:
+    ...    Ex: Time --> \ \ " 8:10:45 AM" \ Preceeding Zero is not allowed for Hours, Ex: "08"
+    ${time_value}    Replace String    ${time_value}    ${SPACE}    :
+    @{time}    Split String    ${time_value}    :
+    ${hour} =    Set Variable    ${time[0]}
+    ${minute} =    Set Variable    ${time[1]}
+    ${seconds} =    Set Variable    ${time[2]}
+    ${am_or_pm} =    Set Variable    ${time[3]}
+    Populate Time Car Info    ${hour}    ${minute}    ${seconds}    [NAME:TimePicker]    ${am_or_pm}
+    Send    {TAB}
+
+Populate Origin
+    [Arguments]    ${origin}    ${origin_line}
+    ${object}    Determine Multiple Object Name Based On Active Tab    OriginTextBox    False
+    Set Control Text Value    ${object}    ${origin}
+    ${object}    Determine Multiple Object Name Based On Active Tab    OriginLineTextBox    False
+    Set Control Text Value    ${object}    ${origin_line}
+    Send    {TAB}
+
+Set Train Number
+    [Arguments]    ${train_number}
+    ${object}    Determine Multiple Object Name Based On Active Tab    TrainNumberTextBox    False
+    Set Control Text Value    ${object}    ${train_number}
+    Send    {TAB}
+
+Set Class/Cabin
+    [Arguments]    ${class_or_cabin}
+    ${object}    Determine Multiple Object Name Based On Active Tab    ClassCabinTextBox    False
+    Set Control Text Value    ${object}    ${class_or_cabin}
+    Send    {TAB}
+
+Click Clear In Request
+    Activate Power Express Window
+    Click Control Button    [NAME:ClearButton]
+
+Click Cancel In Request
+    Activate Power Express Window
+    Click Control Button    [NAME:CancelButton]
+
+Populate Custom Fields Grid For Transaction Charges And Train
+    [Arguments]    ${product}    ${ticket_type}    ${id_type}    ${id_issuing_auth}    ${id_no}    ${no_of_passengers}
+    ...    ${travel_within_24_hrs}    ${id_belong_to_passenger}=${EMPTY}    ${age}=${EMPTY}    ${gender}=${EMPTY}    ${travel_desk_email_id}=${EMPTY}
+    [Documentation]    Do not change the positioning of the Set Row Object as it helps in scrolling respective list for Train-Dom and Transaction Charges.
+    Run Keyword If    '${product.lower()}'=='train- dom'    Set Row Object In Datagrid    Ticket Type    ${ticket_type}    CustomFieldGrid
+    Set Row Object In Datagrid    ID Number    ${id_no}    CustomFieldGrid
+    Set Row Object In Datagrid    ID Issuing Authority    ${id_issuing_auth}    CustomFieldGrid
+    Set Row Object In Datagrid    ID Type    ${id_type}    CustomFieldGrid
+    Set Row Object In Datagrid    Number Of Passengers    ${no_of_passengers}    CustomFieldGrid
+    Run Keyword If    '${product.lower()}'=='train- dom'    Set Row Object In Datagrid    Travel Within 24 Hours    ${travel_within_24_hrs}    CustomFieldGrid
+    Run Keyword If    '${product.lower()}'=='train- dom'    Set Row Object In Datagrid    Age    ${age}    CustomFieldGrid
+    Run Keyword If    '${product.lower()}'=='train- dom'    Set Row Object In Datagrid    Gender    ${gender}    CustomFieldGrid
+    Run Keyword If    '${product.lower()}'=='transaction charges'    Set Row Object In Datagrid    ID Belong To Passenger    ${id_belong_to_passenger}    CustomFieldGrid
+    Run Keyword If    '${product.lower()}'=='train- dom'    Set Row Object In Datagrid    Travel Desk Email ID    ${travel_desk_email_id}    CustomFieldGrid
+    Run Keyword If    '${product.lower()}'=='transaction charges'    Set Row Object In Datagrid    Ticket Type    ${ticket_type}    CustomFieldGrid
+    Run Keyword If    '${product.lower()}'=='transaction charges'    Set Row Object In Datagrid    Travel Within 24 Hours    ${travel_within_24_hrs}    CustomFieldGrid
+
+Click Save In Request
+    Activate Power Express Window
+    Click Control Button    [NAME:SaveButton]
+
+Click Add In Request
+    Activate Power Express Window
+    Click Control Button    [NAME:AddButton]
+
+Populate Destination
+    [Arguments]    ${destination}    ${destination_line}
+    ${object}    Determine Multiple Object Name Based On Active Tab    DestinationTextBox    False
+    Set Control Text Value    ${object}    ${destination}
+    ${object}    Determine Multiple Object Name Based On Active Tab    DestinationLineTextBox    False
+    Set Control Text Value    ${object}    ${destination_line}
+    Send    {TAB}
+    Take Screenshot
+
+Add Train Records In Grid
+    #Add Train Record1
+    Click Add In Request
+    Populate Request Tab Fields For Transaction Charges And Train Products    05/12/2020    10:30:11 AM    BOM    DEL    111    Train1
+    ...    BusinessClassx    Bombay    Delhi
+    Generate Request Tab Fields For Remarks Verification In Transaction Charges And Train Products    R1
+    Click Save In Request
+    Verify Record Is Added Or Deleted From Train Grid    Added    05/12/2020    10:30:11    BOM    DEL    111
+    ...    Train1    BusinessClassx
+    #Add Train Record2
+    Click Add In Request
+    Populate Request Tab Fields For Transaction Charges And Train Products    11/10/2020    11:30:41 AM    DEL    AYU    222    Train2
+    ...    BusinessClassy    Delhi    Abhayapuri
+    Generate Request Tab Fields For Remarks Verification In Transaction Charges And Train Products    R2
+    Click Save In Request
+    Verify Record Is Added Or Deleted From Train Grid    Added    11/10/2020    11:30:41    DEL    AYU    222
+    ...    Train2    BusinessClassy
+    #Add Train Record3
+    Click Add In Request
+    Populate Request Tab Fields For Transaction Charges And Train Products    13/02/2020    10:00:00 PM    BOM    XXX    TR222    Train3
+    ...    Class Y    Bombay    Station X
+    Generate Request Tab Fields For Remarks Verification In Transaction Charges And Train Products    R3
+    Click Save In Request
+    Verify Record Is Added Or Deleted From Train Grid    Added    13/02/2020    22:00:00    BOM    XXX    TR222
+    ...    Train3    Class Y
+
+Get Values From Custom Fields Grid
+    [Arguments]    ${control_id}
+    ${grid_list} =    Get All Cell Values In Data Grid Table    ${control_id}
+    : FOR    ${item}    IN    @{grid_list}
+    \    ${matches}=    Get Matches    ${item}    *;*
+    \    ${count}=    Get Index From List    ${grid_list}    ${item}
+    \    Log    ${matches}
+    \    Exit For Loop If    "${matches}"!="[]"
+    ${custom_field_values}    Create List
+    : FOR    ${item}    IN    @{grid_list[${count}:]}
+    \    ${item_val}    Split String    ${item}    ;
+    \    ${item_val}    Evaluate    str("${item_val[1]}")
+    \    Append To List    ${custom_field_values}    ${item_val}
+    Set Suite Variable    ${custom_field_values}
+
+Get All Records In Request Tab Grid
+    ${request_data}    Get All Cell Values In Data Grid Table    [NAME:TrainTripsGrid]
+    Log List    ${request_data}
+    ${request_collection}    Create List
+    : FOR    ${row_data}    IN    @{request_data}
+    \    ${row_data}    Split String    ${row_data}    ;
+    \    Append To List    ${request_collection}    ${row_data[1:]}
+    Log List    ${request_collection}
+    [Return]    ${request_collection}
+
+Get Date In Request Tab
+    [Arguments]    ${identifier}=${EMPTY}
+    ${date_value}    Get Control Text Value    [NAME:DatePicker]
+    Set Suite Variable    ${date_value${identifier.lower()}}    ${date_value}
+    Log    ${date_value${identifier.lower()}}
+
+Get Origin
+    [Arguments]    ${identifier}=${EMPTY}
+    ${origin}    Get Control Text Value    [NAME:OriginTextBox]
+    Set Suite Variable    ${origin${identifier.lower()}}    ${origin}
+    Log    ${origin${identifier.lower()}}
+    ${origin1}    Get Control Text Value    [NAME:OriginLineTextBox]
+    Set Suite Variable    ${origin1${identifier.lower()}}    ${origin1}
+    Log    ${origin1${identifier.lower()}}
+
+Get Time In Request Tab
+    [Arguments]    ${identifier}=${EMPTY}
+    Wait Until Control Object Is Visible    [NAME:TimePicker]
+    ${time_value}    Get Control Text Value    [NAME:TimePicker]
+    Set Suite Variable    ${time_value${identifier.lower()}}    ${time_value}
+    Log    ${time_value${identifier.lower()}}
+
+Get Train Number
+    [Arguments]    ${identifier}=${EMPTY}
+    ${train_number}    Get Control Text Value    [NAME:TrainNumberTextBox]
+    Set Suite Variable    ${train_number${identifier.lower()}}    ${train_number}
+    Log    ${train_number${identifier.lower()}}
+
+Get Class
+    ${class_or_cabin}    Get Control Text Value    [NAME:ClassCabinTextBox]
+    Set Suite Variable    ${class_or_cabin}
+
+Get Request Tab Fields For Train
+    [Arguments]    ${identifier}
+    Get Date In Request Tab
+    Get Time In Request Tab
+    Get Origin
+    Get Destination
+    Get Train Number
+    Get Name
+    Get Class
+    Get Internal Remarks
+    ${request_list}    Create List    ${date_value}    ${time_value}    ${origin}    ${origin1}    ${destination}
+    ...    ${destination1}    ${train_number}    ${name}    ${class_or_cabin}    ${internal_remarks}
+    Set Suite Variable    ${request_final_list${identifier.lower()}}    ${request_list}
+    Log    ${request_final_list${identifier.lower()}}
+
+Set Values In Custom Fields Grid
+    [Arguments]    ${ticket_type}    ${id_no}    ${id_issuing_auth}    ${id_type}    ${no_of_passengers}    ${travel_within_24_hrs}
+    ...    ${age}    ${gender}
+    Set Row Object In Datagrid    Ticket Type    ${ticket_type}    CustomFieldGrid
+    Set Row Object In Datagrid    ID Number    ${id_no}    CustomFieldGrid
+    Set Row Object In Datagrid    ID Issuing Authority    ${id_issuing_auth}    CustomFieldGrid
+    Set Row Object In Datagrid    ID Type    ${id_type}    CustomFieldGrid
+    Set Row Object In Datagrid    Number Of Passengers    ${no_of_passengers}    CustomFieldGrid
+    Set Row Object In Datagrid    Travel Within 24 Hours    ${travel_within_24_hrs}    CustomFieldGrid
+    Set Row Object In Datagrid    Age    ${age}    CustomFieldGrid
+    Set Row Object In Datagrid    Gender    ${gender}    CustomFieldGrid
+
+Click Yes Or No In Delete Error Message
+    [Arguments]    ${y_or_n}
+    [Documentation]    Pass Y/y for Yes
+    ...    Pass N/n for No
+    Send    ${y_or_n}
+
+Click Delete In Train Grid
+    [Arguments]    ${train_name}
+    Delete Train Grid Record    [NAME:TrainTripsGrid]    ${train_name}
+
+Get Request Field Values When Product Is Train Or Train Dom Or Transaction Charges
+    [Arguments]    ${product}    ${identifier}
+    ${custom_field_values}=    Create List    ${EMPTY}
+    Get Grid Data From Request Tab For Validation    ${identifier}
+    Get Internal Remarks
+    Run Keyword If    "${product.lower()}"=="train- dom" or "${product.lower()}"=="transaction charges"    Get Values From Custom Fields Grid    [NAME:CustomFieldGrid]
+    ${train_request_tab} =    Combine Lists    ${internal_remarks}    ${request_final_list${identifier.lower()}}    ${custom_field_values}
+    Set Suite Variable    ${train_request_tab_${identifier.lower()}}    ${train_request_tab}
+    Log List    ${train_request_tab_${identifier.lower()}}
+    Run Keyword And Continue On Failure    Get Earliest Date From The Grid In Request Tab
+
+Get Earliest Date From The Grid In Request Tab
+    ${grid_list} =    Get All Cell Values In Data Grid Table    [NAME:TrainTripsGrid]
+    ${actual_list}    Create List
+    : FOR    ${item}    IN    @{grid_list[1:]}
+    \    ${item_val_list}    Split String    ${item}    ;
+    \    ${item_date}    Set Variable    ${item_val_list[1]}
+    \    Append To List    ${actual_list}    ${item_date}
+    ${sorted_date_list}    Sort Date List    ${actual_list}    %d/%m/%Y
+    Log    ${sorted_date_list[0]}
+    ${date_passive_segment}    Convert Date To Gds Format    ${sorted_date_list[0]}    %d/%m/%Y
+    Set Suite Variable    ${date_passive_segment}
+    Log    ${date_passive_segment}
+    [Teardown]    Take Screenshot
+
+Get Destination From Request Tab
+    [Arguments]    ${identifier}=${EMPTY}
+    ${destination}    Get Control Text Value    [NAME:DestinationTextBox]
+    Set Suite Variable    ${destination}
+    Set Suite Variable    ${destination${identifier.lower()}}    ${destination}
+    ${destination1}    Get Control Text Value    [NAME:DestinationLineTextBox]
+    Set Suite Variable    ${destination1}
+    Set Suite Variable    ${destination1${identifier.lower()}}    ${destination1}
+
+Get Grid Data From Request Tab For Validation
+    [Arguments]    ${identifier}
+    ${request_final_list}    Get All Records In Request Tab Grid
+    Set Suite Variable    ${request_final_list${identifier.lower()}}    ${request_final_list}
+    Log List    ${request_final_list${identifier.lower()}}
+
+Generate Request Tab Fields For Remarks Verification In Transaction Charges And Train Products
+    [Arguments]    ${identifier}
+    Get Date In Request Tab    ${identifier}
+    Get Time In Request Tab    ${identifier}
+    Get Origin    ${identifier}
+    Get Destination From Request Tab    ${identifier}
+    Get Train Number    ${identifier}
+    Get Name    ${identifier}
+    Get Class Cabin    ${identifier}

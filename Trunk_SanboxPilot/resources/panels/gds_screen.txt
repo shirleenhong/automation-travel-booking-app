@@ -1,0 +1,403 @@
+*** Settings ***
+Resource          ../common/core.txt
+
+*** Keywords ***
+Add Rail Traveller
+    [Arguments]    ${surname}    ${firstname}    ${title}    ${birthday}    ${email_address}=${EMPTY}
+    Enter GDS Command    IR    R/RFAG    R/RFAG    R/NM1${surname}/${firstname} ${title}$D-${birthday}    R/AP442037571611    R/NMALL@&NC
+    ...    R/NM1.1@$C000844    R/NM1.1@$M-${email_address}
+
+Book Active Car Segment
+    [Arguments]    ${location}    ${pdate_num}=2    ${pdays_num}=0    ${rdate_num}=2    ${rdays_num}=1    ${car_vendor}=${EMPTY}
+    ...    ${car_index}=${EMPTY}
+    ${pickup_date} =    Set Departure Date X Months From Now In Gds Format    ${pdate_num}    ${pdays_num}
+    ${return_date} =    Set Departure Date X Months From Now In Gds Format    ${rdate_num}    ${rdays_num}
+    ${car_vendor_with_separator}    Set Variable If    "${car_vendor}" != "${EMPTY}"    /${car_vendor}    ${EMPTY}
+    ${car_availability_command} =    Set Variable If    '${GDS_switch}' == 'amadeus'    CA${location}${pickup_date}-${return_date}/ARR-1000-1200/VT-ICAR    '${GDS_switch}' == 'apollo' or '${GDS_switch}' == 'galileo'    CAL${pickup_date}-${return_date}${location}/ARR-2P/DT-2P${car_vendor_with_separator}    '${GDS_switch}' == 'sabre'
+    ...    CF${location}/${pickup_date}-${return_date}/0900-0900/ICAR
+    ${car_sell_command} =    Set Variable If    '${GDS_switch}' == 'amadeus'    CS1    '${GDS_switch}' == 'apollo' or '${GDS_switch}' == 'galileo'    01A1    '${GDS_switch}' == 'sabre'
+    ...    0C1
+    Enter GDS Command    ${car_availability_command}    ${car_sell_command}
+    Run Keyword If    "${car_index}" != "${EMPTY}"    Set Suite Variable    ${pickup_date_${car_index}}    ${pickup_date}
+
+Book Amadeus Offer Retain Flight
+    [Arguments]    ${optional_segment_number}=${EMPTY}
+    Run Keyword If    '${optional_segment_number}' == '${EMPTY}'    Enter GDS Command    FXD
+    ...    ELSE    Enter GDS Command    FXD/${optional_segment_number}
+    Enter GDS Command    OFS/A1
+
+Book Flight X Months From Now
+    [Arguments]    ${itinerary}    ${seat_select}    ${store_fare}    ${number_of_months}=6    ${number_of_days}=0
+    [Documentation]    changed by etr
+    Activate Power Express Window
+    Wait Until Keyword Succeeds    60    2    Verify Progress Info Window is Not Active
+    ${departure_date} =    Set Departure Date X Months From Now In Gds Format    ${number_of_months}    ${number_of_days}
+    Set Test Variable    ${departure_date}
+    GDS Search Availability & Pricing (OW) With Given Departure Date In Months    AN${departure_date}${itinerary}    ${seat_select}    ${store_fare}
+    Take A Screenshot
+
+Book Flight X Months From Now With Requested Airline Without Pricing
+    [Arguments]    ${itinerary}    ${seat_select}    ${number_of_months}=6    ${number_of_days}=0
+    Activate Power Express Window
+    Wait Until Keyword Succeeds    60    2    Verify Progress Info Window is Not Active
+    ${departure_date} =    Set Departure Date X Months From Now In Gds Format    ${number_of_months}    ${number_of_days}
+    Set Test Variable    ${departure_date}
+    Comment    ${itinerary}=    Generate GDS Search Availability & Pricing    ${itinerary}    ${departure_date}
+    Enter GDS Command    AN${departure_date}${itinerary}
+    Enter GDS Command    ${seat_select}
+
+Book Flight X Months From Now Without Pricing
+    [Arguments]    ${itinerary}    ${seat_select}    ${number_of_months}=6    ${number_of_days}=0
+    Activate Power Express Window
+    Wait Until Keyword Succeeds    60    2    Verify Progress Info Window is Not Active
+    ${departure_date} =    Set Departure Date X Months From Now In Gds Format    ${number_of_months}    ${number_of_days}
+    Set Test Variable    ${departure_date}
+    ${itinerary}=    Generate GDS Search Availability & Pricing    ${itinerary}    ${departure_date}
+    Enter GDS Command    ${itinerary}
+    Enter GDS Command    ${seat_select}
+
+Book Hotel Segment
+    [Arguments]    ${hotel_itinerary}    ${select_hotel}    ${select_rate}    ${store_hotel_rate}
+    ${checkin_date} =    Set Departure Date X Months From Now In Gds Format    3    1
+    ${checkout_date} =    Set Departure Date X Months From Now In Gds Format    3    2
+    ${checkout_date}    Get Substring    ${checkout_date}    0    2
+    Enter GDS Command    HA${hotel_itinerary}${checkin_date}-${checkout_date}
+    Sleep    5
+    Enter GDS Command    ${select_hotel}
+    Sleep    2
+    Enter GDS Command    ${select_rate}
+    Sleep    2
+    Enter GDS Command    ${store_hotel_rate}
+
+Book One Way Flight X Months From Now
+    [Arguments]    ${city_pair}    ${number_of_month}
+    ${seat_select_command}    Set Variable If    '${GDS_switch}' == 'amadeus'    SS1Y1    01Y1
+    ${store_fare_command}    Set Variable If    '${GDS_switch}' == 'sabre'    WPRQ    '${GDS_switch}' == 'amadeus'    FXP    '${GDS_switch}' == 'apollo'
+    ...    T:$B    '${GDS_switch}' == 'galileo'    FQ
+    Book Flight X Months From Now    ${city_pair}    ${seat_select_command}    ${store_fare_command}    ${number_of_month}
+
+Book Passive Car Segment X Months From Now
+    [Arguments]    ${city}    ${departure_months}=6    ${departure_days}=0    ${arrival_months}=6    ${arrival_days}=10
+    Wait Until Keyword Succeeds    60    2    Verify Progress Info Window is Not Active
+    ${departure_date} =    Set Departure Date X Months From Now In Gds Format    ${departure_months}    ${departure_days}
+    ${arrival_date} =    Set Departure Date X Months From Now In Gds Format    ${arrival_months}    ${arrival_days}
+    Set Test Variable    ${departure_date}
+    Set Test Variable    ${arrival_date}
+    Enter GDS Command    0CARZIGK1${city}${departure_date}-${arrival_date}/ICAR/RG-USD35.99/CF-ABC123
+
+Book Passive Hotel Segment X Months From Now
+    [Arguments]    ${city}    ${departure_months}=6    ${departure_days}=0    ${arrival_months}=6    ${arrival_days}=10
+    Wait Until Keyword Succeeds    60    2    Verify Progress Info Window is Not Active
+    ${departure_date} =    Set Departure Date X Months From Now In Gds Format    ${departure_months}    ${departure_days}
+    ${arrival_date} =    Set Departure Date X Months From Now In Gds Format    ${arrival_months}    ${arrival_days}
+    Set Test Variable    ${departure_date}
+    Set Test Variable    ${arrival_date}
+    Enter GDS Command    0HTLMXMK1${city}${departure_date}-OUT${arrival_date}/P-59240/R-SGLB/W-MOTEL 6 MINNEAPOLIS-BROO¤2741 FREEWAY BLVD¤BROOKLYN CENTER MN¤US¤55430¤763-560-9789/**ITB-SGLB/RT-79.00/PC59240**/CF-ABC123
+
+Book Rail X Months From Now
+    [Arguments]    ${city_pair}    ${seat_select}    ${number_of_months}=6    ${number_of_days}=0    @{store_values}
+    ${departure_date} =    Set Departure Date X Months From Now In Gds Format    ${number_of_months}    ${number_of_days}
+    Enter GDS Command    R/AN${departure_date}${city_pair}    ${seat_select}
+    ${list_empty}    Get Length    ${store_values}
+    : FOR    ${store_value}    IN    @{store_values}
+    \    Run Keyword If    ${list_empty} != 0    Enter GDS Command    ${store_value}
+    Run Keyword If    ${list_empty} != 0    Enter GDS Command    R/ER
+    Run Keyword If    ${list_empty} != 0    Enter GDS Command    R/ER
+    Run Keyword If    ${list_empty} != 0    Enter GDS Command    R/ER
+    Run Keyword If    ${list_empty} != 0    Enter GDS Command    R/RT    IR
+    Run Keyword If    ${list_empty} != 0    Run Keywords    Get Resa Rail PNR
+    ...    AND    Get Resa Rail Amount
+    Enter GDS Command    RT
+
+Book Segmented One Way Flight X Months From Now
+    [Arguments]    ${city_pair}    ${segment_number}=${EMPTY}    ${number_of_month}=6
+    Run Keyword If    '${GDS_switch}' == 'sabre' and '${segment_number}' != '${EMPTY}'    Book Flight X Months From Now    ${city_pair}    01Y1    WP${segment_number}'RQ    ${number_of_month}
+    Run Keyword If    '${GDS_switch}' == 'sabre' and '${segment_number}' == '${EMPTY}'    Book Flight X Months From Now    ${city_pair}    01Y1    WPRQ    ${number_of_month}
+    Run Keyword If    '${GDS_switch}' == 'amadeus' and '${segment_number}' != '${EMPTY}'    Book Flight X Months From Now    ${city_pair}    SS1Y1    FXP/${segment_number}    ${number_of_month}
+    Run Keyword If    '${GDS_switch}' == 'amadeus' and '${segment_number}' == '${EMPTY}'    Book Flight X Months From Now    ${city_pair}    SS1Y1    FXP    ${number_of_month}
+    Run Keyword If    '${GDS_switch}' == 'apollo' and '${segment_number}' != '${EMPTY}'    Book Flight X Months From Now    ${city_pair}    01Y1    T:$B${segment_number}    ${number_of_month}
+    Run Keyword If    '${GDS_switch}' == 'apollo' and '${segment_number}' == '${EMPTY}'    Book Flight X Months From Now    ${city_pair}    01Y1    T:$B    ${number_of_month}
+    Run Keyword If    '${GDS_switch}' == 'galileo' and '${segment_number}' != '${EMPTY}'    Book Flight X Months From Now    ${city_pair}    01Y1    FQ${segment_number}    ${number_of_month}
+    Run Keyword If    '${GDS_switch}' == 'galileo' and '${segment_number}' == '${EMPTY}'    Book Flight X Months From Now    ${city_pair}    01Y1    FQ    ${number_of_month}
+
+Cancel Resa Rail Booking
+    [Arguments]    ${resa_rail_pnr}=${EMPTY}
+    Activate Amadeus Selling Platform
+    Send    R/RT${resa_rail_pnr}{ENTER}
+    ${data_clipboard}    Get Clipboard Data Amadeus
+    ${pnr_status}    Run Keyword And Return Status    Should Contain    ${data_clipboard}    FIN OU IGNOR
+    Take A Screenshot
+    Run Keyword If    ${pnr_status} == True    Enter GDS Command    R/IG    R/RFAG    R/ER    R/ER
+    ...    R/IR    IR    R/RT${resa_rail_pnr}
+    Enter GDS Command    R/XI
+    Enter GDS Command    R/RFAG    R/ER    R/ER    R/RT    IR
+    Activate Amadeus Selling Platform
+    Send    R/RT${resa_rail_pnr}{ENTER}
+    ${data_clipboard}    Get Clipboard Data Amadeus
+    ${is_cancelled}    Run Keyword And Return Status    Run Keyword And Continue On Failure    Should Contain    ${data_clipboard}    PAS D'ITINERAIRE
+    Run Keyword If    ${is_cancelled} == False    Cancel Resa Rail Booking    ${resa_rail_pnr}
+
+Cancel Stored Fare and Segment
+    [Arguments]    ${segment_line_number}=${EMPTY}
+    Run Keyword If    '${GDS_switch}' == 'apollo'    Enter GDS Command    XT    XI
+    ...    ELSE IF    '${GDS_switch}' == 'apollo'    Enter GDS Command    TTE/ALL    XE${segment_line_number}
+
+Create Amadeus Offer
+    [Arguments]    ${itinerary}    ${seat_select}    ${store_fare}    ${number_of_months}=6    ${number_of_days}=0    ${store_offer}=FXD
+    ${departure_date} =    Set Departure Date X Months From Now In Gds Format    ${number_of_months}    ${number_of_days}
+    Set Test Variable    ${departure_date}
+    Enter GDS Command    AN${departure_date}${itinerary}    ${seat_select}    ${store_fare}    FXT01/P1    ${store_offer}    OFS/A1
+
+Create Amadeus Offer Remove Flight
+    [Arguments]    ${segment_number}
+    Enter GDS Command    FXX/${segment_number}    OFS/A    OFS/A
+
+Create Amadeus Offer Retain Flight
+    [Arguments]    ${segment_number}    ${offer_select}=A1
+    Enter GDS Command    FXD/${segment_number}    OFS/${offer_select}
+
+Create Resa Rail Single TST
+    [Arguments]    ${surname}    ${firstname}    ${title}    ${birthday}    ${delivery_method}    ${city_pair}
+    ...    ${return_pair}=${EMPTY}    ${passenger_type}=${EMPTY}    ${class_code}=AF
+    Enter GDS Command    IR    R/RFAG    R/RFAG
+    Enter GDS Command    R/NM1${surname}/${firstname} ${title}$D-${birthday}    R/AP442037571611    R/NMALL@&NC    R/NM1.1@$C000844
+    ${trip_date} =    Set Departure Date X Months From Now In Gds Format    2
+    Enter GDS Command    R/AN${trip_date}${city_pair}    R/SS1${class_code}1!4G0"IN
+    ${return_date} =    Set Departure Date X Months From Now In Gds Format    3
+    Run Keyword If    '${return_pair}' != '${EMPTY}'    Enter GDS Command    R/AN${return_date}${return_pair}    R/SS1${class_code}1!4G0"IN
+    Run Keyword If    '${delivery_method}' == 'TKV'    Enter GDS Command    R/FXP$${delivery_method}$P01AW01AD
+    Run Keyword If    '${delivery_method}' != 'TKV'    Enter GDS Command    R/FXP$${delivery_method}${passenger_type}
+    Enter GDS Command    R/ER    R/ER    R/RT    IR    RL
+    Get Resa Rail PNR
+    Get Resa Rail Amount
+
+Delete Air Segment
+    [Arguments]    ${segment}
+    ${delete_air_segment_command} =    Set Variable If    '${GDS_switch}' == 'sabre'    XI${segment}    '${GDS_switch}' == 'apollo' or '${GDS_switch}' == 'galileo'    X${segment}    '${GDS_switch}' == 'amadeus'
+    ...    XE${segment}
+    Enter GDS Command    ${delete_air_segment_command}
+
+Delete All Segments
+    Enter GDS Command    XI
+
+Delete Amadeus Offer
+    [Arguments]    ${offer_number}
+    Enter GDS Command    RTOF    ${offer_number}
+
+Delete Fare Quote and Flight Segment
+    [Arguments]    ${cancel_fare}    ${cancel_segment}
+    Enter GDS Command    ${cancel_fare}    ${cancel_segment}
+
+Delete LCC Remarks
+    ${lcc_remarks}    Get Lines Containing String    ${pnr_details}    LCC
+    Should Not Be Empty    ${lcc_remarks}    Could Not Find LCC Remark Lines
+    ${actual_lcc_remarks}    Split To Lines    ${lcc_remarks}
+    ${first_lcc_line}    Get From List    ${actual_lcc_remarks}    0
+    ${last_lcc_line}    Get From List    ${actual_lcc_remarks}    -1
+    ${first_lcc_line_number}    Fetch From Left    ${first_lcc_line}    .
+    ${last_lcc_line_number}    Fetch From Left    ${last_lcc_line}    .
+    ${first_lcc_line_number}    Remove All Spaces    ${first_lcc_line_number}
+    ${last_lcc_line_number}    Remove All Spaces    ${last_lcc_line_number}
+    ${delete_lcc_remarks_command}    Set Variable If    '${GDS_switch.lower()}' == 'sabre'    5${first_lcc_line_number}-${last_lcc_line_number}¤    '${GDS_switch.lower()}' == 'apollo'    c:${first_lcc_line_number}-${last_lcc_line_number}¤:5    Invalid
+    Run Keyword If    '${delete_lcc_remarks_command}'!= 'Invalid'    Enter GDS Command    ${delete_lcc_remarks_command}
+    ...    ELSE    Log    Unsupported GDS    WARN
+
+Delete Ticket Remarks in the PNR
+    [Arguments]    ${start_remark}    ${end_remark}
+    : FOR    ${INDEX}    IN RANGE    20
+    \    Retrieve PNR Details From Sabre Red    ${current_pnr}
+    \    ${first_number}    Get Line Number In PNR Remarks    ${start_remark}
+    \    ${last_number}    Get Line Number In PNR Remarks    ${end_remark}
+    \    Enter GDS Command    5${first_number}-${last_number}¤
+    \    Enter Specific Command On Native GDS    ER
+    \    Get Clipboard Data
+    \    ${is_simultaneous_exist}    Run Keyword And Return Status    Should Contain    ${data_clipboard.upper()}    SIMULT
+    \    Send    ER
+    \    Get Clipboard Data
+    \    ${is_simultaneous_exist2}    Run Keyword And Return Status    Should Contain    ${data_clipboard.upper()}    SIMULT
+    \    Take Screenshot
+    \    Exit For Loop If    ${is_simultaneous_exist} == False or ${is_simultaneous_exist2} == False
+    Send    I
+
+Emulate PCC
+    [Arguments]    ${pcc}
+    Run Keyword If    '${GDS_switch}' == 'galileo'    Enter Specific Command On Native GDS    I
+    ...    ELSE IF    '${GDS_switch}' == 'amadeus'    Enter GDS Command    IG
+    ...    ELSE    Enter GDS Command    I
+    ${emulate_pcc_command}    Set Variable If    '${GDS_switch}' == 'amadeus'    JUM/O-${pcc}    '${GDS_switch}' == 'sabre'    AAA${pcc}    '${GDS_switch}' == 'apollo' or '${GDS_switch}' == 'galileo'
+    ...    SEM/${pcc}/AG
+    Run Keyword If    '${GDS_switch}' == 'galileo'    Enter Specific Command On Native GDS    ${emulate_pcc_command}
+    ...    ELSE    Enter GDS Command    ${emulate_pcc_command}
+    Set Suite Variable    ${pcc}
+
+Enter Exchange Command X Fare
+    [Arguments]    ${fare_tab}    ${pa_amount}=150.00    ${ea_amount}=150.00    ${nf_amount}=3059.80
+    ${fare_index}    Fetch From Right    ${fare_tab}    ${SPACE}
+    ${writting_command}    Set Variable If    "${fare_tab.upper()}" == "FARE 1"    5X/    5T/TKT${fare_index}
+    Enter GDS Command    5T‡EXCH${fare_index}
+    Enter GDS Command    ${writting_command}-IRP1/PA-${pa_amount}/CA-0.00/EA-${ea_amount}/NF-${nf_amount}
+
+Enter GDS Command
+    [Arguments]    @{gds_command_value}
+    Activate Power Express Window
+    : FOR    ${gds_command}    IN    @{gds_command_value}
+    \    Set Control Text Value    ${cbo_gdscommandline}    ${gds_command}
+    \    Control Click    ${title_power_express}    ${EMPTY}    ${btn_GDScommand}    ${EMPTY}
+    \    Wait Until Keyword Succeeds    60    1    Verify Field Is Empty    ${cbo_gdscommandline}
+    [Teardown]    Take Screenshot
+
+GDS Search Availability & Pricing (OW) With Given Departure Date In Months
+    [Arguments]    ${itinerary}    ${seat_select_value}    ${store_fare_value}=${EMPTY}
+    [Documentation]    changed by etr
+    Activate Power Express Window
+    ${itinerary}=    Generate GDS Search Availability & Pricing    ${itinerary}    ${departure_date}
+    Take A Screenshot
+    Enter GDS Command    ${itinerary}
+    Sleep    2
+    Take A Screenshot
+    Enter GDS Command    ${seat_select_value}
+    Take A Screenshot
+    Run Keyword If    "${store_fare_value}" != "${EMPTY}"    Enter GDS Command    ${store_fare_value}
+    Take A Screenshot
+    Run Keyword If    '${store_fare_value}' != '${EMPTY}' and '${GDS_switch.lower()}' == 'amadeus'    Enter GDS Command    FXT01/P1    FXT01/P1
+    Take A Screenshot
+    Get Data From GDS Screen    \    True
+    Take A Screenshot
+    Should Not Contain Any    ${gds_screen_data}    NO COMBINABLE FARES FOR CLASS USED    NO FARES/RBD/CARRIER/PASSENGER TYPE    VERIFIER LE NUMERO DU SEGMENT    msg=Fare quote should be successful to proceed
+    [Teardown]
+
+Generate GDS Search Availability & Pricing
+    [Arguments]    ${itinerary}    ${date}
+    ${transaction_code}    ${indicator}    Run Keyword If    "${GDS_switch.upper()}" == "AMADEUS"    Set Variable    AN    /A
+    ...    ELSE IF    "${GDS_switch.upper()}" == "SABRE"    Set Variable    1    ¥
+    ...    ELSE IF    "${GDS_switch.upper()}" == "GALILEO"    Set Variable    A    /
+    ...    ELSE IF    "${GDS_switch.upper()}" == "APOLLO"    Set Variable    A    -
+    ${handle_churning?} =    Run Keyword And Return Status    Should Contain    ${itinerary}    ${indicator}
+    ${apollo_handle_churning?} =    Run Keyword And Return Status    Should Contain    ${itinerary}    +
+    ${sabre_handle_churning?} =    Run Keyword And Return Status    Should Contain    ${itinerary}    ‡
+    ${sabre_handle_churning2?} =    Run Keyword And Return Status    Should Contain    ${itinerary}    ¤
+    ${itinerary} =    Remove String Using Regexp    ${itinerary}    .*\\d{1}\\w{3}
+    ${city_pair} =    Get Substring    ${itinerary}    \    6
+    Set Test Variable    ${city_pair}
+    ${churning_airlines} =    Decode Bytes To String    ${churning_airlines_${GDS_switch}}    UTF-8
+    ${itinerary} =    Run Keyword If    ${handle_churning?} == False and ${apollo_handle_churning?} == False and ${sabre_handle_churning?} == False and ${sabre_handle_churning2?} == False    Set Variable    ${transaction_code}${date}${itinerary}${churning_airlines}
+    ...    ELSE    Set Variable    ${transaction_code}${date}${itinerary}
+    [Return]    ${itinerary}
+
+Get AT Id
+    ${at_id} =    Get Control Text Value    [NAME:txtCRS]
+    ${at_id} =    Get Lines Containing String    ${at_id}    IN REMOTE OFFICE
+    ${at_id} =    Fetch From Left    ${at_id}    IN REMOTE
+    ${at_id} =    Fetch From Right    ${at_id}    -
+    ${at_id} =    Set Variable    ${at_id.strip()}
+    Set Suite Variable    ${at_id}
+
+Get Base Fare From Amadeus
+    [Arguments]    ${segment_number}    ${fare_tab}
+    ${fare_tab_index}    Fetch From Right    ${fare_tab}    ${SPACE}
+    Clear Data From Clipboard
+    Activate Amadeus Selling Platform
+    Enter GDS Command    RT    TQT/${segment_number}
+    Get Clipboard Data Amadeus
+    Get Base Fare, Currency, Tst Number And Segment Airline Code    ${fare_tab}
+    Send    RT{ENTER}
+    Sleep    1
+    Send    {SHIFTDOWN}{PAUSE}{SHIFTUP}
+
+Get Base Fare, Currency, Tst Number And Segment Airline Code
+    [Arguments]    ${fare_tab}
+    ${fare_tab_index}    Fetch From Right    ${fare_tab}    ${SPACE}
+    ${base_fare_raw}    Get Lines Containing String    ${data_clipboard}    FARE${SPACE * 2}
+    ${currency}    Get Substring    ${base_fare_raw}    8    11
+    ${base_fare}    Remove All Non-Integer (retain period)    ${base_fare_raw}
+    ${contains_period}    Run Keyword And Return Status    Should Contain    ${base_fare}    .
+    ${base_fare}    Set Variable If    ${contains_period} == True    ${base_fare}    ${base_fare}.00
+    ${tst_number_line}    Get Lines Containing String    ${data_clipboard}    TST0
+    ${tst_number_line}    Split String    ${tst_number_line}    ${SPACE}
+    ${tst_number}    Remove String Using Regexp    ${tst_number_line[0]}    TST.0*
+    ${segment_airline_code_line}    Get Lines Containing String    ${data_clipboard}    .FV${SPACE}
+    ${segment_airline_code}    Fetch From Right    ${segment_airline_code_line.strip()}    ${SPACE}
+    Set Test Variable    ${tst_number_${fare_tab_index}}    ${tst_number}
+    Set Test Variable    ${currency_${fare_tab_index}}    ${currency}
+    Set Test Variable    ${base_fare_${fare_tab_index}}    ${base_fare}
+    Set Test Variable    ${segment_airline_code_${fare_tab_index}}    ${segment_airline_code}
+
+Get Data From GDS Screen
+    [Arguments]    ${command}=${EMPTY}    ${apply_current_screen_only}=False
+    Run Keyword If    "${command}" != "${EMPTY}"    Enter GDS Command    ${command}
+    ${gds_screen_data_raw}    Get Control Text Value    [NAME:txtCRS]
+    @{splitted_data}    Split To Lines    ${gds_screen_data_raw}
+    ${data}    Set Variable    ${splitted_data[-23:-1]}
+    ${gds_screen_data_current}    Convert List To Lines    ${data}
+    ${gds_screen_data}    Set Variable If    "${apply_current_screen_only}" == "True"    ${gds_screen_data_current}    ${gds_screen_data_raw}
+    Set Test Variable    ${gds_screen_data}
+    [Teardown]
+    [Return]    ${gds_screen_data}
+
+Get Resa Rail Amount
+    Activate Amadeus Selling Platform
+    Enter GDS Command    RL    R//W*P9
+    Get Clipboard Data Amadeus
+    ${amount_line} =    Get Lines Containing String    ${data_clipboard}    PRIX TOTAL
+    ${no_space} =    Remove All Spaces    ${amount_line}
+    ${from_left} =    Fetch From Left    ${no_space}    EUR
+    ${from_right} =    Fetch From Right    ${from_left}    TOTAL
+    Set Test Variable    ${rail_amount}    ${from_right}
+
+Get Resa Rail PNR
+    [Arguments]    ${pnr}=${EMPTY}
+    : FOR    ${INDEX}    IN RANGE    3
+    \    Enter GDS Command    RT${pnr}
+    \    Activate Amadeus Selling Platform
+    \    Enter GDS Command    RL
+    \    Get Clipboard Data Amadeus
+    \    ${is_no_element_found}    Run Keyword And Return Status    Should Contain    ${data_clipboard}    NO ELEMENT FOUND
+    \    Exit For Loop If    ${is_no_element_found} == False
+    \    Enter GDS Command    R/ER    R/ER    R/RT    IR
+    \    Sleep    5
+    ${2C_line} =    Get Lines Containing String    ${data_clipboard}    2C/
+    ${resa_rail_pnr} =    Get String Using Marker    ${2C_line}    2C/    ${SPACE}
+    Set Test Variable    ${resa_rail_pnr}
+    ${contains_rail}    Run Keyword And Return Status    Should Not Be Empty    ${resa_rail_pnr}    Rail PNR was not retrieved. Please cancel PNR manually.
+    Run Keyword And Continue On Failure    Should Be True    ${contains_rail} == True
+    Set Test Variable    ${contains_rail}
+    Append To File    C:\\Users\\Public\\Documents\\pnr_created.txt    ${\n}${resa_rail_pnr} - ${GDS_switch} - resa_rail
+    Comment    Append To File    ${CURDIR}/../../pnr_created.txt    ${\n}${resa_rail_pnr} - ${GDS_switch} - resa_rail
+    [Teardown]    Take Screenshot
+
+Get Total Fare From Amadeus
+    [Arguments]    ${segment_number}    ${fare_tab}
+    ${fare_tab_index}    Fetch From Right    ${fare_tab}    ${SPACE}
+    Clear Data From Clipboard
+    Activate Amadeus Selling Platform
+    Enter GDS Command    RT    TQT/${segment_number}
+    Get Clipboard Data Amadeus
+    ${total_fare_raw}    Get Lines Containing String    ${data_clipboard}    GRAND TOTAL
+    ${currency}    Get Substring    ${total_fare_raw}    12    16
+    ${grand_total_fare}    Remove All Non-Integer (retain period)    ${total_fare_raw}
+    ${contains_period}    Run Keyword And Return Status    Should Contain    ${grand_total_fare}    .
+    ${grand_total_fare}    Convert To Float    ${grand_total_fare}
+    Set Test Variable    ${currency_${fare_tab_index}}    ${currency}
+    Set Test Variable    ${grand_total_fare_${fare_tab_index}}    ${grand_total_fare}
+    Send    RT{ENTER}
+    Sleep    1
+    Send    {SHIFTDOWN}{PAUSE}{SHIFTUP}
+
+Jump Out PCC
+    Enter GDS Command    IG
+    ${jump_out_pcc_command} =    Set Variable If    '${GDS_switch}' == 'amadeus'    juo
+    Enter GDS Command    ${jump_out_pcc_command}
+
+Jump To Different PCC
+    [Arguments]    ${pcc}
+    ${jump_out_pcc_command} =    Set Variable If    '${GDS_switch}' == 'amadeus'    juo
+    ${jump_in_pcc_command} =    Set Variable If    '${GDS_switch}' == 'amadeus'    jum/o-${pcc}
+    Enter GDS Command    ${jump_out_pcc_command}    IG    ${jump_in_pcc_command}
+    Run Keyword If    '${GDS_switch}' == 'amadeus'    Get AT Id
+
+Search Low Fare Calculation
+    [Arguments]    ${search_low_fare_command}    ${select_low_fare_segment}    ${store_low_fare}    ${cancel_uneccessary_segment}=X1-2
+    Enter GDS Command    ${search_low_fare_command}
+    Enter GDS Command    ${select_low_fare_segment}
+    Enter GDS Command    ${store_low_fare}
+    Enter GDS Command    ${cancel_uneccessary_segment}

@@ -1,0 +1,104 @@
+*** Settings ***
+Resource          ../../../resources/common/global_resources.txt
+
+*** Keywords ***
+Verify Record Is Added Or Deleted From Train Grid
+    [Arguments]    ${status}    ${trip_date}    ${trip_time}    ${trip_origin}    ${trip_dest}    ${train_no}
+    ...    ${train_name}    ${train_class_cabin}
+    ${grid_list} =    Get All Cell Values In Data Grid Table    [NAME:TrainTripsGrid]
+    ${expected_grid_val} =    Set Variable    ${trip_date},${trip_time},${trip_origin},${trip_dest},${train_no},${train_name},${train_class_cabin}
+    ${actual_list}    Create List
+    : FOR    ${item}    IN    @{grid_list[1:]}
+    \    ${item_val_list}    Split String    ${item}    ;
+    \    ${item_date}    Set Variable    ${item_val_list[1]}
+    \    ${item_time}    Set Variable    ${item_val_list[2]}
+    \    ${item_origin}    Set Variable    ${item_val_list[3]}
+    \    ${item_dest}    Set Variable    ${item_val_list[4]}
+    \    ${item_no}    Set Variable    ${item_val_list[5]}
+    \    ${item_name}    Set Variable    ${item_val_list[6]}
+    \    ${item_cabin}    Set Variable    ${item_val_list[7]}
+    \    Append To List    ${actual_list}    ${item_date},${item_time},${item_origin},${item_dest},${item_no},${item_name},${item_cabin}
+    Set Test Variable    ${actual_list}
+    Run Keyword And Continue On Failure    Run Keyword If    "${status.lower()}"=="added"    List Should Contain Value    ${actual_list}    ${expected_grid_val}
+    ...    ELSE IF    "${status.lower()}"=="deleted"    List Should Not Contain Value    ${actual_list}    ${expected_grid_val}
+    [Teardown]    Take Screenshot
+
+Verify Error Message Is Displayed On Deleting Train Trip
+    [Arguments]    ${trip_date}    ${trip_time}    ${trip_origin}    ${trip_dest}
+    ${expected_text} =    Set Variable    You are about to delete the train entry for ${trip_date} ${trip_time} from ${trip_origin} to ${trip_dest}. Would you like to proceed?
+    Wait Until Window Exists    Confirm Delete
+    Win Activate    Confirm Delete    ${EMPTY}
+    ${is_window_active} =    Win Active    Confirm Delete    ${EMPTY}
+    ${window_text}    Win Get Text    Confirm Delete    ${EMPTY}
+    Log    ${window_text}
+    Log    ${is_window_active}
+    ${window_text_val} =    Set Variable    ${window_text[9:-1]}
+    Run Keyword If    "${is_window_active}" == "1"    Should Be Equal As Strings    ${expected_text}    ${window_text_val}
+
+Verify Request UI For Transaction Charges And Train
+    Populate Request Tab Fields For Transaction Charges And Train Products    06/12/2019    10:30:01 AM    DEL    BOM    123    Train1
+    ...    Business Class    Delhi    Bombay
+    Click Clear In Request
+    Verify Request Fields Are Set To Default Value
+    Populate Request Tab Fields For Transaction Charges And Train Products    06/12/2019    10:30:01 AM    DEL    BOM    123    Train1
+    ...    Business Class    Delhi    Bombay
+    Click Cancel In Request
+    Verify Record Is Added Or Deleted From Train Grid    Deleted    06/12/2019    10:30:01    DEL    BOM    123
+    ...    Train1    Business Class
+    Click Add In Request
+    #Add Train Record1
+    Populate Request Tab Fields For Transaction Charges And Train Products    30/01/2020    1:20:00 PM    DEL    BOM    TR111    Train1
+    ...    Business Class    New Delhi    Bombay
+    Click Save In Request
+    Verify Record Is Added Or Deleted From Train Grid    Added    30/01/2020    13:20:00    DEL    BOM    TR111
+    ...    Train1    Business Class
+    #Add Train Record2
+    Click Add In Request
+    Populate Request Tab Fields For Transaction Charges And Train Products    05/10/2019    12:30:01 AM    BOM    DEL    456    Train0
+    ...    Economy    Bombay    Delhi
+    Generate Request Tab Fields For Remarks Verification In Transaction Charges And Train Products    R0
+    Click Save In Request
+    Verify Record Is Added Or Deleted From Train Grid    Added    05/10/2019    00:30:01    BOM    DEL    456
+    ...    Train0    Economy
+    #Delete Train Record1
+    Click Delete In Train Grid    Train0
+    Verify Error Message Is Displayed On Deleting Train Trip    05/10/2019    00:30:01    BOM    DEL
+    Click Yes Or No In Delete Error Message    N
+    Log    Type No
+    Verify Record Is Added Or Deleted From Train Grid    Added    05/10/2019    00:30:01    BOM    DEL    456
+    ...    Train0    Economy
+    Click Delete In Train Grid    Train0
+    Verify Error Message Is Displayed On Deleting Train Trip    05/10/2019    00:30:01    BOM    DEL
+    Click Yes Or No In Delete Error Message    Y
+    Log    Type Yes
+    Verify Record Is Added Or Deleted From Train Grid    Deleted    05/10/2019    00:30:01    BOM    DEL    456
+    ...    Train0    Economy
+    Click Delete In Train Grid    Train1
+    Click Yes Or No In Delete Error Message    Y
+    Log    UI Verification Completed
+
+Verify Request Fields Default to Correct Values Upon Amend EO When Product Is Transaction Charges And Train
+    [Arguments]    ${identifier1}    ${identifier2}
+    Log List    ${expected_list${identifier1}}
+    Log List    ${expected_list${identifier2}}
+    Run Keyword And Continue On Failure    Lists Should Be Equal    ${expected_list${identifier1}}    ${expected_list${identifier2}}
+
+Verify Request Fields Are Set To Default Value
+    Get Date In Request Tab
+    Get Time In Request Tab
+    Get Origin
+    Get Destination From Request Tab
+    Get Train Number
+    Get Name
+    Get Class
+    ${req_list}    Create List    ${origin}    ${origin1}    ${destination}    ${destination1}    ${train_number}
+    ...    ${name}    ${class_or_cabin}    ${date_value.strip()}
+    ${req_current_date}    DateTime.Get Current Date    time_zone=local    result_format=%d/%b/%Y
+    ${req_current_time}    DateTime.Get Current Date    time_zone=local    result_format=%I:%M %p
+    ${cleared_list}    Create List    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    ${EMPTY}    ${EMPTY}    ${req_current_date}
+    Run Keyword And Continue On Failure    Lists Should Be Equal    ${req_list}    ${cleared_list}
+
+Verify Field Values In Request On Amend Eo When Product Is Train
+    [Arguments]    ${identifier1}    ${identifier2}
+    Run Keyword And Continue On Failure    Should Be Equal    ${train_request_tab_${identifier1.lower()}}    ${train_request_tab_${identifier2.lower()}}

@@ -1,0 +1,719 @@
+*** Settings ***
+Suite Setup
+Force Tags        amadeus
+Resource          ../../other_services.txt
+
+*** Test Cases ***
+[IN NB OS] Verify That Error Message Is Displayed When PNR Has No Air Segment And Product Is Any Air Product
+    [Tags]    in    team_chiu    us596
+    Create New Booking For Other Services - India    1026100093 ¦ SIEMENS PLM SOFTWARE UGS -(K.PARK)-CC ¦ APAC IN OS AUTOMATION    VI    passive_car=1    active_air=0
+    Click Other Services
+    Select Product    Air BSp
+    Select Vendor    AIR CHINA
+    Click Continue In Other Svcs
+    Verify Error Message Is Displayed
+    Click Ok In Error Message
+    Verify Other Services Tabs Are Not Displayed
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[IN NB OS] Verify That New EO Is Created And Accounting Remarks Are Written When Product Is Air BSP And FOP Is Credit Card - VI
+    [Tags]    us596    in    team_chiu    us590    us1033
+    Create New Booking For Other Services - India    1026100093 ¦ SIEMENS PLM SOFTWARE UGS -(K.PARK)-CC ¦ APAC IN OS AUTOMATION    VI    passive_air=2    active_hotel=1    passive_hotel=1
+    Click Other Services
+    Select Product And Vendor    Air BSp    AIR CHINA
+    Verify Tabs Displayed In Other Services When Product Is Air BSp Or Air Domestic
+    ##Request Tab
+    Click Tab In Other Services Panel    Request
+    Verify Request Tab Fields Displayed Or Not When Products Is Air BSp Or Air Domestic
+    Verify Default Values Of Request Tab Fields When Product is Air BSp Or Air Domestic
+    Verify Request Tab Fields Madatory And Optional When Product Is Air Bsp Or Air Domestic
+    Populate Request Tab Fields When Products Are Air BSP Or Air Domestic    3K    S    true    REBOOKING FEE INTERNATIONAL    200    ALL \ \ \ Albanian Lek
+    ...    10    10    Cash    Issue in Exchange    In con    Original
+    ...    Remark11fbfdb
+    ##UI Validations
+    Tick Request VMPD Checkbox
+    Verify Request Tab Fields Madatory And Optional When Product Is Air Bsp Or Air Domestic
+    Populate Request Tab Fields When Products Are Air BSP Or Air Domestic    3K    S    true    REBOOKING FEE INTERNATIONAL    200    ALL \ \ \ Albanian Lek
+    ...    10    10    Cash    Test1    Test2    Test3
+    ...    Test4
+    ## Select Below code based upon Credit Card Type
+    Tick Request VMPD Checkbox
+    Populate Request Tab Fields When Products Are Air BSP Or Air Domestic    AA    S    true    REBOOKING FEE INTERNATIONAL    200    ALL \ \ \ Albanian Lek
+    ...    10    10    Credit    Issue Exchange    In Conjunction    Original Place
+    ...    Remark
+    Get Request Field Values    Air BSp    newRequest
+    Select Air Segment    2    3    4
+    ####Charges
+    Click Tab In Other Services Panel    Charges
+    Verify Default Values Of Charges Fields For Air Products    International    Credit Card (CC)    VI    XXXXXXXXXXXX1111    12/25
+    Populate Charges Field For Air Products    HKG    International    Non Passthrough    666    8888888888    11
+    ...    true    true    ${EMPTY}    Vendor Reference GSA    4000    11
+    ...    22    24    20    12    36    34
+    ...    IssueInExchnage
+    Get Charges Field Values For Air Products    Air BSp    newCharges
+    #Vendor Info Tab
+    Click Tab In Other Services Panel    Vendor Info
+    Get Fields From Vendor Info Tab    UI
+    Verify Prepopulated Default Value In Vendor Info tab
+    Populate Fields For Vendor Info Tab    Attention1    Address1    Bangalore    India    cwt_email    cwt_phone
+    #Grid In Vendor Info Tab
+    Populate Grid Data In Vendor Info Tab    Phone    0987654321    False
+    Click Add In Vendor Info Tab
+    Get Fields From Vendor Info Tab    newVendor
+    ###MI Tab
+    Click Tab In Other Services Panel    MI
+    Verify Default Values Of MI Tab When Product Is Air
+    Populate MI Tab For All Air Products    44444    4444    FF - First Class Full Fare    ${EMPTY}    Agent Booked    CF - CLIENT NEGOTIATED FARE SAVING ACCEPTED
+    ...    A - PARTIAL MISSED SAVING    AB    ${EMPTY}    11    ${EMPTY}
+    Get MI Field Values When Products Is Air    newMi
+    Click Finish PNR    \    5    Other Svcs
+    Get Exchange Order Number
+    Verify Accounting Lines For Main EO Are Written    Air BSp    fop=Credit Card (CC)    segment_number=020304
+    Verify Accounting Lines For VAT For Main EO Are Written    Air BSp    Credit Card (CC)    020304
+    Verify Acounting Lines For Merchant Fee Of EO Are Written    Air BSp    Credit Card (CC)    020304
+    Verify Acounting Lines For VAT For Merchant Fee Of EO Are Written    Air BSp    Credit Card (CC)    020304
+    Verify Accounting Lines For Transaction Fee Are Written    Air BSp    Credit Card (CC)    020304
+    Verify Accounting Lines For VAT For Transaction Fee Are Written    Air BSp    Credit Card (CC)    020304
+    Verify Accounting Lines For Rebate Are Written    Air BSp    Credit Card (CC)    020304
+    Verify Acounting Lines For Merchant Fee (TF) Are Written    Air BSp    Credit Card (CC)    020304
+    Verify Acounting Lines For Merchant Fee (TF) Are Not Written    Credit Card (CC)    020304
+    Verify Acounting Lines For VAT For Merchant Fee (TF) Are Written    Air BSp    Credit Card (CC)    020304
+    Verify Acounting Lines For VAT For Merchant Fee (TF) Are Not Written    Credit Card (CC)    020304
+
+[IN AB AOS] Verify That Request Fields Default To The Correct Values Upon Amend EO When Product Is Air BSP Is FOP Is Credit Card-VI
+    [Tags]    us596    in    team_chiu    us590    us1033
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Enter GDS Command    XE2
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR    Amend Booking For Verify That Request Fields Default To The Correct Values Upon Amend EO When Product Air BSp Or Air Domestic
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Request Fields Default To The Correct Values Upon Amend EO When Product Air BSp Or Air Domestic
+    ##Amend
+    Click Other Services
+    Click Amend Eo    ${eo_number}
+    ####Request
+    Get Request Field Values    Air BSp    amendRequest1
+    Verify Request Tab Fields In Amend EO When Product Is Air Bsp Or Air DOmestic    newRequest    amendRequest1
+    Populate Request Tab Fields When Products Are Air BSP Or Air Domestic    AA    P    true    RESERVED FOR FUTURE INDUSTRY USE    500    BHD \ \ \ Bahraini Dinar
+    ...    200    100    Credit    Issue Exchange    In Conjunction    Original Place
+    ...    Remark
+    Get Request Field Values    Air BSp    amendRequest2
+    Select Air Segment    2    3
+    ###Charges
+    Click Tab In Other Services Panel    Charges
+    Get Charges Field Values For Air Products    Air BSp    amend1
+    Verify Field Values In Charges On Amend EO    newCharges    amend1
+    Populate Charges Field For Air Products    JFK    International    Full Passthrough    444    5454545454    22
+    ...    true    true    po    Vendor Reference GSA    4000    11
+    ...    22    24    20    12
+    Get Charges Field Values For Air Products    Air BSp    amend2
+    #Vendor Amend1
+    Click Tab In Other Services Panel    Vendor Info
+    Get Fields From Vendor Info Tab    amendVendor1
+    Verify Vendor Info Fields Default to Correct Values Upon Amend EO    newVendor    amendVendor1
+    #Correct Entries
+    Populate Fields For Vendor Info Tab    Attention2    Address2    Pune    India    Email2    09875123456
+    Get Number Of Records In Vendor Info Tab
+    #Grid In Vendor Info Tab
+    Populate Grid Data In Vendor Info Tab    Phone    0987654321    False
+    Click Add In Vendor Info Tab
+    Get Fields From Vendor Info Tab    amendVendor2
+    ###MI Tab
+    Click Tab In Other Services Panel    MI
+    Get MI Field Values When Products Is Air    amendMi1
+    Verify Field Values In MI On Amend Eo When Product Is Air    newMi    amendMi1
+    Click Finish PNR    \    5    Other Svcs
+    Click Other Services
+    ###Amend Eo Second Time
+    Click Amend Eo    ${eo_number}
+    ###Final Amend Request
+    Get Request Field Values    Air BSp    FinalRequestAmend3
+    Verify Request Tab Fields In Amend EO When Product Is Air Bsp Or Air DOmestic    amendRequest2    FinalRequestAmend3
+    ###Final AmendCharges
+    Click Tab In Other Services Panel    Charges
+    Get Charges Field Values For Air Products    Air BSp    amend3
+    Verify Field Values In Charges On Amend EO    amend2    amend3
+    #Vendor Amend1
+    Click Tab In Other Services Panel    Vendor Info
+    Get Fields From Vendor Info Tab    amendfinalVendor
+    Verify Vendor Info Fields Default to Correct Values Upon Amend EO    amendVendor2    amendfinalVendor
+    ###MI Tab Final Amend
+    Click Tab In Other Services Panel    MI
+    Get MI Field Values When Products Is Air    finalAmendMi1
+    Verify Field Values In MI On Amend Eo When Product Is Air    amendMi1    finalAmendMi1
+    [Teardown]    Run Keyword And Ignore Error    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[IN NB OS] Verify That New EO Is Created And Accounting Remarks Are Written When Product Is Air Domestic And FOP Is Credit Card - AX
+    [Tags]    us596    in    team_chiu    us590    us1033
+    Create New Booking For Other Services - India    1026100093 ¦ SIEMENS PLM SOFTWARE UGS -(K.PARK)-CC ¦ APAC IN OS AUTOMATION    AX    1    2    0    0
+    ...    1    1
+    Click Other Services
+    Select Product And Vendor    Air domestic    B.S.P.DOMESTIC SALES
+    #Request Tab
+    Verify Tabs Displayed In Other Services When Product Is Air BSp Or Air Domestic
+    Click Tab In Other Services Panel    Request
+    Verify Request Tab Fields Displayed Or Not When Products Is Air BSp Or Air Domestic
+    Verify Default Values Of Request Tab Fields When Product is Air BSp Or Air Domestic
+    Verify Request Tab Fields Madatory And Optional When Product Is Air Bsp Or Air Domestic
+    Tick Request VMPD Checkbox
+    Populate Request Tab Fields When Products Are Air BSP Or Air Domestic    3K    S    true    REBOOKING FEE INTERNATIONAL    200    ALL \ \ \ Albanian Lek
+    ...    10    10    Credit    Test1    Test2    Test3
+    ...    Test4
+    Populate Request Tab Fields FOP Type Is CC When Product Is Air BSp Or Air Domestic    AX    378282246310005    12    28
+    Select Air Segment    2    3
+    Get Request Field Values    Air domestic    dom_request
+    #Charges Tab
+    Get Product
+    Get Vendor
+    Click Tab In Other Services Panel    Charges
+    Populate Charges Field For Air Products    HKG    International    Full Passthrough    122    9811223341    12
+    ...    true    true    TESTPO    TESTGSA    1000    10
+    ...    20    100    10    AB    10    100
+    ...    cancellation
+    Get Charges Field Values For Air Products    Air domestic    dom_charges
+    #MI Tab
+    Click Tab In Other Services Panel    MI
+    Verify Default Values Of MI Tab When Product Is Air
+    Populate MI Tab For All Air Products    300    15    FF - First Class Full Fare    A1    Agent Booked    CF - CLIENT NEGOTIATED FARE SAVING ACCEPTED
+    ...    A - PARTIAL MISSED SAVING    A1    B1    13    14
+    Get MI Field Values When Products Is Air    dom_mi
+    Click Finish PNR    \    5    Other Svcs
+    Get Exchange Order Number
+    #Verification of Remarks
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Accounting Lines For Main EO Are Written    air domestic    fop=Credit Card (CC)    segment_number=0203
+    Verify Accounting Lines For VAT For Main EO Are Written    air domestic    Credit Card (CC)    0203
+    Verify Acounting Lines For Merchant Fee Of EO Are Written    air domestic    Credit Card (CC)    0203
+    Verify Acounting Lines For VAT For Merchant Fee Of EO Are Written    air domestic    Credit Card (CC)    0203
+    Verify Acounting Lines For Merchant Fee (TF) Are Written    air domestic    Credit Card (CC)    0203
+    Verify Acounting Lines For VAT For Merchant Fee (TF) Are Written    air domestic    Credit Card (CC)    0203
+    Verify Accounting Lines For Transaction Fee Are Written    air domestic    Credit Card (CC)    0203
+    Verify Accounting Lines For VAT For Transaction Fee Are Written    air domestic    Credit Card (CC)    0203
+    Verify Accounting Lines For Rebate Are Written    air domestic    Credit Card (CC)    0203
+    [Teardown]
+
+[IN AOS] Verify That Tabs Default To Correct Values And Accounting Remarks Are Written When Product Is Air Domestic And FOP Is Credit Card - AX
+    [Tags]    us596    in    team_chiu    us590    us1033
+    Click Other Services
+    Click Amend Eo    ${eo_number}
+    #Amend Request verification
+    Click Tab In Other Services Panel    Request
+    Get Request Field Values    Air domestic    amend_dom_request
+    Verify Request Tab Fields In Amend EO When Product Is Air Bsp Or Air DOmestic    dom_request    amend_dom_request
+    Populate Request Tab Fields When Products Are Air BSP Or Air Domestic    AA    S    true    BAG SHIPPED AS CARGO    300    HRK \ \ \ Croatian Kuna
+    ...    20    30    Credit    Test1    Test2    Test3
+    ...    Test4
+    Get Request Field Values    Air domestic    amend_dom_request2
+    Tick Select All Segments
+    #Amend Charges verification
+    Click Tab In Other Services Panel    Charges
+    Get Charges Field Values For Air Products    Air domestic    dom_charges_amend
+    Verify Field Values In Charges On Amend EO    dom_charges    dom_charges_amend
+    Populate Charges Field For Air Products    SFO    International    Non Passthrough    122    9087654321    12
+    ...    false    true    ${EMPTY}    Hyperstrada    300    10
+    ...    20    23    10    AB    14    250
+    Get Charges Field Values For Air Products    Air domestic    dom_charges_amend2
+    #Amend MI Verification
+    Click Tab In Other Services Panel    MI
+    Get MI Field Values When Products Is Air    dom_mi_amend
+    Verify Field Values In MI On Amend Eo When Product Is Air    dom_mi    dom_mi_amend
+    Populate MI Tab For All Air Products    300    15    FF - First Class Full Fare    A1    Agent Booked    CF - CLIENT NEGOTIATED FARE SAVING ACCEPTED
+    ...    A - PARTIAL MISSED SAVING    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    Get MI Field Values When Products Is Air    dom_mi_amend2
+    Click Finish PNR    \    5    Other Svcs
+    #Verification of Remarks
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Accounting Lines For Main EO Are Written    air domestic    fop=Credit Card (CC)    segment_number=0203
+    Verify Accounting Lines For VAT For Main EO Are Written    air domestic    Credit Card (CC)    0203
+    Verify Acounting Lines For Merchant Fee Of EO Are Written    air domestic    Credit Card (CC)    0203
+    Verify Acounting Lines For VAT For Merchant Fee Of EO Are Written    air domestic    Credit Card (CC)    0203
+    Verify Acounting Lines For Merchant Fee (TF) Are Written    air domestic    Credit Card (CC)    0203
+    Verify Acounting Lines For VAT For Merchant Fee (TF) Are Written    air domestic    Credit Card (CC)    0203
+    Verify Accounting Lines For Transaction Fee Are Written    air domestic    Credit Card (CC)    0203
+    Verify Accounting Lines For VAT For Transaction Fee Are Written    air domestic    Credit Card (CC)    0203
+    Verify Accounting Lines For Rebate Are Written    air domestic    Credit Card (CC)    0203
+    #Verification of Amend Changes
+    Click Other Services
+    Click Amend Eo    ${eo_number}
+    Get Request Field Values    Air domestic    amend_dom_request3
+    Tick Select All Segments
+    Verify Request Tab Fields In Amend EO When Product Is Air Bsp Or Air DOmestic    amend_dom_request2    amend_dom_request3
+    Click Tab In Other Services Panel    Charges
+    Get Charges Field Values For Air Products    Air domestic    dom_charges_amend3
+    Verify Field Values In Charges On Amend EO    dom_charges_amend2    dom_charges_amend3
+    Click Tab In Other Services Panel    MI
+    Get MI Field Values When Products Is Air    dom_mi_amend3
+    Verify Field Values In MI On Amend Eo When Product Is Air    dom_mi_amend2    dom_mi_amend3
+    #End of Tabs
+    Click Finish PNR
+    [Teardown]    Run Keyword And Ignore Error    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[IN NB OS] Verify That New EO Is Created And Accounting Remarks Are Written When Product Is Air BSP Add On And FOP Is Credit Card - AX
+    [Tags]    us598    us590    us1033    in    team_chiu
+    Create New Booking For Other Services - India    1026100093 ¦ SIEMENS PLM SOFTWARE UGS -(K.PARK)-CC ¦ APAC IN OS AUTOMATION    AX    1    2    0    0
+    ...    1    1
+    Click Other Services
+    Select Product And Vendor    Air BSP Add on    UNITED AIRLINES
+    Select Air Segment    2    3
+    Populate Request Fields Except Select Air Segments When Product Is Any Air Add On    Air BSP Add on    AA    S    TOURCODE123    150.558
+    Get Request Field Values    Air BSP Add On    new
+    #Charges Tab
+    Get Product
+    Get Vendor
+    Click Tab In Other Services Panel    Charges
+    Populate Charges Field For Air Products    JFK    International    Full Passthrough    122    981122334    12
+    ...    false    true    TESTPO    TESTGSA    1000    10
+    ...    20    100    10    AB    10    100
+    Get Charges Field Values For Air Products    Air BSP Add on    new
+    #Vendor Info Tab
+    Click Tab In Other Services Panel    Vendor Info
+    Get Fields From Vendor Info Tab    new
+    Verify Prepopulated Default Value In Vendor Info tab
+    Populate Fields For Vendor Info Tab    Attention1    Address1    Bangalore    India    cwt_email    cwt_phone
+    Populate Grid Data In Vendor Info Tab    Phone    0987654321    False
+    Click Add In Vendor Info Tab
+    Get Fields From Vendor Info Tab    new
+    #MI Tab
+    Click Tab In Other Services Panel    MI
+    Verify Default Values Of MI Tab When Product Is Air
+    Populate MI Tab For All Air Products    300    15    FF - First Class Full Fare    A1    Agent Booked    CF - CLIENT NEGOTIATED FARE SAVING ACCEPTED
+    ...    A - PARTIAL MISSED SAVING    A1    B1    13    14
+    Get MI Field Values When Products Is Air    new
+    Click Finish PNR    \    5    Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    #Remarks Verification
+    Verify Accounting Lines For Main EO Are Written    Air BSP Add on    fop=Credit Card (CC)    segment_number=0203
+    Verify Accounting Lines For VAT For Main EO Are Written    Air BSP Add on    Credit Card (CC)    0203
+    Verify Acounting Lines For Merchant Fee Of EO Are Written    Air BSP Add On    Credit Card (CC)    0203
+    Verify Acounting Lines For VAT For Merchant Fee Of EO Are Written    Air BSP Add On    Credit Card (CC)    0203
+    Verify Acounting Lines For Merchant Fee (TF) Are Written    Air BSP Add On    Credit Card (CC)    0203
+    Verify Acounting Lines For VAT For Merchant Fee (TF) Are Written    Air BSP Add On    Credit Card (CC)    0203
+    Verify Accounting Lines For VAT For Transaction Fee Are Written    Air BSP Add on    Credit Card (CC)    0203
+    Verify Accounting Lines For Transaction Fee Are Written    Air BSP Add on    Credit Card (CC)    0203
+    Verify Accounting Lines For Rebate Are Written    Air BSP Add on    Credit Card (CC)    0203
+
+[IN AOS] Verify That Tabs Default To The Correct Values And Accounting Remarks Are Written When Product Is Air BSP Add On And FOP Is Credit Card - AX
+    [Tags]    us598    us590    us1033    in    team_chiu
+    Click Other Services
+    Click Amend Eo    ${eo_number}
+    #Request Tab
+    Get Request Field Values    Air BSP Add On    amend_1
+    Verify Field Values In Request On Amend EO When Product Is Any Air Add On    Air BSP Add On    new    amend_1
+    Populate Request Fields Except Select Air Segments When Product Is Any Air Add On    Air BSP Add On    JL    P    TOURX12345    250.463
+    Select Air Segment    3    4
+    Get Request Field Values    Air BSP Add On    amend_2
+    #Amend EO Verification Of Charges And MI Tab
+    Click Tab In Other Services Panel    Charges
+    Get Charges Field Values For Air Products    Air BSP Add on    amend1
+    Verify Field Values In Charges On Amend EO    new    amend1
+    Click Tab In Other Services Panel    MI
+    Get MI Field Values When Products Is Air    amend1
+    Verify Field Values In MI On Amend Eo When Product Is Air    new    amend1
+    #Charges Tab
+    Click Tab In Other Services Panel    Charges
+    Populate Charges Field For Air Products    LAX    International    Non Passthrough    122    981122334    12
+    ...    1234567    false    ${EMPTY}    TESTGSA    200    0
+    ...    0    10    20    AB    10
+    Get Charges Field Values For Air Products    Air BSP Add on    amend2
+    #Vendor Info Tab
+    Click Tab In Other Services Panel    Vendor Info
+    Get Fields From Vendor Info Tab    amend1
+    Verify Vendor Info Fields Default to Correct Values Upon Amend EO    new    amend1
+    Populate Fields For Vendor Info Tab    Attention2    Address2    Delhi    Manila    EMAIL2    PHONE2
+    Populate Grid Data In Vendor Info Tab    Email    Cwt@email.com    True
+    Click Add In Vendor Info Tab
+    Get Fields From Vendor Info Tab    amend2
+    #MI Tab
+    Click Tab In Other Services Panel    MI
+    Populate MI Tab For All Air Products    300    15    FF - First Class Full Fare    ${EMPTY}    Agent Booked    CF - CLIENT NEGOTIATED FARE SAVING ACCEPTED
+    ...    A - PARTIAL MISSED SAVING    ${EMPTY}    B1    ${EMPTY}    14
+    Get MI Field Values When Products Is Air    amend2
+    Click Finish PNR    \    5    Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    #Remarks Verification
+    Verify Accounting Lines For Main EO Are Written    Air BSP Add on    fop=Credit Card (CC)    segment_number=0304
+    Verify Accounting Lines For VAT For Main EO Are Written    Air BSP Add on    Credit Card (CC)    0304
+    Verify Acounting Lines For Merchant Fee Of EO Are Written    Air BSP Add On    Credit Card (CC)    0304
+    Verify Acounting Lines For VAT For Merchant Fee Of EO Are Written    Air BSP Add On    Credit Card (CC)    0304
+    [Teardown]    Run Keyword And Ignore Error    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[IN NB OS] Verify That New EO Is Created And Accounting Remarks Are Written When Product Is Air Dom Add On And FOP Is Invoice
+    [Tags]    us598    in    team_chiu    us590    us1033
+    Create New Booking For Other Services - India    1026100093 ¦ SIEMENS PLM SOFTWARE UGS -(K.PARK)-CC ¦ APAC IN OS AUTOMATION    INVOICE    1    1    1    1
+    ...    1    1
+    Click Other Services
+    Select Product And Vendor    AIR DOM ADD ON    JET AIRWAYS
+    Verify Active Tab    Request
+    Verify Tabs Displayed In Other Services    Request    Charges    Associated Charges    Vendor Info    MI
+    Click Tab In Other Services Panel    Associated Charges
+    Verify Tab Is Disabled    Associated Charges
+    #Request Tab
+    Verify Fields Are Displayed In Request    AIR DOM ADD ON
+    Verify Air Segments Displayed In Select Air Segments
+    Verify Field Default Values In Request    AIR DOM ADD ON
+    Populate Request Fields Except Select Air Segments When Product Is Any Air Add On    AIR DOM ADD ON    JL    P    CODE456    300.99
+    Select Air Segment    3    4
+    Get Request Field Values    AIR DOM ADD ON    new
+    #Charges Tab
+    Click Tab In Other Services Panel    Charges
+    Populate Charges Field For Air Products    SIN    International    Full Passthrough    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    ${EMPTY}    true    ${EMPTY}    789012    1500.453    12.56
+    ...    0    4.01    1.01    AA    0    0
+    ...    ${EMPTY}    2.02    BB    3.03    CC
+    Get Charges Field Values For Air Products    AIR DOM ADD ON    new
+    #Vendor Info Tab
+    Click Tab In Other Services Panel    Vendor Info
+    Populate Fields For Vendor Info Tab    Attention1    Address1    Bangalore    India    email@cwt.com    9809134
+    Populate Grid Data In Vendor Info Tab    Phone    0987654321    True
+    Click Add In Vendor Info Tab
+    Get Fields From Vendor Info Tab    new
+    #MI Tab
+    Click Tab In Other Services Panel    MI
+    Populate MI Tab For All Air Products    2500    100    FW - First Class CWT Negotiated Fare    JL    Agent Booked    LC - LOW COST CARRIER FARE ACCEPTED
+    ...    B - PASSENGER REQUESTED SPECIFIC AIRLINE    AA    ${EMPTY}    2506    ${EMPTY}
+    Get MI Field Values When Products Is Air    new
+    Click Finish PNR    \    5    Other Svcs
+    Get Exchange Order Number
+    #Remarks Verification
+    Verify Accounting Lines For Main EO Are Written    AIR DOM ADD ON    fop=Invoice    segment_number=0304
+    Verify Accounting Lines For VAT For Main EO Are Written    AIR DOM ADD ON    Invoice    0304
+    Verify Acounting Lines For Merchant Fee Of EO Are Not Written    Invoice    0304
+    Verify Acounting Lines For VAT For Merchant Fee Of EO Are Not Written    Invoice    0304
+    Verify Acounting Lines For Merchant Fee (TF) Are Not Written    Invoice    0304
+    Verify Acounting Lines For VAT For Merchant Fee (TF) Are Not Written    Invoice    0304
+    Verify Accounting Lines For Rebate Are Written    AIR DOM ADD ON    Invoice    0304
+    Verify Accounting Lines For Transaction Fee Are Not Written    AIR DOM ADD ON    Invoice    0304
+    Verify Accounting Lines For VAT For Transaction Fee Are Not Written    AIR DOM ADD ON    Invoice    0304
+
+[IN AOS] Verify That Tabs Default To The Correct Values And Accounting Remarks Are Written When Product Is Air Dom Add On And FOP Is Invoice
+    [Tags]    us598    in    team_chiu    us590    us1033
+    Click Other Services
+    Click Amend Eo    ${eo_number}
+    ##Saving Verification For All Tabs
+    #Request Tab
+    Get Request Field Values    AIR DOM ADD ON    amend_1
+    Verify Field Values In Request On Amend EO When Product Is Any Air Add On    AIR DOM ADD ON    new    amend_1
+    #Charges Tab
+    Click Tab In Other Services Panel    Charges
+    Get Charges Field Values For Air Products    AIR DOM ADD ON    amend1
+    Verify Field Values In Charges On Amend EO    new    amend1
+    #MI Tab
+    Click Tab In Other Services Panel    MI
+    Get MI Field Values When Products Is Air    amend1
+    Verify Field Values In MI On Amend Eo When Product Is Air    new    amend1
+    #Vendor Info Tab
+    Click Tab In Other Services Panel    Vendor Info
+    Get Fields From Vendor Info Tab    amend1
+    Verify Vendor Info Fields Default to Correct Values Upon Amend EO    new    amend1
+    #Population of Tabs
+    #Request Tab
+    Click Tab In Other Services Panel    Request
+    Populate Request Fields Except Select Air Segments When Product Is Any Air Add On    AIR DOM ADD ON    JL    P    980ABCDE    500
+    Select Air Segment    3    4
+    #Charges Tab
+    Click Tab In Other Services Panel    Charges
+    Populate Charges Field For Air Products    JFK    Domestic    Non Passthrough    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    ${EMPTY}    true    ${EMPTY}    789012    1500.453    12.56
+    ...    ${EMPTY}    4.01    1.01    AA    ${EMPTY}    2
+    ...    ${EMPTY}    2.02    BB    ${EMPTY}    ${EMPTY}
+    Get Charges Field Values For Air Products    AIR DOM ADD ON    amend2
+    #MI Tab
+    Click Tab In Other Services Panel    MI
+    Populate MI Tab For All Air Products    3000    100    CD - Business Class Discounted Fare    AK    Agent Booked    MC - MISCELLANEOUS
+    ...    X - POLICY WAIVED - EMERGENCY CONDITIONS    5J    B6    5000    6000
+    Get MI Field Values When Products Is Air    new
+    Click Finish PNR    \    5    Other Svcs
+    #Remarks Verification
+    Verify Accounting Lines For Main EO Are Written    AIR DOM ADD ON    fop=Invoice    segment_number=0304
+    Verify Accounting Lines For VAT For Main EO Are Written    AIR DOM ADD ON    Invoice    0304
+    Verify Accounting Lines For Transaction Fee Are Written    AIR DOM ADD ON    Invoice    0304
+    Verify Accounting Lines For VAT For Transaction Fee Are Written    AIR DOM ADD ON    Invoice    0304
+    Verify Accounting Lines For Rebate Are Written    AIR DOM ADD ON    Invoice    0304
+    [Teardown]    Run Keyword And Ignore Error    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[IN NB OS] Verify That New EO Is Created And Passive Segment And Accounting Remarks Are Written When Product Is Air Sales-Non BSP INT And FOP Is Cash
+    [Tags]    us598    in    team_chiu    us1033    us1078
+    Create New Booking For Other Services - India    3024300001 ¦ EQUANT SOLUTIONS INDIA P LTD GGN ¦ APAC IN OS AUTOMATION    CASH    1    2    0    0
+    ...    1    1
+    Click Other Services
+    Select Product And Vendor    Air Sales-Non BSP INT    Continental Airlines
+    Verify Active Tab    Request
+    Verify Tabs Displayed In Other Services    Request    Charges    Associated Charges    Vendor Info    MI
+    Click Tab In Other Services Panel    Associated Charges
+    Verify Tab Is Disabled    Associated Charges
+    Verify Fields Are Displayed In Request    Air Sales-Non BSP INT
+    Verify Air Segments Displayed In Select Air Segments
+    Verify Field Default Values In Request    Air Sales-Non BSP INT
+    Populate Request Fields Except Select Air Segments When Product Is Any Air Add On    Air Sales-Non BSP INT    AA    S    XYZ123    450
+    Select Air Segment    4
+    Get Request Field Values    Air Sales-Non BSP INT    new
+    #Charges Tab
+    Click Tab In Other Services Panel    Charges
+    Populate Charges Field For Air Products    SIN    International    Full Passthrough    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    ${EMPTY}    true    ${EMPTY}    789012    1500.453    0
+    ...    0    4.01    1.01    AA    0    6.89
+    ...    ${EMPTY}    2.02    BB    3.03    CC
+    Get Charges Field Values For Air Products    Air Sales-Non BSP INT    new
+    #Vendor Info Tab
+    Click Tab In Other Services Panel    Vendor Info
+    Populate Fields For Vendor Info Tab    Attention1    Address1    Bangalore    India    email@cwt.com    9809134
+    Populate Grid Data In Vendor Info Tab    Phone    0987654321    True
+    Click Add In Vendor Info Tab
+    Get Fields From Vendor Info Tab    new
+    #MI Tab
+    Click Tab In Other Services Panel    MI
+    Populate MI Tab For All Air Products    2500    100    FW - First Class CWT Negotiated Fare    3K    Agent Booked    LC - LOW COST CARRIER FARE ACCEPTED
+    ...    B - PASSENGER REQUESTED SPECIFIC AIRLINE    AA    ${EMPTY}    2506    ${EMPTY}
+    Verify Client MI Field Is Correct    Decline fare Airline One    ${EMPTY}    IT    2    character    FF17
+    Verify Client MI Field Is Correct    Decline fare ONE    ${EMPTY}    ${EMPTY}    ${EMPTY}    numeric    FF18
+    Verify Client MI Field Is Correct    DECLINE FARE 2 AIRLINE${SPACE}    ${EMPTY}    IT    2    character    FF19
+    Verify Client MI Field Is Correct    DECLINE FARE 2    ${EMPTY}    ${EMPTY}    ${EMPTY}    numeric    FF20
+    Set Client MI Field    Decline fare Airline One    AK
+    Set Client MI Field    Decline fare ONE    2500
+    Set Client MI Field    DECLINE FARE 2 AIRLINE${SPACE}    TG
+    Set Client MI Field    DECLINE FARE 2    3500
+    Get MI Field Values When Products Is Air    new
+    Click Finish PNR    \    5    Other Svcs
+    Get Exchange Order Number
+    #Remarks Verification
+    Verify Accounting Lines For Main EO Are Written    Air Sales-Non BSP INT    RM *MSX/FF17-AK/FF18-2500/FF19-TG/FF20-3500    Cash    04
+    Verify Accounting Lines For VAT For Main EO Are Written    Air Sales-Non BSP INT    Cash    04
+    Verify Accounting Lines For Transaction Fee Are Written    Air Sales-Non BSP INT    Cash    04
+    Verify Accounting Lines For VAT For Transaction Fee Are Written    Air Sales-Non BSP INT    Cash    04
+
+[IN AOS] Verify That Tabs Default To The Correct Values And Accounting Remarks Are Written When Product Is Air Sales-Non BSP INT And FOP Is Cash
+    [Tags]    us598    in    team_chiu    us1078    us1033
+    Click Other Services
+    Click Amend Eo    ${eo_number}
+    ##Saving Verification For All Tabs
+    #Request Tab
+    Get Request Field Values    Air Sales-Non BSP INT    amend_1
+    Verify Field Values In Request On Amend EO When Product Is Any Air Add On    Air Sales-Non BSP INT    new    amend_1
+    #Charges Tab
+    Click Tab In Other Services Panel    Charges
+    Get Charges Field Values For Air Products    Air Sales-Non BSP INT    amend1
+    Verify Field Values In Charges On Amend EO    new    amend1
+    #MI Tab
+    Click Tab In Other Services Panel    MI
+    Get MI Field Values When Products Is Air    amend1
+    Verify Field Values In MI On Amend Eo When Product Is Air    new    amend1
+    #Vendor Info Tab
+    Click Tab In Other Services Panel    Vendor Info
+    Get Fields From Vendor Info Tab    amend1
+    Verify Vendor Info Fields Default to Correct Values Upon Amend EO    new    amend1
+    #Population of Tabs
+    #Request Tab
+    Click Tab In Other Services Panel    Request
+    Populate Request Fields Except Select Air Segments When Product Is Any Air Add On    Air Sales-Non BSP INT    JL    P    980ABCDE    500
+    Select Air Segment    2    4
+    #Charges Tab
+    Click Tab In Other Services Panel    Charges
+    Populate Charges Field For Air Products    JFK    Domestic    Non Passthrough    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    ${EMPTY}    true    1234567890    0987654321    1500.453    12.56
+    ...    10.55    4.01    1.01    AA    ${EMPTY}    2
+    ...    ${EMPTY}    2.02    BB    ${EMPTY}    ${EMPTY}
+    Get Charges Field Values For Air Products    Air Sales-Non BSP INT    amend2
+    #MI Tab
+    Click Tab In Other Services Panel    MI
+    Populate MI Tab For All Air Products    3000    100    CD - Business Class Discounted Fare    AK    Agent Booked    MC - MISCELLANEOUS
+    ...    X - POLICY WAIVED - EMERGENCY CONDITIONS    5J    B6    5000    6000
+    Set Client MI Field    Decline fare Airline One    AI
+    Set Client MI Field    Decline fare ONE    3000
+    Set Client MI Field    DECLINE FARE 2 AIRLINE${SPACE}    9W
+    Set Client MI Field    DECLINE FARE 2    4000
+    Get MI Field Values When Products Is Air    new
+    Click Finish PNR    \    5    Other Svcs
+    #Remarks Verification
+    Verify Accounting Lines For Main EO Are Written    Air Sales-Non BSP INT    RM *MSX/FF17-AI/FF18-3000/FF19-9W/FF20-4000    fop=Cash    segment_number=0204
+    Verify Accounting Lines For VAT For Main EO Are Written    Air Sales-Non BSP INT    Cash    0204
+    Verify Accounting Lines For Transaction Fee Are Written    Air Sales-Non BSP INT    Cash    0204
+    Verify Accounting Lines For VAT For Transaction Fee Are Written    Air Sales-Non BSP INT    Cash    0204
+    Verify Accounting Lines For Rebate Are Written    Air Sales-Non BSP INT    Cash    0204
+    [Teardown]    Run Keyword And Ignore Error    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[IN NB OS] Verify That Request Tab And Fields Are Displayed When Product Is Air Conso-Dom And FOP Is Credit Card - CA
+    [Tags]    us598    in    team_chiu    us1027    us590    us1033
+    Create New Booking For Other Services - India    1026100093 ¦ SIEMENS PLM SOFTWARE UGS -(K.PARK)-CC ¦ APAC IN OS AUTOMATION    CA    1    2    0    0
+    ...    1    1
+    Click Other Services
+    Select Product And Vendor    Air Conso-Dom    DECCAN CHARTERED LIMITED
+    Verify Active Tab    Request
+    Verify Tabs Displayed In Other Services    Request    Charges    Associated Charges    Vendor Info    MI
+    Click Tab In Other Services Panel    Associated Charges
+    Verify Tab Is Disabled    Associated Charges
+    #Request Tab
+    Verify Fields Are Displayed In Request    Air Conso-Dom
+    Verify Air Segments Displayed In Select Air Segments
+    Verify Field Default Values In Request    Air Conso-Dom
+    Populate Request Fields Except Select Air Segments When Product Is Any Air Add On    Air Conso-Dom    AA    P    TOURCODE123    150.558    PoS Remark 1
+    ...    PoS Remark 2    PoS Remark 3    C Desk 1    C Desk 2    Indigo    New Issue
+    ...    ABC123    Fare Break Up 1    Fare Break Up 2    500    LCC 123    GST IN 123
+    ...    email@cwt.com    Entity Name 123    2 555 55 55
+    Select Air Segment    2
+    Get Request Field Values    Air Conso-Dom    new
+    #Charges Tab
+    Click Tab In Other Services Panel    Charges
+    Populate Charges Field For Air Products    SIN    Domestic    Non Passthrough    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    ${EMPTY}    true    0987654321    ${EMPTY}    1500.453    12.56
+    ...    8.08    4.01    1.01    AA    2.25    80
+    ...    ${EMPTY}    ${EMPTY}    ${EMPTY}    3.03    CC
+    Get Charges Field Values For Air Products    Air Conso-Dom    new
+    #Vendor Info Tab
+    Click Tab In Other Services Panel    Vendor Info
+    Populate Fields For Vendor Info Tab    Attention1    Address1    Bangalore    India    email@cwt.com    9809134
+    Populate Grid Data In Vendor Info Tab    Phone    0987654321    True
+    Click Add In Vendor Info Tab
+    Get Fields From Vendor Info Tab    new
+    #MI Tab
+    Click Tab In Other Services Panel    MI
+    Populate MI Tab For All Air Products    2500    100    FW - First Class CWT Negotiated Fare    AA    Agent Booked    LC - LOW COST CARRIER FARE ACCEPTED
+    ...    B - PASSENGER REQUESTED SPECIFIC AIRLINE    3K    ${EMPTY}    3000    ${EMPTY}
+    Get MI Field Values When Products Is Air    new
+    Click Finish PNR    \    5    Other Svcs
+    Get Exchange Order Number
+    #Remarks Verification
+    Verify General Remarks Are Written Correctly    Air Conso-Dom
+    Verify Accounting Lines For Main EO Are Written    Air Conso-Dom    fop=Credit Card (CC)    segment_number=02
+    Verify Accounting Lines For VAT For Main EO Are Written    Air Conso-Dom    Credit Card (CC)    02
+    Verify Acounting Lines For Merchant Fee Of EO Are Written    Air Conso-Dom    Credit Card (CC)    02
+    Verify Acounting Lines For VAT For Merchant Fee Of EO Are Written    Air Conso-Dom    Credit Card (CC)    02
+    Verify Acounting Lines For Merchant Fee (TF) Are Written    Air Conso-Dom    Credit Card (CC)    02
+    Verify Acounting Lines For VAT For Merchant Fee (TF) Are Written    Air Conso-Dom    Credit Card (CC)    02
+    Verify Accounting Lines For Transaction Fee Are Written    Air Conso-Dom    Credit Card (CC)    02
+    Verify Accounting Lines For VAT For Transaction Fee Are Written    Air Conso-Dom    Credit Card (CC)    02
+    Verify Accounting Lines For Rebate Are Written    Air Conso-Dom    Credit Card (CC)    02
+
+[IN AOS] Verify That Request Fields Default To The Correct Values Upon Amend EO When Product Is Air Conso-Dom - CA
+    [Tags]    us598    in    team_chiu    us1027    us590    us1033
+    Click Other Services
+    Click Amend Eo    ${eo_number}
+    ##Saving Verification For All Tabs
+    #Request Tab
+    Get Request Field Values    Air Conso-Dom    amend_1
+    Verify Field Values In Request On Amend EO When Product Is Any Air Add On    Air Conso-Dom    new    amend_1
+    #Charges Tab
+    Click Tab In Other Services Panel    Charges
+    Get Charges Field Values For Air Products    Air Conso-Dom    amend1
+    Verify Field Values In Charges On Amend EO    new    amend1
+    #MI Tab
+    Click Tab In Other Services Panel    MI
+    Get MI Field Values When Products Is Air    amend1
+    Verify Field Values In MI On Amend Eo When Product Is Air    new    amend1
+    #Vendor Info Tab
+    Click Tab In Other Services Panel    Vendor Info
+    Get Fields From Vendor Info Tab    amend1
+    Verify Vendor Info Fields Default to Correct Values Upon Amend EO    new    amend1
+    #Population of Tabs
+    #Request Tab
+    Click Tab In Other Services Panel    Request
+    Populate Request Fields Except Select Air Segments When Product Is Any Air Add On    Air Conso-Dom    JL    S    TOUR789    500.609    PoS Remark 1 X
+    ...    PoS Remark 2 X    PoS Remark 3 X    C Desk 1 X    C Desk 2 X    Go Air    Rebooking
+    ...    XYZ123    Fare Break Up 1 X    Fare Break Up 2 X    123 X    LCC 123 X    GST IN 123 X
+    ...    emai123l@cwt.com    xyxy    2 555 55 77
+    Select Air Segment    2    4
+    #Charges Tab
+    Click Tab In Other Services Panel    Charges
+    Populate Charges Field For Air Products    JFK    Domestic    Non Passthrough    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    ${EMPTY}    true    1234567890    0987654321    1500.453    12.56
+    ...    10.55    4.01    1.01    AA    ${EMPTY}    2
+    ...    ${EMPTY}    2.02    BB    ${EMPTY}    ${EMPTY}
+    Get Charges Field Values For Air Products    Air Conso-Dom    amend2
+    #MI Tab
+    Click Tab In Other Services Panel    MI
+    Populate MI Tab For All Air Products    3000    100    CD - Business Class Discounted Fare    AK    Agent Booked    MC - MISCELLANEOUS
+    ...    X - POLICY WAIVED - EMERGENCY CONDITIONS    5J    B6    5000    6000
+    Get MI Field Values When Products Is Air    new
+    Click Finish PNR    \    5    Other Svcs
+    #Remarks Verification
+    Verify General Remarks Are Written Correctly    Air Conso-Dom
+    Verify Accounting Lines For Main EO Are Written    Air Conso-Dom    fop=Credit Card (CC)    segment_number=0204
+    Verify Accounting Lines For VAT For Main EO Are Written    Air Conso-Dom    Credit Card (CC)    0204
+    Verify Acounting Lines For Merchant Fee Of EO Are Written    Air Conso-Dom    Credit Card (CC)    0204
+    Verify Acounting Lines For VAT For Merchant Fee Of EO Are Written    Air Conso-Dom    Credit Card (CC)    0204
+    Verify Acounting Lines For Merchant Fee (TF) Are Written    Air Conso-Dom    Credit Card (CC)    0204
+    Verify Acounting Lines For VAT For Merchant Fee (TF) Are Written    Air Conso-Dom    Credit Card (CC)    0204
+    Verify Accounting Lines For Transaction Fee Are Written    Air Conso-Dom    Credit Card (CC)    0204
+    Verify Accounting Lines For VAT For Transaction Fee Are Written    Air Conso-Dom    Credit Card (CC)    0204
+    Verify Accounting Lines For Rebate Are Written    Air Conso-Dom    Credit Card (CC)    0204
+    [Teardown]    Run Keyword And Ignore Error    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[IN NB OS] Verify That Error Message Is Displayed When PNR Has No Air Segment And Product Is Any Air Add On
+    [Tags]    us598    in    team_chiu
+    Create New Booking For Other Services - India    1026100093 ¦ SIEMENS PLM SOFTWARE UGS -(K.PARK)-CC ¦ APAC IN OS AUTOMATION    VI    active_air=0    passive_car=1
+    Click Other Services
+    Select Product    Air Sales-Non BSP INT
+    Select Vendor    Continental Airlines
+    Click Continue In Other Svcs
+    Verify Error Message Is Displayed
+    Click Ok In Error Message
+    Verify Other Services Tabs Are Not Displayed
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[IN NB OS] Verify That New EO Is Created And Accounting Remarks Are Written When Product Is Air BSP And FOP Is Cash
+    [Tags]    team_chiu    us590    in    us1033
+    Create New Booking For Other Services - India    1026100093 ¦ SIEMENS PLM SOFTWARE UGS -(K.PARK)-CC ¦ APAC IN OS AUTOMATION    CASH    1    1
+    Click Other Services
+    Select Product And Vendor    Air BSp    AIR CHINA
+    ###Request Tab
+    Click Tab In Other Services Panel    Request
+    Verify Request Tab Fields Displayed Or Not When Products Is Air BSp Or Air Domestic
+    Select Air Segment    2    3
+    Tick Request VMPD Checkbox
+    Populate Request Tab Fields When Products Are Air BSP Or Air Domestic    JL    S    true    REBOOKING FEE INTERNATIONAL    200    ALL \ \ \ Albanian Lek
+    ...    10    10    Credit    Issue Exchange    In Conjunction    Original Place
+    ...    Remark
+    Get Request Field Values    Air BSp    newRequest
+    ####Charges
+    Click Tab In Other Services Panel    Charges
+    Verify Default Values Of Charges Fields For Air Products    International    BTC    ${EMPTY}    Agent Booked    10/18
+    Populate Charges Field For Air Products    JFK    International    Full Passthrough    666    8888888888    11
+    ...    true    true    TestPO    Vendor Reference GSA    4000    11
+    ...    22    24    20    12    0
+    Get Charges Field Values For Air Products    Air BSp    newCharges
+    #Vendor Info Tab
+    Click Tab In Other Services Panel    Vendor Info
+    Get Fields From Vendor Info Tab    gridui
+    Verify Prepopulated Default Value In Vendor Info tab
+    Populate Fields For Vendor Info Tab    Attention1    Address1    Bangalore    India    cwt_email    cwt_phone
+    #Grid In Vendor Info Tab
+    Populate Grid Data In Vendor Info Tab    Phone    0987654321    False
+    Click Add In Vendor Info Tab
+    Get Fields From Vendor Info Tab    newVendor
+    ###MI Tab
+    Click Tab In Other Services Panel    MI
+    Verify Default Values Of MI Tab When Product Is Air
+    Populate MI Tab For All Air Products    44444    4444    FF - First Class Full Fare    ${EMPTY}    ${EMPTY}    CF - CLIENT NEGOTIATED FARE SAVING ACCEPTED
+    ...    A - PARTIAL MISSED SAVING    ${EMPTY}    ${EMPTY}    22    11
+    Get MI Field Values When Products Is Air    newMi
+    Click Finish PNR    \    5    Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details    ${current_pnr}
+    Verify Accounting Lines For Main EO Are Written    Air BSp
+    Verify Accounting Lines For VAT For Main EO Are Written    Air BSp
+    Verify Accounting Lines For Transaction Fee Are Written    Air BSp
+    Verify Accounting Lines For VAT For Transaction Fee Are Written    Air BSp
+    Verify Accounting Lines For Rebate Are Written    Air BSp
+    [Teardown]    Run Keyword And Ignore Error    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Amend Booking For Verify That Request Fields Default To The Correct Values Upon Amend EO When Product Is Air BSP Add On
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Book Flight X Months From Now    JFKLAX/AAA    SS1Y1    FXP/S2    5    3
+    Click Read Booking
+    Click Panel    Car
+    Click Car Tab    HKG - ${pickup_date_1}
+    Populate Car Tab With Values    500    100    200    RF - RESTRICTED RATE ACCEPTED    L - Lowest rate accepted    0 - Referral
+    ...    No    ${EMPTY}    Manual    Associated Remarks
+    Populate All Panels (Except Given Panels If Any)    Car
+    Click Finish PNR
+
+Amend Booking For Verify That Request Fields Default To The Correct Values Upon Amend EO When Product Air BSp Or Air Domestic
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR    Amend Booking For Verify That Request Fields Default To The Correct Values Upon Amend EO When Product Air BSp Or Air Domestic

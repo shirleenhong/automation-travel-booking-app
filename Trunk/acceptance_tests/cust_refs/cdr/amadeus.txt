@@ -1,0 +1,205 @@
+*** Settings ***
+Force Tags        emea    amadeus
+Resource          ../cust_refs_verification.txt
+
+*** Test Cases ***
+[NB] Verify That DefaultValue From CDR Table Will Default In Cust Refs Panel
+    [Tags]    us4782    17.8    not_ready
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    de-DE    AutomationDE    DE AUTO AMADEUS
+    Select GDS    Amadeus
+    Set Client And Traveler    Amadeus DE 16 - Auto ¦ US4782    AutoOneEight    LokiTravTwo
+    Click New Booking
+    Book Flight X Months From Now    CDGLHR/AAF    SS1Y1    FXP    6
+    Click Read Booking
+    Click Panel    Cust Refs
+    Verify CDR Value Is Correct    Employee ID    TEST123
+    Verify CDR Value Is Correct    TripReason    AUTOTEST
+    Set CDR Value    Employee ID    ${EMPTY}
+    Set CDR Value    TripReason    ${EMPTY}
+    Tick Not Known At Time Of Booking
+    Populate Fare Tab With Default Values    Fare 1
+    Populate Delivery Panel Without On Hold Reason
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Specific Line Is Not Written In The PNR    *0601*TEST123
+    Verify Specific Line Is Not Written In The PNR    *0602*AUTOTEST
+
+[AB] Verify That DefaultValue From CDR Table Will Default In Cust Refs Panel
+    [Tags]    us4782    17.8    not_ready
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Click Panel    Cust Refs
+    Verify CDR Value Is Correct    Employee ID    TEST123
+    Verify CDR Value Is Correct    TripReason    AUTOTEST
+    Set CDR Value    Employee ID    ${EMPTY}
+    Set CDR Value    TripReason    ${EMPTY}
+    Tick Not Known At Time Of Booking
+    Populate Fare Tab With Default Values    Fare 1
+    Populate Delivery Panel Without On Hold Reason
+    Click Finish PNR    Amend Booking Worfklow For CDR
+    Execute Simultaneous Change Handling    Amend Booking Worfklow For CDR
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Specific Line Is Not Written In The PNR    *0601*TEST123
+    Verify Specific Line Is Not Written In The PNR    *0602*AUTOTEST
+
+[QA] Verify That DefaultValue From CDR Table Will Default In Cust Refs Panel
+    [Tags]    us4782    17.8    not_ready
+    Retrieve PNR    ${current_pnr}
+    Verify Quick Amend Is Visible
+    Verify Quick Amend Spiel Is Visible    Diese Buchung ist auf Status ‘Warten auf Kundenreferenzen‘, sparen sie Zeit und benutzen sie den ‚Quick Amend‘ Knopf um fehlende Daten einzugeben und die Buchung abzuschließen!
+    Click Quick Amend
+    Verify Actual Panel Equals To Expected Panel    CUST REFS    DELIVERY    RECAP
+    Click Panel    Cust Refs
+    Verify CDR Value Is Correct    Employee ID    TEST123
+    Verify CDR Value Is Correct    TripReason    AUTOTEST
+    Verify Cust Refs Not Known Checkbox Is Unticked And Disabled
+    Click Panel    Delivery
+    Verify Reasons For Placing Booking On Hold Section In Delivery Panel Is Disabled
+    Verify On Hold Booking Reason Is Unchecked    Awaiting Customer References
+    Populate Delivery Panel Without On Hold Reason
+    Click Finish PNR    Quick Amend Booking Worfklow For CDR
+    Execute Simultaneous Change Handling    Quick Amend Booking Worfklow For CDR
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Specific Line Is Not Written In The PNR    RMM ONHOLD:FEHLENDE ZUSATZDATEN
+    Verify Specific Line Is Written In The PNR    *0601*TEST123
+    Verify Specific Line Is Written In The PNR    *0602*AUTOTEST
+    Retrieve PNR    ${current_pnr}
+    Verify Quick Amend Is Not Visible
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+1A EMEA] [NB][SE] Verify that CDRs are written in the RIR Remarks when 'Not Known at the time of Booking' is ticked and SO 'Enable Print CDRs On Itinerary' Is Set To Yes
+    Open Power Express And Retrieve Profile    ${version}    Test    U003KXR    en-GB    kronquillouk    SE QA Team Amadeus
+    Select GDS    Amadeus
+    Set Client And Traveler    Power Express EMEA test ¦ SE-AMADEUS RAIL TEST    Cala    Carlson
+    Click New Booking
+    Book Flight X Months From Now    CDGARN/AAF    SS1Y1    FXP    6
+    Click Read Booking
+    Click Panel    Cust Refs
+    Set CDR Value    Cost Center    111
+    Set CDR Value    EmployeeID    ${EMPTY}
+    Set CDR Value    Trip Reason    ${EMPTY}
+    Tick Not Known At Time Of Booking
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus    ${current_pnr}    rtb
+    Verify CDR Remarks Are Written    RIR REFERENCE 1: COST CENTER - 111
+    Verify CDR Remarks Are Written    RIR REFERENCE 2: EMPLOYEEID -
+    Verify CDR Remarks Are Written    RIR REFERENCE 3: TRIP REASON -
+
+[1A EMEA] [AB][SE] Verify that CDRs are written in the RIR Remarks when 'Not Known at the time of Booking' is ticked and SO 'Enable Print CDRs On Itinerary' Is Set To Yes
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Click Panel    Cust Refs
+    Set CDR Value    Cost Center    111
+    Set CDR Value    EmployeeID    1234567891
+    Set CDR Value    Trip Reason    ${EMPTY}
+    Tick Not Known At Time Of Booking
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Execute Simultaneous Change Handling    Amend Booking for CDRs written
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Specific Line Is Written In The PNR    *0603*111
+    Verify Specific Line Is Written In The PNR    *0604*1234567891
+    Retrieve PNR Details From Amadeus    ${current_pnr}    rtb
+    Verify CDR Remarks Are Written    RIR REFERENCE 1: COST CENTER - 111
+    Verify CDR Remarks Are Written    RIR REFERENCE 2: EMPLOYEEID - 1234567891
+    Verify CDR Remarks Are Written    RIR REFERENCE 3: TRIP REASON -
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[1A EMEA][NB][DK] Verify That No RIR Remarks Are Written For CDR When Enable Print CDRs On Itinerary Is Set To No And Not Known At Time Of Booking Is Ticked
+    [Tags]
+    Open Power Express And Retrieve Profile    ${version}    Test    U003KXR    en-GB    kronquillouk    UK QA Team Amadeus
+    Select GDS    Amadeus
+    Set Client And Traveler    UK Amadeus 1 - SyEx ¦ UK - Amadeus Sub2    Mason    James
+    Select Client Account Using Default Value
+    Click New Booking
+    Click Panel    Cust Refs
+    Set CDR Value    COSTCENTER    ${EMPTY}
+    Set CDR Value    EMPLOYEE ID    ${EMPTY}
+    Set CDR Value    TRIP REASON    ${EMPTY}
+    Tick Not Known At Time Of Booking
+    Click Update PNR
+    Book Flight X Months From Now    CDGARN/AAF    SS1Y1    FXP    6
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus    ${current_pnr}    rtb
+    Verify Specific Line Is Not Written In The PNR    RIR REFERENCE 2: Cost Center -
+    Verify Specific Line Is Not Written In The PNR    RIR REFERENCE 3: TRIP REASON CODE -
+
+[1A EMEA][AB][DK] Verify That No RIR Remarks Are Written For CDR When Enable Print CDRs On Itinerary Is Set To No And Not Known At Time Of Booking Is Ticked
+    [Tags]
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Click Panel    Cust Refs
+    Set CDR Value    COSTCENTER    111
+    Set CDR Value    EMPLOYEE ID    ${EMPTY}
+    Set CDR Value    TRIP REASON    ${EMPTY}
+    Tick Not Known At Time Of Booking
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Execute Simultaneous Change Handling    Amend Booking for CDRs written when so is No
+    Retrieve PNR Details From Amadeus    ${current_pnr}    rtr    md
+    Verify Specific Line Is Written In The PNR    *0601*111
+    Retrieve PNR Details From Amadeus    ${current_pnr}    rtb
+    Verify Specific Line Is Not Written In The PNR    RIR REFERENCE 1: COST CENTER - 111
+    Verify Specific Line Is Not Written In The PNR    RIR REFERENCE 3: TRIP REASON -
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Amend Booking Worfklow For CDR
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Click Panel    Cust Refs
+    Verify CDR Value Is Correct    Employee ID    TEST123
+    Verify CDR Value Is Correct    TripReason    AUTOTEST
+    Set CDR Value    Employee ID    ${EMPTY}
+    Set CDR Value    TripReason    ${EMPTY}
+    Tick Not Known At Time Of Booking
+    Populate Fare Tab With Default Values    Fare 1
+    Populate Delivery Panel Without On Hold Reason
+    Click Finish PNR    Amend Booking Worfklow For CDR
+
+Quick Amend Booking Worfklow For CDR
+    Retrieve PNR    ${current_pnr}
+    Verify Quick Amend Is Visible
+    Verify Quick Amend Spiel Is Visible    Diese Buchung ist auf Status ‘Warten auf Kundenreferenzen‘, sparen sie Zeit und benutzen sie den ‚Quick Amend‘ Knopf um fehlende Daten einzugeben und die Buchung abzuschließen!
+    Click Quick Amend
+    Verify Actual Panel Equals To Expected Panel    CUST REFS    DELIVERY    RECAP
+    Click Panel    Cust Refs
+    Verify CDR Value Is Correct    Employee ID    TEST123
+    Verify CDR Value Is Correct    TripReason    AUTOTEST
+    Verify Cust Refs Not Known Checkbox Is Unticked And Disabled
+    Click Panel    Delivery
+    Verify Reasons For Placing Booking On Hold Section In Delivery Panel Is Disabled
+    Verify On Hold Booking Reason Is Unchecked    Awaiting Customer References
+    Populate Delivery Panel Without On Hold Reason
+    Click Finish PNR    Quick Amend Booking Worfklow For CDR
+
+Amend Booking for CDRs written
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Click Panel    Cust Refs
+    Set CDR Value    Cost Center    111
+    Set CDR Value    EmployeeID    1234567891
+    Set CDR Value    Trip Reason    ${EMPTY}
+    Tick Not Known At Time Of Booking
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+
+Amend Booking for CDRs written when so is No
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Click Panel    Cust Refs
+    Set CDR Value    CostCenter    111
+    Set CDR Value    EMPLOYEE ID    ${EMPTY}
+    Set CDR Value    Trip Reason    ${EMPTY}
+    Tick Not Known At Time Of Booking
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR

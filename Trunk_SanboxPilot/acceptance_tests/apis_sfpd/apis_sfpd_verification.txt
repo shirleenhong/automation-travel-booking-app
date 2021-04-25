@@ -1,0 +1,18 @@
+*** Settings ***
+Resource          ../../resources/common/global_resources.txt
+
+*** Keywords ***
+Verify APIS/SFPD Not Known Checkbox Is Unticked And Disabled
+    Verify Checkbox Is Unticked    ${check_box_notknown}
+    Verify Control Object Is Disabled    ${check_box_notknown}
+
+Verify Apis Address Fields Are Displayed
+    Verify Control Object Is Visible    [NAME:grpAPISAddress]
+    Verify Control Object Is Visible    [NAME:chkAddress]
+    Verify Control Object Is Visible    [NAME:cradHome]
+    Verify Control Object Is Visible    [NAME:cradDestination]
+    Verify Control Object Is Visible    [NAME:ctxtAddressStreet]
+    Verify Control Object Is Visible    [NAME:ctxtAddressCity]
+    Verify Control Object Is Visible    [NAME:ccboAddressCountry]
+    Verify Control Object Is Visible    [NAME:ccboAddressStateCode]
+    Verify Control Object Is Visible    [NAME:ctxtAddressZipCode]

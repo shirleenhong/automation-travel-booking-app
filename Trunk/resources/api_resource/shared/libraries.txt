@@ -1,0 +1,7 @@
+*** Settings ***
+Library           Collections
+Library           OperatingSystem
+Library           String
+Library           HttpLibrary.HTTP    #-----Library    ImageHorizonLibrary    ${CURDIR}/../sikuli    ${OUTPUTDIR}
+Library           RequestsLibrary
+Library           JSONLibrary

@@ -1,0 +1,1024 @@
+Citrix client replay version 14.12.0.18020 , record version 14.5.0.10018
+Virtual User Script started at: 1/24/2019 7:35:47 PM
+Starting action vuser_init.
+vuser_init.c(4): web_cleanup_cookies started  	[MsgId: MMSG-26355]
+vuser_init.c(4): web_cleanup_cookies was successful  	[MsgId: MMSG-26392]
+vuser_init.c(5): web_set_max_html_param_len started  	[MsgId: MMSG-26355]
+vuser_init.c(5): web_set_max_html_param_len was successful  	[MsgId: MMSG-26392]
+vuser_init.c(6): web_set_sockets_option started  	[MsgId: MMSG-26355]
+vuser_init.c(6): web_set_sockets_option was successful  	[MsgId: MMSG-26392]
+vuser_init.c(8): web_url("PilotWeb") started  	[MsgId: MMSG-26355]
+vuser_init.c(8): Found resource "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/images/common/wspinner@2x_26FCB0A3548E30DC.gif" in HTML "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/"  	[MsgId: MMSG-26659]
+vuser_init.c(8): Found resource "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/external/jquery-1.12.4.min_618538B4AB9639D4.js" in HTML "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/"  	[MsgId: MMSG-26659]
+vuser_init.c(8): Found resource "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/external/jquery-ui-v1.11.4.min_17D0B6DEFA33B91A.js" in HTML "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/"  	[MsgId: MMSG-26659]
+vuser_init.c(8): Found resource "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/external/jquery.ui.touch-punch.min_94EA8262E7FD35F4.js" in HTML "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/"  	[MsgId: MMSG-26659]
+vuser_init.c(8): Found resource "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/external/hammer.v2.0.8.min_F699A1E56189259A.js" in HTML "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/"  	[MsgId: MMSG-26659]
+vuser_init.c(8): Found resource "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/external/jquery.dotdotdot.min_08EE54CBA886AD0A.js" in HTML "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/"  	[MsgId: MMSG-26659]
+vuser_init.c(8): Found resource "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/external/velocity.min_B218502A82F66680.js" in HTML "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/"  	[MsgId: MMSG-26659]
+vuser_init.c(8): Found resource "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/external/slick.min_FEB62CC230E2BA2A.js" in HTML "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/"  	[MsgId: MMSG-26659]
+vuser_init.c(8): Found resource "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/ctxs.core.min_7FF34A29259D8D74.js" in HTML "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/"  	[MsgId: MMSG-26659]
+vuser_init.c(8): Found resource "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/js/ctxs.webui.min_91463D1B79731411.js" in HTML "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/"  	[MsgId: MMSG-26659]
+vuser_init.c(8): web_url("PilotWeb") was successful, 235778 body bytes, 5042 header bytes  	[MsgId: MMSG-26386]
+vuser_init.c(18): web_add_auto_header("X-Citrix-IsUsingHTTPS") started  	[MsgId: MMSG-26355]
+vuser_init.c(18): web_add_auto_header("X-Citrix-IsUsingHTTPS") was successful  	[MsgId: MMSG-26392]
+vuser_init.c(21): web_add_auto_header("X-Requested-With") started  	[MsgId: MMSG-26355]
+vuser_init.c(21): web_add_auto_header("X-Requested-With") was successful  	[MsgId: MMSG-26392]
+vuser_init.c(24): web_reg_save_param_regexp started  	[MsgId: MMSG-26355]
+vuser_init.c(24): Registering web_reg_save_param_regexp was successful  	[MsgId: MMSG-26390]
+vuser_init.c(33): web_custom_request("Configuration") started  	[MsgId: MMSG-26355]
+vuser_init.c(33): Notify: Saving Parameter "CsrfToken = AB8971B56ABB93BF732A4ABB7D0F95B3".
+vuser_init.c(33): web_custom_request("Configuration") was successful, 1359 body bytes, 475 header bytes  	[MsgId: MMSG-26386]
+vuser_init.c(45): web_add_auto_header("Csrf-Token") started  	[MsgId: MMSG-26355]
+vuser_init.c(45): Notify: Parameter Substitution: parameter "CsrfToken" =  "AB8971B56ABB93BF732A4ABB7D0F95B3"
+vuser_init.c(45): web_add_auto_header("Csrf-Token") was successful  	[MsgId: MMSG-26392]
+vuser_init.c(48): Notify: Transaction "Citrix_LoginPage" started.
+vuser_init.c(50): web_submit_data("List") started  	[MsgId: MMSG-26355]
+vuser_init.c(50): web_submit_data("List") was successful, 42 body bytes, 513 header bytes  	[MsgId: MMSG-26386]
+vuser_init.c(62): web_custom_request("GetAuthMethods") started  	[MsgId: MMSG-26355]
+vuser_init.c(62): web_custom_request("GetAuthMethods") was successful, 186 body bytes, 304 header bytes  	[MsgId: MMSG-26386]
+vuser_init.c(73): web_custom_request("Login") started  	[MsgId: MMSG-26355]
+vuser_init.c(73): web_custom_request("Login") was successful, 551 body bytes, 384 header bytes  	[MsgId: MMSG-26386]
+vuser_init.c(85): Notify: Transaction "Citrix_LoginPage" ended with a "Pass" status (Duration: 0.6946 Wasted Time: 0.0261).
+vuser_init.c(92): Notify: Transaction "Citrix_Login" started.
+vuser_init.c(94): web_submit_data("LoginAttempt") started  	[MsgId: MMSG-26355]
+vuser_init.c(94): Notify: Parameter Substitution: parameter "CitrixLogin" =  "SvcSyExTest1"
+vuser_init.c(94): web_submit_data("LoginAttempt") was successful, 212 body bytes, 403 header bytes  	[MsgId: MMSG-26386]
+vuser_init.c(110): web_custom_request("GetUserName") started  	[MsgId: MMSG-26355]
+vuser_init.c(110): HTML parsing not performed for Content-Type "text" ("ParseHtmlContentType" Runtime Setting is "TEXT"). URL="https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/Authentication/GetUserName"  	[MsgId: MMSG-26548]
+vuser_init.c(110): web_custom_request("GetUserName") was successful, 32 body bytes, 292 header bytes  	[MsgId: MMSG-26386]
+vuser_init.c(120): web_custom_request("AllowSelfServiceAccountManagement") started  	[MsgId: MMSG-26355]
+vuser_init.c(120): web_custom_request("AllowSelfServiceAccountManagement") was successful, 172 body bytes, 304 header bytes  	[MsgId: MMSG-26386]
+vuser_init.c(131): lr_think_time: 2.00 seconds.
+vuser_init.c(133): Connecting via NFUSE portal "https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/Resources/LaunchIca/RGVmYXVsdEFnZ3JlZ2F0aW9uR3JvdXAuXFNFQ08gUGVyZm9ybWFuY2UgVGVzdGluZw--.ica?CsrfToken={CsrfToken}&IsUsingHttps=Yes&displayNameDesktopTitle=SECOPerformance       1.609834e-279sting&launchId={LaunchID}"
+vuser_init.c(133): Notify: Parameter Substitution: parameter "CsrfToken" =  "AB8971B56ABB93BF732A4ABB7D0F95B3"
+vuser_init.c(133): Notify: Next row for parameter LaunchID = 1 [table  = LaunchID].
+vuser_init.c(133): Notify: Parameter Substitution: parameter "LaunchID" =  "1538580435701"
+vuser_init.c(133): Setting connection option "ICAFILE" to "D:\DesktopTest\PerformanceTest\desktop_tests\PowerExpress_EMEA_NewBooking\\nfuse_(null).ica"
+24/01/2019 19:35:54 vuser_init.c(133): (2624:4612) - CitrixClientImpl.dll version: 12.60.971.0
+24/01/2019 19:35:54 vuser_init.c(133): (2624:4612) - Number of currently used GDI handles on this machine = 1503
+24/01/2019 19:35:54 vuser_init.c(133): (2624:4612) - Running Citrix processes:
+	concentr.exe, pid 2232, GDI handles in use: 41
+	receiver.exe, pid 684, GDI handles in use: 44
+24/01/2019 19:35:54 vuser_init.c(133): (2624:4612) - Modifying ICA file with commands "ConnectionBar=0	TWIMode=Off": done with status 0 (SUCCESS).
+24/01/2019 19:35:54 vuser_init.c(133): (2624:4612) - Citrix ClientName is "VWSNG1AX00089-"
+24/01/2019 19:35:54 vuser_init.c(133): (2624:4612) - WaitForEvent: Initializing wait event, time=180000, end time=535796
+24/01/2019 19:35:58 vuser_init.c(133): (2624:4612) - Got Connect event
+24/01/2019 19:35:58 vuser_init.c(133): (2624:4612) - Number of currently used GDI handles on this machine = 1568
+24/01/2019 19:35:58 vuser_init.c(133): (2624:4612) - Running Citrix processes:
+	concentr.exe, pid 2232, GDI handles in use: 41
+	receiver.exe, pid 684, GDI handles in use: 44
+	wfica32.exe, pid 3532, GDI handles in use: 29
+24/01/2019 19:35:58 vuser_init.c(133): (2624:4612) - client resolution = 1440x900, client color depth = 32 bits
+24/01/2019 19:35:58 vuser_init.c(133): (2624:4612) - Wake Up and check new event.
+vuser_init.c(135): Notify: Transaction "Citrix_Login" ended with a "Pass" status (Duration: 7.6615 Think Time: 2.0144 Wasted Time: 0.0275).
+vuser_init.c(137): Setting the waiting time to 60 seconds
+vuser_init.c(139): Waiting for logon
+24/01/2019 19:35:58 vuser_init.c(139): (2624:4612) - WaitForEvent: Initializing wait event, time=60000, end time=419687
+24/01/2019 19:36:02 vuser_init.c(139): (2624:4612) - "Windows Logon" is not currently in map, adding it now
+24/01/2019 19:36:02 vuser_init.c(139): (2624:4612) - Create window name="Windows Logon" flag=1 style=-1778384896 ext_style=0 ID=65568
+24/01/2019 19:36:02 vuser_init.c(139): (2624:4612) - Created window: "Windows Logon"  at (0, 0)
+24/01/2019 19:36:02 vuser_init.c(139): (2624:4612) - Foreground window = 65580
+24/01/2019 19:36:16 vuser_init.c(139): (2624:4612) - Get Logon event
+24/01/2019 19:36:16 vuser_init.c(139): (2624:4612) - Wake Up and check new event.
+vuser_init.c(139): Logon succeeded
+vuser_init.c(141): Notify: Transaction "Sellco Login" started.
+vuser_init.c(143): lr_think_time: 5.00 seconds.
+24/01/2019 19:36:16 vuser_init.c(143): (2624:4612) - Foreground window = 0
+24/01/2019 19:36:16 vuser_init.c(143): (2624:4612) - Destroy window: "Windows Logon"
+24/01/2019 19:36:16 vuser_init.c(143): (2624:4612) - removing "Windows Logon" from LogicNameMap
+24/01/2019 19:36:16 vuser_init.c(143): (2624:4612) - Foreground window = 65914
+24/01/2019 19:36:17 vuser_init.c(143): (2624:4612) - "Desktop" is not currently in map, adding it now
+24/01/2019 19:36:17 vuser_init.c(143): (2624:4612) - Create window name="Desktop" flag=0 style=-1778384896 ext_style=128 ID=66074
+24/01/2019 19:36:17 vuser_init.c(143): (2624:4612) - Created window: "Desktop"  at (0, 0)
+24/01/2019 19:36:17 vuser_init.c(143): (2624:4612) - "-2_856_1445_47" is not currently in map, adding it now
+24/01/2019 19:36:17 vuser_init.c(143): (2624:4612) - Create window name="-2_856_1445_47" flag=1 style=-1769734144 ext_style=392 ID=65914
+24/01/2019 19:36:17 vuser_init.c(143): (2624:4612) - Created window: "-2_856_1445_47"  at (-2, 856)
+24/01/2019 19:36:17 vuser_init.c(143): (2624:4612) - "Start" is not currently in map, adding it now
+24/01/2019 19:36:17 vuser_init.c(143): (2624:4612) - Create window name="Start" flag=1 style=-1811936256 ext_style=524424 ID=65918
+24/01/2019 19:36:17 vuser_init.c(143): (2624:4612) - Created window: "Start"  at (2, 860)
+24/01/2019 19:36:17 vuser_init.c(143): (2624:4612) - Foreground window = 66074
+vuser_init.c(145): Executing type ("a")
+24/01/2019 19:36:21 vuser_init.c(145): (2624:4612) - KeyDown 65 0
+24/01/2019 19:36:21 vuser_init.c(145): (2624:4612) - KeyUp 65 0
+vuser_init.c(147): lr_think_time: 2.00 seconds.
+vuser_init.c(149): Executing type ("a")
+24/01/2019 19:36:23 vuser_init.c(149): (2624:4612) - KeyDown 65 0
+24/01/2019 19:36:23 vuser_init.c(149): (2624:4612) - KeyUp 65 0
+vuser_init.c(151): lr_think_time: 2.00 seconds.
+vuser_init.c(153): Executing key ("ENTER_KEY")
+24/01/2019 19:36:25 vuser_init.c(153): (2624:4612) - KeyDown 13 0
+24/01/2019 19:36:26 vuser_init.c(153): (2624:4612) - KeyUp 13 0
+vuser_init.c(175): lr_think_time: 10.00 seconds.
+24/01/2019 19:36:26 vuser_init.c(175): (2624:4612) - "Untitled - Google Chrome" is not currently in map, adding it now
+24/01/2019 19:36:26 vuser_init.c(175): (2624:4612) - Create window name="Untitled - Google Chrome" flag=0 style=399441920 ext_style=256 ID=66140
+24/01/2019 19:36:26 vuser_init.c(175): (2624:4612) - Created window: "Untitled - Google Chrome"  at (-4, -4)
+24/01/2019 19:36:26 vuser_init.c(175): (2624:4612) - Activate window: "Untitled - Google Chrome"
+24/01/2019 19:36:26 vuser_init.c(175): (2624:4612) - Foreground window = 66140
+24/01/2019 19:36:27 vuser_init.c(175): (2624:4612) - "Amadeus Global Travel Distribution System - Google Chrome" is not currently in map, adding it now
+24/01/2019 19:36:27 vuser_init.c(175): (2624:4612) - Caption change: "Untitled - Google Chrome" ---> "Amadeus Global Travel Distribution System - Google Chrome" = "Amadeus Global Travel Distribution System - Google Chrome"
+24/01/2019 19:36:27 vuser_init.c(175): (2624:4612) - "Amadeus Selling Platform Connect - Google Chrome" is not currently in map, adding it now
+24/01/2019 19:36:27 vuser_init.c(175): (2624:4612) - Caption change: "Amadeus Global Travel Distribution System - Google Chrome" ---> "Amadeus Selling Platform Connect - Google Chrome" = "Amadeus Selling Platform Connect - Google Chrome"
+vuser_init.c(177): Executing ctrl key ("a")
+24/01/2019 19:36:36 vuser_init.c(177): (2624:4612) - KeyDown 17 0
+24/01/2019 19:36:36 vuser_init.c(177): (2624:4612) - Send ping: mod_2
+24/01/2019 19:36:36 vuser_init.c(177): (2624:4612) - KeyDown 65 2
+24/01/2019 19:36:36 vuser_init.c(177): (2624:4612) - KeyUp 65 2
+24/01/2019 19:36:36 vuser_init.c(177): (2624:4612) - KeyUp 17 0
+24/01/2019 19:36:36 vuser_init.c(179): (2624:4612) - Get ping ack: mod_2
+vuser_init.c(179): lr_think_time: 2.00 seconds.
+vuser_init.c(181): Executing key ("BACKSPACE_KEY")
+24/01/2019 19:36:38 vuser_init.c(181): (2624:4612) - KeyDown 8 0
+24/01/2019 19:36:38 vuser_init.c(181): (2624:4612) - KeyUp 8 0
+vuser_init.c(183): lr_think_time: 2.00 seconds.
+vuser_init.c(185): Notify: Next row for parameter GDSLogin = 1 [table  = GDSLogin].
+vuser_init.c(185): Notify: Parameter Substitution: parameter "GDSLogin" =  "TEST01"
+vuser_init.c(185): Executing type ("{GDSLogin}")
+24/01/2019 19:36:40 vuser_init.c(185): (2624:4612) - KeyDown 16 0
+24/01/2019 19:36:40 vuser_init.c(185): (2624:4612) - Send ping: mod_1
+24/01/2019 19:36:40 vuser_init.c(185): (2624:4612) - KeyDown 84 1
+24/01/2019 19:36:40 vuser_init.c(185): (2624:4612) - KeyUp 84 1
+24/01/2019 19:36:40 vuser_init.c(185): (2624:4612) - KeyUp 16 0
+24/01/2019 19:36:40 vuser_init.c(185): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:36:40 vuser_init.c(185): (2624:4612) - KeyDown 16 0
+24/01/2019 19:36:40 vuser_init.c(185): (2624:4612) - Send ping: mod_1
+24/01/2019 19:36:41 vuser_init.c(185): (2624:4612) - KeyDown 69 1
+24/01/2019 19:36:41 vuser_init.c(185): (2624:4612) - KeyUp 69 1
+24/01/2019 19:36:41 vuser_init.c(185): (2624:4612) - KeyUp 16 0
+24/01/2019 19:36:41 vuser_init.c(185): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:36:41 vuser_init.c(185): (2624:4612) - KeyDown 16 0
+24/01/2019 19:36:41 vuser_init.c(185): (2624:4612) - Send ping: mod_1
+24/01/2019 19:36:41 vuser_init.c(185): (2624:4612) - KeyDown 83 1
+24/01/2019 19:36:41 vuser_init.c(185): (2624:4612) - KeyUp 83 1
+24/01/2019 19:36:41 vuser_init.c(185): (2624:4612) - KeyUp 16 0
+24/01/2019 19:36:41 vuser_init.c(185): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:36:41 vuser_init.c(185): (2624:4612) - KeyDown 16 0
+24/01/2019 19:36:41 vuser_init.c(185): (2624:4612) - Send ping: mod_1
+24/01/2019 19:36:41 vuser_init.c(185): (2624:4612) - KeyDown 84 1
+24/01/2019 19:36:41 vuser_init.c(185): (2624:4612) - KeyUp 84 1
+24/01/2019 19:36:41 vuser_init.c(185): (2624:4612) - KeyUp 16 0
+24/01/2019 19:36:41 vuser_init.c(185): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:36:41 vuser_init.c(185): (2624:4612) - KeyDown 48 0
+24/01/2019 19:36:41 vuser_init.c(185): (2624:4612) - KeyUp 48 0
+24/01/2019 19:36:42 vuser_init.c(185): (2624:4612) - KeyDown 49 0
+24/01/2019 19:36:42 vuser_init.c(185): (2624:4612) - KeyUp 49 0
+vuser_init.c(187): lr_think_time: 2.00 seconds.
+vuser_init.c(189): Executing key ("TAB_KEY")
+24/01/2019 19:36:44 vuser_init.c(189): (2624:4612) - KeyDown 9 0
+24/01/2019 19:36:44 vuser_init.c(189): (2624:4612) - KeyUp 9 0
+vuser_init.c(191): lr_think_time: 2.00 seconds.
+vuser_init.c(193): Executing type ("su")
+24/01/2019 19:36:46 vuser_init.c(193): (2624:4612) - KeyDown 83 0
+24/01/2019 19:36:46 vuser_init.c(193): (2624:4612) - KeyUp 83 0
+24/01/2019 19:36:46 vuser_init.c(193): (2624:4612) - KeyDown 85 0
+24/01/2019 19:36:46 vuser_init.c(193): (2624:4612) - KeyUp 85 0
+vuser_init.c(195): lr_think_time: 2.00 seconds.
+vuser_init.c(197): Executing key ("TAB_KEY")
+24/01/2019 19:36:48 vuser_init.c(197): (2624:4612) - KeyDown 9 0
+24/01/2019 19:36:48 vuser_init.c(197): (2624:4612) - KeyUp 9 0
+vuser_init.c(199): lr_think_time: 2.00 seconds.
+vuser_init.c(201): Executing type ("HKGWL2102")
+24/01/2019 19:36:50 vuser_init.c(201): (2624:4612) - KeyDown 16 0
+24/01/2019 19:36:50 vuser_init.c(201): (2624:4612) - Send ping: mod_1
+24/01/2019 19:36:50 vuser_init.c(201): (2624:4612) - KeyDown 72 1
+24/01/2019 19:36:50 vuser_init.c(201): (2624:4612) - KeyUp 72 1
+24/01/2019 19:36:51 vuser_init.c(201): (2624:4612) - KeyUp 16 0
+24/01/2019 19:36:51 vuser_init.c(201): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:36:51 vuser_init.c(201): (2624:4612) - KeyDown 16 0
+24/01/2019 19:36:51 vuser_init.c(201): (2624:4612) - Send ping: mod_1
+24/01/2019 19:36:51 vuser_init.c(201): (2624:4612) - KeyDown 75 1
+24/01/2019 19:36:51 vuser_init.c(201): (2624:4612) - KeyUp 75 1
+24/01/2019 19:36:51 vuser_init.c(201): (2624:4612) - KeyUp 16 0
+24/01/2019 19:36:51 vuser_init.c(201): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:36:51 vuser_init.c(201): (2624:4612) - KeyDown 16 0
+24/01/2019 19:36:51 vuser_init.c(201): (2624:4612) - Send ping: mod_1
+24/01/2019 19:36:51 vuser_init.c(201): (2624:4612) - KeyDown 71 1
+24/01/2019 19:36:51 vuser_init.c(201): (2624:4612) - KeyUp 71 1
+24/01/2019 19:36:51 vuser_init.c(201): (2624:4612) - KeyUp 16 0
+24/01/2019 19:36:51 vuser_init.c(201): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:36:51 vuser_init.c(201): (2624:4612) - KeyDown 16 0
+24/01/2019 19:36:51 vuser_init.c(201): (2624:4612) - Send ping: mod_1
+24/01/2019 19:36:51 vuser_init.c(201): (2624:4612) - KeyDown 87 1
+24/01/2019 19:36:51 vuser_init.c(201): (2624:4612) - KeyUp 87 1
+24/01/2019 19:36:52 vuser_init.c(201): (2624:4612) - KeyUp 16 0
+24/01/2019 19:36:52 vuser_init.c(201): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:36:52 vuser_init.c(201): (2624:4612) - KeyDown 16 0
+24/01/2019 19:36:52 vuser_init.c(201): (2624:4612) - Send ping: mod_1
+24/01/2019 19:36:52 vuser_init.c(201): (2624:4612) - KeyDown 76 1
+24/01/2019 19:36:52 vuser_init.c(201): (2624:4612) - KeyUp 76 1
+24/01/2019 19:36:52 vuser_init.c(201): (2624:4612) - KeyUp 16 0
+24/01/2019 19:36:52 vuser_init.c(201): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:36:52 vuser_init.c(201): (2624:4612) - KeyDown 50 0
+24/01/2019 19:36:52 vuser_init.c(201): (2624:4612) - KeyUp 50 0
+24/01/2019 19:36:52 vuser_init.c(201): (2624:4612) - KeyDown 49 0
+24/01/2019 19:36:52 vuser_init.c(201): (2624:4612) - KeyUp 49 0
+24/01/2019 19:36:52 vuser_init.c(201): (2624:4612) - KeyDown 48 0
+24/01/2019 19:36:52 vuser_init.c(201): (2624:4612) - KeyUp 48 0
+24/01/2019 19:36:52 vuser_init.c(201): (2624:4612) - KeyDown 50 0
+24/01/2019 19:36:52 vuser_init.c(201): (2624:4612) - KeyUp 50 0
+vuser_init.c(203): lr_think_time: 2.00 seconds.
+vuser_init.c(205): Executing key ("TAB_KEY")
+24/01/2019 19:36:55 vuser_init.c(205): (2624:4612) - KeyDown 9 0
+24/01/2019 19:36:55 vuser_init.c(205): (2624:4612) - KeyUp 9 0
+vuser_init.c(207): lr_think_time: 3.00 seconds.
+vuser_init.c(209): Notify: Next row for parameter GDSPassword = 1 [table  = GDSPassword].
+vuser_init.c(209): Notify: Parameter Substitution: parameter "GDSPassword" =  "Carlson1234%"
+vuser_init.c(209): Executing type ("{GDSPassword}")
+24/01/2019 19:36:58 vuser_init.c(209): (2624:4612) - KeyDown 16 0
+24/01/2019 19:36:58 vuser_init.c(209): (2624:4612) - Send ping: mod_1
+24/01/2019 19:36:58 vuser_init.c(209): (2624:4612) - KeyDown 67 1
+24/01/2019 19:36:58 vuser_init.c(209): (2624:4612) - KeyUp 67 1
+24/01/2019 19:36:58 vuser_init.c(209): (2624:4612) - KeyUp 16 0
+24/01/2019 19:36:58 vuser_init.c(209): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:36:58 vuser_init.c(209): (2624:4612) - KeyDown 65 0
+24/01/2019 19:36:58 vuser_init.c(209): (2624:4612) - KeyUp 65 0
+24/01/2019 19:36:58 vuser_init.c(209): (2624:4612) - KeyDown 82 0
+24/01/2019 19:36:58 vuser_init.c(209): (2624:4612) - KeyUp 82 0
+24/01/2019 19:36:58 vuser_init.c(209): (2624:4612) - KeyDown 76 0
+24/01/2019 19:36:58 vuser_init.c(209): (2624:4612) - KeyUp 76 0
+24/01/2019 19:36:58 vuser_init.c(209): (2624:4612) - KeyDown 83 0
+24/01/2019 19:36:59 vuser_init.c(209): (2624:4612) - KeyUp 83 0
+24/01/2019 19:36:59 vuser_init.c(209): (2624:4612) - KeyDown 79 0
+24/01/2019 19:36:59 vuser_init.c(209): (2624:4612) - KeyUp 79 0
+24/01/2019 19:36:59 vuser_init.c(209): (2624:4612) - KeyDown 78 0
+24/01/2019 19:36:59 vuser_init.c(209): (2624:4612) - KeyUp 78 0
+24/01/2019 19:36:59 vuser_init.c(209): (2624:4612) - KeyDown 49 0
+24/01/2019 19:36:59 vuser_init.c(209): (2624:4612) - KeyUp 49 0
+24/01/2019 19:36:59 vuser_init.c(209): (2624:4612) - KeyDown 50 0
+24/01/2019 19:36:59 vuser_init.c(209): (2624:4612) - KeyUp 50 0
+24/01/2019 19:36:59 vuser_init.c(209): (2624:4612) - KeyDown 51 0
+24/01/2019 19:36:59 vuser_init.c(209): (2624:4612) - KeyUp 51 0
+24/01/2019 19:36:59 vuser_init.c(209): (2624:4612) - KeyDown 52 0
+24/01/2019 19:36:59 vuser_init.c(209): (2624:4612) - KeyUp 52 0
+24/01/2019 19:37:00 vuser_init.c(209): (2624:4612) - KeyDown 16 0
+24/01/2019 19:37:00 vuser_init.c(209): (2624:4612) - Send ping: mod_1
+24/01/2019 19:37:00 vuser_init.c(209): (2624:4612) - KeyDown 53 1
+24/01/2019 19:37:00 vuser_init.c(209): (2624:4612) - KeyUp 53 1
+24/01/2019 19:37:00 vuser_init.c(209): (2624:4612) - KeyUp 16 0
+24/01/2019 19:37:00 vuser_init.c(211): (2624:4612) - Get ping ack: mod_1
+vuser_init.c(211): lr_think_time: 2.00 seconds.
+vuser_init.c(213): Executing key ("ENTER_KEY")
+24/01/2019 19:37:02 vuser_init.c(213): (2624:4612) - KeyDown 13 0
+24/01/2019 19:37:02 vuser_init.c(213): (2624:4612) - KeyUp 13 0
+vuser_init.c(215): lr_think_time: 15.00 seconds.
+24/01/2019 19:37:06 vuser_init.c(215): (2624:4612) - "HKGWL2102 - Amadeus Selling Platform Connect - Google Chrome" is not currently in map, adding it now
+24/01/2019 19:37:06 vuser_init.c(215): (2624:4612) - Caption change: "Amadeus Selling Platform Connect - Google Chrome" ---> "HKGWL2102 - Amadeus Selling Platform Connect - Google Chrome" = "HKGWL2102 - Amadeus Selling Platform Connect - Google Chrome"
+vuser_init.c(217): Executing key ("ENTER_KEY")
+24/01/2019 19:37:17 vuser_init.c(217): (2624:4612) - KeyDown 13 0
+24/01/2019 19:37:17 vuser_init.c(217): (2624:4612) - KeyUp 13 0
+vuser_init.c(219): lr_think_time: 10.00 seconds.
+vuser_init.c(221): Notify: Transaction "Sellco Login" ended with a "Pass" status (Duration: 71.1089 Think Time: 63.1026).
+Ending action vuser_init.
+Running Vuser...
+Starting iteration 1.
+Maximum number of concurrent connections per server: 6  	[MsgId: MMSG-26989]
+24/01/2019 19:37:27 (2624:4612) - New Iteration started
+Starting action NewBooking.
+NewBooking.c(4): Notify: Transaction "Creating PNR" started.
+NewBooking.c(6): Executing ctrl key ("ESC_KEY")
+24/01/2019 19:37:27 NewBooking.c(6): (2624:4612) - KeyDown 17 0
+24/01/2019 19:37:27 NewBooking.c(6): (2624:4612) - Send ping: mod_2
+24/01/2019 19:37:27 NewBooking.c(6): (2624:4612) - KeyDown 27 2
+24/01/2019 19:37:27 NewBooking.c(6): (2624:4612) - KeyUp 27 2
+24/01/2019 19:37:28 NewBooking.c(6): (2624:4612) - KeyUp 17 0
+24/01/2019 19:37:28 NewBooking.c(8): (2624:4612) - Get ping ack: mod_2
+NewBooking.c(8): lr_think_time: 5.00 seconds.
+24/01/2019 19:37:28 NewBooking.c(8): (2624:4612) - Foreground window = 65914
+24/01/2019 19:37:28 NewBooking.c(8): (2624:4612) - "Start menu" is not currently in map, adding it now
+24/01/2019 19:37:28 NewBooking.c(8): (2624:4612) - Create window name="Start menu" flag=0 style=-1774190592 ext_style=392 ID=131538
+24/01/2019 19:37:28 NewBooking.c(8): (2624:4612) - Created window: "Start menu"  at (0, 400)
+24/01/2019 19:37:28 NewBooking.c(8): (2624:4612) - "SvcSyExTest1" is not currently in map, adding it now
+24/01/2019 19:37:28 NewBooking.c(8): (2624:4612) - Create window name="SvcSyExTest1" flag=1 style=-1811939328 ext_style=524424 ID=131604
+24/01/2019 19:37:28 NewBooking.c(8): (2624:4612) - Created window: "SvcSyExTest1"  at (298, 406)
+24/01/2019 19:37:28 NewBooking.c(8): (2624:4612) - Foreground window = 131538
+NewBooking.c(10): Executing type ("cmd.exe")
+24/01/2019 19:37:33 NewBooking.c(10): (2624:4612) - KeyDown 67 0
+24/01/2019 19:37:33 NewBooking.c(10): (2624:4612) - KeyUp 67 0
+24/01/2019 19:37:33 NewBooking.c(10): (2624:4612) - KeyDown 77 0
+24/01/2019 19:37:33 NewBooking.c(10): (2624:4612) - KeyUp 77 0
+24/01/2019 19:37:33 NewBooking.c(10): (2624:4612) - KeyDown 68 0
+24/01/2019 19:37:33 NewBooking.c(10): (2624:4612) - KeyUp 68 0
+24/01/2019 19:37:33 NewBooking.c(10): (2624:4612) - Destroy window: "SvcSyExTest1"
+24/01/2019 19:37:33 NewBooking.c(10): (2624:4612) - removing "SvcSyExTest1" from LogicNameMap
+24/01/2019 19:37:33 NewBooking.c(10): (2624:4612) - KeyDown 190 0
+24/01/2019 19:37:33 NewBooking.c(10): (2624:4612) - KeyUp 190 0
+24/01/2019 19:37:33 NewBooking.c(10): (2624:4612) - KeyDown 69 0
+24/01/2019 19:37:33 NewBooking.c(10): (2624:4612) - KeyUp 69 0
+24/01/2019 19:37:33 NewBooking.c(10): (2624:4612) - KeyDown 88 0
+24/01/2019 19:37:33 NewBooking.c(10): (2624:4612) - KeyUp 88 0
+24/01/2019 19:37:34 NewBooking.c(10): (2624:4612) - KeyDown 69 0
+24/01/2019 19:37:34 NewBooking.c(10): (2624:4612) - KeyUp 69 0
+NewBooking.c(12): lr_think_time: 2.00 seconds.
+NewBooking.c(14): Executing key ("ENTER_KEY")
+24/01/2019 19:37:36 NewBooking.c(14): (2624:4612) - KeyDown 13 0
+24/01/2019 19:37:36 NewBooking.c(14): (2624:4612) - KeyUp 13 0
+NewBooking.c(16): lr_think_time: 5.00 seconds.
+24/01/2019 19:37:36 NewBooking.c(16): (2624:4612) - Foreground window = 65914
+24/01/2019 19:37:36 NewBooking.c(16): (2624:4612) - Destroy window: "Start menu"
+24/01/2019 19:37:36 NewBooking.c(16): (2624:4612) - removing "Start menu" from LogicNameMap
+24/01/2019 19:37:36 NewBooking.c(16): (2624:4612) - "C:\Windows\system32\cmd.exe" is not currently in map, adding it now
+24/01/2019 19:37:36 NewBooking.c(16): (2624:4612) - Create window name="C:\Windows\system32\cmd.exe" flag=0 style=351207424 ext_style=262928 ID=328246
+24/01/2019 19:37:36 NewBooking.c(16): (2624:4612) - Created window: "C:\Windows\system32\cmd.exe"  at (66, 66)
+24/01/2019 19:37:36 NewBooking.c(16): (2624:4612) - Activate window: "C:\Windows\system32\cmd.exe"
+24/01/2019 19:37:36 NewBooking.c(16): (2624:4612) - Foreground window = 328246
+24/01/2019 19:37:36 NewBooking.c(16): (2624:4612) - "Administrator: C:\Windows\system32\cmd.exe" is not currently in map, adding it now
+24/01/2019 19:37:36 NewBooking.c(16): (2624:4612) - Caption change: "C:\Windows\system32\cmd.exe" ---> "Administrator: C:\Windows\system32\cmd.exe" = "Administrator: C:\Windows\system32\cmd.exe"
+NewBooking.c(18): Notify: Parameter Substitution: parameter "CitrixLogin" =  "SvcSyExTest1"
+NewBooking.c(18): Notify: Next row for parameter Surname = 1 [table  = Surname].
+NewBooking.c(18): Notify: Parameter Substitution: parameter "Surname" =  "BEAR"
+NewBooking.c(18): Notify: Next row for parameter Firstname = 1 [table  = Firstname].
+NewBooking.c(18): Notify: Parameter Substitution: parameter "Firstname" =  "PERFHKA"
+NewBooking.c(18): Notify: Parameter Substitution: parameter "UseMockEnv" =  "False"
+NewBooking.c(18): Notify: Parameter Substitution: parameter "BookingIteration" =  "10"
+NewBooking.c(18): Executing type ("call pybot --test "New Booking" -d d:\seco\result\{CitrixLogin} -v version:18.10 -v test_environment:Test -v surname:{Surname} -v firstname:{Firstname} -v use_mock_env:{UseMockEnv} -v booking_iteration:{BookingIteration} --removekeywords WUKS D:\seco\desktop_tests\apac.txt")
+24/01/2019 19:37:41 NewBooking.c(18): (2624:4612) - KeyDown 67 0
+24/01/2019 19:37:41 NewBooking.c(18): (2624:4612) - KeyUp 67 0
+24/01/2019 19:37:41 NewBooking.c(18): (2624:4612) - KeyDown 65 0
+24/01/2019 19:37:41 NewBooking.c(18): (2624:4612) - KeyUp 65 0
+24/01/2019 19:37:41 NewBooking.c(18): (2624:4612) - KeyDown 76 0
+24/01/2019 19:37:41 NewBooking.c(18): (2624:4612) - KeyUp 76 0
+24/01/2019 19:37:41 NewBooking.c(18): (2624:4612) - KeyDown 76 0
+24/01/2019 19:37:41 NewBooking.c(18): (2624:4612) - KeyUp 76 0
+24/01/2019 19:37:42 NewBooking.c(18): (2624:4612) - KeyDown 32 0
+24/01/2019 19:37:42 NewBooking.c(18): (2624:4612) - KeyUp 32 0
+24/01/2019 19:37:42 NewBooking.c(18): (2624:4612) - KeyDown 80 0
+24/01/2019 19:37:42 NewBooking.c(18): (2624:4612) - KeyUp 80 0
+24/01/2019 19:37:42 NewBooking.c(18): (2624:4612) - KeyDown 89 0
+24/01/2019 19:37:42 NewBooking.c(18): (2624:4612) - KeyUp 89 0
+24/01/2019 19:37:42 NewBooking.c(18): (2624:4612) - KeyDown 66 0
+24/01/2019 19:37:42 NewBooking.c(18): (2624:4612) - KeyUp 66 0
+24/01/2019 19:37:42 NewBooking.c(18): (2624:4612) - KeyDown 79 0
+24/01/2019 19:37:42 NewBooking.c(18): (2624:4612) - KeyUp 79 0
+24/01/2019 19:37:42 NewBooking.c(18): (2624:4612) - KeyDown 84 0
+24/01/2019 19:37:42 NewBooking.c(18): (2624:4612) - KeyUp 84 0
+24/01/2019 19:37:43 NewBooking.c(18): (2624:4612) - KeyDown 32 0
+24/01/2019 19:37:43 NewBooking.c(18): (2624:4612) - KeyUp 32 0
+24/01/2019 19:37:43 NewBooking.c(18): (2624:4612) - KeyDown 189 0
+24/01/2019 19:37:43 NewBooking.c(18): (2624:4612) - KeyUp 189 0
+24/01/2019 19:37:43 NewBooking.c(18): (2624:4612) - KeyDown 189 0
+24/01/2019 19:37:43 NewBooking.c(18): (2624:4612) - KeyUp 189 0
+24/01/2019 19:37:43 NewBooking.c(18): (2624:4612) - KeyDown 84 0
+24/01/2019 19:37:43 NewBooking.c(18): (2624:4612) - KeyUp 84 0
+24/01/2019 19:37:43 NewBooking.c(18): (2624:4612) - KeyDown 69 0
+24/01/2019 19:37:43 NewBooking.c(18): (2624:4612) - KeyUp 69 0
+24/01/2019 19:37:43 NewBooking.c(18): (2624:4612) - KeyDown 83 0
+24/01/2019 19:37:43 NewBooking.c(18): (2624:4612) - KeyUp 83 0
+24/01/2019 19:37:43 NewBooking.c(18): (2624:4612) - KeyDown 84 0
+24/01/2019 19:37:44 NewBooking.c(18): (2624:4612) - KeyUp 84 0
+24/01/2019 19:37:44 NewBooking.c(18): (2624:4612) - KeyDown 32 0
+24/01/2019 19:37:44 NewBooking.c(18): (2624:4612) - KeyUp 32 0
+24/01/2019 19:37:44 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:37:44 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:37:44 NewBooking.c(18): (2624:4612) - KeyDown 222 1
+24/01/2019 19:37:44 NewBooking.c(18): (2624:4612) - KeyUp 222 1
+24/01/2019 19:37:44 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:37:44 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:37:44 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:37:44 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:37:44 NewBooking.c(18): (2624:4612) - KeyDown 78 1
+24/01/2019 19:37:44 NewBooking.c(18): (2624:4612) - KeyUp 78 1
+24/01/2019 19:37:44 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:37:44 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:37:44 NewBooking.c(18): (2624:4612) - KeyDown 69 0
+24/01/2019 19:37:44 NewBooking.c(18): (2624:4612) - KeyUp 69 0
+24/01/2019 19:37:45 NewBooking.c(18): (2624:4612) - KeyDown 87 0
+24/01/2019 19:37:45 NewBooking.c(18): (2624:4612) - KeyUp 87 0
+24/01/2019 19:37:45 NewBooking.c(18): (2624:4612) - KeyDown 32 0
+24/01/2019 19:37:45 NewBooking.c(18): (2624:4612) - KeyUp 32 0
+24/01/2019 19:37:45 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:37:45 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:37:45 NewBooking.c(18): (2624:4612) - KeyDown 66 1
+24/01/2019 19:37:45 NewBooking.c(18): (2624:4612) - KeyUp 66 1
+24/01/2019 19:37:45 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:37:45 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:37:45 NewBooking.c(18): (2624:4612) - KeyDown 79 0
+24/01/2019 19:37:45 NewBooking.c(18): (2624:4612) - KeyUp 79 0
+24/01/2019 19:37:45 NewBooking.c(18): (2624:4612) - KeyDown 79 0
+24/01/2019 19:37:45 NewBooking.c(18): (2624:4612) - KeyUp 79 0
+24/01/2019 19:37:45 NewBooking.c(18): (2624:4612) - KeyDown 75 0
+24/01/2019 19:37:46 NewBooking.c(18): (2624:4612) - KeyUp 75 0
+24/01/2019 19:37:46 NewBooking.c(18): (2624:4612) - KeyDown 73 0
+24/01/2019 19:37:46 NewBooking.c(18): (2624:4612) - KeyUp 73 0
+24/01/2019 19:37:46 NewBooking.c(18): (2624:4612) - KeyDown 78 0
+24/01/2019 19:37:46 NewBooking.c(18): (2624:4612) - KeyUp 78 0
+24/01/2019 19:37:46 NewBooking.c(18): (2624:4612) - KeyDown 71 0
+24/01/2019 19:37:46 NewBooking.c(18): (2624:4612) - KeyUp 71 0
+24/01/2019 19:37:46 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:37:46 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:37:46 NewBooking.c(18): (2624:4612) - KeyDown 222 1
+24/01/2019 19:37:46 NewBooking.c(18): (2624:4612) - KeyUp 222 1
+24/01/2019 19:37:46 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:37:46 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:37:46 NewBooking.c(18): (2624:4612) - KeyDown 32 0
+24/01/2019 19:37:47 NewBooking.c(18): (2624:4612) - KeyUp 32 0
+24/01/2019 19:37:47 NewBooking.c(18): (2624:4612) - KeyDown 189 0
+24/01/2019 19:37:47 NewBooking.c(18): (2624:4612) - KeyUp 189 0
+24/01/2019 19:37:47 NewBooking.c(18): (2624:4612) - KeyDown 68 0
+24/01/2019 19:37:47 NewBooking.c(18): (2624:4612) - KeyUp 68 0
+24/01/2019 19:37:47 NewBooking.c(18): (2624:4612) - KeyDown 32 0
+24/01/2019 19:37:47 NewBooking.c(18): (2624:4612) - KeyUp 32 0
+24/01/2019 19:37:47 NewBooking.c(18): (2624:4612) - KeyDown 68 0
+24/01/2019 19:37:47 NewBooking.c(18): (2624:4612) - KeyUp 68 0
+24/01/2019 19:37:47 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:37:47 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:37:47 NewBooking.c(18): (2624:4612) - KeyDown 186 1
+24/01/2019 19:37:47 NewBooking.c(18): (2624:4612) - KeyUp 186 1
+24/01/2019 19:37:47 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:37:47 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:37:48 NewBooking.c(18): (2624:4612) - KeyDown 220 0
+24/01/2019 19:37:48 NewBooking.c(18): (2624:4612) - KeyUp 220 0
+24/01/2019 19:37:48 NewBooking.c(18): (2624:4612) - KeyDown 83 0
+24/01/2019 19:37:48 NewBooking.c(18): (2624:4612) - KeyUp 83 0
+24/01/2019 19:37:48 NewBooking.c(18): (2624:4612) - KeyDown 69 0
+24/01/2019 19:37:48 NewBooking.c(18): (2624:4612) - KeyUp 69 0
+24/01/2019 19:37:48 NewBooking.c(18): (2624:4612) - KeyDown 67 0
+24/01/2019 19:37:48 NewBooking.c(18): (2624:4612) - KeyUp 67 0
+24/01/2019 19:37:48 NewBooking.c(18): (2624:4612) - KeyDown 79 0
+24/01/2019 19:37:48 NewBooking.c(18): (2624:4612) - KeyUp 79 0
+24/01/2019 19:37:48 NewBooking.c(18): (2624:4612) - KeyDown 220 0
+24/01/2019 19:37:48 NewBooking.c(18): (2624:4612) - KeyUp 220 0
+24/01/2019 19:37:48 NewBooking.c(18): (2624:4612) - KeyDown 82 0
+24/01/2019 19:37:49 NewBooking.c(18): (2624:4612) - KeyUp 82 0
+24/01/2019 19:37:49 NewBooking.c(18): (2624:4612) - KeyDown 69 0
+24/01/2019 19:37:49 NewBooking.c(18): (2624:4612) - KeyUp 69 0
+24/01/2019 19:37:49 NewBooking.c(18): (2624:4612) - KeyDown 83 0
+24/01/2019 19:37:49 NewBooking.c(18): (2624:4612) - KeyUp 83 0
+24/01/2019 19:37:49 NewBooking.c(18): (2624:4612) - KeyDown 85 0
+24/01/2019 19:37:49 NewBooking.c(18): (2624:4612) - KeyUp 85 0
+24/01/2019 19:37:49 NewBooking.c(18): (2624:4612) - KeyDown 76 0
+24/01/2019 19:37:49 NewBooking.c(18): (2624:4612) - KeyUp 76 0
+24/01/2019 19:37:49 NewBooking.c(18): (2624:4612) - KeyDown 84 0
+24/01/2019 19:37:49 NewBooking.c(18): (2624:4612) - KeyUp 84 0
+24/01/2019 19:37:49 NewBooking.c(18): (2624:4612) - KeyDown 220 0
+24/01/2019 19:37:49 NewBooking.c(18): (2624:4612) - KeyUp 220 0
+24/01/2019 19:37:50 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:37:50 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:37:50 NewBooking.c(18): (2624:4612) - KeyDown 83 1
+24/01/2019 19:37:50 NewBooking.c(18): (2624:4612) - KeyUp 83 1
+24/01/2019 19:37:50 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:37:50 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:37:50 NewBooking.c(18): (2624:4612) - KeyDown 86 0
+24/01/2019 19:37:50 NewBooking.c(18): (2624:4612) - KeyUp 86 0
+24/01/2019 19:37:50 NewBooking.c(18): (2624:4612) - KeyDown 67 0
+24/01/2019 19:37:50 NewBooking.c(18): (2624:4612) - KeyUp 67 0
+24/01/2019 19:37:50 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:37:50 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:37:50 NewBooking.c(18): (2624:4612) - KeyDown 83 1
+24/01/2019 19:37:50 NewBooking.c(18): (2624:4612) - KeyUp 83 1
+24/01/2019 19:37:50 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:37:50 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:37:50 NewBooking.c(18): (2624:4612) - KeyDown 89 0
+24/01/2019 19:37:51 NewBooking.c(18): (2624:4612) - KeyUp 89 0
+24/01/2019 19:37:51 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:37:51 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:37:51 NewBooking.c(18): (2624:4612) - KeyDown 69 1
+24/01/2019 19:37:51 NewBooking.c(18): (2624:4612) - KeyUp 69 1
+24/01/2019 19:37:51 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:37:51 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:37:51 NewBooking.c(18): (2624:4612) - KeyDown 88 0
+24/01/2019 19:37:51 NewBooking.c(18): (2624:4612) - KeyUp 88 0
+24/01/2019 19:37:51 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:37:51 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:37:51 NewBooking.c(18): (2624:4612) - KeyDown 84 1
+24/01/2019 19:37:51 NewBooking.c(18): (2624:4612) - KeyUp 84 1
+24/01/2019 19:37:51 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:37:51 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:37:51 NewBooking.c(18): (2624:4612) - KeyDown 69 0
+24/01/2019 19:37:52 NewBooking.c(18): (2624:4612) - KeyUp 69 0
+24/01/2019 19:37:52 NewBooking.c(18): (2624:4612) - KeyDown 83 0
+24/01/2019 19:37:52 NewBooking.c(18): (2624:4612) - KeyUp 83 0
+24/01/2019 19:37:52 NewBooking.c(18): (2624:4612) - KeyDown 84 0
+24/01/2019 19:37:52 NewBooking.c(18): (2624:4612) - KeyUp 84 0
+24/01/2019 19:37:52 NewBooking.c(18): (2624:4612) - KeyDown 49 0
+24/01/2019 19:37:52 NewBooking.c(18): (2624:4612) - KeyUp 49 0
+24/01/2019 19:37:52 NewBooking.c(18): (2624:4612) - KeyDown 32 0
+24/01/2019 19:37:52 NewBooking.c(18): (2624:4612) - KeyUp 32 0
+24/01/2019 19:37:52 NewBooking.c(18): (2624:4612) - KeyDown 189 0
+24/01/2019 19:37:52 NewBooking.c(18): (2624:4612) - KeyUp 189 0
+24/01/2019 19:37:52 NewBooking.c(18): (2624:4612) - KeyDown 86 0
+24/01/2019 19:37:52 NewBooking.c(18): (2624:4612) - KeyUp 86 0
+24/01/2019 19:37:53 NewBooking.c(18): (2624:4612) - KeyDown 32 0
+24/01/2019 19:37:53 NewBooking.c(18): (2624:4612) - KeyUp 32 0
+24/01/2019 19:37:53 NewBooking.c(18): (2624:4612) - KeyDown 86 0
+24/01/2019 19:37:53 NewBooking.c(18): (2624:4612) - KeyUp 86 0
+24/01/2019 19:37:53 NewBooking.c(18): (2624:4612) - KeyDown 69 0
+24/01/2019 19:37:53 NewBooking.c(18): (2624:4612) - KeyUp 69 0
+24/01/2019 19:37:53 NewBooking.c(18): (2624:4612) - KeyDown 82 0
+24/01/2019 19:37:53 NewBooking.c(18): (2624:4612) - KeyUp 82 0
+24/01/2019 19:37:53 NewBooking.c(18): (2624:4612) - KeyDown 83 0
+24/01/2019 19:37:53 NewBooking.c(18): (2624:4612) - KeyUp 83 0
+24/01/2019 19:37:53 NewBooking.c(18): (2624:4612) - KeyDown 73 0
+24/01/2019 19:37:53 NewBooking.c(18): (2624:4612) - KeyUp 73 0
+24/01/2019 19:37:53 NewBooking.c(18): (2624:4612) - KeyDown 79 0
+24/01/2019 19:37:54 NewBooking.c(18): (2624:4612) - KeyUp 79 0
+24/01/2019 19:37:54 NewBooking.c(18): (2624:4612) - KeyDown 78 0
+24/01/2019 19:37:54 NewBooking.c(18): (2624:4612) - KeyUp 78 0
+24/01/2019 19:37:54 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:37:54 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:37:54 NewBooking.c(18): (2624:4612) - KeyDown 186 1
+24/01/2019 19:37:54 NewBooking.c(18): (2624:4612) - KeyUp 186 1
+24/01/2019 19:37:54 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:37:54 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:37:54 NewBooking.c(18): (2624:4612) - KeyDown 49 0
+24/01/2019 19:37:54 NewBooking.c(18): (2624:4612) - KeyUp 49 0
+24/01/2019 19:37:54 NewBooking.c(18): (2624:4612) - KeyDown 56 0
+24/01/2019 19:37:54 NewBooking.c(18): (2624:4612) - KeyUp 56 0
+24/01/2019 19:37:54 NewBooking.c(18): (2624:4612) - KeyDown 190 0
+24/01/2019 19:37:54 NewBooking.c(18): (2624:4612) - KeyUp 190 0
+24/01/2019 19:37:55 NewBooking.c(18): (2624:4612) - KeyDown 49 0
+24/01/2019 19:37:55 NewBooking.c(18): (2624:4612) - KeyUp 49 0
+24/01/2019 19:37:55 NewBooking.c(18): (2624:4612) - KeyDown 48 0
+24/01/2019 19:37:55 NewBooking.c(18): (2624:4612) - KeyUp 48 0
+24/01/2019 19:37:55 NewBooking.c(18): (2624:4612) - KeyDown 32 0
+24/01/2019 19:37:55 NewBooking.c(18): (2624:4612) - KeyUp 32 0
+24/01/2019 19:37:55 NewBooking.c(18): (2624:4612) - KeyDown 189 0
+24/01/2019 19:37:55 NewBooking.c(18): (2624:4612) - KeyUp 189 0
+24/01/2019 19:37:55 NewBooking.c(18): (2624:4612) - KeyDown 86 0
+24/01/2019 19:37:55 NewBooking.c(18): (2624:4612) - KeyUp 86 0
+24/01/2019 19:37:55 NewBooking.c(18): (2624:4612) - KeyDown 32 0
+24/01/2019 19:37:55 NewBooking.c(18): (2624:4612) - KeyUp 32 0
+24/01/2019 19:37:56 NewBooking.c(18): (2624:4612) - KeyDown 84 0
+24/01/2019 19:37:56 NewBooking.c(18): (2624:4612) - KeyUp 84 0
+24/01/2019 19:37:56 NewBooking.c(18): (2624:4612) - KeyDown 69 0
+24/01/2019 19:37:56 NewBooking.c(18): (2624:4612) - KeyUp 69 0
+24/01/2019 19:37:56 NewBooking.c(18): (2624:4612) - KeyDown 83 0
+24/01/2019 19:37:56 NewBooking.c(18): (2624:4612) - KeyUp 83 0
+24/01/2019 19:37:56 NewBooking.c(18): (2624:4612) - KeyDown 84 0
+24/01/2019 19:37:56 NewBooking.c(18): (2624:4612) - KeyUp 84 0
+24/01/2019 19:37:56 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:37:56 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:37:56 NewBooking.c(18): (2624:4612) - KeyDown 189 1
+24/01/2019 19:37:56 NewBooking.c(18): (2624:4612) - KeyUp 189 1
+24/01/2019 19:37:56 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:37:56 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:37:56 NewBooking.c(18): (2624:4612) - KeyDown 69 0
+24/01/2019 19:37:57 NewBooking.c(18): (2624:4612) - KeyUp 69 0
+24/01/2019 19:37:57 NewBooking.c(18): (2624:4612) - KeyDown 78 0
+24/01/2019 19:37:57 NewBooking.c(18): (2624:4612) - KeyUp 78 0
+24/01/2019 19:37:57 NewBooking.c(18): (2624:4612) - KeyDown 86 0
+24/01/2019 19:37:57 NewBooking.c(18): (2624:4612) - KeyUp 86 0
+24/01/2019 19:37:57 NewBooking.c(18): (2624:4612) - KeyDown 73 0
+24/01/2019 19:37:57 NewBooking.c(18): (2624:4612) - KeyUp 73 0
+24/01/2019 19:37:57 NewBooking.c(18): (2624:4612) - KeyDown 82 0
+24/01/2019 19:37:57 NewBooking.c(18): (2624:4612) - KeyUp 82 0
+24/01/2019 19:37:57 NewBooking.c(18): (2624:4612) - KeyDown 79 0
+24/01/2019 19:37:57 NewBooking.c(18): (2624:4612) - KeyUp 79 0
+24/01/2019 19:37:57 NewBooking.c(18): (2624:4612) - KeyDown 78 0
+24/01/2019 19:37:57 NewBooking.c(18): (2624:4612) - KeyUp 78 0
+24/01/2019 19:37:58 NewBooking.c(18): (2624:4612) - KeyDown 77 0
+24/01/2019 19:37:58 NewBooking.c(18): (2624:4612) - KeyUp 77 0
+24/01/2019 19:37:58 NewBooking.c(18): (2624:4612) - KeyDown 69 0
+24/01/2019 19:37:58 NewBooking.c(18): (2624:4612) - KeyUp 69 0
+24/01/2019 19:37:58 NewBooking.c(18): (2624:4612) - KeyDown 78 0
+24/01/2019 19:37:58 NewBooking.c(18): (2624:4612) - KeyUp 78 0
+24/01/2019 19:37:58 NewBooking.c(18): (2624:4612) - KeyDown 84 0
+24/01/2019 19:37:58 NewBooking.c(18): (2624:4612) - KeyUp 84 0
+24/01/2019 19:37:58 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:37:58 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:37:58 NewBooking.c(18): (2624:4612) - KeyDown 186 1
+24/01/2019 19:37:58 NewBooking.c(18): (2624:4612) - KeyUp 186 1
+24/01/2019 19:37:58 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:37:58 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:37:58 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:37:58 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:37:59 NewBooking.c(18): (2624:4612) - KeyDown 84 1
+24/01/2019 19:37:59 NewBooking.c(18): (2624:4612) - KeyUp 84 1
+24/01/2019 19:37:59 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:37:59 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:37:59 NewBooking.c(18): (2624:4612) - KeyDown 69 0
+24/01/2019 19:37:59 NewBooking.c(18): (2624:4612) - KeyUp 69 0
+24/01/2019 19:37:59 NewBooking.c(18): (2624:4612) - KeyDown 83 0
+24/01/2019 19:37:59 NewBooking.c(18): (2624:4612) - KeyUp 83 0
+24/01/2019 19:37:59 NewBooking.c(18): (2624:4612) - KeyDown 84 0
+24/01/2019 19:37:59 NewBooking.c(18): (2624:4612) - KeyUp 84 0
+24/01/2019 19:37:59 NewBooking.c(18): (2624:4612) - KeyDown 32 0
+24/01/2019 19:37:59 NewBooking.c(18): (2624:4612) - KeyUp 32 0
+24/01/2019 19:37:59 NewBooking.c(18): (2624:4612) - KeyDown 189 0
+24/01/2019 19:37:59 NewBooking.c(18): (2624:4612) - KeyUp 189 0
+24/01/2019 19:38:00 NewBooking.c(18): (2624:4612) - KeyDown 86 0
+24/01/2019 19:38:00 NewBooking.c(18): (2624:4612) - KeyUp 86 0
+24/01/2019 19:38:00 NewBooking.c(18): (2624:4612) - KeyDown 32 0
+24/01/2019 19:38:00 NewBooking.c(18): (2624:4612) - KeyUp 32 0
+24/01/2019 19:38:00 NewBooking.c(18): (2624:4612) - KeyDown 83 0
+24/01/2019 19:38:00 NewBooking.c(18): (2624:4612) - KeyUp 83 0
+24/01/2019 19:38:00 NewBooking.c(18): (2624:4612) - KeyDown 85 0
+24/01/2019 19:38:00 NewBooking.c(18): (2624:4612) - KeyUp 85 0
+24/01/2019 19:38:00 NewBooking.c(18): (2624:4612) - KeyDown 82 0
+24/01/2019 19:38:00 NewBooking.c(18): (2624:4612) - KeyUp 82 0
+24/01/2019 19:38:00 NewBooking.c(18): (2624:4612) - KeyDown 78 0
+24/01/2019 19:38:00 NewBooking.c(18): (2624:4612) - KeyUp 78 0
+24/01/2019 19:38:01 NewBooking.c(18): (2624:4612) - KeyDown 65 0
+24/01/2019 19:38:01 NewBooking.c(18): (2624:4612) - KeyUp 65 0
+24/01/2019 19:38:01 NewBooking.c(18): (2624:4612) - KeyDown 77 0
+24/01/2019 19:38:01 NewBooking.c(18): (2624:4612) - KeyUp 77 0
+24/01/2019 19:38:01 NewBooking.c(18): (2624:4612) - KeyDown 69 0
+24/01/2019 19:38:01 NewBooking.c(18): (2624:4612) - KeyUp 69 0
+24/01/2019 19:38:01 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:38:01 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:38:01 NewBooking.c(18): (2624:4612) - KeyDown 186 1
+24/01/2019 19:38:01 NewBooking.c(18): (2624:4612) - KeyUp 186 1
+24/01/2019 19:38:01 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:38:01 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:38:01 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:38:01 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:38:01 NewBooking.c(18): (2624:4612) - KeyDown 66 1
+24/01/2019 19:38:01 NewBooking.c(18): (2624:4612) - KeyUp 66 1
+24/01/2019 19:38:02 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:38:02 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:38:02 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:38:02 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:38:02 NewBooking.c(18): (2624:4612) - KeyDown 69 1
+24/01/2019 19:38:02 NewBooking.c(18): (2624:4612) - KeyUp 69 1
+24/01/2019 19:38:02 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:38:02 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:38:02 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:38:02 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:38:02 NewBooking.c(18): (2624:4612) - KeyDown 65 1
+24/01/2019 19:38:02 NewBooking.c(18): (2624:4612) - KeyUp 65 1
+24/01/2019 19:38:02 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:38:02 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:38:02 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:38:02 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:38:02 NewBooking.c(18): (2624:4612) - KeyDown 82 1
+24/01/2019 19:38:02 NewBooking.c(18): (2624:4612) - KeyUp 82 1
+24/01/2019 19:38:02 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:38:02 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:38:03 NewBooking.c(18): (2624:4612) - KeyDown 32 0
+24/01/2019 19:38:03 NewBooking.c(18): (2624:4612) - KeyUp 32 0
+24/01/2019 19:38:03 NewBooking.c(18): (2624:4612) - KeyDown 189 0
+24/01/2019 19:38:03 NewBooking.c(18): (2624:4612) - KeyUp 189 0
+24/01/2019 19:38:03 NewBooking.c(18): (2624:4612) - KeyDown 86 0
+24/01/2019 19:38:03 NewBooking.c(18): (2624:4612) - KeyUp 86 0
+24/01/2019 19:38:03 NewBooking.c(18): (2624:4612) - KeyDown 32 0
+24/01/2019 19:38:03 NewBooking.c(18): (2624:4612) - KeyUp 32 0
+24/01/2019 19:38:03 NewBooking.c(18): (2624:4612) - KeyDown 70 0
+24/01/2019 19:38:03 NewBooking.c(18): (2624:4612) - KeyUp 70 0
+24/01/2019 19:38:03 NewBooking.c(18): (2624:4612) - KeyDown 73 0
+24/01/2019 19:38:03 NewBooking.c(18): (2624:4612) - KeyUp 73 0
+24/01/2019 19:38:03 NewBooking.c(18): (2624:4612) - KeyDown 82 0
+24/01/2019 19:38:04 NewBooking.c(18): (2624:4612) - KeyUp 82 0
+24/01/2019 19:38:04 NewBooking.c(18): (2624:4612) - KeyDown 83 0
+24/01/2019 19:38:04 NewBooking.c(18): (2624:4612) - KeyUp 83 0
+24/01/2019 19:38:04 NewBooking.c(18): (2624:4612) - KeyDown 84 0
+24/01/2019 19:38:04 NewBooking.c(18): (2624:4612) - KeyUp 84 0
+24/01/2019 19:38:04 NewBooking.c(18): (2624:4612) - KeyDown 78 0
+24/01/2019 19:38:04 NewBooking.c(18): (2624:4612) - KeyUp 78 0
+24/01/2019 19:38:04 NewBooking.c(18): (2624:4612) - KeyDown 65 0
+24/01/2019 19:38:04 NewBooking.c(18): (2624:4612) - KeyUp 65 0
+24/01/2019 19:38:04 NewBooking.c(18): (2624:4612) - KeyDown 77 0
+24/01/2019 19:38:04 NewBooking.c(18): (2624:4612) - KeyUp 77 0
+24/01/2019 19:38:04 NewBooking.c(18): (2624:4612) - KeyDown 69 0
+24/01/2019 19:38:04 NewBooking.c(18): (2624:4612) - KeyUp 69 0
+24/01/2019 19:38:05 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:38:05 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:38:05 NewBooking.c(18): (2624:4612) - KeyDown 186 1
+24/01/2019 19:38:05 NewBooking.c(18): (2624:4612) - KeyUp 186 1
+24/01/2019 19:38:05 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:38:05 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:38:05 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:38:05 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:38:05 NewBooking.c(18): (2624:4612) - KeyDown 80 1
+24/01/2019 19:38:05 NewBooking.c(18): (2624:4612) - KeyUp 80 1
+24/01/2019 19:38:05 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:38:05 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:38:05 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:38:05 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:38:05 NewBooking.c(18): (2624:4612) - KeyDown 69 1
+24/01/2019 19:38:05 NewBooking.c(18): (2624:4612) - KeyUp 69 1
+24/01/2019 19:38:05 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:38:05 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:38:06 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:38:06 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:38:06 NewBooking.c(18): (2624:4612) - KeyDown 82 1
+24/01/2019 19:38:06 NewBooking.c(18): (2624:4612) - KeyUp 82 1
+24/01/2019 19:38:06 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:38:06 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:38:06 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:38:06 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:38:06 NewBooking.c(18): (2624:4612) - KeyDown 70 1
+24/01/2019 19:38:06 NewBooking.c(18): (2624:4612) - KeyUp 70 1
+24/01/2019 19:38:06 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:38:06 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:38:06 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:38:06 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:38:06 NewBooking.c(18): (2624:4612) - KeyDown 72 1
+24/01/2019 19:38:06 NewBooking.c(18): (2624:4612) - KeyUp 72 1
+24/01/2019 19:38:06 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:38:06 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:38:06 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:38:06 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:38:07 NewBooking.c(18): (2624:4612) - KeyDown 75 1
+24/01/2019 19:38:07 NewBooking.c(18): (2624:4612) - KeyUp 75 1
+24/01/2019 19:38:07 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:38:07 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:38:07 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:38:07 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:38:07 NewBooking.c(18): (2624:4612) - KeyDown 65 1
+24/01/2019 19:38:07 NewBooking.c(18): (2624:4612) - KeyUp 65 1
+24/01/2019 19:38:07 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:38:07 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:38:07 NewBooking.c(18): (2624:4612) - KeyDown 32 0
+24/01/2019 19:38:07 NewBooking.c(18): (2624:4612) - KeyUp 32 0
+24/01/2019 19:38:07 NewBooking.c(18): (2624:4612) - KeyDown 189 0
+24/01/2019 19:38:07 NewBooking.c(18): (2624:4612) - KeyUp 189 0
+24/01/2019 19:38:07 NewBooking.c(18): (2624:4612) - KeyDown 86 0
+24/01/2019 19:38:07 NewBooking.c(18): (2624:4612) - KeyUp 86 0
+24/01/2019 19:38:08 NewBooking.c(18): (2624:4612) - KeyDown 32 0
+24/01/2019 19:38:08 NewBooking.c(18): (2624:4612) - KeyUp 32 0
+24/01/2019 19:38:08 NewBooking.c(18): (2624:4612) - KeyDown 85 0
+24/01/2019 19:38:08 NewBooking.c(18): (2624:4612) - KeyUp 85 0
+24/01/2019 19:38:08 NewBooking.c(18): (2624:4612) - KeyDown 83 0
+24/01/2019 19:38:08 NewBooking.c(18): (2624:4612) - KeyUp 83 0
+24/01/2019 19:38:08 NewBooking.c(18): (2624:4612) - KeyDown 69 0
+24/01/2019 19:38:08 NewBooking.c(18): (2624:4612) - KeyUp 69 0
+24/01/2019 19:38:08 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:38:08 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:38:08 NewBooking.c(18): (2624:4612) - KeyDown 189 1
+24/01/2019 19:38:08 NewBooking.c(18): (2624:4612) - KeyUp 189 1
+24/01/2019 19:38:08 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:38:08 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:38:08 NewBooking.c(18): (2624:4612) - KeyDown 77 0
+24/01/2019 19:38:09 NewBooking.c(18): (2624:4612) - KeyUp 77 0
+24/01/2019 19:38:09 NewBooking.c(18): (2624:4612) - KeyDown 79 0
+24/01/2019 19:38:09 NewBooking.c(18): (2624:4612) - KeyUp 79 0
+24/01/2019 19:38:09 NewBooking.c(18): (2624:4612) - KeyDown 67 0
+24/01/2019 19:38:09 NewBooking.c(18): (2624:4612) - KeyUp 67 0
+24/01/2019 19:38:09 NewBooking.c(18): (2624:4612) - KeyDown 75 0
+24/01/2019 19:38:09 NewBooking.c(18): (2624:4612) - KeyUp 75 0
+24/01/2019 19:38:09 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:38:09 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:38:09 NewBooking.c(18): (2624:4612) - KeyDown 189 1
+24/01/2019 19:38:09 NewBooking.c(18): (2624:4612) - KeyUp 189 1
+24/01/2019 19:38:09 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:38:09 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:38:09 NewBooking.c(18): (2624:4612) - KeyDown 69 0
+24/01/2019 19:38:10 NewBooking.c(18): (2624:4612) - KeyUp 69 0
+24/01/2019 19:38:10 NewBooking.c(18): (2624:4612) - KeyDown 78 0
+24/01/2019 19:38:10 NewBooking.c(18): (2624:4612) - KeyUp 78 0
+24/01/2019 19:38:10 NewBooking.c(18): (2624:4612) - KeyDown 86 0
+24/01/2019 19:38:10 NewBooking.c(18): (2624:4612) - KeyUp 86 0
+24/01/2019 19:38:10 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:38:10 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:38:10 NewBooking.c(18): (2624:4612) - KeyDown 186 1
+24/01/2019 19:38:10 NewBooking.c(18): (2624:4612) - KeyUp 186 1
+24/01/2019 19:38:10 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:38:10 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:38:10 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:38:10 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:38:10 NewBooking.c(18): (2624:4612) - KeyDown 70 1
+24/01/2019 19:38:10 NewBooking.c(18): (2624:4612) - KeyUp 70 1
+24/01/2019 19:38:10 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:38:10 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:38:11 NewBooking.c(18): (2624:4612) - KeyDown 65 0
+24/01/2019 19:38:11 NewBooking.c(18): (2624:4612) - KeyUp 65 0
+24/01/2019 19:38:11 NewBooking.c(18): (2624:4612) - KeyDown 76 0
+24/01/2019 19:38:11 NewBooking.c(18): (2624:4612) - KeyUp 76 0
+24/01/2019 19:38:11 NewBooking.c(18): (2624:4612) - KeyDown 83 0
+24/01/2019 19:38:11 NewBooking.c(18): (2624:4612) - KeyUp 83 0
+24/01/2019 19:38:11 NewBooking.c(18): (2624:4612) - KeyDown 69 0
+24/01/2019 19:38:11 NewBooking.c(18): (2624:4612) - KeyUp 69 0
+24/01/2019 19:38:11 NewBooking.c(18): (2624:4612) - KeyDown 32 0
+24/01/2019 19:38:11 NewBooking.c(18): (2624:4612) - KeyUp 32 0
+24/01/2019 19:38:11 NewBooking.c(18): (2624:4612) - KeyDown 189 0
+24/01/2019 19:38:11 NewBooking.c(18): (2624:4612) - KeyUp 189 0
+24/01/2019 19:38:11 NewBooking.c(18): (2624:4612) - KeyDown 86 0
+24/01/2019 19:38:12 NewBooking.c(18): (2624:4612) - KeyUp 86 0
+24/01/2019 19:38:12 NewBooking.c(18): (2624:4612) - KeyDown 32 0
+24/01/2019 19:38:12 NewBooking.c(18): (2624:4612) - KeyUp 32 0
+24/01/2019 19:38:12 NewBooking.c(18): (2624:4612) - KeyDown 66 0
+24/01/2019 19:38:12 NewBooking.c(18): (2624:4612) - KeyUp 66 0
+24/01/2019 19:38:12 NewBooking.c(18): (2624:4612) - KeyDown 79 0
+24/01/2019 19:38:12 NewBooking.c(18): (2624:4612) - KeyUp 79 0
+24/01/2019 19:38:12 NewBooking.c(18): (2624:4612) - KeyDown 79 0
+24/01/2019 19:38:12 NewBooking.c(18): (2624:4612) - KeyUp 79 0
+24/01/2019 19:38:12 NewBooking.c(18): (2624:4612) - KeyDown 75 0
+24/01/2019 19:38:12 NewBooking.c(18): (2624:4612) - KeyUp 75 0
+24/01/2019 19:38:12 NewBooking.c(18): (2624:4612) - KeyDown 73 0
+24/01/2019 19:38:12 NewBooking.c(18): (2624:4612) - KeyUp 73 0
+24/01/2019 19:38:13 NewBooking.c(18): (2624:4612) - KeyDown 78 0
+24/01/2019 19:38:13 NewBooking.c(18): (2624:4612) - KeyUp 78 0
+24/01/2019 19:38:13 NewBooking.c(18): (2624:4612) - KeyDown 71 0
+24/01/2019 19:38:13 NewBooking.c(18): (2624:4612) - KeyUp 71 0
+24/01/2019 19:38:13 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:38:13 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:38:13 NewBooking.c(18): (2624:4612) - KeyDown 189 1
+24/01/2019 19:38:13 NewBooking.c(18): (2624:4612) - KeyUp 189 1
+24/01/2019 19:38:13 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:38:13 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:38:13 NewBooking.c(18): (2624:4612) - KeyDown 73 0
+24/01/2019 19:38:13 NewBooking.c(18): (2624:4612) - KeyUp 73 0
+24/01/2019 19:38:13 NewBooking.c(18): (2624:4612) - KeyDown 84 0
+24/01/2019 19:38:13 NewBooking.c(18): (2624:4612) - KeyUp 84 0
+24/01/2019 19:38:14 NewBooking.c(18): (2624:4612) - KeyDown 69 0
+24/01/2019 19:38:14 NewBooking.c(18): (2624:4612) - KeyUp 69 0
+24/01/2019 19:38:14 NewBooking.c(18): (2624:4612) - KeyDown 82 0
+24/01/2019 19:38:14 NewBooking.c(18): (2624:4612) - KeyUp 82 0
+24/01/2019 19:38:14 NewBooking.c(18): (2624:4612) - KeyDown 65 0
+24/01/2019 19:38:14 NewBooking.c(18): (2624:4612) - KeyUp 65 0
+24/01/2019 19:38:14 NewBooking.c(18): (2624:4612) - KeyDown 84 0
+24/01/2019 19:38:14 NewBooking.c(18): (2624:4612) - KeyUp 84 0
+24/01/2019 19:38:14 NewBooking.c(18): (2624:4612) - KeyDown 73 0
+24/01/2019 19:38:14 NewBooking.c(18): (2624:4612) - KeyUp 73 0
+24/01/2019 19:38:14 NewBooking.c(18): (2624:4612) - KeyDown 79 0
+24/01/2019 19:38:14 NewBooking.c(18): (2624:4612) - KeyUp 79 0
+24/01/2019 19:38:14 NewBooking.c(18): (2624:4612) - KeyDown 78 0
+24/01/2019 19:38:15 NewBooking.c(18): (2624:4612) - KeyUp 78 0
+24/01/2019 19:38:15 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:38:15 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:38:15 NewBooking.c(18): (2624:4612) - KeyDown 186 1
+24/01/2019 19:38:15 NewBooking.c(18): (2624:4612) - KeyUp 186 1
+24/01/2019 19:38:15 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:38:15 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:38:15 NewBooking.c(18): (2624:4612) - KeyDown 49 0
+24/01/2019 19:38:15 NewBooking.c(18): (2624:4612) - KeyUp 49 0
+24/01/2019 19:38:15 NewBooking.c(18): (2624:4612) - KeyDown 48 0
+24/01/2019 19:38:15 NewBooking.c(18): (2624:4612) - KeyUp 48 0
+24/01/2019 19:38:15 NewBooking.c(18): (2624:4612) - KeyDown 32 0
+24/01/2019 19:38:15 NewBooking.c(18): (2624:4612) - KeyUp 32 0
+24/01/2019 19:38:15 NewBooking.c(18): (2624:4612) - KeyDown 189 0
+24/01/2019 19:38:15 NewBooking.c(18): (2624:4612) - KeyUp 189 0
+24/01/2019 19:38:16 NewBooking.c(18): (2624:4612) - KeyDown 189 0
+24/01/2019 19:38:16 NewBooking.c(18): (2624:4612) - KeyUp 189 0
+24/01/2019 19:38:16 NewBooking.c(18): (2624:4612) - KeyDown 82 0
+24/01/2019 19:38:16 NewBooking.c(18): (2624:4612) - KeyUp 82 0
+24/01/2019 19:38:16 NewBooking.c(18): (2624:4612) - KeyDown 69 0
+24/01/2019 19:38:16 NewBooking.c(18): (2624:4612) - KeyUp 69 0
+24/01/2019 19:38:16 NewBooking.c(18): (2624:4612) - KeyDown 77 0
+24/01/2019 19:38:16 NewBooking.c(18): (2624:4612) - KeyUp 77 0
+24/01/2019 19:38:16 NewBooking.c(18): (2624:4612) - KeyDown 79 0
+24/01/2019 19:38:16 NewBooking.c(18): (2624:4612) - KeyUp 79 0
+24/01/2019 19:38:16 NewBooking.c(18): (2624:4612) - KeyDown 86 0
+24/01/2019 19:38:16 NewBooking.c(18): (2624:4612) - KeyUp 86 0
+24/01/2019 19:38:16 NewBooking.c(18): (2624:4612) - KeyDown 69 0
+24/01/2019 19:38:17 NewBooking.c(18): (2624:4612) - KeyUp 69 0
+24/01/2019 19:38:17 NewBooking.c(18): (2624:4612) - KeyDown 75 0
+24/01/2019 19:38:17 NewBooking.c(18): (2624:4612) - KeyUp 75 0
+24/01/2019 19:38:17 NewBooking.c(18): (2624:4612) - KeyDown 69 0
+24/01/2019 19:38:17 NewBooking.c(18): (2624:4612) - KeyUp 69 0
+24/01/2019 19:38:17 NewBooking.c(18): (2624:4612) - KeyDown 89 0
+24/01/2019 19:38:17 NewBooking.c(18): (2624:4612) - KeyUp 89 0
+24/01/2019 19:38:17 NewBooking.c(18): (2624:4612) - KeyDown 87 0
+24/01/2019 19:38:17 NewBooking.c(18): (2624:4612) - KeyUp 87 0
+24/01/2019 19:38:17 NewBooking.c(18): (2624:4612) - KeyDown 79 0
+24/01/2019 19:38:17 NewBooking.c(18): (2624:4612) - KeyUp 79 0
+24/01/2019 19:38:17 NewBooking.c(18): (2624:4612) - KeyDown 82 0
+24/01/2019 19:38:17 NewBooking.c(18): (2624:4612) - KeyUp 82 0
+24/01/2019 19:38:18 NewBooking.c(18): (2624:4612) - KeyDown 68 0
+24/01/2019 19:38:18 NewBooking.c(18): (2624:4612) - KeyUp 68 0
+24/01/2019 19:38:18 NewBooking.c(18): (2624:4612) - KeyDown 83 0
+24/01/2019 19:38:18 NewBooking.c(18): (2624:4612) - KeyUp 83 0
+24/01/2019 19:38:18 NewBooking.c(18): (2624:4612) - KeyDown 32 0
+24/01/2019 19:38:18 NewBooking.c(18): (2624:4612) - KeyUp 32 0
+24/01/2019 19:38:18 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:38:18 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:38:18 NewBooking.c(18): (2624:4612) - KeyDown 87 1
+24/01/2019 19:38:18 NewBooking.c(18): (2624:4612) - KeyUp 87 1
+24/01/2019 19:38:18 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:38:18 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:38:18 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:38:18 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:38:18 NewBooking.c(18): (2624:4612) - KeyDown 85 1
+24/01/2019 19:38:19 NewBooking.c(18): (2624:4612) - KeyUp 85 1
+24/01/2019 19:38:19 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:38:19 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:38:19 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:38:19 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:38:19 NewBooking.c(18): (2624:4612) - KeyDown 75 1
+24/01/2019 19:38:19 NewBooking.c(18): (2624:4612) - KeyUp 75 1
+24/01/2019 19:38:19 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:38:19 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:38:19 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:38:19 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:38:19 NewBooking.c(18): (2624:4612) - KeyDown 83 1
+24/01/2019 19:38:19 NewBooking.c(18): (2624:4612) - KeyUp 83 1
+24/01/2019 19:38:19 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:38:19 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:38:19 NewBooking.c(18): (2624:4612) - KeyDown 32 0
+24/01/2019 19:38:19 NewBooking.c(18): (2624:4612) - KeyUp 32 0
+24/01/2019 19:38:19 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:38:19 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:38:20 NewBooking.c(18): (2624:4612) - KeyDown 68 1
+24/01/2019 19:38:20 NewBooking.c(18): (2624:4612) - KeyUp 68 1
+24/01/2019 19:38:20 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:38:20 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:38:20 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:38:20 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:38:20 NewBooking.c(18): (2624:4612) - KeyDown 186 1
+24/01/2019 19:38:20 NewBooking.c(18): (2624:4612) - KeyUp 186 1
+24/01/2019 19:38:20 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:38:20 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:38:20 NewBooking.c(18): (2624:4612) - KeyDown 220 0
+24/01/2019 19:38:20 NewBooking.c(18): (2624:4612) - KeyUp 220 0
+24/01/2019 19:38:20 NewBooking.c(18): (2624:4612) - KeyDown 83 0
+24/01/2019 19:38:20 NewBooking.c(18): (2624:4612) - KeyUp 83 0
+24/01/2019 19:38:20 NewBooking.c(18): (2624:4612) - KeyDown 69 0
+24/01/2019 19:38:21 NewBooking.c(18): (2624:4612) - KeyUp 69 0
+24/01/2019 19:38:21 NewBooking.c(18): (2624:4612) - KeyDown 67 0
+24/01/2019 19:38:21 NewBooking.c(18): (2624:4612) - KeyUp 67 0
+24/01/2019 19:38:21 NewBooking.c(18): (2624:4612) - KeyDown 79 0
+24/01/2019 19:38:21 NewBooking.c(18): (2624:4612) - KeyUp 79 0
+24/01/2019 19:38:21 NewBooking.c(18): (2624:4612) - KeyDown 220 0
+24/01/2019 19:38:21 NewBooking.c(18): (2624:4612) - KeyUp 220 0
+24/01/2019 19:38:21 NewBooking.c(18): (2624:4612) - KeyDown 68 0
+24/01/2019 19:38:21 NewBooking.c(18): (2624:4612) - KeyUp 68 0
+24/01/2019 19:38:21 NewBooking.c(18): (2624:4612) - KeyDown 69 0
+24/01/2019 19:38:21 NewBooking.c(18): (2624:4612) - KeyUp 69 0
+24/01/2019 19:38:21 NewBooking.c(18): (2624:4612) - KeyDown 83 0
+24/01/2019 19:38:21 NewBooking.c(18): (2624:4612) - KeyUp 83 0
+24/01/2019 19:38:22 NewBooking.c(18): (2624:4612) - KeyDown 75 0
+24/01/2019 19:38:22 NewBooking.c(18): (2624:4612) - KeyUp 75 0
+24/01/2019 19:38:22 NewBooking.c(18): (2624:4612) - KeyDown 84 0
+24/01/2019 19:38:22 NewBooking.c(18): (2624:4612) - KeyUp 84 0
+24/01/2019 19:38:22 NewBooking.c(18): (2624:4612) - KeyDown 79 0
+24/01/2019 19:38:22 NewBooking.c(18): (2624:4612) - KeyUp 79 0
+24/01/2019 19:38:22 NewBooking.c(18): (2624:4612) - KeyDown 80 0
+24/01/2019 19:38:22 NewBooking.c(18): (2624:4612) - KeyUp 80 0
+24/01/2019 19:38:22 NewBooking.c(18): (2624:4612) - KeyDown 16 0
+24/01/2019 19:38:22 NewBooking.c(18): (2624:4612) - Send ping: mod_1
+24/01/2019 19:38:22 NewBooking.c(18): (2624:4612) - KeyDown 189 1
+24/01/2019 19:38:22 NewBooking.c(18): (2624:4612) - KeyUp 189 1
+24/01/2019 19:38:22 NewBooking.c(18): (2624:4612) - KeyUp 16 0
+24/01/2019 19:38:22 NewBooking.c(18): (2624:4612) - Get ping ack: mod_1
+24/01/2019 19:38:23 NewBooking.c(18): (2624:4612) - KeyDown 84 0
+24/01/2019 19:38:23 NewBooking.c(18): (2624:4612) - KeyUp 84 0
+24/01/2019 19:38:23 NewBooking.c(18): (2624:4612) - KeyDown 69 0
+24/01/2019 19:38:23 NewBooking.c(18): (2624:4612) - KeyUp 69 0
+24/01/2019 19:38:23 NewBooking.c(18): (2624:4612) - KeyDown 83 0
+24/01/2019 19:38:23 NewBooking.c(18): (2624:4612) - KeyUp 83 0
+24/01/2019 19:38:23 NewBooking.c(18): (2624:4612) - KeyDown 84 0
+24/01/2019 19:38:23 NewBooking.c(18): (2624:4612) - KeyUp 84 0
+24/01/2019 19:38:23 NewBooking.c(18): (2624:4612) - KeyDown 83 0
+24/01/2019 19:38:23 NewBooking.c(18): (2624:4612) - KeyUp 83 0
+24/01/2019 19:38:23 NewBooking.c(18): (2624:4612) - KeyDown 220 0
+24/01/2019 19:38:23 NewBooking.c(18): (2624:4612) - KeyUp 220 0
+24/01/2019 19:38:23 NewBooking.c(18): (2624:4612) - KeyDown 65 0
+24/01/2019 19:38:24 NewBooking.c(18): (2624:4612) - KeyUp 65 0
+24/01/2019 19:38:24 NewBooking.c(18): (2624:4612) - KeyDown 80 0
+24/01/2019 19:38:24 NewBooking.c(18): (2624:4612) - KeyUp 80 0
+24/01/2019 19:38:24 NewBooking.c(18): (2624:4612) - KeyDown 65 0
+24/01/2019 19:38:24 NewBooking.c(18): (2624:4612) - KeyUp 65 0
+24/01/2019 19:38:24 NewBooking.c(18): (2624:4612) - KeyDown 67 0
+24/01/2019 19:38:24 NewBooking.c(18): (2624:4612) - KeyUp 67 0
+24/01/2019 19:38:24 NewBooking.c(18): (2624:4612) - KeyDown 190 0
+24/01/2019 19:38:24 NewBooking.c(18): (2624:4612) - KeyUp 190 0
+24/01/2019 19:38:24 NewBooking.c(18): (2624:4612) - KeyDown 84 0
+24/01/2019 19:38:24 NewBooking.c(18): (2624:4612) - KeyUp 84 0
+24/01/2019 19:38:24 NewBooking.c(18): (2624:4612) - KeyDown 88 0
+24/01/2019 19:38:24 NewBooking.c(18): (2624:4612) - KeyUp 88 0
+24/01/2019 19:38:25 NewBooking.c(18): (2624:4612) - KeyDown 84 0
+24/01/2019 19:38:25 NewBooking.c(18): (2624:4612) - KeyUp 84 0
+NewBooking.c(20): lr_think_time: 2.00 seconds.
+NewBooking.c(22): Executing key ("ENTER_KEY")
+24/01/2019 19:38:27 NewBooking.c(22): (2624:4612) - KeyDown 13 0
+24/01/2019 19:38:27 NewBooking.c(22): (2624:4612) - KeyUp 13 0
+NewBooking.c(26): Notify: Parameter Substitution: parameter "BookingIteration" =  "10"
+NewBooking.c(29): lr_think_time: 7200.00 seconds.
+24/01/2019 19:38:27 NewBooking.c(29): (2624:4612) - "Administrator: C:\Windows\system32\cmd.exe - call  pybot --tes" is not currently in map, adding it now
+24/01/2019 19:38:27 NewBooking.c(29): (2624:4612) - Caption change: "Administrator: C:\Windows\system32\cmd.exe" ---> "Administrator: C:\Windows\system32\cmd.exe - call  pybot --tes" = "Administrator: C:\Windows\system32\cmd.exe - call  pybot --tes"
+24/01/2019 19:38:34 NewBooking.c(29): (2624:4612) - "Administrator: C:\Windows\system32\cmd.exe" is not currently in map, adding it now
+24/01/2019 19:38:34 NewBooking.c(29): (2624:4612) - Caption change: "Administrator: C:\Windows\system32\cmd.exe - call  pybot --tes" ---> "Administrator: C:\Windows\system32\cmd.exe" = "Administrator: C:\Windows\system32\cmd.exe"
+NewBooking.c(29): Notify: Transaction "Creating PNR" ended with a "Stop" status (Duration: 124.5042 Think Time: 14.0278).
+Abort was called from an action.
+Ending Vuser...
+Starting action vuser_end.
+vuser_end.c(4): Notify: Transaction "Citrix Logout" started.
+vuser_end.c(6): Logging off
+24/01/2019 19:39:32 vuser_end.c(6): (2624:4612) - Calling Logoff()
+24/01/2019 19:39:32 vuser_end.c(6): (2624:4612) - WaitForEvent: Initializing wait event, time=60000, end time=633062
+24/01/2019 19:39:32 vuser_end.c(6): (2624:4612) - Activate window: "HKGWL2102 - Amadeus Selling Platform Connect - Google Chrome"
+24/01/2019 19:39:32 vuser_end.c(6): (2624:4612) - Foreground window = 66140
+24/01/2019 19:39:32 vuser_end.c(6): (2624:4612) - Destroy window: "Administrator: C:\Windows\system32\cmd.exe"
+24/01/2019 19:39:32 vuser_end.c(6): (2624:4612) - removing "Administrator: C:\Windows\system32\cmd.exe" from LogicNameMap
+24/01/2019 19:39:32 vuser_end.c(6): (2624:4612) - Foreground window = 65810
+24/01/2019 19:39:32 vuser_end.c(6): (2624:4612) - Destroy window: "HKGWL2102 - Amadeus Selling Platform Connect - Google Chrome"
+24/01/2019 19:39:32 vuser_end.c(6): (2624:4612) - removing "HKGWL2102 - Amadeus Selling Platform Connect - Google Chrome" from LogicNameMap
+24/01/2019 19:39:32 vuser_end.c(6): (2624:4612) - Foreground window = 0
+24/01/2019 19:39:32 vuser_end.c(6): (2624:4612) - Foreground window = 0
+24/01/2019 19:39:32 vuser_end.c(6): (2624:4612) - Foreground window = 131394
+24/01/2019 19:39:33 vuser_end.c(6): (2624:4612) - Foreground window = 65914
+24/01/2019 19:39:33 vuser_end.c(6): (2624:4612) - Destroy window: "Desktop"
+24/01/2019 19:39:33 vuser_end.c(6): (2624:4612) - removing "Desktop" from LogicNameMap
+24/01/2019 19:39:33 vuser_end.c(6): (2624:4612) - Foreground window = 0
+24/01/2019 19:39:33 vuser_end.c(6): (2624:4612) - Destroy window: "Start"
+24/01/2019 19:39:33 vuser_end.c(6): (2624:4612) - removing "Start" from LogicNameMap
+24/01/2019 19:39:33 vuser_end.c(6): (2624:4612) - Destroy window: "-2_856_1445_47"
+24/01/2019 19:39:33 vuser_end.c(6): (2624:4612) - removing "-2_856_1445_47" from LogicNameMap
+24/01/2019 19:39:33 vuser_end.c(6): (2624:4612) - Inside OnDisconnectEvent()
+24/01/2019 19:39:33 vuser_end.c(6): (2624:4612) - Number of currently used GDI handles on this machine = 1607
+24/01/2019 19:39:33 vuser_end.c(6): (2624:4612) - Running Citrix processes:
+	concentr.exe, pid 2232, GDI handles in use: 41
+	receiver.exe, pid 684, GDI handles in use: 44
+	wfica32.exe, pid 3532, GDI handles in use: 76
+24/01/2019 19:39:33 vuser_end.c(6): (2624:4612) - Got Disconnect event
+vuser_end.c(6): CITRIX: ASSERT: "__thiscall CSession::~CSession(void)" at Session.cpp(163). Text: "SUCCEEDED(SessionEventImpl::DispEventUnadvise(m_session, &DIID__ISessionEvents))"
+24/01/2019 19:39:34 vuser_end.c(6): (2624:4612) - Wake Up and check new event.
+24/01/2019 19:39:34 vuser_end.c(6): (2624:4612) - WaitForEvent result = 0
+24/01/2019 19:39:34 vuser_end.c(6): (2624:4612) - Already disconnected, no need to logoff again
+vuser_end.c(8): web_add_header("Csrf-Token") started  	[MsgId: MMSG-26355]
+vuser_end.c(8): Notify: Parameter Substitution: parameter "CsrfToken" =  "AB8971B56ABB93BF732A4ABB7D0F95B3"
+vuser_end.c(8): web_add_header("Csrf-Token") was successful  	[MsgId: MMSG-26392]
+vuser_end.c(11): web_custom_request("Logoff") started  	[MsgId: MMSG-26355]
+vuser_end.c(11): Connection to emea.cwtdesktop.pilot.int.carlsonwagonlit.com:443 closed after being inactive for 219 seconds, exceeding the "HTTP Keep-Alive timeout" Runtime Setting (60 seconds). URL="https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/Authentication/Logoff"  	[MsgId: MMSG-27648]
+vuser_end.c(11): web_custom_request("Logoff") was successful, 0 body bytes, 585 header bytes  	[MsgId: MMSG-26386]
+vuser_end.c(22): Notify: Transaction "Citrix Logout" ended with a "Pass" status (Duration: 3.1494 Wasted Time: 0.0098).
+Ending action vuser_end.
+Vuser Terminated.

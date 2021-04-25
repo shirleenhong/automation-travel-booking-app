@@ -1,0 +1,82 @@
+*** Settings ***
+Resource          ../../resources/common/global_resources.txt
+
+*** Test Cases ***
+
+*** Keywords ***
+Get Ticket Number
+    Get Data From GDS Screen    *HTE    True
+    Should Not Contain    ${gds_screen_data}    TICKETING RECORD NOT FOUND    UNABLE TO PROCESS ELECTRONIC TICKET DISPLAY
+    ${raw_ticket_number}=    Get String Between Strings    ${gds_screen_data}    TKT:    NAME:
+    ${raw_ticket_number}=    Replace String    ${raw_ticket_number}    ${SPACE}    ${EMPTY}
+    ${ticket_number}=    Set Variable    ${raw_ticket_number}
+    Set Test Variable    ${ticket_number}
+    Log    ${ticket_number}
+    [Return]    ${ticket_number}
+
+Issue Ticket
+    [Documentation]    LINKAGE/OPTIONS CHANGED - UPDATE SDPT
+    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Select GDS    Galileo
+    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Enter GDS Command    R.CWTPTEST
+    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Enter GDS Command    TKPDTDAD
+    ${screen_data}=    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Get Data From GDS Screen    \    True
+    ${error_msg_line}=    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Get Lines Containing String    ${screen_data}    ERROR 3088 - REQUESTED FILED FARE EXPIRED
+    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Should Not Be Equal    ${error_msg_line}    ERROR 3088 - REQUESTED FILED FARE EXPIRED    msg=Unable to issue ticket. Filed fare is not valid anymore.
+    ${error_msg_line}=    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Get Lines Containing String    ${screen_data}    ERROR 4366 - FORM OF PAYMENT REQUIRED
+    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Should Not Be Equal    ${error_msg_line}    ERROR 4366 - FORM OF PAYMENT REQUIRED    msg=Unable to issue ticket. FoP is required.
+    ${error_msg_line}=    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Get Lines Containing String    ${screen_data}    LINKAGE/OPTIONS CHANGED - UPDATE SDPT
+    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Should Not Be Equal    ${error_msg_line}    LINKAGE/OPTIONS CHANGED - UPDATE SDPT    msg=Unable to issue ticket. FoP is required.
+
+Get Ticket Information
+    [Arguments]    ${info_to_get}    ${ticket_number}=${EMPTY}    ${pnr}=${EMPTY}
+    Run Keyword If    '${pnr}' != "${EMPTY}"    Run Keywords    Retrieve PNR    ${pnr}
+    ...    AND    Select GDS    Galileo
+    Comment    KWs when Status is needed
+    Run Keyword If    '${info_to_get.lower()}'=='status'    Should Not Be True    '${ticket_number}'=='${EMPTY}'    msg=Ticket number is required when Status info is needed
+    ${screen_data}=    Run Keyword If    '${info_to_get.lower()}'=='status'    Get Data From GDS Screen    *HTI    True
+    ${return_value}=    Run Keyword If    '${info_to_get.lower()}'=='status'    Get Lines Containing String    ${screen_data}    ${ticket_number}
+    ${return_value}=    Run Keyword If    '${info_to_get.lower()}'=='status'    Fetch From Right    ${return_value}    /
+    ${return_value}=    Run Keyword If    '${info_to_get.lower()}'=='status'    Set Variable If    '${return_value}'!='VOID'    Active    Voided
+    Run Keyword If    '${info_to_get.lower()}'=='status'    Set Suite Variable    ${ticket_info}    ${return_value}
+    Comment    KWs when Ticket Number is needed
+    ${return_value}=    Run Keyword If    '${info_to_get.lower()}'=='ticket number'    Get Ticket Number
+    Run Keyword If    '${info_to_get.lower()}'=='ticket number'    Set Suite Variable    ${ticket_info}    ${return_value}
+    Comment    '${info_to_get.lower()}'=='ticket number' OR '${info_to_get.lower()}'=='ticket' OR '${info_to_get.lower()}'=='number'
+    Log    ${ticket_info}
+    [Return]    ${ticket_info}
+
+Void A Ticket Number
+    [Arguments]    ${ticket_number}
+    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Select GDS    Galileo
+    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Enter GDS Command    R.CWTPTEST
+    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Enter GDS Command    TRV/${ticket_number}
+    ${screen_data}=    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Get Data From GDS Screen    \    True
+    ${confirmation_line}=    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Get Lines Containing String    ${screen_data}    TICKET NO.${ticket_number}CHANGED TO VOID STATUS
+    ${ticket_voided}=    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Run Keyword And Return Status    Should Be Equal    ${confirmation_line}    TICKET NO.${ticket_number}CHANGED TO VOID STATUS
+    ...    msg=Ticket ${ticket_number} of ${current_pnr} has been voided.
+    Log    ${ticket_voided}
+    [Return]    ${ticket_voided}
+
+Confirm Valid Travel Documents
+    [Arguments]    ${use_travel_doc_index}=1
+    Select Is Doc Valid    Yes    0
+    Tick Use Document    1
+
+Select Visa Requirements
+    Select Visa Requirement    Not Required    0
+    Select Visa Requirement    Not Required    1
+
+Change Booked Air Class Of Specfied Segment
+    [Arguments]    ${target_segment}    ${new_class}
+    Run Keyword If    '${target_segment.lower()}'=='all'    Set Test Variable    ${target_segment}    A
+    Get Data From GDS Screen    @${target_segment}/${new_class}    True
+
+Verify 0106 Line Is Written In The PNR
+    ${line_to_search}=    Evaluate    'FREE TEXT-*0106*%07d' % ${client_account_number}
+    Verify Specific Line Is Written In The PNR    ${line_to_search}
+
+Initialize Variable
+    Set Suite Variable    ${gds_switch}    galileo
+    Set Suite Variable    ${locale}    en-GB
+    Open Power Express And Retrieve Profile    ${version}    ${syex_env}    U003WXR    en-GB    AutomationUK    UK Head Office Test Team
+    Select GDS    Galileo

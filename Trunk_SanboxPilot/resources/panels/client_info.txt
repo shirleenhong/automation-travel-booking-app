@@ -1,0 +1,86 @@
+*** Settings ***
+Resource          ../common/utilities.txt
+Variables         ../variables/client_info_control_objects.py
+
+*** Keywords ***
+Click Add Form Of Payment
+    Click Control Button    [NAME:cmdAddFOP]
+
+Click Clear Form Of Payment
+    Click Control Button    [NAME:cmdClearFOP]
+
+Click Edit Form Of Payment
+    Click Control Button    [NAME:cmdEditFormOfPayment]
+
+Get Form Of Payment Value
+    ${fop_value} =    Get Control Text Value    ${combo_form_of_payment}    ${title_power_express}
+    [Return]    ${fop_value}
+
+Get Service Option Values
+    Select Tab Control    Service Options
+    ${service_option_values}    Get Service Option Items
+    Set Test Variable    ${service_option_values}
+    Log    ${service_option_values}
+    [Teardown]    Take Screenshot
+    [Return]    ${service_option_values}
+
+Manually Set Value In Form Of Payment
+    [Arguments]    ${str_card_type}    ${str_card_number}    ${str_exp_date}
+    Click Control Button    ${button_edit_form_of_payment}
+    Sleep    2
+    Click Control Button    ${combo_card_type}
+    Send    ${str_card_type}{TAB}
+    Set Control Text Value    ${ctext_card_number}    ${str_card_number}
+    Click Control Button    ${cmtext_exp_date}
+    Send    {LEFT 5}
+    Send    ${str_exp_date}
+    Click Control Button    ${button_add_fop}
+    Set Suite Variable    ${str_card_type}
+    Set Suite Variable    ${str_card_number}
+    Set Suite Variable    ${str_exp_date}
+    [Teardown]    Take Screenshot
+
+Populate Client Info Panel With Default Values
+    ${is_not_known_present} =    Control Command    ${title_power_express}    ${EMPTY}    ${check_box_not_known_a_time_of_booking}    IsVisible    ${EMPTY}
+    Run Keyword If    ${is_not_known_present} == 1    Click Control Button    ${check_box_not_known_a_time_of_booking}
+    ...    ELSE    Manually Set Value In Form Of Payment    VI    4111111111111111    1221
+    [Teardown]    Take Screenshot
+
+Select Card Type
+    [Arguments]    ${card_type}
+    Select Value From Dropdown List    [NAME:ccboCardType]    ${card_type}
+    [Teardown]    Take Screenshot
+
+Select Form Of Payment
+    [Arguments]    ${fop_value}
+    Click Control Button    ${combo_form_of_payment}    ${title_power_express}
+    Select Value From Combobox    ComboBox    ${fop_value}
+    Send    {TAB}
+    Set Suite Variable    ${str_card_type}    ${fop_value}
+    [Teardown]    Take Screenshot
+
+Set Card Number
+    [Arguments]    ${card_number}
+    Set Control Text Value    [NAME:ctxtCardNumber]    ${card_number}
+    [Teardown]    Take Screenshot
+
+Set Cardholder Name
+    [Arguments]    ${cardholder_name}
+    Set Control Text Value    [NAME:ctxtCardHolderName]    ${cardholder_name}
+    [Teardown]    Take Screenshot
+
+Set Expiry Date
+    [Arguments]    ${exp_month}    ${exp_year}
+    Comment    Set Control Text Value    [NAME:cmtxtExpDate]    ${expiry_date}
+    Control Send    ${title_power_express}    ${EMPTY}    [NAME:cmtxtExpDate]    ${exp_month}${exp_year}
+    [Teardown]    Take Screenshot
+
+Tick Not Known At Time Of Booking For Form Of Payment
+    Wait Until Control Object Is Visible    ${check_box_not_known_a_time_of_booking}
+    ${tick_not_known}    Set Variable If    "${locale}" == "de-DE"    Bei Buchung nicht bekannt    "${locale}" == "fr-FR"    Inconnu au moment de la réservation    Not known at time of booking
+    Tick Checkbox Via Description    ${tick_not_known}
+
+Untick Not Known At Time Of Booking For Form Of Payment
+    Wait Until Control Object Is Visible    ${check_box_not_known_a_time_of_booking}
+    ${tick_not_known}    Set Variable If    "${locale}" == "de-DE"    Bei Buchung nicht bekannt    "${locale}" == "fr-FR"    Inconnu au moment de la réservation    Not known at time of booking
+    Untick Checkbox Via Description    ${tick_not_known}

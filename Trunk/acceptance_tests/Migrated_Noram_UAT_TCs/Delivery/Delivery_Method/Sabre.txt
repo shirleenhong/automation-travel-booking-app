@@ -1,0 +1,53 @@
+*** Settings ***
+Resource          ../../../air_fare/air_fare_verification.txt
+Resource          ../../../delivery/delivery_verification.txt
+Resource          ../../../id_traveller/id_traveller_verification.txt
+
+*** Test Cases ***
+[NB] Verify That 8TL Line Is Written In The PNR
+    [Tags]    uat
+    Set Suite Variable    ${gds_switch}    sabre
+    Set Suite Variable    ${locale}    en-US
+    Comment    Open Power Express And Retrieve Profile    ${version}    sandboxpilot    U003WXR    en-US    AutomationUS
+    ...    SABRE TEAM - AUTO US
+    Comment    Select GDS    Sabre
+    Comment    Emulate PCC    3W7F
+    Set Client And Traveler    NORAM Express Sabre Auto ¦ NORAM Express Sabre Sub Auto    Automason    Yuri
+    Select PCC/CompanyProfile/TravellerProfile    1S/3W7F/AUTOSABRESTAR1
+    Select Client Account Value    ZZZ ¦ US TEST TEAM ACCOUNT ¦ NORAM Express Sabre Sub Auto
+    Click New Booking
+    Book Flight X Months From Now    MSPORD¥AA    01Y1    \    6
+    Click Panel    Client Info
+    Tick Not Known At Time Of Booking For Form Of Payment
+    Click Update PNR
+    Click Read Booking
+    Click Panel    Air Fare
+    Select Missed Saving Code Value    7 - Low fare within policy threshold
+    Click Panel    Delivery
+    Select Delivery Method    8TL Auto Cancel TAW
+    Verify Ticketing Time Limit Field Is Visible
+    Verify Ticketing Time Limit Field Is Enabled
+    Verify Ticketing Time Limit Field Value    900P
+    Verify Time Limit Remarks Field Is Visible
+    Verify Time Limit Remarks Field Is Enabled
+    Verify Time Limit Remarks Field Value    ${EMPTY}
+    Verify That Follow Up Date Is Not Visible
+    Verify Reasons For Placing Booking On Hold Section In Delivery Panel Is Disabled
+    Verify Ticketing Time Limit Field Is Enabled
+    Verify Ticketing Date Field Value Is Current Date
+    Select Ticketing Time Limit    1000P
+    Set Time Limit Remarks    TEST TEST TEST 143
+    Set Email Address In Delivery Panel    automation@carlson.com
+    Click Panel    Client Info
+    Populate Client Info Panel With Default Values
+    Comment    Click Finish PNR
+    Comment    Retrieve PNR Details From Sabre Red    ${current_pnr}
+    Comment    Verify 8TL Line Is Written In The PNR    1000P    TEST.TEST.TEST.143
+    Comment    Verify Specific Line Is Written In The PNR    T‡TKT1-8TL-DIN‡S1
+
+TC Exer
+    ${emp_info}    Create List    Super    Mann    CWT
+    ${email_add}=    Catenate    SEPARATOR=.    @{emp_info}[0]    @{emp_info}[1]
+    ${email_add}=    Catenate    SEPARATOR=@    ${email_add}=    @{emp_info}[2]
+    ${email_add}=    Catenate    SEPARATOR=.    ${email_add}=    com
+    Log    ${email_add.lower()}

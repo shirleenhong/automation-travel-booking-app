@@ -1,0 +1,21 @@
+*** Settings ***
+Suite Setup
+Force Tags        gst
+Resource          ../other_services.txt
+Resource          ../../../../acceptance_tests/gds/gds_verification.txt
+
+*** Test Cases ***
+test
+    Get Expected Last Amend Date
+
+*** Keywords ***
+DONT USE ME Get Expected Last Amend Date
+    ${date}    DateTime.Get Current Date    UTC    exclude_millis=True
+    ${month}    Get Time    month    ${date}
+    ${day}    Get Time    day    ${date}
+    ${year}    Get Time    year    ${date}
+    ${hour}    Get Time    hour    ${date}
+    ${minute}    Get Time    minute    ${date}
+    Set Test Variable    ${expected_last_amend_date}    ${month}/${day}/${year} ${hour}:${minute}
+    Log    Expected last amend date is: ${expected_last_amend_date}
+    [Return]    ${expected_last_amend_date}

@@ -1,0 +1,36 @@
+*** Settings ***
+Documentation     core keywords for all API services
+Resource          libraries.txt
+
+*** Keywords ***
+Consolidate Request Data
+    [Arguments]    @{request_data}
+    ${previous_data}    Set Variable    ${EMPTY}
+    : FOR    ${request_data}    IN    @{request_data}
+    \    ${consolidated_data}    Catenate    SEPARATOR=    ${previous_data}    ${request_data}
+    \    ${previous_data}    Set Variable    ${consolidated_data}
+    ${consolidated_data}    To Json    ${consolidated_data}    True
+    [Return]    ${consolidated_data}
+
+Generate URL Data
+    [Arguments]    ${url_data}
+    Set Test Variable    ${${env}_base_url}    ${url_data}
+    Log    ${${env}_base_url}
+
+Send Post Request
+    [Arguments]    ${endpoint}    ${params}=None    ${data}=None    ${gateway_type}="remarks"
+    [Documentation]    When ${gateway_type} argument is empty, Send Post Request's uses the default value of ${path} which is a global variable. When you intent to use "Send Post Request" for Other Services, give this argument the value of "Other Services" (case insensitive).
+    Comment    ${request_data}    Consolidate Request Data    @{data}
+    Create Session    remarksServices    ${${env}_base_url}    headers=${generated_headers}    verify=True
+    Run Keyword If    '${gateway_type.lower()}'=='other services'    Set Suite Variable    ${path}    /remarksgateway/otherservices
+    ${request_data}    To Json    ${data}
+    ${response}    Post Request    remarksServices    ${path}/${endpoint}    data=${request_data}    params=${params}
+    Set Test Variable    ${test_response}    ${response}
+    Log    Endpoint: ${${env}_base_url}/${path}/${endpoint}
+    Log    ${test_response.headers}
+    Log    ${test_response.content}
+
+Generate Path Data
+    [Arguments]    ${path}
+    Set Test Variable    ${path}
+    Log    ${path}

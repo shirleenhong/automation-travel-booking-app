@@ -1,0 +1,6 @@
+*** Variables ***
+${wire_mock_base_url}    https://remarks.service.appserver.dev
+${dev_base_url}    http://172.17.1.67:8080
+${test_base_url}    http://172.17.1.181:5001
+${path}           /remarksgateway/remarks
+${token_path}     /api/token/requesttoken

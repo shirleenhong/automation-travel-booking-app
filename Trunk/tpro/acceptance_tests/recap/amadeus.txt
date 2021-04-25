@@ -1,0 +1,107 @@
+*** Settings ***
+Resource          ../../../resources/panels/recap.txt
+Resource          recap_verification.txt
+
+*** Test Cases ***
+[NB SG] Verify That Recap Panel Fields Are Prepopulated And Remarks Are Being Written
+    [Tags]    us791    sg    howan
+    Open Power Express And Retrieve Profile    ${version}    Test    u003axo    en-GB    aobsum    APAC QA
+    Select GDS    Amadeus
+    Set Client And Traveler    APAC SYN CORP ¦ AUTOMATION SG - US304    BEAR    SGTHREEZEROFOUR
+    Click New Booking
+    Update PNR for EN or GB
+    Book Flight X Months From Now    HKGSIN/ASQ    SS1Y1    FXP/S2    6    5
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Recap
+    Click Panel    Recap
+    Select Value From Override Or Skip Entries    AQUA: Skip Seat Module
+    Select Value From Override Or Skip Entries    AQUA: Skip Fare Module
+    Select Value From Override Or Skip Entries    AQUA: Skip Waitlist Module
+    Verify PCC And Team Name Values    SINWL2101    X9Z-32
+    Click Add General Remark
+    Create General Remark By Qualifier    A    1    Recap General Remark Testing
+    Click Add General Remark Button
+    Create General Remark By Qualifier    P    2    Recap PV Test
+    Click Add General Remark Button    2
+    Create General Remark By Qualifier    U    3    Recap AQUA
+    Click Add Queue Minder
+    Populate Queue Minder    1    1    5    HKGWL2102    62    2
+    ...    Adding Queue Minder 2
+    Add New Queue Minder Row    1
+    Populate Queue Minder    2    1    3    HKGWL2102    62    3
+    ...    Adding Queue Minder 3
+    Add New Queue Minder Row    2
+    Populate Queue Minder    3    0    0    SINWL2102    63    2
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RT
+    Verify PCC And Team Name Remarks Are Written    RMG PCCSINWL2101    RMG TEAM X9Z-32
+    Verify General Remarks Are Writen In PNR For Qualifier    A    RECAP GENERAL REMARK TESTING
+    Verify General Remarks Are Writen In PNR For Qualifier    P    RECAP PV TEST
+    Verify General Remarks Are Writen In PNR For Qualifier    U    RECAP AQUA
+    Verify Skip Entries Remark Is Written    RMA SKIP-FARE
+    Verify Skip Entries Remark Is Written    RMA SKIP-SEAT
+    Verify Skip Entries Remark Is Written    RMA SKIP-WAIT
+    Verify Queue Minder In Recap Are Written    1    HKGWL2102    62    2    ADDING QUEUE MINDER 2
+    Verify Queue Minder In Recap Are Written    2    HKGWL2102    62    3    ADDING QUEUE MINDER 3
+
+[AB SG] Verify That Recap Panel Fields Are Prepopulated And Remarks Are Being Written
+    [Tags]    us791    sg    howan
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Recap
+    Click Panel    Client Info
+    Click Panel    Recap
+    Verify Overrides Or Skip Entries Default Value    AQUA: Skip Seat Module    1
+    Verify Overrides Or Skip Entries Default Value    AQUA: Fare Override    2
+    Verify Overrides Or Skip Entries Default Value    AQUA: Skip Waitlist Module    3
+    Click Delete From Overrides Or Skip Entries
+    Click Delete From Overrides Or Skip Entries
+    Select Value From Override Or Skip Entries    BMF: 01 - CWT initiated updates/changes (including agent errors)
+    Select Value From Override Or Skip Entries    BMF: 03 - Ticket Office, re-pricing or re-booking of existing flight segments
+    Verify PCC And Team Name Values    SINWL2101    X9Z-32
+    Set PCC Field Value    HKGWL2102
+    Set Team ID Field Value    X9Z-31
+    Click Add General Remark
+    Create General Remark By Qualifier    G    1    TEST IN AMEND
+    Click Add General Remark Button
+    Create General Remark By Qualifier    U    2    remarks for aqua
+    Click Finish PNR
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Recap Panel Fields Are Prepopulated And Remarks Are Being Written For SG
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RT
+    Verify PCC And Team Name Remarks Are Written    RMG PCCHKGWL2102    RMG TEAM X9Z-31
+    Verify General Remarks Are Writen In PNR For Qualifier    A    RECAP GENERAL REMARK TESTING
+    Verify General Remarks Are Writen In PNR For Qualifier    P    RECAP PV TEST
+    Verify General Remarks Are Writen In PNR For Qualifier    U    RECAP AQUA
+    Verify General Remarks Are Writen In PNR For Qualifier    G    TEST IN AMEND
+    Verify General Remarks Are Writen In PNR For Qualifier    U    REMARKS FOR AQUA
+    Verify Skip Entries Remark Is Written    RM PCT*SKIP01
+    Verify Skip Entries Remark Is Written    RM PCT*SKIP03
+    Verify Skip Entries Remark Is Written    RMA SKIP-SEAT
+    Verify Skip Entries Remark Is Not Written    RMA SKIP-FARE
+    Verify Skip Entries Remark Is Not Written    RMA SKIP-WAIT
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Amend Booking For Verify That Recap Panel Fields Are Prepopulated And Remarks Are Being Written For SG
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Recap
+    Click Panel    Client Info
+    Click Panel    Recap
+    Verify Overrides Or Skip Entries Default Value    AQUA: Skip Seat Module    1
+    Verify Overrides Or Skip Entries Default Value    AQUA: Fare Override    2
+    Verify Overrides Or Skip Entries Default Value    AQUA: Skip Waitlist Module    3
+    Click Delete From Overrides Or Skip Entries
+    Click Delete From Overrides Or Skip Entries
+    Select Value From Override Or Skip Entries    BMF: 01 - CWT initiated updates/changes (including agent errors)
+    Select Value From Override Or Skip Entries    BMF: 03 - Ticket Office, re-pricing or re-booking of existing flight segments
+    Verify PCC And Team Name Values    SINWL2101    X9Z-32
+    Set PCC Field Value    HKGWL2102
+    Set Team ID Field Value    X9Z-31
+    Click Add General Remark
+    Create General Remark By Qualifier    G    1    TEST IN AMEND
+    Click Add General Remark Button
+    Create General Remark By Qualifier    U    2    remarks for aqua
+    Click Finish PNR

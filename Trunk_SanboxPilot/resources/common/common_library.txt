@@ -1,0 +1,24 @@
+*** Settings ***
+Library           AutoItLibrary    ${OUTPUTDIR}    15
+Library           Screenshot
+Library           Collections
+Library           OperatingSystem
+Library           String
+Library           XML
+Library           DatabaseLibrary
+Library           DateTime
+Library           ../libraries/ExtendedCustomSyExLibrary.py
+Library           ../libraries/CustomSyexLibrary.py
+Library           ExtendedSelenium2Library
+Library           Remote    http://localhost:${port}    # Sikuli
+#Library           ../libraries/RSALibrary.py
+Library           ImageHorizonLibrary    ${CURDIR}/../sikuli    ${OUTPUTDIR}
+Library           ../../resources/libraries/RSALibrary.py
+
+*** Variables ***
+${port}           8270
+${bln_CoordsKnown}    False
+${public_documents_path}    C:\\Users\\Public\\Documents
+${is_new_booking_worflow}    ${False}
+
+*** Keywords ***

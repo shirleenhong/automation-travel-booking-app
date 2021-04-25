@@ -1,0 +1,13 @@
+[t7]
+FileName1=t7.html
+URL1=https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/Resources/List
+Total=2
+RequestHeaderFile=t7_RequestHeader.txt
+RequestBodyFile=t7_RequestBody.txt
+ResponseHeaderFile=t7_ResponseHeader.txt
+ContentType=application/json
+SnapshotXmlFile=snapshot_7.xml
+FileName2=t7_icon_loading_9A0623127A028FEB.png
+URL2=https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/images/common/icon_loading_9A0623127A028FEB.png
+[ProtocolInfo]
+ProtocolId=QTWeb

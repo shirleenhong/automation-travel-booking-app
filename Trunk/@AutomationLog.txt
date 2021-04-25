@@ -1,0 +1,37 @@
+CustomControl's BoundingRectangle is empty(0,0,0,0). searchPorperty: {'ControlType': 50025, 'Name': u'Row 5'}
+CustomControl's BoundingRectangle is empty(0,0,0,0). searchPorperty: {'ControlType': 50025, 'Name': u'Row 5'}
+CustomControl's BoundingRectangle is empty(0,0,0,0). searchPorperty: {'ControlType': 50025, 'Name': u'Row 5'}
+CustomControl's BoundingRectangle is empty(0,0,0,0). searchPorperty: {'ControlType': 50025, 'Name': u'Row 5'}
+CustomControl's BoundingRectangle is empty(0,0,0,0). searchPorperty: {'ControlType': 50025, 'Name': u'Row 5'}
+CustomControl's BoundingRectangle is empty(0,0,0,0). searchPorperty: {'ControlType': 50025, 'Name': u'Row 5'}
+CustomControl's BoundingRectangle is empty(0,0,0,0). searchPorperty: {'ControlType': 50025, 'Name': u'Row 5'}
+CustomControl's BoundingRectangle is empty(0,0,0,0). searchPorperty: {'ControlType': 50025, 'Name': u'Row 5'}
+CustomControl's BoundingRectangle is empty(0,0,0,0). searchPorperty: {'ControlType': 50025, 'Name': u'Row 5'}
+CustomControl's BoundingRectangle is empty(0,0,0,0). searchPorperty: {'ControlType': 50025, 'Name': u'Row 5'}
+CustomControl's BoundingRectangle is empty(0,0,0,0). searchPorperty: {'ControlType': 50025, 'Name': u'Row 5'}
+CustomControl's BoundingRectangle is empty(0,0,0,0). searchPorperty: {'ControlType': 50025, 'Name': u'Row 5'}
+GetElementControlType returns 0, invalid ControlType!
+GetElementControlType returns 0, invalid ControlType!
+GetElementControlType returns 0, invalid ControlType!
+GetElementControlType returns 0, invalid ControlType!
+GetElementControlType returns 0, invalid ControlType!
+GetElementControlType returns 0, invalid ControlType!
+GetElementControlType returns 0, invalid ControlType!
+GetElementControlType returns 0, invalid ControlType!
+GetElementControlType returns 0, invalid ControlType!
+GetElementControlType returns 0, invalid ControlType!
+GetElementControlType returns 0, invalid ControlType!
+GetElementControlType returns 0, invalid ControlType!
+GetElementControlType returns 0, invalid ControlType!
+GetElementControlType returns 0, invalid ControlType!
+GetElementControlType returns 0, invalid ControlType!
+GetElementControlType returns 0, invalid ControlType!
+GetElementControlType returns 0, invalid ControlType!
+GetElementControlType returns 0, invalid ControlType!
+GetElementControlType returns 0, invalid ControlType!
+GetElementControlType returns 0, invalid ControlType!
+GetElementControlType returns 0, invalid ControlType!
+GetElementControlType returns 0, invalid ControlType!
+GetElementControlType returns 0, invalid ControlType!
+GetElementControlType returns 0, invalid ControlType!
+GetElementControlType returns 0, invalid ControlType!

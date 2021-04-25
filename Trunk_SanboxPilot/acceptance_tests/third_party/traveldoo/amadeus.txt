@@ -1,0 +1,185 @@
+*** Settings ***
+Force Tags        amadeus    emea
+Resource          ../third_party_verification.txt
+
+*** Test Cases ***
+[NB FR] Verify That Remarks Are Written For Single Air Segment With Multiple Alternate Fares
+    [Tags]    us1309    data_dependent
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    fr-FR    AutomationFR    FR AUTO AMADEUS
+    Select GDS    Amadeus
+    Emulate PCC    PARWL210G
+    Create New Booking With One Way Flight Using Default Values    Amadeus FR 15 - Auto ¦ US2837 Traveldoo    AutoOneFiveTwo    EmeaTrvlrTwo    CDGLAX/AAF    \    Air Fare
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Populate Fare Tab With Default Values    Fare 1
+    Get Fare Details    Fare 1
+    Click Finish PNR
+    Modify Transaction Codes    3TD    2TD
+    Remove PNR Remark And End Transaction    \\*0104\\*
+    Verify OBT Remarks Exist In PNR    2TD
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Generic Remarks Are Written    EmeaTrvlrTwo    AutoOneFiveTwo    ${EMPTY}    obt
+    Verify Air Savings Remarks Are Written    S2    Fare 1
+    Verify Air Trip Information Remarks Are Written    S2    Fare 1
+    Verify Specific Line Is Written In The PNR    RM *0106*0717171
+    Verify Ticketing Line Is Written    Onhold
+    Verify "Issue To Be Confirmed At The Latest" Line Is Written
+    Verify Specific Line Is Written In The PNR    RMZ AUTOMAIL-NO
+    Verify Specific Line Is Written In The PNR    RMZ CONF*SEND TO MAIL AUTOMATION@CARLSONWAGONLIT.COM
+    Verify Specific Line Is Written In The PNR    RIR PASSEPORT ET VISA INFORMATION
+    Verify Specific Line Is Not Written In The PNR    RIR NATIONALITE DU VOYAGEUR:
+    Verify Specific Line Is Not Written In The PNR    RIR VALIDITE DU PASSEPORT:
+    Verify Specific Line Is Not Written In The PNR    RIR CONTROLE DE VISA:
+    Verify Itinerary Remarks Are Written    Fare 1
+    Verify Fare Remarks Are Written    S2    Fare 1
+
+[AB FR] Verify That Remarks Are Written For Single Air Segment With Multiple Alternate Fares
+    [Tags]    us1309    data_dependent
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Cancel Stored Fare And Segment    2
+    Book One Way Flight X Months From Now    CDGLHR/AAF    6
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Populate Fare Tab With Default Values    Fare 1
+    Click Add Alternate Fare
+    Click Fare Tab    Alternate Fare 1
+    Populate Alternate Fare Details Using Copy Air Button    TEST1    100    YA - Economy Tarif Public
+    Get Alternate Fare Details    Alternate Fare 1
+    Click Add Alternate Fare
+    Click Fare Tab    Alternate Fare 2
+    Populate Alternate Fare Details Using Copy Air Button    TEST2    200    YB - Economy Tarif Corporate
+    Get Alternate Fare Details    Alternate Fare 2
+    Click Panel    Client Fees
+    Verify Client Fees Type Default Value    Module Offline (Traveldoo)
+    Click Finish PNR    Amend Booking Workflow In Verify That Remarks Are Written For Single Air Segment With Multiple Alternate Fares
+    Re-Execute Amend Booking Workflow In Verify That Remarks Are Written For Single Air Segment With Multiple Alternate Fares If Simultaneous Change Error Is Displayed
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Alternate Fare Remarks Are Written    Alternate Fare 1    traveldoo
+    Verify Alternate Fare Remarks Are Written    Alternate Fare 2    traveldoo
+    Verify Offer Remarks Are Written    Alternate Fare 1
+    Verify Offer Remarks Are Written    Alternate Fare 2
+    Verify OBT Remarks Exist In PNR    2TD
+    Verify CP Remarks Is Written    Alternate Fare 1
+    Verify CP Remarks Is Written    Alternate Fare 2
+
+[AB FR] Verify That Remarks Are Removed For Deleted Alternate Fare
+    [Tags]    us1309    data_dependent
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Verify Fare Tab Is Visible    Fare 1    Alternate Fare 1    Alternate Fare 2
+    Click Fare Tab    Alternate Fare 2
+    Get Alternate Fare Details    Alternate Fare 2
+    Click Remove Alternate Fare
+    Click Finish PNR    Amend Booking Workflow In Verify That Remarks Are Removed For Deleted Alternate Fare
+    Re-Execute Amend Booking Workflow In Verify That Remarks Are Removed For Deleted Alternate Fare If Simultaneous Change Error Is Displayed
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify CP Remarks Is Not Written    Alternate Fare 2
+    Verify Alternate Fare Remarks Are Not Written    Alternate Fare 2    traveldoo
+
+[AB FR] Verify That Remarks Are Written For Multiple Air Segment With Multiple Alternate Fares
+    [Tags]    us1309    data_dependent
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Cancel Stored Fare and Segment    2
+    Book Flight X Months From Now    CDGLHR/AAF    SS1Y1    FXP/S2    6
+    Book Flight X Months From Now    LHRCDG/AAF    SS1Y1    FXP/S3    6    2
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Verify Fare Tab Is Visible    Fare 1    Fare 2
+    Click Fare Tab    Alternate Fare 1
+    Click Remove Alternate Fare
+    Populate Fare Tab With Default Values    Fare 1
+    Populate Fare Tab With Default Values    Fare 2
+    Click Add Alternate Fare
+    Click Fare Tab    Alternate Fare 1
+    Populate Alternate Fare Details Using Copy Air Button    MFTEST1    100    YA - Economy Tarif Public
+    Get Alternate Fare Details    Alternate Fare 1
+    Click Add Alternate Fare
+    Click Fare Tab    Alternate Fare 2
+    Populate Alternate Fare Details Using Copy Air Button    MFTEST2    200    YB - Economy Tarif Corporate
+    Get Alternate Fare Details    Alternate Fare 2
+    Click Finish PNR    Amend Booking Workflow In Verify That Remarks Are Written For Multiple Air Segment With Multiple Alternate Fares
+    Re-Execute Amend Booking Workflow In Verify That Remarks Are Written For Multiple Air Segment With Multiple Alternate Fares If Simultaneous Change Error Is Displayed
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify CP Remarks Is Written    Alternate Fare 1
+    Verify CP Remarks Is Written    Alternate Fare 2
+    Verify OBT Remarks Exist In PNR    2TD
+    Verify Alternate Fare Remarks Are Written    Alternate Fare 1    traveldoo
+    Verify Alternate Fare Remarks Are Written    Alternate Fare 2    traveldoo
+    Verify Offer Remarks Are Written    Alternate Fare 1    PROPOSITION NO 1
+    Verify Offer Remarks Are Written    Alternate Fare 2    PROPOSITION NO 2
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}    True
+
+*** Keywords ***
+Amend Booking Workflow In Verify That Remarks Are Removed For Deleted Alternate Fare
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Verify Fare Tab Is Visible    Fare 1    Alternate Fare 1    Alternate Fare 2
+    Click Fare Tab    Alternate Fare 2
+    Get Alternate Fare Details    Alternate Fare 2
+    Click Remove Alternate Fare
+    Click Finish PNR    Amend Booking Workflow In Verify That Remarks Are Removed For Deleted Alternate Fare
+
+Amend Booking Workflow In Verify That Remarks Are Written For Multiple Air Segment With Multiple Alternate Fares
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Cancel Stored Fare And Segment    2
+    Book Flight X Months From Now    CDGLHR/AAF    SS1Y1    FXP/S2    6
+    Book Flight X Months From Now    LHRCDG/AAF    SS1Y1    FXP/S3    6    2
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Verify Fare Tab Is Visible    Fare 1    Fare 2
+    Click Fare Tab    Alternate Fare 1
+    Click Remove Alternate Fare
+    Populate Fare Tab With Default Values    Fare 1
+    Populate Fare Tab With Default Values    Fare 2
+    Click Add Alternate Fare
+    Click Fare Tab    Alternate Fare 1
+    Populate Alternate Fare Details Using Copy Air Button    MFTEST1    100    YA - Economy Tarif Public
+    Get Alternate Fare Details    Alternate Fare 1
+    Click Add Alternate Fare
+    Click Fare Tab    Alternate Fare 2
+    Populate Alternate Fare Details Using Copy Air Button    MFTEST2    200    YB - Economy Tarif Corporate
+    Get Alternate Fare Details    Alternate Fare 2
+    Click Finish PNR    Amend Booking Workflow In Verify That Remarks Are Written For Multiple Air Segment With Multiple Alternate Fares
+
+Amend Booking Workflow In Verify That Remarks Are Written For Single Air Segment With Multiple Alternate Fares
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Cancel Stored Fare And Segment    2
+    Book One Way Flight X Months From Now    CDGLHR/AAF    6
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Populate Fare Tab With Default Values    Fare 1
+    Click Add Alternate Fare
+    Click Fare Tab    Alternate Fare 1
+    Populate Alternate Fare Details Using Copy Air Button    TEST1    100    YA - Economy Tarif Public
+    Get Alternate Fare Details    Alternate Fare 1
+    Click Add Alternate Fare
+    Click Fare Tab    Alternate Fare 2
+    Populate Alternate Fare Details Using Copy Air Button    TEST2    200    YB - Economy Tarif Corporate
+    Get Alternate Fare Details    Alternate Fare 2
+    Click Panel    Client Fees
+    Verify Client Fees Type Default Value    Module Offline (Traveldoo)
+    Click Finish PNR    Amend Booking Workflow In Verify That Remarks Are Written For Single Air Segment With Multiple Alternate Fares
+
+Verify CP Remarks Is Not Written
+    [Arguments]    ${fare_tab}
+    ${fare_tab_index}    Fetch From Right    ${fare_tab}    ${SPACE}
+    Verify Specific Line Is Not Written In The PNR    RMO CP${fare_tab_index} COMMENT/${total_fare_alt_${fare_tab_index}}/EUR/1/1/Y/-
+
+Verify CP Remarks Is Written
+    [Arguments]    ${fare_tab}
+    ${fare_tab_index}    Fetch From Right    ${fare_tab}    ${SPACE}
+    Verify Specific Line Is Written In The PNR    RMO CP${fare_tab_index} COMMENT/${total_fare_alt_${fare_tab_index}}/EUR/1/1/Y/-

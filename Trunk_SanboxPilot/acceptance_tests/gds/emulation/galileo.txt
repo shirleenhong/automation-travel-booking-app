@@ -1,0 +1,46 @@
+*** Settings ***
+Force Tags        galileo    emea
+Resource          ../gds_verification.txt
+
+*** Test Cases ***
+[NB UK] Verify That Traveller PCC Is Auto-Emulated And Travelport PCC Is Auto-Updated Upon Clicking New Booking Coming From A Different PCC
+    [Tags]    uat    emea    uk    multi_host
+    Open Power Express And Retrieve Profile    ${version}    ${syex_env}    U003WXR    en-GB    AutomationUK    UK Team 1
+    Select GDS    Galileo
+    Emulate PCC    46T
+    Verify Travelport PCC Is Displayed Correctly    46T
+    Set Client And Traveler    IHS ¦ GB-IHSP    Automason    Yuri
+    Click New Booking
+    Verify Travelport PCC Is Displayed Correctly    KN6
+    Verify Travelport PCC Is Displayed Correctly    KN6
+    Click Panel    Cust Refs
+    Populate Cust Refs Panel With Default Values
+    Click Panel    Client Info
+    Tick Not Known At Time Of Booking For Form Of Payment
+    Click Create Shell
+    Verify PNR Is Successfully Created
+    Retrieve PNR Details From Travelport    ${current_pnr}
+    Verify Specific Line Is Written In The PNR    1.1AUTOMASON/YURIMR
+    [Teardown]
+
+[AB UK] Verify That Current PCC Shown In Power Assist Is The Same As The PCC That Owns The PNR
+    [Tags]    uk    emea    uat
+    Emulate PCC    46T
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Verify Current PCC Is Similar As The PCC That Owns The PNR    KN6
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Verify Current PCC Is Similar As The PCC That Owns The PNR
+    [Arguments]    ${pcc}
+    Retrieve PNR Details From Travelport    \    QCA
+    Verify Specific Line Is Written In The PNR    ${pcc}
+
+Verify Travelport PCC Is Displayed Correctly
+    [Arguments]    ${pcc}
+    Sleep    5
+    Activate Travelport Window
+    ${object_exist}    Run Keyword And Return Status    Object Exists    ${sikuli_image_path}/smartpoint_pcc_${pcc}.png    ${similarity}    ${timeout}
+    Should Be True    '${object_exist}'=='True'
+    [Teardown]    Activate Power Express Window

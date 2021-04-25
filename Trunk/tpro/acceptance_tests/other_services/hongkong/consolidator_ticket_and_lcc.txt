@@ -1,0 +1,2680 @@
+*** Settings ***
+Force Tags        consolidator_ticket_and_lcc
+Resource          ../other_services.txt
+
+*** Test Cases ***
+[NB OS] Verify That Consolidator Ticket Computes The Correct Fees When Apply Formula Is True And Client Type Is DU, DB And MN
+    [Tags]    US469    horton    us1322    us1456    us1620    de486
+    Create PNR Using Credit Card As FOP    HK    air_segment=True
+    Click Panel    Other Svcs
+    Select Product And Vendor    CONSOLIDATOR TICKET    CWT
+    Click Tab In Other Services Panel    Ticket Info
+    #Apply Formula Is Ticked
+    Verify Form Of Payment Details Are Correct    BTA CTCL VI/VI************7710/D0823    Credit Card (CX)
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    AX    378282246310005    12    2026
+    Select Consolidator Ticket Client Type    DU
+    Set Nett Fare    500
+    Set Tax 1    10
+    Set Commission Value    50
+    Set Discount Value    275
+    Compute Consolidator And LCC Fees For Other Services    HK    2
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Gross Fare Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    #Scenario 2 With Commission Percentage
+    Compute Consolidator And LCC Fees For Other Services    HK    2    is_commission_percent=true
+    Verify Gross Fare Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct
+    Verify Discount Fee Value Is Correct    275
+    Verify Merchant Fee Value Is Correct
+    #Scenario 3 With Discount Percentage
+    Set Discount Value    50
+    Compute Consolidator And LCC Fees For Other Services    HK    2    is_discount_percent=true
+    Verify Gross Fare Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct    510
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    #Client_type == DB
+    Select Consolidator Ticket Client Type    DB
+    Set Commission Value    50
+    Set Discount Value    275
+    Compute Consolidator And LCC Fees For Other Services    HK    2
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Gross Fare Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    #Scenario 2 With Commission Percentage
+    Compute Consolidator And LCC Fees For Other Services    HK    2    is_commission_percent=true
+    Verify Gross Fare Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct
+    Verify Discount Fee Value Is Correct    275
+    Verify Merchant Fee Value Is Correct
+    #Scenario 3 With Discount Percentage
+    Set Discount Value    50
+    Compute Consolidator And LCC Fees For Other Services    HK    2    is_discount_percent=true
+    Verify Gross Fare Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct    500
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    #Scenario 4 CWT Merchant Absorb
+    Tick Merchant Fee CWT Absorb
+    Compute Consolidator And LCC Fees For Other Services    HK    2
+    Verify Gross Fare Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct    500
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    #Scenario 5 FOP Is Cash
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Cash
+    Compute Consolidator And LCC Fees For Other Services    HK    2
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Gross Fare Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    #Client_type == MN
+    Select Consolidator Ticket Client Type    MN
+    Set Commission Value    50
+    Compute Consolidator And LCC Fees For Other Services    HK    2
+    Verify Gross Fare Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Discount Fee Value Is Correct    0
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    #Scenario 2 With Commission Percentage
+    Compute Consolidator And LCC Fees For Other Services    HK    2    is_commission_percent=true
+    Verify Gross Fare Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct
+    Verify Discount Fee Value Is Correct    0
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    #Apply Formula Is Not Ticked
+    Select Consolidator Ticket Client Type    DU
+    Tick Apply Formula Checkbox    Untick
+    Set Nett Fare    250
+    Set Tax 1    25
+    Set Commission Value    500
+    Set Discount Value    500
+    Compute Consolidator And LCC Fees For Other Services    HK    2
+    Verify Nett Cost In EO Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Merchant Fee Value Is Correct    0
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Tick Select All Segments    Tick
+    Populate Airline Code And Ticket Number    111    1234567890
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CX)    BTA CTCL VI/VI************7710/D0823
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    QF
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    B - PASSENGER REQUESTED SPECIFIC AIRLINE
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    CONSOLIDATOR TICKET
+    Click Finish PNR
+    Verify PNR Is Successfully Created    False    Exchange Order(s) Transaction Successfully Saved!
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+    [Teardown]
+
+[AB OS] Verify That Low Cost Carrier Computes The Correct Fees When Apply Formula Is True And Client Type Is TF, MG And TP
+    [Tags]    US469    horton    us1322    us1462    us1620    de486
+    Retrieve PNR And Populate Amend Workflow    country=HK
+    Click Panel    Client Info
+    Select Form Of Payment    BTA CTCL VI/VI************7710/D0823
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Click Panel    Other Svcs
+    Select Product And Vendor    Low Cost Carrier    Low Cost Carrier
+    Click Tab In Other Services Panel    Ticket Info
+    #Apply Formula Is Ticked
+    Verify Form Of Payment Details Are Correct    BTA CTCL VI/VI************7710/D0823    Credit Card (CX)
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    AX    378282246310005    12    2026
+    Select Consolidator Ticket Client Type    TF
+    Set Nett Fare    500
+    Set Tax 1    10
+    Set Tranx/Service Fee Value    500
+    Set Commission Value    50
+    Set Discount Value    275
+    Compute Consolidator And LCC Fees For Other Services    HK    2
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Gross Fare Value Is Correct
+    Verify Discount Fee Value Is Correct    0
+    Verify Merchant Fee Value Is Correct
+    #Scenario 2 With Commission Percentage
+    Compute Consolidator And LCC Fees For Other Services    HK    2    is_commission_percent=true
+    Verify Gross Fare Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct
+    Verify Discount Fee Value Is Correct    0
+    Verify Merchant Fee Value Is Correct
+    #Scenario 3 With Discount Percentage
+    Set Discount Value    50
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Invoice
+    Compute Consolidator And LCC Fees For Other Services    HK    2    is_discount_percent=true
+    Verify Gross Fare Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct    500
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    #Client_type == MG
+    Select Consolidator Ticket Client Type    MG
+    Set Commission Value    50
+    Set Discount Value    275
+    Compute Consolidator And LCC Fees For Other Services    HK    2
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Gross Fare Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    #Scenario 2 With Commission Percentage
+    Compute Consolidator And LCC Fees For Other Services    HK    2    is_commission_percent=true
+    Verify Gross Fare Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct
+    Verify Discount Fee Value Is Correct    275
+    Verify Merchant Fee Value Is Correct
+    #Scenario 3 With Discount Percentage
+    Set Discount Value    50
+    Compute Consolidator And LCC Fees For Other Services    HK    2    is_discount_percent=true
+    Verify Gross Fare Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct    500
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    #Scenario 4 CWT Merchant Absorb
+    Tick Merchant Fee CWT Absorb
+    Compute Consolidator And LCC Fees For Other Services    HK    2
+    Verify Gross Fare Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct    500
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    #Client_type == TP
+    Select Consolidator Ticket Client Type    TP
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    DC    378282246310005    12    2026
+    Set Commission Value    50
+    Set Discount Value    275
+    Compute Consolidator And LCC Fees For Other Services    HK    2
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    #Scenario 2 With Commission Percentage
+    Compute Consolidator And LCC Fees For Other Services    HK    2    is_commission_percent=true
+    Verify Gross Fare Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct    0
+    Verify Discount Fee Value Is Correct    275
+    Verify Merchant Fee Value Is Correct
+    #Apply Formula Is Not Ticked
+    Select Consolidator Ticket Client Type    DU
+    Tick Apply Formula Checkbox    Untick
+    Set Nett Fare    250
+    Set Tax 1    25
+    Set Commission Value    500
+    Set Discount Value    500
+    Compute Consolidator And LCC Fees For Other Services    HK    2
+    Verify Nett Cost In EO Value Is Correct
+    Verify Merchant Fee Value Is Correct    0
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Tick Select All Segments    Tick
+    Populate Airline Code And Ticket Number    111    1234567890
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    QF
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    E - EXCHANGE
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    CONSOLIDATOR TICKET
+    Click Finish PNR    Amend To Verify That Low Cost Carrier Computes The Correct Fees When Apply Formula Is True And Client Type Is TF, MG And TP
+    Execute Simultaneous Change Handling    Amend To Verify That Low Cost Carrier Computes The Correct Fees When Apply Formula Is True And Client Type Is TF, MG And TP
+    Verify PNR Is Successfully Created    False    Exchange Order(s) Transaction Successfully Saved!
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB OS] Verify That Consolidator Ticket Remarks Are Written
+    [Tags]    US469    horton    us454    US1291    us1167    us1322
+    ...    us1700    us1456    us1620    US1338    de486
+    Open Power Express And Retrieve Profile    ${version}    Test    u003axo    en-GB    aobsum    APAC QA
+    Select GDS    Amadeus
+    Set Client And Traveler    APAC SYN CORP ¦ APAC HK OS AUTOMATION    BEAR    HKOTHERS
+    Click New Booking
+    Click Panel    Client Info
+    Select Form Of Payment    TEST CARD/AX***********0009/D0822/CVV****
+    Populate All Panels (Except Given Panels If Any)    Client Info
+    Click Update PNR
+    Book Flight X Months From Now    HKGSIN/ASQ    SS1Y1    FXP/S2    4    10
+    Book Flight X Months From Now    SINHKG/ASQ    SS1Y1    FXP/S3    4    15
+    Book Flight X Months From Now    HKGSIN/ASQ    SS1Y1    FXP/S4    4    20
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)
+    Get Segment Number From TST
+    Retrieve PNR Details From Amadeus    command=RTA    refresh_needed=False
+    Click Panel    Other Svcs
+    Select Product And Vendor    CONSOLIDATOR TICKET    CWT
+    Click Tab In Other Services Panel    Ticket Info
+    Select Consolidator Ticket Client Type    DU
+    Verify Apply Formula Checkbox Status Is Correct    True
+    Verify Nett Fare Value Is Correct    0
+    Verify Gross Fare Value Is Correct    0
+    Verify Tax 1 Value and Code Are Correct    0
+    Verify Nett Cost In EO Value Is Correct    0
+    Verify Commission Fee Value Is Correct    0
+    Verify Discount Fee Value Is Correct    0
+    Verify Merchant Fee Value Is Correct    0
+    Verify Total Selling Price Value Is Correct    0
+    Verify CWT Absorb Checkbox For Merchant Fee Status Is Correct    False
+    Verify Tranx/Service Fee Value Is Correct    0
+    Verify Fuel Surcharge Value Is Correct    0
+    Get Current Segments From The PNR
+    Verify Air Segments Are Retrieved Correctly
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Verify Airline Code And Ticket Number Is Correct    \    0000000000
+    Set Vendor Contact    CWT Vendor
+    Verify Form Of Payment Details Are Correct    TEST CARD/AX***********0009/D0822/CVV****    Credit Card (CX)
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Set Commission Value    0
+    Set Discount Value    0
+    Set Fuel Surcharge Fee    0
+    Populate Airline Code And Ticket Number    111    1234567890
+    Set Passenger ID Value    AA
+    Get Passenger ID Value
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Tick Select All Segments    TICK
+    Get Selected Air Segment From Air Segment Grid
+    Get Merchant Fee In Other Services
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Verify MI Filed Fare Number Field Is Correct
+    Verify MI Realised Saving Codes In Dropdown Are Correct    hk
+    Verify MI Missed Saving Codes In Dropdown Are Correct    hk
+    Verify MI Class Of Services In Dropdown Are Correct
+    Verify MI PT And ET Selection Are Available
+    Verify MI Default Field Values    HK
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Low Fare    1000
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    HK
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    B - PASSENGER REQUESTED SPECIFIC AIRLINE
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    # Vendor Info and Remarks Section
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    WILL PICK UP TICKET BY [TIME] HRS
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    CONSOLIDATOR TICKET
+    Click Finish PNR
+    Verify PNR Is Successfully Created    False    Exchange Order(s) Transaction Successfully Saved!
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+    Verify EO Status For Third Party Vendor    New    1
+    Generate Exchange Order Creation Date    P1
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Other Services General Notepad Remarks    CONSOLIDATOR TICKET
+    Verify Other Services Consolidator Ticket And LCC Generic Accounting Remarks    CONSOLIDATOR TICKET    CWT    Credit Card (CX)    HK
+    Verify Other Services Transaction Credit Card Info Remarks    Credit Card (CX)    HK    375000000000009    AX    08    2022
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    True    CONSOLIDATOR TICKET    CWT    1
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    False    Discount    CWT    0
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    False    Transaction Fee    CWT    0
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    False    SVC Fee for Surcharges    CWT    0
+    Verify BA And TA Remarks    ${uid}
+    Verify Merchant Fee Remarks Are Written    HK
+    [Teardown]
+
+[AB AOS] Verify That Fields Are Pre-populated And Remarks Are Written When Amend Ticket Number Is Not Ticked
+    [Tags]    US469    horton    us454    us1291    us1167    us1322
+    ...    us1462    us1620    us1338
+    Retrieve PNR And Populate Amend Workflow    country=HK
+    Click Panel    Other Svcs
+    Click Amend EO    ${eo_number}
+    Comment    Verify Amend Ticket Num Only Checkbox Status Is Correct    False
+    Verify Apply Formula Checkbox Status Is Correct    True
+    Verify Consolidatory Client Type Is Correct    DU
+    Verify Vendor Contact Value Is Correct    CWT Vendor
+    Verify Nett Fare Value Is Correct    1000
+    Verify Gross Fare Value Is Correct    1010
+    Verify Tax 1 Value and Code Are Correct    10    HK
+    Verify Nett Cost In EO Value Is Correct    1000
+    Verify Commission Fee Value Is Correct    0
+    Verify Discount Fee Value Is Correct    0
+    Verify Merchant Fee Value Is Correct    21
+    Verify Total Selling Price Value Is Correct    1031
+    Verify CWT Absorb Checkbox For Merchant Fee Status Is Correct    False
+    Verify Tranx/Service Fee Value Is Correct    0
+    Verify Fuel Surcharge Value Is Correct    0
+    Verify Form Of Payment Details Are Correct    TEST CARD/AX***********0009/D0822/CVV****    Credit Card (CX)
+    Comment    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Verify Airline Code And Ticket Number Is Correct    111    1234567890
+    Verify Exchange Order Number    ${eo_number}
+    Tick Select All Segments    Tick
+    Get Ticket Info Fee Values    HK
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Verify MI Filed Fare Number Is Correct    1
+    Verify MI Reference Fare Value Is Correct    1234
+    Verify MI Low Fare Value Is Correct    1000    #Add Value
+    Verify MI Final Destination Value Is Correct    SIN
+    Verify MI Low Fare Carrier Value Is Correct    HK    #Add Value
+    Verify MI Type Of Ticket Value Is Correct    PT
+    Verify MI Realised Saving Code Value Is Correct    XX - NO SAVING
+    Verify MI Missed Saving Code Value Is Correct    B - PASSENGER REQUESTED SPECIFIC AIRLINE
+    Verify MI Class Of Service Value Is Correct    YF - Economy Class Full Fare
+    #Insert MI Verification here......
+    Get MI Fields Values
+    # Vendor Info and Remarks Section
+    Click Vendor Info Tab
+    Verify Vendor Value Is Correct    CWT
+    Verify Address 1 Value Is Correct    27/F ING TOWER
+    Verify Address 2 Value Is Correct    308 DES VOEUX ROAD CENTRAL
+    Verify City Value Is Correct
+    Verify Country Value Is Correct    HONG KONG
+    Verify Email Value Is Correct    automationtest@cwt.com
+    Verify Contact No Value Is Correct
+    Verify Fax No Value Is Correct    1111
+    Verify Credit Terms Values Is Correct    0
+    Verify Support Email Value Is Correct    automationtest@cwt.com
+    Click Remarks Tab
+    Verify Exchange Order Remarks Are Correct    WILL PICK UP TICKET BY [TIME] HRS
+    Click Update Button In EO Panel    Ticket Info
+    Click Finish PNR    Amend To Verify That Fields Are Pre-populated And Remarks Are Written When Amend Ticket Number Is Not Ticked
+    Execute Simultaneous Change Handling    Amend To Verify That Fields Are Pre-populated And Remarks Are Written When Amend Ticket Number Is Not Ticked
+    Click Panel    Other Svcs
+    Generate Data For Specific Product    False    P1    02    CONSOLIDATOR TICKET    CT    000001
+    ...    ${EMPTY}    New
+    Verify Exchange Order Number Is Retained    ${eo_number}
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Other Services General Notepad Remarks    CONSOLIDATOR TICKET
+    Verify Other Services Consolidator Ticket And LCC Generic Accounting Remarks    CONSOLIDATOR TICKET    CWT    Credit Card (CX)    HK
+    Verify Other Services Transaction Credit Card Info Remarks    Credit Card (CX)    HK    375000000000009    AX    08    2022
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    True    CONSOLIDATOR TICKET    CWT    1
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    False    Discount    CWT    0    True
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    False    Transaction Fee    CWT    0    True
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    False    SVC Fee for Surcharges    CWT    0    True
+    Verify Merchant Fee Remarks Are Written    HK
+
+[AB OS] Verify That Consolidator Ticket And Commission Remarks Are Written
+    [Tags]    us469    horton    us454    us1167    us1322    us1462
+    ...    us1620    de486
+    Retrieve PNR And Populate Amend Workflow    country=HK
+    Click Panel    Client Info
+    Select Form Of Payment    TEST CARD/AX***********0009/D0822/CVV****
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTA
+    Get Segment Number From TST
+    Click Panel    Other Svcs
+    Select Product And Vendor    CONSOLIDATOR TICKET    CWT TRAVEL SINGAPORE PTE LTD
+    Click Tab In Other Services Panel    Ticket Info
+    Verify Apply Formula Checkbox Status Is Correct    True
+    Verify Nett Fare Value Is Correct    0
+    Verify Gross Fare Value Is Correct    0
+    Verify Tax 1 Value and Code Are Correct    0
+    Verify Nett Cost In EO Value Is Correct    0
+    Verify Commission Fee Value Is Correct    0
+    Verify Discount Fee Value Is Correct    0
+    Verify Merchant Fee Value Is Correct    0
+    Verify Total Selling Price Value Is Correct    0
+    Verify CWT Absorb Checkbox For Merchant Fee Status Is Correct    False
+    Verify Tranx/Service Fee Value Is Correct    0
+    Verify Fuel Surcharge Value Is Correct    0
+    Get Current Segments From The PNR
+    Verify Air Segments Are Retrieved Correctly
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Verify Airline Code And Ticket Number Is Correct    \    0000000000
+    Set Vendor Contact    CWT Vendor
+    Verify Form Of Payment Details Are Correct    TEST CARD/AX***********0009/D0822/CVV****    Credit Card (CX)
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Set Commission Value    150
+    Set Discount Value    0
+    Set Fuel Surcharge Fee    0
+    Populate Airline Code And Ticket Number    111    1234567890
+    Set Passenger ID Value    AA
+    Get Passenger ID Value
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Tick Select All Segments    TICK    #Replace with Single Air Selection Keyword
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Verify MI Filed Fare Number Field Is Correct
+    Verify MI Realised Saving Codes In Dropdown Are Correct    hk
+    Verify MI Missed Saving Codes In Dropdown Are Correct    hk
+    Verify MI Class Of Services In Dropdown Are Correct
+    Verify MI PT And ET Selection Are Available
+    Verify MI Default Field Values    HK
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    HK
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    E - EXCHANGE
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    # Vendor Info and Remarks Section
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    PLEASE DELIVER TICKET TO OUR OFFICE BEFORE [TIME] HRS
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    CONSOLIDATOR TICKET
+    Click Finish PNR    Amend Verify That Consolidator Ticket And Commission Remarks Are Written
+    Execute Simultaneous Change Handling    Amend Verify That Consolidator Ticket And Commission Remarks Are Written
+    Verify PNR Is Successfully Created    False    Exchange Order(s) Transaction Successfully Saved!
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Other Services General Notepad Remarks    CONSOLIDATOR TICKET
+    Verify Other Services Consolidator Ticket And LCC Generic Accounting Remarks    CONSOLIDATOR TICKET    CWT TRAVEL SINGAPORE PTE LTD    Credit Card (CX)    HK
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    False    Discount    x_times=0
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    False    Transaction Fee    x_times=0
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    False    SVC Fee for Surcharges    x_times=0
+
+[AB OS] Verify That Consolidator Ticket And Fuel Surcharge Remarks Are Written
+    [Tags]    us469    horton    us454    us1167    us1322    us1462
+    ...    us1620    de486
+    Retrieve PNR And Populate Amend Workflow    country=HK
+    Click Panel    Client Info
+    Select Form Of Payment    TEST CARD/AX***********0009/D0822/CVV****
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTA
+    Get Segment Number From TST
+    Click Panel    Other Svcs
+    Select Product And Vendor    CONSOLIDATOR TICKET    JBC TRAVEL CO LTD
+    Click Tab In Other Services Panel    Ticket Info
+    Verify Apply Formula Checkbox Status Is Correct    True
+    Verify Nett Fare Value Is Correct    0
+    Verify Gross Fare Value Is Correct    0
+    Verify Tax 1 Value and Code Are Correct    0
+    Verify Nett Cost In EO Value Is Correct    0
+    Verify Commission Fee Value Is Correct    0
+    Verify Discount Fee Value Is Correct    0
+    Verify Merchant Fee Value Is Correct    0
+    Verify Total Selling Price Value Is Correct    0
+    Verify CWT Absorb Checkbox For Merchant Fee Status Is Correct    False
+    Verify Tranx/Service Fee Value Is Correct    0
+    Verify Fuel Surcharge Value Is Correct    0
+    Get Current Segments From The PNR
+    Verify Air Segments Are Retrieved Correctly
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Verify Airline Code And Ticket Number Is Correct    \    0000000000
+    Set Vendor Contact    CWT Vendor
+    Verify Form Of Payment Details Are Correct    TEST CARD/AX***********0009/D0822/CVV****    Credit Card (CX)
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Set Commission Value    0
+    Set Discount Value    0
+    Set Fuel Surcharge Fee    100
+    Populate Airline Code And Ticket Number    111    1234567890
+    Set Passenger ID Value    AA
+    Get Passenger ID Value
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Select Air Segment    2
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Verify MI Filed Fare Number Field Is Correct
+    Verify MI Realised Saving Codes In Dropdown Are Correct    hk
+    Verify MI Missed Saving Codes In Dropdown Are Correct    hk
+    Verify MI Class Of Services In Dropdown Are Correct
+    Verify MI PT And ET Selection Are Available
+    Verify MI Default Field Values    HK
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    HK
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    F - PASSENGER REQUESTED SPECIFIC CLASS
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    # Vendor Info and Remarks Section
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    PLEASE DELIVER TICKET TO OUR OFFICE BEFORE [TIME] HRS
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    CONSOLIDATOR TICKET
+    Click Finish PNR    Amend To Verify That Consolidator Ticket And Fuel Surcharge Remarks Are Written
+    Execute Simultaneous Change Handling    Amend To Verify That Consolidator Ticket And Fuel Surcharge Remarks Are Written
+    Verify PNR Is Successfully Created    False    Exchange Order(s) Transaction Successfully Saved!
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Other Services General Notepad Remarks    CONSOLIDATOR TICKET
+    Verify Other Services Consolidator Ticket And LCC Generic Accounting Remarks    CONSOLIDATOR TICKET    JBC TRAVEL CO LTD    Credit Card (CX)    HK
+    Verify Other Services Consolidator Ticket and LCC With Additional Fee Remarks    SVC Fee for Surcharges    Credit Card (CX)    100    HK
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    False    Discount    x_times=0
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    False    Transaction Fee    x_times=0
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    True    SVC Fee for Surcharges    x_times=1    is_air_product=True
+
+[AB OS] Verify That Consolidator Ticket And Transaction Fee Remarks Are Written
+    [Tags]    us469    horton    us454    us1167    us1322    us1462
+    ...    us1620    de486
+    Retrieve PNR And Populate Amend Workflow    country=HK
+    Click Panel    Client Info
+    Select Form Of Payment    TEST CARD/VI************0087/D0823/CVV***
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTA
+    Get Segment Number From TST
+    Click Panel    Other Svcs
+    Select Product And Vendor    CONSOLIDATOR TICKET    T & T CO LTD
+    Click Tab In Other Services Panel    Ticket Info
+    Verify Apply Formula Checkbox Status Is Correct    True
+    Get Current Segments From The PNR
+    Verify Air Segments Are Retrieved Correctly
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Select Consolidator Ticket Client Type    TF
+    Set Vendor Contact    CWT Vendor
+    Verify Form Of Payment Details Are Correct    TEST CARD/VI************0087/D0823/CVV***    Credit Card (CX)
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Set Commission Value    0
+    Set Discount Value    0
+    Set Fuel Surcharge Fee    0
+    Set Tranx/Service Fee Value    200
+    Populate Airline Code And Ticket Number    111    1234567890
+    Set Passenger ID Value    AA
+    Get Passenger ID Value
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Select Air Segment    2    3    4
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Verify MI Filed Fare Number Field Is Correct
+    Verify MI Realised Saving Codes In Dropdown Are Correct    hk
+    Verify MI Missed Saving Codes In Dropdown Are Correct    hk
+    Verify MI Class Of Services In Dropdown Are Correct
+    Verify MI PT And ET Selection Are Available
+    Verify MI Default Field Values    HK
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    HK
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    B - PASSENGER REQUESTED SPECIFIC AIRLINE
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    # Vendor Info and Remarks Section
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    PLEASE DELIVER TICKET TO OUR OFFICE BEFORE [TIME] HRS
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    CONSOLIDATOR TICKET
+    Click Finish PNR    Amend To Verify That Consolidator Ticket And Transaction Fee Remarks Are Written
+    Execute Simultaneous Change Handling    Amend To Verify That Consolidator Ticket And Transaction Fee Remarks Are Written
+    Verify PNR Is Successfully Created    False    Exchange Order(s) Transaction Successfully Saved!
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Other Services General Notepad Remarks    CONSOLIDATOR TICKET
+    Verify Other Services Consolidator Ticket And LCC Generic Accounting Remarks    CONSOLIDATOR TICKET    T & T CO LTD    Credit Card (CX)    HK
+    Verify Other Services Transaction Credit Card Info Remarks    Credit Card (CX)    HK    4900000000000087    VI    08    2023
+    Verify Other Services Consolidator Ticket and LCC With Additional Fee Remarks    Transaction Fee    Credit Card (CX)    200    HK
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    False    Discount    x_times=0
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    True    Transaction Fee    x_times=1    is_air_product=True
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    False    SVC Fee for Surcharges    x_times=1    is_air_product=True
+
+[AB OS] Verify That Consolidator Ticket And Discount Remarks Are Written
+    [Tags]    us469    horton    us454    us1167    us1322    us1462
+    ...    us1620    de486
+    Retrieve PNR And Populate Amend Workflow    country=HK
+    Click Panel    Client Info
+    Select Form Of Payment    BTA TP CARD/TP***********4198/D0825/CVV***
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTA
+    Get Segment Number From TST
+    Click Panel    Other Svcs
+    Select Product And Vendor    CONSOLIDATOR TICKET    HOLIDAY TOURS AND TRAVEL
+    Click Tab In Other Services Panel    Ticket Info
+    Select Consolidator Ticket Client Type    DU
+    Verify Apply Formula Checkbox Status Is Correct    True
+    Get Current Segments From The PNR
+    Verify Air Segments Are Retrieved Correctly
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Set Vendor Contact    CWT Vendor
+    Verify Form Of Payment Details Are Correct    BTA TP CARD/TP***********4198/D0825/CVV***    Credit Card (CX)
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Set Commission Value    0
+    Set Discount Value    100
+    Set Fuel Surcharge Fee    0
+    Populate Airline Code And Ticket Number    111    1234567890
+    Set Passenger ID Value    ${EMPTY}
+    Get Passenger ID Value
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Select Air Segment    2    4
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Verify MI Filed Fare Number Field Is Correct
+    Verify MI Realised Saving Codes In Dropdown Are Correct    hk
+    Verify MI Missed Saving Codes In Dropdown Are Correct    hk
+    Verify MI Class Of Services In Dropdown Are Correct
+    Verify MI PT And ET Selection Are Available
+    Verify MI Default Field Values    HK
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    HK
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    F - PASSENGER REQUESTED SPECIFIC CLASS
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    # Vendor Info and Remarks Section
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    PLEASE DELIVER TICKET TO OUR OFFICE BEFORE [TIME] HRS
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    CONSOLIDATOR TICKET
+    Click Finish PNR    Amend To Verify That Consolidator Ticket And Discount Remarks Are Written
+    Execute Simultaneous Change Handling    Amend To Verify That Consolidator Ticket And Discount Remarks Are Written
+    Verify PNR Is Successfully Created    False    Exchange Order(s) Transaction Successfully Saved!
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Other Services General Notepad Remarks    CONSOLIDATOR TICKET
+    Verify Other Services Consolidator Ticket And LCC Generic Accounting Remarks    CONSOLIDATOR TICKET    HOLIDAY TOURS AND TRAVEL    Credit Card (CX)    HK
+    Verify Other Services Transaction Credit Card Info Remarks    Credit Card (CX)    HK    120298264454198    TP    08    2025
+    ...    False
+    Verify Other Services Consolidator Ticket and LCC With Additional Fee Remarks    Discount    Credit Card (CX)    100    HK
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    True    Discount    x_times=1    is_air_product=True
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    False    Transaction Fee    x_times=1    is_air_product=True
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    False    SVC Fee for Surcharges    x_times=1
+
+[AB OS] Verify That Consolidator Ticket, Fuel Surcharge And Transaction Fee Remarks Are Written
+    [Tags]    us469    horton    us454    us1167    us1322    us1462
+    ...    us1620    de486
+    Retrieve PNR And Populate Amend Workflow    country=HK
+    Click Panel    Client Info
+    Select Form Of Payment    BTA DC/DC**********2207/D0823/CVV***
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTA
+    Get Segment Number From TST
+    Click Panel    Other Svcs
+    Select Product And Vendor    CONSOLIDATOR TICKET    CARLSON WAGONLIT SYDNEY
+    Click Tab In Other Services Panel    Ticket Info
+    Verify Apply Formula Checkbox Status Is Correct    True
+    Get Current Segments From The PNR
+    Verify Air Segments Are Retrieved Correctly
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Verify Airline Code And Ticket Number Is Correct    \    0000000000
+    Select Consolidator Ticket Client Type    TF
+    Set Vendor Contact    CWT Vendor
+    Verify Form Of Payment Details Are Correct    BTA DC/DC**********2207/D0823/CVV***    Credit Card (CX)
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Set Commission Value    0
+    Set Discount Value    20
+    Set Fuel Surcharge Fee    100
+    Set Tranx/Service Fee Value    200
+    Populate Airline Code And Ticket Number    111    1234567890
+    Set Passenger ID Value    AA
+    Get Passenger ID Value
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Select Air Segment    2    3
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Verify MI Filed Fare Number Field Is Correct
+    Verify MI Realised Saving Codes In Dropdown Are Correct    hk
+    Verify MI Missed Saving Codes In Dropdown Are Correct    hk
+    Verify MI Class Of Services In Dropdown Are Correct
+    Verify MI PT And ET Selection Are Available
+    Verify MI Default Field Values    HK
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    HK
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    B - PASSENGER REQUESTED SPECIFIC AIRLINE
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    # Vendor Info and Remarks Section
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    PLEASE DELIVER TICKET TO OUR OFFICE BEFORE [TIME] HRS
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    CONSOLIDATOR TICKET
+    Click Finish PNR    Amend To Verify That Consolidator Ticket, Fuel Surcharge And Transaction Fee Remarks Are Written
+    Execute Simultaneous Change Handling    Amend To Verify That Consolidator Ticket, Fuel Surcharge And Transaction Fee Remarks Are Written
+    Verify PNR Is Successfully Created    False    Exchange Order(s) Transaction Successfully Saved!
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Other Services General Notepad Remarks    CONSOLIDATOR TICKET
+    Verify Other Services Consolidator Ticket And LCC Generic Accounting Remarks    CONSOLIDATOR TICKET    CARLSON WAGONLIT SYDNEY    Credit Card (CX)    HK
+    Verify Other Services Transaction Credit Card Info Remarks    Credit Card (CX)    HK    30569101582207    DC    08    2023
+    Verify Other Services Consolidator Ticket and LCC With Additional Fee Remarks    Transaction Fee    Credit Card (CX)    200    HK
+    Verify Other Services Consolidator Ticket and LCC With Additional Fee Remarks    SVC Fee for Surcharges    Credit Card (CX)    100    HK
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    True    Transaction Fee    x_times=2    is_air_product=True
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    True    SVC Fee for Surcharges    x_times=2    is_air_product=True
+
+[AB OS] Verify That Consolidator Ticket Discount, Commission And Fuel Surcharge Remarks Are Written
+    [Tags]    us469    horton    us454    us1167    us1322    us1462
+    ...    us1620    de486
+    Retrieve PNR And Populate Amend Workflow    country=HK
+    Click Panel    Client Info
+    Select Form Of Payment    BTA CARD/CA************1114/D0828/CVV****
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTA
+    Get Segment Number From TST
+    Click Panel    Other Svcs
+    Select Product And Vendor    CONSOLIDATOR TICKET    EAST ASIA AIRLINES LTD
+    Click Tab In Other Services Panel    Ticket Info
+    Select Consolidator Ticket Client Type    DU
+    Tick Apply Formula Checkbox    Untick
+    Verify Apply Formula Checkbox Status Is Correct    False
+    Get Current Segments From The PNR
+    Verify Air Segments Are Retrieved Correctly
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Verify Airline Code And Ticket Number Is Correct    \    0000000000
+    Set Vendor Contact    CWT Vendor
+    Verify Form Of Payment Details Are Correct    BTA CARD/CA************1114/D0828/CVV****    Credit Card (CX)
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Set Commission Value    100
+    Set Discount Value    100
+    Set Fuel Surcharge Fee    250
+    Populate Airline Code And Ticket Number    111    1234567890
+    Set Passenger ID Value    ${EMPTY}
+    Get Passenger ID Value
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Select Air Segment    4
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Verify MI Filed Fare Number Field Is Correct
+    Verify MI Realised Saving Codes In Dropdown Are Correct    hk
+    Verify MI Missed Saving Codes In Dropdown Are Correct    hk
+    Verify MI Class Of Services In Dropdown Are Correct
+    Verify MI PT And ET Selection Are Available
+    Verify MI Default Field Values    HK
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    HK
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    E - EXCHANGE
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    # Vendor Info and Remarks Section
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    PLEASE DELIVER TICKET TO OUR OFFICE BEFORE [TIME] HRS
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    CONSOLIDATOR TICKET
+    Click Finish PNR    Amend To Verify That Consolidator Ticket Discount, Commission And Fuel Surcharge Remarks Are Written
+    Execute Simultaneous Change Handling    Amend To Verify That Consolidator Ticket Discount, Commission And Fuel Surcharge Remarks Are Written
+    Verify PNR Is Successfully Created    False    Exchange Order(s) Transaction Successfully Saved!
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Other Services General Notepad Remarks    CONSOLIDATOR TICKET
+    Verify Other Services Consolidator Ticket And LCC Generic Accounting Remarks    CONSOLIDATOR TICKET    EAST ASIA AIRLINES LTD    Credit Card (CX)    HK
+    Verify Other Services Transaction Credit Card Info Remarks    Credit Card (CX)    HK    2222420000001114    CA    08    2028
+    ...    False
+    Verify Other Services Consolidator Ticket and LCC With Additional Fee Remarks    Discount    Credit Card (CX)    100    HK
+    Verify Other Services Consolidator Ticket and LCC With Additional Fee Remarks    SVC Fee for Surcharges    Credit Card (CX)    250    HK
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    True    Discount    x_times=2    is_air_product=True
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    False    Transaction Fee    x_times=2    is_air_product=True
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    True    SVC Fee for Surcharges    x_times=3    is_air_product=True
+
+[AB OS] Verify That Consolidator Ticket, Discount And Commission Remarks Are Written
+    [Tags]    us469    horton    us454    us1167    us1322    us1462
+    ...    us1620    de486
+    Retrieve PNR And Populate Amend Workflow    country=HK
+    Click Panel    Client Info
+    Manually Set Value In Form Of Payment    AX    378282246310005    1226
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTA
+    Get Segment Number From TST
+    Click Panel    Other Svcs
+    Select Product And Vendor    CONSOLIDATOR TICKET    EAST ASIA AIRLINES LTD
+    Click Tab In Other Services Panel    Ticket Info
+    Select Consolidator Ticket Client Type    DU
+    Tick Apply Formula Checkbox    Untick
+    Verify Apply Formula Checkbox Status Is Correct    False
+    Verify Form Of Payment Details Are Correct    AX***********0005/D1226    Credit Card (CX)
+    Get Current Segments From The PNR
+    Verify Air Segments Are Retrieved Correctly
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Verify Airline Code And Ticket Number Is Correct    \    0000000000
+    Select Consolidator Ticket Client Type    TF
+    Set Vendor Contact    CWT Vendor
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Set Commission Value    100
+    Set Discount Value    100
+    Set Fuel Surcharge Fee    0
+    Set Tranx/Service Fee Value    0
+    Populate Airline Code And Ticket Number    111    1234567890
+    Set Passenger ID Value    AA
+    Get Passenger ID Value
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Tick Select All Segments    Tick
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Verify MI Filed Fare Number Field Is Correct
+    Verify MI Realised Saving Codes In Dropdown Are Correct    hk
+    Verify MI Missed Saving Codes In Dropdown Are Correct    hk
+    Verify MI Class Of Services In Dropdown Are Correct
+    Verify MI PT And ET Selection Are Available
+    Verify MI Default Field Values    HK
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    HK
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    F - PASSENGER REQUESTED SPECIFIC CLASS
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    # Vendor Info and Remarks Section
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    PLEASE DELIVER TICKET TO OUR OFFICE BEFORE [TIME] HRS
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    CONSOLIDATOR TICKET
+    Click Finish PNR    Amend To Verify That Consolidator Ticket, Discount And Commission Remarks Are Written
+    Execute Simultaneous Change Handling    Amend To Verify That Consolidator Ticket, Discount And Commission Remarks Are Written
+    Verify PNR Is Successfully Created    False    Exchange Order(s) Transaction Successfully Saved!
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+    Verify Other Services General Notepad Remarks    CONSOLIDATOR TICKET
+    Verify Other Services Consolidator Ticket And LCC Generic Accounting Remarks    CONSOLIDATOR TICKET    EAST ASIA AIRLINES LTD    Credit Card (CX)    HK
+    Verify Other Services Consolidator Ticket and LCC With Additional Fee Remarks    Discount    Credit Card (CX)    100    HK
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    True    Discount    x_times=3    is_air_product=True
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    False    Transaction Fee    x_times=2    is_air_product=True
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    False    SVC Fee for Surcharges    x_times=3    is_air_product=True
+    [Teardown]    Run Keyword And Ignore Error    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB][OS] Verify That Low Cost Carrier, Discount And Fuel Surcharge Remarks Are Written
+    [Tags]    US469    horton    us454    us1291    us1167    us1322
+    ...    us1456    us1620
+    Open Power Express And Retrieve Profile    ${version}    Test    u003axo    en-GB    aobsum    APAC QA
+    Select GDS    Amadeus
+    Set Client And Traveler    APAC SYN CORP ¦ APAC HK OS AUTOMATION    BEAR    HKOTHERS
+    Click New Booking
+    Click Panel    Client Info
+    Select Form Of Payment    Cash
+    Populate All Panels (Except Given Panels If Any)    Client Info
+    Click Update PNR
+    Book Flight X Months From Now    HKGSIN/ASQ    SS1Y1    FXP/S2    4    10
+    Book Flight X Months From Now    SINHKG/ASQ    SS1Y1    FXP/S3    4    15
+    Book Flight X Months From Now    HKGSIN/ASQ    SS1Y1    FXP/S4    4    20
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Other Svcs
+    Retrieve PNR Details From Amadeus    ${EMPTY}    RTA
+    Get Segment Number From TST
+    Click Panel    Other Svcs
+    Select Product And Vendor    Low Cost Carrier    Low Cost Carrier
+    Click Tab In Other Services Panel    Ticket Info
+    Verify Apply Formula Checkbox Status Is Correct    True
+    Verify Nett Fare Value Is Correct    0
+    Verify Gross Fare Value Is Correct    0
+    Verify Tax 1 Value and Code Are Correct    0
+    Verify Nett Cost In EO Value Is Correct    0
+    Verify Commission Fee Value Is Correct    0
+    Verify Discount Fee Value Is Correct    0
+    Verify Merchant Fee Value Is Correct    0
+    Verify Total Selling Price Value Is Correct    0
+    Verify CWT Absorb Checkbox For Merchant Fee Status Is Correct    False
+    Verify Tranx/Service Fee Value Is Correct    0
+    Verify Fuel Surcharge Value Is Correct    0
+    Get Current Segments From The PNR
+    Verify Air Segments Are Retrieved Correctly
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Verify Airline Code And Ticket Number Is Correct    \    0000000000
+    Tick Apply Formula Checkbox    Untick
+    Verify Form Of Payment Details Are Correct    Cash
+    Set Vendor Contact    CWT Vendor
+    Select Consolidator Ticket Client Type    DU
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Set Commission Value    0
+    Set Discount Value    100
+    Set Fuel Surcharge Fee    150
+    Populate Airline Code And Ticket Number    111    1234567890
+    Set Passenger ID Value    ${EMPTY}
+    Get Passenger ID Value
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Tick Select All Segments    TICK
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Verify MI Filed Fare Number Field Is Correct
+    Verify MI Realised Saving Codes In Dropdown Are Correct    hk
+    Verify MI Missed Saving Codes In Dropdown Are Correct    hk
+    Verify MI Class Of Services In Dropdown Are Correct
+    Verify MI PT And ET Selection Are Available
+    Verify MI Default Field Values    HK
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Low Fare    800
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    HK
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    B - PASSENGER REQUESTED SPECIFIC AIRLINE
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    # Vendor Info and Remarks Section
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    PLEASE DELIVER TICKET TO OUR OFFICE BEFORE [TIME] HRS
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    Low Cost Carrier
+    Click Finish PNR
+    Verify PNR Is Successfully Created    False    Exchange Order(s) Transaction Successfully Saved!
+    Click Panel    Other Svcs
+    Get Exchange Order Number    identifier=lowcostcarrier
+    Generate Exchange Order Creation Date    P2
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Other Services General Notepad Remarks    Low Cost Carrier
+    Verify Other Services Consolidator Ticket And LCC Generic Accounting Remarks    Low Cost Carrier    Low Cost Carrier    Invoice    HK
+    Verify Other Services Consolidator Ticket and LCC With Additional Fee Remarks    Discount    Invoice    100    HK
+    Verify Other Services Consolidator Ticket and LCC With Additional Fee Remarks    SVC Fee for Surcharges    Invoice    150    HK
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    True    Low Cost Carrier    Low Cost Carrier    1
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    True    Discount    Low Cost Carrier    1    is_air_product=True
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    False    Transaction Fee    Low Cost Carrier    0
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    True    SVC Fee for Surcharges    Low Cost Carrier    1    is_air_product=True
+    [Teardown]
+
+[AB AOS] Verify That Fields Are Pre-populated And Remarks Are Not Written When Amend Ticket Number Is Ticked
+    [Tags]    us469    horton    us454    us1291    us1167    us1322
+    ...    us1462    us1620
+    [Template]
+    Retrieve PNR And Populate Amend Workflow    country=HK
+    Click Panel    Other Svcs
+    Click Amend EO    ${eo_number_lowcostcarrier}
+    Verify Form Of Payment Details Are Correct    Cash
+    Verify Apply Formula Checkbox Status Is Correct    True
+    Verify Consolidatory Client Type Is Correct    DU
+    Verify Vendor Contact Value Is Correct    CWT Vendor
+    Verify Nett Fare Value Is Correct    1000
+    Comment    Verify Gross Fare Value Is Correct    930
+    Verify Gross Fare Value Is Correct    910
+    Verify Tax 1 Value and Code Are Correct    10    HK
+    Verify Nett Cost In EO Value Is Correct    1000
+    Verify Commission Fee Value Is Correct    0
+    Verify Discount Fee Value Is Correct    100
+    Verify Merchant Fee Value Is Correct    0
+    Comment    Verify Total Selling Price Value Is Correct    930
+    Verify Total Selling Price Value Is Correct    910
+    Verify CWT Absorb Checkbox For Merchant Fee Status Is Correct    False
+    Verify Tranx/Service Fee Value Is Correct    0
+    Verify Fuel Surcharge Value Is Correct    150
+    Verify All Air Segments Are Selected/Not Selected    Selected
+    Verify Airline Code And Ticket Number Is Correct    111    1234567890
+    Verify Exchange Order Number    ${eo_number_lowcostcarrier}
+    Select Air Segment    2
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Verify MI Filed Fare Number Is Correct    1
+    Verify MI Reference Fare Value Is Correct    1234
+    Verify MI Low Fare Value Is Correct    800    #Add Value
+    Verify MI Final Destination Value Is Correct    SIN
+    Verify MI Low Fare Carrier Value Is Correct    HK    #Add Value
+    Verify MI Type Of Ticket Value Is Correct    PT
+    Verify MI Realised Saving Code Value Is Correct    XX - NO SAVING
+    Verify MI Missed Saving Code Value Is Correct    B - PASSENGER REQUESTED SPECIFIC AIRLINE
+    Verify MI Class Of Service Value Is Correct    YF - Economy Class Full Fare
+    #Insert MI Verification here......
+    Get MI Fields Values
+    # Vendor Info and Remarks Section
+    Click Vendor Info Tab
+    Verify Vendor Value Is Correct    Low Cost Carrier
+    Verify Address 1 Value Is Correct
+    Verify Address 2 Value Is Correct
+    Verify City Value Is Correct
+    Verify Country Value Is Correct
+    Verify Email Value Is Correct    automationtest@cwt.com
+    Verify Contact No Value Is Correct
+    Verify Fax No Value Is Correct    1111
+    Verify Credit Terms Values Is Correct    0
+    Verify Support Email Value Is Correct    automationtest@cwt.com
+    Click Remarks Tab
+    Verify Exchange Order Remarks Are Correct    PLEASE DELIVER TICKET TO OUR OFFICE BEFORE [TIME] HRS
+    Click Update Button In EO Panel    Ticket Info
+    Click Finish PNR    Amend To Verify That Fields Are Pre-populated And Remarks Are Not Written When Amend Ticket Number Is Ticked
+    Execute Simultaneous Change Handling    Amend To Verify That Fields Are Pre-populated And Remarks Are Not Written When Amend Ticket Number Is Ticked
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+    Generate Data For Specific Product    False    P2    91    Low Cost Carrier    CT    333
+    ...    ${EMPTY}    New
+    Verify Exchange Order Number Is Retained    ${eo_number_lowcostcarrier}
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Other Services General Notepad Remarks    Low Cost Carrier
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    True    Low Cost Carrier    Low Cost Carrier    1
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    True    Discount    Low Cost Carrier    1    True
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    False    Transaction Fee    Low Cost Carrier    0    True
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    True    SVC Fee for Surcharges    Low Cost Carrier    1    True
+    [Teardown]
+
+[AB OS] Verify That Low Cost Carrier, Discount And Commission Remarks Are Written
+    [Tags]    US469    horton    us454    us1167    us1322    us1462
+    ...    us1620    de486
+    Retrieve PNR And Populate Amend Workflow    country=HK
+    Click Panel    Client Info
+    Select Form Of Payment    BTA TP CARD/TP***********4198/D0825/CVV***
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTA
+    Get Segment Number From TST
+    Click Panel    Other Svcs
+    Select Product And Vendor    Low Cost Carrier    Low Cost Carrier
+    Click Tab In Other Services Panel    Ticket Info
+    Verify Form Of Payment Details Are Correct    BTA TP CARD/TP***********4198/D0825/CVV***    Credit Card (CX)
+    Verify Apply Formula Checkbox Status Is Correct    True
+    Verify Nett Fare Value Is Correct    0
+    Verify Gross Fare Value Is Correct    0
+    Verify Tax 1 Value and Code Are Correct    0
+    Verify Nett Cost In EO Value Is Correct    0
+    Verify Commission Fee Value Is Correct    0
+    Verify Discount Fee Value Is Correct    0
+    Verify Merchant Fee Value Is Correct    0
+    Verify Total Selling Price Value Is Correct    0
+    Verify CWT Absorb Checkbox For Merchant Fee Status Is Correct    False
+    Verify Tranx/Service Fee Value Is Correct    0
+    Verify Fuel Surcharge Value Is Correct    0
+    Get Current Segments From The PNR
+    Verify Air Segments Are Retrieved Correctly
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Verify Airline Code And Ticket Number Is Correct    \    0000000000
+    Set Vendor Contact    CWT Vendor
+    Select Consolidator Ticket Client Type    DU
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Set Commission Value    200
+    Set Discount Value    100
+    Set Fuel Surcharge Fee    0
+    Populate Airline Code And Ticket Number    111    1234567890
+    Set Passenger ID Value    ${EMPTY}
+    Get Passenger ID Value
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Select Air Segment    2
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Verify MI Filed Fare Number Field Is Correct
+    Verify MI Realised Saving Codes In Dropdown Are Correct    hk
+    Verify MI Missed Saving Codes In Dropdown Are Correct    hk
+    Verify MI Class Of Services In Dropdown Are Correct
+    Verify MI PT And ET Selection Are Available
+    Verify MI Default Field Values    HK
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    HK
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    Q - CLIENT NEGOTIATED RATE ACCEPTED
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    # Vendor Info and Remarks Section
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    PLEASE DELIVER TICKET TO OUR OFFICE BEFORE [TIME] HRS
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    Low Cost Carrier
+    Click Finish PNR    Amend To Verify That Low Cost Carrier, Discount And Commission Remarks Are Written
+    Execute Simultaneous Change Handling    Amend To Verify That Low Cost Carrier, Discount And Commission Remarks Are Written
+    Verify PNR Is Successfully Created    False    Exchange Order(s) Transaction Successfully Saved!
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Other Services General Notepad Remarks    Low Cost Carrier
+    Verify Other Services Consolidator Ticket And LCC Generic Accounting Remarks    Low Cost Carrier    Low Cost Carrier    Credit Card (CX)    HK
+    Verify Other Services Transaction Credit Card Info Remarks    Credit Card (CX)    HK    120298264454198    TP    08    2025
+    ...    False
+    Verify Other Services Consolidator Ticket and LCC With Additional Fee Remarks    Discount    Credit Card (CX)    100    HK
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    True    Discount    x_times=2    is_air_product=True
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    False    Transaction Fee    x_times=0
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    False    SVC Fee for Surcharges    x_times=1
+
+[AB OS] Verify That Low Cost Carrier, Transaction Fee And Commission Remarks Are Written
+    [Tags]    US469    horton    us454    us1167    us1322    us1462
+    ...    us1620    de486
+    Retrieve PNR And Populate Amend Workflow    country=HK
+    Click Panel    Client Info
+    Select Form Of Payment    BTA DC/DC**********2207/D0823/CVV***
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTA
+    Get Segment Number From TST
+    Click Panel    Other Svcs
+    Select Product And Vendor    Low Cost Carrier    Low Cost Carrier
+    Click Tab In Other Services Panel    Ticket Info
+    Verify Apply Formula Checkbox Status Is Correct    True
+    Get Current Segments From The PNR
+    Verify Air Segments Are Retrieved Correctly
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Verify Airline Code And Ticket Number Is Correct    \    0000000000
+    Select Consolidator Ticket Client Type    TF
+    Set Vendor Contact    CWT Vendor
+    Verify Form Of Payment Details Are Correct    BTA DC/DC**********2207/D0823/CVV***    Credit Card (CX)
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Set Commission Value    200
+    Set Discount Value    0
+    Set Fuel Surcharge Fee    0
+    Set Tranx/Service Fee Value    200
+    Populate Airline Code And Ticket Number    111    1234567890
+    Set Passenger ID Value    AA
+    Get Passenger ID Value
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Tick Select All Segments    Tick
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Verify MI Filed Fare Number Field Is Correct
+    Verify MI Realised Saving Codes In Dropdown Are Correct    hk
+    Verify MI Missed Saving Codes In Dropdown Are Correct    hk
+    Verify MI Class Of Services In Dropdown Are Correct
+    Verify MI PT And ET Selection Are Available
+    Verify MI Default Field Values    HK
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1235
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    HK
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    Q - CLIENT NEGOTIATED RATE ACCEPTED
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    # Vendor Info and Remarks Section
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    PLEASE DELIVER TICKET TO OUR OFFICE BEFORE [TIME] HRS
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    Low Cost Carrier
+    Click Finish PNR    Amend To Verify That Low Cost Carrier, Transaction Fee And Commission Remarks Are Written
+    Execute Simultaneous Change Handling    Amend To Verify That Low Cost Carrier, Transaction Fee And Commission Remarks Are Written
+    Verify PNR Is Successfully Created    FALSE    Exchange Order(s) Transaction Successfully Saved!
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Other Services General Notepad Remarks    Low Cost Carrier
+    Verify Other Services Consolidator Ticket And LCC Generic Accounting Remarks    Low Cost Carrier    Low Cost Carrier    Credit Card (CX)    HK
+    Verify Other Services Consolidator Ticket and LCC With Additional Fee Remarks    Transaction Fee    Credit Card (CX)    200    HK
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    False    Discount    x_times=2
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    True    Transaction Fee    x_times=1    is_air_product=True
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    False    SVC Fee for Surcharges    x_times=1
+
+[AB OS] Verify That Low Cost Carrier, Transaction Fee And Fuel Surcharge Remarks Are Written
+    [Tags]    US469    horton    us454    us1167    us1322    us1462
+    ...    us1620    de486
+    Retrieve PNR And Populate Amend Workflow    country=HK
+    Click Panel    Client Info
+    Select Form Of Payment    BTA TP CARD/TP***********4198/D0825/CVV***
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTA
+    Get Segment Number From TST
+    Click Panel    Other Svcs
+    Select Product And Vendor    Low Cost Carrier    Low Cost Carrier
+    Click Tab In Other Services Panel    Ticket Info
+    Verify Apply Formula Checkbox Status Is Correct    True
+    Get Current Segments From The PNR
+    Verify Air Segments Are Retrieved Correctly
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Verify Airline Code And Ticket Number Is Correct    \    0000000000
+    Set Vendor Contact    CWT Vendor
+    Select Consolidator Ticket Client Type    TF
+    Verify Form Of Payment Details Are Correct    BTA TP CARD/TP***********4198/D0825/CVV***    Credit Card (CX)
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Set Commission Value    0
+    Set Discount Value    0
+    Set Fuel Surcharge Fee    200
+    Set Tranx/Service Fee Value    100
+    Populate Airline Code And Ticket Number    111    1234567890
+    Set Passenger ID Value    AA
+    Get Passenger ID Value
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Select Air Segment    2    4
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Verify MI Filed Fare Number Field Is Correct
+    Verify MI Realised Saving Codes In Dropdown Are Correct    hk
+    Verify MI Missed Saving Codes In Dropdown Are Correct    hk
+    Verify MI Class Of Services In Dropdown Are Correct
+    Verify MI PT And ET Selection Are Available
+    Verify MI Default Field Values    HK
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    HK
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    Q - CLIENT NEGOTIATED RATE ACCEPTED
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    # Vendor Info and Remarks Section
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    PLEASE DELIVER TICKET TO OUR OFFICE BEFORE [TIME] HRS
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    Low Cost Carrier
+    Click Finish PNR    Amend To Verify That Low Cost Carrier, Transaction Fee And Fuel Surcharge Remarks Are Written
+    Execute Simultaneous Change Handling    Amend To Verify That Low Cost Carrier, Transaction Fee And Fuel Surcharge Remarks Are Written
+    Verify PNR Is Successfully Created    FALSE    Exchange Order(s) Transaction Successfully Saved!
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Other Services General Notepad Remarks    Low Cost Carrier
+    Verify Other Services Consolidator Ticket And LCC Generic Accounting Remarks    Low Cost Carrier    Low Cost Carrier    Credit Card (CX)    HK
+    Verify Other Services Consolidator Ticket and LCC With Additional Fee Remarks    Transaction Fee    Credit Card (CX)    100    HK
+    Verify Other Services Consolidator Ticket and LCC With Additional Fee Remarks    SVC Fee for Surcharges    Credit Card (CX)    200    HK
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    False    Discount    x_times=2
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    True    Transaction Fee    x_times=2    is_air_product=True
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    True    SVC Fee for Surcharges    x_times=2    is_air_product=True
+
+[AB OS] Verify That Low Cost Carrier, Transaction Fee, Fuel Surcharge And Commission Remarks Are Written
+    [Tags]    US469    horton    us454    us1167    us1322    us1462
+    ...    us1620    de486
+    Retrieve PNR And Populate Amend Workflow    country=HK
+    Click Panel    Client Info
+    Select Form Of Payment    BTA DC/DC**********2207/D0823/CVV***
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTA
+    Get Segment Number From TST
+    Click Panel    Other Svcs
+    Select Product And Vendor    Low Cost Carrier    Low Cost Carrier
+    Click Tab In Other Services Panel    Ticket Info
+    Verify Apply Formula Checkbox Status Is Correct    True
+    Get Current Segments From The PNR
+    Verify Air Segments Are Retrieved Correctly
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Verify Airline Code And Ticket Number Is Correct    \    0000000000
+    Tick Apply Formula Checkbox    Untick
+    Set Vendor Contact    CWT Vendor
+    Select Consolidator Ticket Client Type    TF
+    Verify Form Of Payment Details Are Correct    BTA DC/DC**********2207/D0823/CVV***    Credit Card (CX)
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Set Commission Value    200
+    Set Discount Value    0
+    Set Fuel Surcharge Fee    150
+    Set Tranx/Service Fee Value    250
+    Populate Airline Code And Ticket Number    111    1234567890
+    Set Passenger ID Value    AA
+    Get Passenger ID Value
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Select Air Segment    3
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Verify MI Filed Fare Number Field Is Correct
+    Verify MI Realised Saving Codes In Dropdown Are Correct    hk
+    Verify MI Missed Saving Codes In Dropdown Are Correct    hk
+    Verify MI Class Of Services In Dropdown Are Correct
+    Verify MI PT And ET Selection Are Available
+    Verify MI Default Field Values    HK
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    HK
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    Q - CLIENT NEGOTIATED RATE ACCEPTED
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    # Vendor Info and Remarks Section
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    PLEASE DELIVER TICKET TO OUR OFFICE BEFORE [TIME] HRS
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    Low Cost Carrier
+    Click Finish PNR    Amend To Verify That Low Cost Carrier, Transaction Fee, Fuel Surcharge And Commission Remarks Are Written
+    Execute Simultaneous Change Handling    Amend To Verify That Low Cost Carrier, Transaction Fee, Fuel Surcharge And Commission Remarks Are Written
+    Verify PNR Is Successfully Created    FALSE    Exchange Order(s) Transaction Successfully Saved!
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Other Services General Notepad Remarks    Low Cost Carrier
+    Verify Other Services Consolidator Ticket And LCC Generic Accounting Remarks    Low Cost Carrier    Low Cost Carrier    Credit Card (CX)    HK
+    Verify Other Services Transaction Credit Card Info Remarks    Credit Card (CX)    HK    30569101582207    DC    08    2023
+    Verify Other Services Consolidator Ticket and LCC With Additional Fee Remarks    Transaction Fee    Credit Card (CX)    250    HK
+    Verify Other Services Consolidator Ticket and LCC With Additional Fee Remarks    SVC Fee for Surcharges    Credit Card (CX)    150    HK
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    False    Discount    x_times=2
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    True    Transaction Fee    x_times=3    is_air_product=True
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    True    SVC Fee for Surcharges    x_times=3    is_air_product=True
+
+[AB OS] Verify That Low Cost Carrier, Commission And Fuel Surcharge Remarks Are Written
+    [Tags]    US469    horton    us454    us1167    us1322    us1462
+    ...    us1620    de486
+    Retrieve PNR And Populate Amend Workflow    country=HK
+    Click Panel    Client Info
+    Select Form Of Payment    BTA CARD/CA************1114/D0828/CVV****
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTA
+    Get Segment Number From TST
+    Click Panel    Other Svcs
+    Select Product And Vendor    Low Cost Carrier    TESTING VENDOR 1
+    Click Tab In Other Services Panel    Ticket Info
+    Verify Apply Formula Checkbox Status Is Correct    True
+    Get Current Segments From The PNR
+    Verify Air Segments Are Retrieved Correctly
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Verify Airline Code And Ticket Number Is Correct    \    0000000000
+    Tick Apply Formula Checkbox    Untick
+    Set Vendor Contact    CWT Vendor
+    Verify Form Of Payment Details Are Correct    BTA CARD/CA************1114/D0828/CVV****    Credit Card (CX)
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Set Commission Value    100
+    Set Discount Value    0
+    Set Fuel Surcharge Fee    150
+    Populate Airline Code And Ticket Number    111    1234567890
+    Set Passenger ID Value    AA
+    Get Passenger ID Value
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Tick Select All Segments    Tick
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Verify MI Filed Fare Number Field Is Correct
+    Verify MI Realised Saving Codes In Dropdown Are Correct    hk
+    Verify MI Missed Saving Codes In Dropdown Are Correct    hk
+    Verify MI Class Of Services In Dropdown Are Correct
+    Verify MI PT And ET Selection Are Available
+    Verify MI Default Field Values    HK
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    HK
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    Q - CLIENT NEGOTIATED RATE ACCEPTED
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    # Vendor Info and Remarks Section
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    WILL PICK UP TICKET BY [TIME] HRS
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    Low Cost Carrier
+    Click Finish PNR    Amend To Verify That Low Cost Carrier, Commission And Fuel Surcharge Remarks Are Written
+    Execute Simultaneous Change Handling    Amend To Verify That Low Cost Carrier, Commission And Fuel Surcharge Remarks Are Written
+    Verify PNR Is Successfully Created    FALSE    Exchange Order(s) Transaction Successfully Saved!
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Other Services General Notepad Remarks    Low Cost Carrier
+    Verify Other Services Consolidator Ticket And LCC Generic Accounting Remarks    Low Cost Carrier    TESTING VENDOR 1    Credit Card (CX)    HK
+    Verify Other Services Transaction Credit Card Info Remarks    Credit Card (CX)    HK    2222420000001114    CA    08    2028
+    ...    False
+    Verify Other Services Consolidator Ticket and LCC With Additional Fee Remarks    SVC Fee for Surcharges    Credit Card (CX)    150    HK
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    False    Discount    x_times=2
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    False    Transaction Fee    x_times=3    is_air_product=True
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    True    SVC Fee for Surcharges    x_times=4    is_air_product=True
+
+[AB OS] Verify That Low Cost Carrier, Commission And Transaction Fee Remarks Are Written
+    [Tags]    US469    horton    us454    us1167    us1322    us1462
+    ...    us1620    de486
+    Retrieve PNR And Populate Amend Workflow    country=HK
+    Click Panel    Client Info
+    Select Form Of Payment    BTA CARD/CA************1114/D0828/CVV****
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTA
+    Get Segment Number From TST
+    Click Panel    Other Svcs
+    Select Product And Vendor    Low Cost Carrier    TESTING VENDOR 1
+    Click Tab In Other Services Panel    Ticket Info
+    Verify Apply Formula Checkbox Status Is Correct    True
+    Get Current Segments From The PNR
+    Verify Air Segments Are Retrieved Correctly
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Verify Airline Code And Ticket Number Is Correct    \    0000000000
+    Set Vendor Contact    CWT Vendor
+    Select Consolidator Ticket Client Type    TF
+    Verify Form Of Payment Details Are Correct    BTA CARD/CA************1114/D0828/CVV****    Credit Card (CX)
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Set Commission Value    250
+    Set Discount Value    0
+    Set Fuel Surcharge Fee    0
+    Set Tranx/Service Fee Value    50
+    Populate Airline Code And Ticket Number    111    1234567890
+    Set Passenger ID Value    ${EMPTY}
+    Get Passenger ID Value
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Select Air Segment    4
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Verify MI Filed Fare Number Field Is Correct
+    Verify MI Realised Saving Codes In Dropdown Are Correct    hk
+    Verify MI Missed Saving Codes In Dropdown Are Correct    hk
+    Verify MI Class Of Services In Dropdown Are Correct
+    Verify MI PT And ET Selection Are Available
+    Verify MI Default Field Values    HK
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1286
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    HK
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    Q - CLIENT NEGOTIATED RATE ACCEPTED
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    # Vendor Info and Remarks Section
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    WILL PICK UP TICKET BY [TIME] HRS
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    Low Cost Carrier
+    Click Finish PNR    Amend To Verify That Low Cost Carrier, Commission And Transaction Fee Remarks Are Written
+    Execute Simultaneous Change Handling    Amend To Verify That Low Cost Carrier, Commission And Transaction Fee Remarks Are Written
+    Verify PNR Is Successfully Created    FALSE    Exchange Order(s) Transaction Successfully Saved!
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Other Services General Notepad Remarks    Low Cost Carrier
+    Verify Other Services Consolidator Ticket And LCC Generic Accounting Remarks    Low Cost Carrier    TESTING VENDOR 1    Credit Card (CX)    HK
+    Verify Other Services Consolidator Ticket and LCC With Additional Fee Remarks    Transaction Fee    Credit Card (CX)    50    HK
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    False    Discount    x_times=2
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    True    Transaction Fee    x_times=4    is_air_product=True
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    False    SVC Fee for Surcharges    x_times=4
+
+[AB OS] Verify That Low Cost Carrier, Commission, Transaction Fee And Fuel Surcharge Remarks Are Written
+    [Tags]    US469    horton    us454    us1167    us1322    us1462
+    ...    us1620
+    Retrieve PNR And Populate Amend Workflow    country=HK
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTA
+    Get Segment Number From TST
+    Click Panel    Other Svcs
+    Select Product And Vendor    Low Cost Carrier    TESTING VENDOR 1
+    Click Tab In Other Services Panel    Ticket Info
+    Verify Apply Formula Checkbox Status Is Correct    True
+    Get Current Segments From The PNR
+    Verify Air Segments Are Retrieved Correctly
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Verify Airline Code And Ticket Number Is Correct    \    0000000000
+    Set Vendor Contact    CWT Vendor
+    Select Consolidator Ticket Client Type    TF
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Invoice
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Set Commission Value    100
+    Set Discount Value    0
+    Set Fuel Surcharge Fee    150
+    Set Tranx/Service Fee Value    200
+    Populate Airline Code And Ticket Number    111    1234567890
+    Set Passenger ID Value    ${EMPTY}
+    Get Passenger ID Value
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Select Air Segment    2
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Verify MI Filed Fare Number Field Is Correct
+    Verify MI Realised Saving Codes In Dropdown Are Correct    hk
+    Verify MI Missed Saving Codes In Dropdown Are Correct    hk
+    Verify MI Class Of Services In Dropdown Are Correct
+    Verify MI PT And ET Selection Are Available
+    Verify MI Default Field Values    HK
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    HK
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    Q - CLIENT NEGOTIATED RATE ACCEPTED
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    # Vendor Info and Remarks Section
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    WILL PICK UP TICKET BY [TIME] HRS
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    Low Cost Carrier
+    Click Finish PNR    Amend To Verify That Low Cost Carrier, Commission, Transaction Fee And Fuel Surcharge Remarks Are Written
+    Execute Simultaneous Change Handling    Amend To Verify That Low Cost Carrier, Commission, Transaction Fee And Fuel Surcharge Remarks Are Written
+    Verify PNR Is Successfully Created    FALSE    Exchange Order(s) Transaction Successfully Saved!
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Other Services General Notepad Remarks    Low Cost Carrier
+    Verify Other Services Consolidator Ticket And LCC Generic Accounting Remarks    Low Cost Carrier    TESTING VENDOR 1    Invoice    HK
+    Verify Other Services Consolidator Ticket and LCC With Additional Fee Remarks    Transaction Fee    Invoice    200    HK
+    Verify Other Services Consolidator Ticket and LCC With Additional Fee Remarks    SVC Fee for Surcharges    Invoice    150    HK
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    False    Discount    x_times=2
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    True    Transaction Fee    x_times=5    is_air_product=True
+    Verify Specific Product Remarks Are Written X Number Of Times    HK    True    SVC Fee for Surcharges    x_times=7    is_air_product=True
+    [Teardown]
+
+[HK][AB][CEO] Verify That Accounting Lines For Consolidator Ticket And LCC Product Is Not Written When Cancelled
+    [Tags]    us1570
+    Retrieve PNR And Populate Amend Workflow    country=HK
+    Click Panel    Other Svcs
+    Cancel EO    ${eo_number}    Ticket Info    HK
+    Verify Exchange Order Is Cancelled In EO Grid    ${eo_number}
+    Click Finish PNR
+    Verify PNR Is Successfully Created    FALSE    Exchange Order(s) Transaction Successfully Saved!
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Other Services Consolidator Ticket And LCC Generic Accounting Remarks Are Not Written
+    Verify Other Services Consolidator Ticket and LCC With Additional Fee Remarks Are Not Written
+    [Teardown]    Run Keyword And Ignore Error    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Amend To Verify That Low Cost Carrier Computes The Correct Fees When Apply Formula Is True And Client Type Is TF, MG And TP
+    Retrieve PNR And Populate Amend Workflow    country=HK
+    Click Panel    Client Info
+    Select Form Of Payment    BTA CTCL VI/VI************7710/D0823
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Click Panel    Other Svcs
+    Select Product And Vendor    Low Cost Carrier    Low Cost Carrier
+    Click Tab In Other Services Panel    Ticket Info
+    #Apply Formula Is Ticked
+    Verify Form Of Payment Details Are Correct    BTA CTCL VI/VI************7710/D0823    Credit Card (CX)
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    AX    378282246310005    12    2026
+    Select Consolidator Ticket Client Type    TF
+    Set Nett Fare    500
+    Set Tax 1    10
+    Set Tranx/Service Fee Value    500
+    Set Commission Value    50
+    Set Discount Value    275
+    Compute Consolidator And LCC Fees For Other Services    HK    2
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Gross Fare Value Is Correct
+    Verify Discount Fee Value Is Correct    0
+    Verify Merchant Fee Value Is Correct
+    #Scenario 2 With Commission Percentage
+    Compute Consolidator And LCC Fees For Other Services    HK    2    is_commission_percent=true
+    Verify Gross Fare Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct
+    Verify Discount Fee Value Is Correct    0
+    Verify Merchant Fee Value Is Correct
+    #Scenario 3 With Discount Percentage
+    Set Discount Value    50
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Invoice
+    Compute Consolidator And LCC Fees For Other Services    HK    2    is_discount_percent=true
+    Verify Gross Fare Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct    500
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    #Client_type == MG
+    Select Consolidator Ticket Client Type    MG
+    Set Commission Value    50
+    Set Discount Value    275
+    Compute Consolidator And LCC Fees For Other Services    HK    2
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Gross Fare Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    #Scenario 2 With Commission Percentage
+    Compute Consolidator And LCC Fees For Other Services    HK    2    is_commission_percent=true
+    Verify Gross Fare Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct
+    Verify Discount Fee Value Is Correct    275
+    Verify Merchant Fee Value Is Correct
+    #Scenario 3 With Discount Percentage
+    Set Discount Value    50
+    Compute Consolidator And LCC Fees For Other Services    HK    2    is_discount_percent=true
+    Verify Gross Fare Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct    500
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    #Scenario 4 CWT Merchant Absorb
+    Tick Merchant Fee CWT Absorb
+    Compute Consolidator And LCC Fees For Other Services    HK    2
+    Verify Gross Fare Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct    500
+    Verify Discount Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    #Client_type == TP
+    Select Consolidator Ticket Client Type    TP
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    DC    378282246310005    12    2026
+    Set Commission Value    50
+    Set Discount Value    275
+    Compute Consolidator And LCC Fees For Other Services    HK    2
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    #Scenario 2 With Commission Percentage
+    Compute Consolidator And LCC Fees For Other Services    HK    2    is_commission_percent=true
+    Verify Gross Fare Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Verify Nett Cost In EO Value Is Correct
+    Verify Commission Fee Value Is Correct    0
+    Verify Discount Fee Value Is Correct    275
+    Verify Merchant Fee Value Is Correct
+    #Apply Formula Is Not Ticked
+    Select Consolidator Ticket Client Type    DU
+    Tick Apply Formula Checkbox    Untick
+    Set Nett Fare    250
+    Set Tax 1    25
+    Set Commission Value    500
+    Set Discount Value    500
+    Compute Consolidator And LCC Fees For Other Services    HK    2
+    Verify Nett Cost In EO Value Is Correct
+    Verify Merchant Fee Value Is Correct    0
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Tick Select All Segments    Tick
+    Populate Airline Code And Ticket Number    111    1234567890
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    QF
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    E - EXCHANGE
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    CONSOLIDATOR TICKET
+    Click Finish PNR    Amend To Verify That Low Cost Carrier Computes The Correct Fees When Apply Formula Is True And Client Type Is TF, MG And TP
+
+Amend To Verify That Fields Are Pre-populated And Remarks Are Written When Amend Ticket Number Is Not Ticked
+    Retrieve PNR And Populate Amend Workflow    country=HK
+    Click Panel    Other Svcs
+    Click Amend EO    ${eo_number}
+    Comment    Verify Amend Ticket Num Only Checkbox Status Is Correct    False
+    Verify Apply Formula Checkbox Status Is Correct    True
+    Verify Consolidatory Client Type Is Correct    DU
+    Verify Vendor Contact Value Is Correct    CWT Vendor
+    Verify Nett Fare Value Is Correct    1000
+    Verify Gross Fare Value Is Correct    1010
+    Verify Tax 1 Value and Code Are Correct    10    HK
+    Verify Nett Cost In EO Value Is Correct    1000
+    Verify Commission Fee Value Is Correct    0
+    Verify Discount Fee Value Is Correct    0
+    Verify Merchant Fee Value Is Correct    21
+    Verify Total Selling Price Value Is Correct    1031
+    Verify CWT Absorb Checkbox For Merchant Fee Status Is Correct    False
+    Verify Tranx/Service Fee Value Is Correct    0
+    Verify Fuel Surcharge Value Is Correct    0
+    Verify Form Of Payment Details Are Correct    TEST CARD/AX***********0009/D0822/CVV****    Credit Card (CX)
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Verify Airline Code And Ticket Number Is Correct    111    1234567890
+    Verify Exchange Order Number    ${eo_number}
+    Tick Select All Segments    Tick
+    Get Ticket Info Fee Values    HK
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Verify MI Filed Fare Number Is Correct    1
+    Verify MI Reference Fare Value Is Correct    1234
+    Verify MI Low Fare Value Is Correct    1000    #Add Value
+    Verify MI Final Destination Value Is Correct    SIN
+    Verify MI Low Fare Carrier Value Is Correct    HK    #Add Value
+    Verify MI Type Of Ticket Value Is Correct    PT
+    Verify MI Realised Saving Code Value Is Correct    XX - NO SAVING
+    Verify MI Missed Saving Code Value Is Correct    B - PASSENGER REQUESTED SPECIFIC AIRLINE
+    Verify MI Class Of Service Value Is Correct    YF - Economy Class Full Fare
+    #Insert MI Verification here......
+    Get MI Fields Values
+    # Vendor Info and Remarks Section
+    Click Vendor Info Tab
+    Verify Vendor Value Is Correct    CWT
+    Verify Address 1 Value Is Correct    27/F ING TOWER
+    Verify Address 2 Value Is Correct    308 DES VOEUX ROAD CENTRAL
+    Verify City Value Is Correct
+    Verify Country Value Is Correct    HONG KONG
+    Verify Email Value Is Correct    automationtest@cwt.com
+    Verify Contact No Value Is Correct
+    Verify Fax No Value Is Correct    1111
+    Verify Credit Terms Values Is Correct    0
+    Verify Support Email Value Is Correct    automationtest@cwt.com
+    Click Remarks Tab
+    Verify Exchange Order Remarks Are Correct    WILL PICK UP TICKET BY [TIME] HRS
+    Click Update Button In EO Panel    Ticket Info
+    Click Finish PNR    Amend To Verify That Fields Are Pre-populated And Remarks Are Written When Amend Ticket Number Is Not Ticked
+
+Amend Verify That Consolidator Ticket And Commission Remarks Are Written
+    Retrieve PNR And Populate Amend Workflow    country=HK
+    Click Panel    Client Info
+    Select Form Of Payment    TEST CARD/AX***********0009/D0822/CVV****
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTA
+    Get Segment Number From TST
+    Click Panel    Other Svcs
+    Select Product And Vendor    CONSOLIDATOR TICKET    CWT TRAVEL SINGAPORE PTE LTD
+    Click Tab In Other Services Panel    Ticket Info
+    Verify Apply Formula Checkbox Status Is Correct    True
+    Verify Nett Fare Value Is Correct    0
+    Verify Gross Fare Value Is Correct    0
+    Verify Tax 1 Value and Code Are Correct    0
+    Verify Nett Cost In EO Value Is Correct    0
+    Verify Commission Fee Value Is Correct    0
+    Verify Discount Fee Value Is Correct    0
+    Verify Merchant Fee Value Is Correct    0
+    Verify Total Selling Price Value Is Correct    0
+    Verify CWT Absorb Checkbox For Merchant Fee Status Is Correct    False
+    Verify Tranx/Service Fee Value Is Correct    0
+    Verify Fuel Surcharge Value Is Correct    0
+    Get Current Segments From The PNR
+    Verify Air Segments Are Retrieved Correctly
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Verify Airline Code And Ticket Number Is Correct    \    0000000000
+    Set Vendor Contact    CWT Vendor
+    Verify Form Of Payment Details Are Correct    TEST CARD/AX***********0009/D0822/CVV****    Credit Card (CX)
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Set Commission Value    150
+    Set Discount Value    0
+    Set Fuel Surcharge Fee    0
+    Populate Airline Code And Ticket Number    111    1234567890
+    Set Passenger ID Value    AA
+    Get Passenger ID Value
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Tick Select All Segments    TICK    #Replace with Single Air Selection Keyword
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Verify MI Filed Fare Number Field Is Correct
+    Verify MI Realised Saving Codes In Dropdown Are Correct    hk
+    Verify MI Missed Saving Codes In Dropdown Are Correct    hk
+    Verify MI Class Of Services In Dropdown Are Correct
+    Verify MI PT And ET Selection Are Available
+    Verify MI Default Field Values    HK
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    HK
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    E - EXCHANGE
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    # Vendor Info and Remarks Section
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    PLEASE DELIVER TICKET TO OUR OFFICE BEFORE [TIME] HRS
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    CONSOLIDATOR TICKET
+    Click Finish PNR    Amend Verify That Consolidator Ticket And Commission Remarks Are Written
+
+Amend To Verify That Consolidator Ticket And Fuel Surcharge Remarks Are Written
+    Retrieve PNR And Populate Amend Workflow    country=HK
+    Click Panel    Client Info
+    Select Form Of Payment    TEST CARD/AX***********0009/D0822/CVV****
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTA
+    Get Segment Number From TST
+    Click Panel    Other Svcs
+    Select Product And Vendor    CONSOLIDATOR TICKET    JBC TRAVEL CO LTD
+    Click Tab In Other Services Panel    Ticket Info
+    Verify Apply Formula Checkbox Status Is Correct    True
+    Verify Nett Fare Value Is Correct    0
+    Verify Gross Fare Value Is Correct    0
+    Verify Tax 1 Value and Code Are Correct    0
+    Verify Nett Cost In EO Value Is Correct    0
+    Verify Commission Fee Value Is Correct    0
+    Verify Discount Fee Value Is Correct    0
+    Verify Merchant Fee Value Is Correct    0
+    Verify Total Selling Price Value Is Correct    0
+    Verify CWT Absorb Checkbox For Merchant Fee Status Is Correct    False
+    Verify Tranx/Service Fee Value Is Correct    0
+    Verify Fuel Surcharge Value Is Correct    0
+    Get Current Segments From The PNR
+    Verify Air Segments Are Retrieved Correctly
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Verify Airline Code And Ticket Number Is Correct    \    0000000000
+    Set Vendor Contact    CWT Vendor
+    Verify Form Of Payment Details Are Correct    TEST CARD/AX***********0009/D0822/CVV****    Credit Card (CX)
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Set Commission Value    0
+    Set Discount Value    0
+    Set Fuel Surcharge Fee    100
+    Populate Airline Code And Ticket Number    111    1234567890
+    Set Passenger ID Value    AA
+    Get Passenger ID Value
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Select Air Segment    2
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Verify MI Filed Fare Number Field Is Correct
+    Verify MI Realised Saving Codes In Dropdown Are Correct    hk
+    Verify MI Missed Saving Codes In Dropdown Are Correct    hk
+    Verify MI Class Of Services In Dropdown Are Correct
+    Verify MI PT And ET Selection Are Available
+    Verify MI Default Field Values    HK
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    HK
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    F - PASSENGER REQUESTED SPECIFIC CLASS
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    # Vendor Info and Remarks Section
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    PLEASE DELIVER TICKET TO OUR OFFICE BEFORE [TIME] HRS
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    CONSOLIDATOR TICKET
+    Click Finish PNR    Amend To Verify That Consolidator Ticket And Fuel Surcharge Remarks Are Written
+
+Amend To Verify That Consolidator Ticket And Transaction Fee Remarks Are Written
+    Retrieve PNR And Populate Amend Workflow    country=HK
+    Click Panel    Client Info
+    Select Form Of Payment    TEST CARD/VI************0087/D0823/CVV***
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTA
+    Get Segment Number From TST
+    Click Panel    Other Svcs
+    Select Product And Vendor    CONSOLIDATOR TICKET    T & T CO LTD
+    Click Tab In Other Services Panel    Ticket Info
+    Verify Apply Formula Checkbox Status Is Correct    True
+    Get Current Segments From The PNR
+    Verify Air Segments Are Retrieved Correctly
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Select Consolidator Ticket Client Type    TF
+    Set Vendor Contact    CWT Vendor
+    Verify Form Of Payment Details Are Correct    TEST CARD/VI************0087/D0823/CVV***    Credit Card (CX)
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Set Commission Value    0
+    Set Discount Value    0
+    Set Fuel Surcharge Fee    0
+    Set Tranx/Service Fee Value    200
+    Populate Airline Code And Ticket Number    111    1234567890
+    Set Passenger ID Value    AA
+    Get Passenger ID Value
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Select Air Segment    2    3    4
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Verify MI Filed Fare Number Field Is Correct
+    Verify MI Realised Saving Codes In Dropdown Are Correct    hk
+    Verify MI Missed Saving Codes In Dropdown Are Correct    hk
+    Verify MI Class Of Services In Dropdown Are Correct
+    Verify MI PT And ET Selection Are Available
+    Verify MI Default Field Values    HK
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    HK
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    B - PASSENGER REQUESTED SPECIFIC AIRLINE
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    # Vendor Info and Remarks Section
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    PLEASE DELIVER TICKET TO OUR OFFICE BEFORE [TIME] HRS
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    CONSOLIDATOR TICKET
+    Click Finish PNR    Amend To Verify That Consolidator Ticket And Transaction Fee Remarks Are Written
+
+Amend To Verify That Consolidator Ticket And Discount Remarks Are Written
+    Retrieve PNR And Populate Amend Workflow    country=HK
+    Click Panel    Client Info
+    Select Form Of Payment    BTA TP CARD/TP***********4198/D0825/CVV***
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTA
+    Get Segment Number From TST
+    Click Panel    Other Svcs
+    Select Product And Vendor    CONSOLIDATOR TICKET    HOLIDAY TOURS AND TRAVEL
+    Click Tab In Other Services Panel    Ticket Info
+    Select Consolidator Ticket Client Type    DU
+    Verify Apply Formula Checkbox Status Is Correct    True
+    Get Current Segments From The PNR
+    Verify Air Segments Are Retrieved Correctly
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Set Vendor Contact    CWT Vendor
+    Verify Form Of Payment Details Are Correct    BTA TP CARD/TP***********4198/D0825/CVV***    Credit Card (CX)
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Set Commission Value    0
+    Set Discount Value    100
+    Set Fuel Surcharge Fee    0
+    Populate Airline Code And Ticket Number    111    1234567890
+    Set Passenger ID Value    ${EMPTY}
+    Get Passenger ID Value
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Select Air Segment    2    4
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Verify MI Filed Fare Number Field Is Correct
+    Verify MI Realised Saving Codes In Dropdown Are Correct    hk
+    Verify MI Missed Saving Codes In Dropdown Are Correct    hk
+    Verify MI Class Of Services In Dropdown Are Correct
+    Verify MI PT And ET Selection Are Available
+    Verify MI Default Field Values    HK
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    HK
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    F - PASSENGER REQUESTED SPECIFIC CLASS
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    # Vendor Info and Remarks Section
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    PLEASE DELIVER TICKET TO OUR OFFICE BEFORE [TIME] HRS
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    CONSOLIDATOR TICKET
+    Click Finish PNR    Amend To Verify That Consolidator Ticket And Discount Remarks Are Written
+
+Amend To Verify That Consolidator Ticket, Fuel Surcharge And Transaction Fee Remarks Are Written
+    Retrieve PNR And Populate Amend Workflow    country=HK
+    Click Panel    Client Info
+    Select Form Of Payment    BTA DC/DC**********2207/D0823/CVV***
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTA
+    Get Segment Number From TST
+    Click Panel    Other Svcs
+    Select Product And Vendor    CONSOLIDATOR TICKET    CARLSON WAGONLIT SYDNEY
+    Click Tab In Other Services Panel    Ticket Info
+    Verify Apply Formula Checkbox Status Is Correct    True
+    Get Current Segments From The PNR
+    Verify Air Segments Are Retrieved Correctly
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Verify Airline Code And Ticket Number Is Correct    \    0000000000
+    Select Consolidator Ticket Client Type    TP
+    Set Vendor Contact    CWT Vendor
+    Verify Form Of Payment Details Are Correct    BTA DC/DC**********2207/D0823/CVV***    Credit Card (CX)
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Set Commission Value    0
+    Set Discount Value    20
+    Set Fuel Surcharge Fee    100
+    Set Tranx/Service Fee Value    200
+    Populate Airline Code And Ticket Number    111    1234567890
+    Set Passenger ID Value    AA
+    Get Passenger ID Value
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Select Air Segment    2    3
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Verify MI Filed Fare Number Field Is Correct
+    Verify MI Realised Saving Codes In Dropdown Are Correct    hk
+    Verify MI Missed Saving Codes In Dropdown Are Correct    hk
+    Verify MI Class Of Services In Dropdown Are Correct
+    Verify MI PT And ET Selection Are Available
+    Verify MI Default Field Values    HK
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    HK
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    B - PASSENGER REQUESTED SPECIFIC AIRLINE
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    # Vendor Info and Remarks Section
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    PLEASE DELIVER TICKET TO OUR OFFICE BEFORE [TIME] HRS
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    CONSOLIDATOR TICKET
+    Click Finish PNR    Amend To Verify That Consolidator Ticket, Fuel Surcharge And Transaction Fee Remarks Are Written
+
+Amend To Verify That Consolidator Ticket Discount, Commission And Fuel Surcharge Remarks Are Written
+    Retrieve PNR And Populate Amend Workflow    country=HK
+    Click Panel    Client Info
+    Select Form Of Payment    BTA CARD/CA************1114/D0828/CVV****
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTA
+    Get Segment Number From TST
+    Click Panel    Other Svcs
+    Select Product And Vendor    CONSOLIDATOR TICKET    EAST ASIA AIRLINES LTD
+    Click Tab In Other Services Panel    Ticket Info
+    Select Consolidator Ticket Client Type    DU
+    Tick Apply Formula Checkbox    Untick
+    Verify Apply Formula Checkbox Status Is Correct    False
+    Get Current Segments From The PNR
+    Verify Air Segments Are Retrieved Correctly
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Verify Airline Code And Ticket Number Is Correct    \    0000000000
+    Set Vendor Contact    CWT Vendor
+    Verify Form Of Payment Details Are Correct    BTA CARD/CA************1114/D0828/CVV****    Credit Card (CX)
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Set Commission Value    100
+    Set Discount Value    100
+    Set Fuel Surcharge Fee    250
+    Populate Airline Code And Ticket Number    111    1234567890
+    Set Passenger ID Value    ${EMPTY}
+    Get Passenger ID Value
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Select Air Segment    4
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Verify MI Filed Fare Number Field Is Correct
+    Verify MI Realised Saving Codes In Dropdown Are Correct    hk
+    Verify MI Missed Saving Codes In Dropdown Are Correct    hk
+    Verify MI Class Of Services In Dropdown Are Correct
+    Verify MI PT And ET Selection Are Available
+    Verify MI Default Field Values    HK
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    HK
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    E - EXCHANGE
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    # Vendor Info and Remarks Section
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    PLEASE DELIVER TICKET TO OUR OFFICE BEFORE [TIME] HRS
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    CONSOLIDATOR TICKET
+    Click Finish PNR    Amend To Verify That Consolidator Ticket Discount, Commission And Fuel Surcharge Remarks Are Written
+
+Amend To Verify That Consolidator Ticket, Discount And Commission Remarks Are Written
+    Retrieve PNR And Populate Amend Workflow    country=HK
+    Click Panel    Client Info
+    Manually Set Value In Form Of Payment    AX    378282246310005    1226
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTA
+    Get Segment Number From TST
+    Click Panel    Other Svcs
+    Select Product And Vendor    CONSOLIDATOR TICKET    EAST ASIA AIRLINES LTD
+    Click Tab In Other Services Panel    Ticket Info
+    Select Consolidator Ticket Client Type    DU
+    Tick Apply Formula Checkbox    Untick
+    Verify Apply Formula Checkbox Status Is Correct    False
+    Verify Form Of Payment Details Are Correct    AX***********0005/D1226    Credit Card (CX)
+    Get Current Segments From The PNR
+    Verify Air Segments Are Retrieved Correctly
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Verify Airline Code And Ticket Number Is Correct    \    0000000000
+    Select Consolidator Ticket Client Type    TF
+    Set Vendor Contact    CWT Vendor
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Set Commission Value    100
+    Set Discount Value    100
+    Set Fuel Surcharge Fee    0
+    Set Tranx/Service Fee Value    0
+    Populate Airline Code And Ticket Number    111    1234567890
+    Set Passenger ID Value    AA
+    Get Passenger ID Value
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Tick Select All Segments    Tick
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Verify MI Filed Fare Number Field Is Correct
+    Verify MI Realised Saving Codes In Dropdown Are Correct    hk
+    Verify MI Missed Saving Codes In Dropdown Are Correct    hk
+    Verify MI Class Of Services In Dropdown Are Correct
+    Verify MI PT And ET Selection Are Available
+    Verify MI Default Field Values    HK
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    HK
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    F - PASSENGER REQUESTED SPECIFIC CLASS
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    # Vendor Info and Remarks Section
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    PLEASE DELIVER TICKET TO OUR OFFICE BEFORE [TIME] HRS
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    CONSOLIDATOR TICKET
+    Click Finish PNR    Amend To Verify That Consolidator Ticket, Discount And Commission Remarks Are Written
+
+Amend To Verify That Fields Are Pre-populated And Remarks Are Not Written When Amend Ticket Number Is Ticked
+    Retrieve PNR And Populate Amend Workflow    country=HK
+    Click Panel    Other Svcs
+    Click Amend EO    ${eo_number_lowcostcarrier}
+    Verify Form Of Payment Details Are Correct    Cash
+    Verify Apply Formula Checkbox Status Is Correct    True
+    Verify Consolidatory Client Type Is Correct    DU
+    Verify Vendor Contact Value Is Correct    CWT Vendor
+    Verify Nett Fare Value Is Correct    1000
+    Comment    Verify Gross Fare Value Is Correct    930
+    Verify Gross Fare Value Is Correct    910
+    Verify Tax 1 Value and Code Are Correct    10    HK
+    Verify Nett Cost In EO Value Is Correct    1000
+    Verify Commission Fee Value Is Correct    0
+    Verify Discount Fee Value Is Correct    100
+    Verify Merchant Fee Value Is Correct    0
+    Comment    Verify Total Selling Price Value Is Correct    930
+    Verify Total Selling Price Value Is Correct    910
+    Verify CWT Absorb Checkbox For Merchant Fee Status Is Correct    False
+    Verify Tranx/Service Fee Value Is Correct    0
+    Verify Fuel Surcharge Value Is Correct    150
+    Verify All Air Segments Are Selected/Not Selected    Selected
+    Verify Airline Code And Ticket Number Is Correct    111    1234567890
+    Verify Exchange Order Number    ${eo_number_lowcostcarrier}
+    Select Air Segment    2
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Verify MI Filed Fare Number Is Correct    1
+    Verify MI Reference Fare Value Is Correct    1234
+    Verify MI Low Fare Value Is Correct    800    #Add Value
+    Verify MI Final Destination Value Is Correct    SIN
+    Verify MI Low Fare Carrier Value Is Correct    HK    #Add Value
+    Verify MI Type Of Ticket Value Is Correct    PT
+    Verify MI Realised Saving Code Value Is Correct    XX - NO SAVING
+    Verify MI Missed Saving Code Value Is Correct    B - PASSENGER REQUESTED SPECIFIC AIRLINE
+    Verify MI Class Of Service Value Is Correct    YF - Economy Class Full Fare
+    #Insert MI Verification here......
+    Get MI Fields Values
+    # Vendor Info and Remarks Section
+    Click Vendor Info Tab
+    Verify Vendor Value Is Correct    Low Cost Carrier
+    Verify Address 1 Value Is Correct
+    Verify Address 2 Value Is Correct
+    Verify City Value Is Correct
+    Verify Country Value Is Correct
+    Verify Email Value Is Correct    automationtest@cwt.com
+    Verify Contact No Value Is Correct
+    Verify Fax No Value Is Correct    1111
+    Verify Credit Terms Values Is Correct    0
+    Verify Support Email Value Is Correct    automationtest@cwt.com
+    Click Remarks Tab
+    Verify Exchange Order Remarks Are Correct    PLEASE DELIVER TICKET TO OUR OFFICE BEFORE [TIME] HRS
+    Click Update Button In EO Panel    Ticket Info
+    Click Finish PNR    Amend To Verify That Fields Are Pre-populated And Remarks Are Not Written When Amend Ticket Number Is Ticked
+
+Amend To Verify That Low Cost Carrier, Discount And Commission Remarks Are Written
+    Retrieve PNR And Populate Amend Workflow    country=HK
+    Click Panel    Client Info
+    Select Form Of Payment    BTA TP CARD/TP***********4198/D0825/CVV***
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTA
+    Get Segment Number From TST
+    Click Panel    Other Svcs
+    Select Product And Vendor    Low Cost Carrier    Low Cost Carrier
+    Click Tab In Other Services Panel    Ticket Info
+    Verify Form Of Payment Details Are Correct    BTA TP CARD/TP***********4198/D0825/CVV***    Credit Card (CX)
+    Verify Apply Formula Checkbox Status Is Correct    True
+    Verify Nett Fare Value Is Correct    0
+    Verify Gross Fare Value Is Correct    0
+    Verify Tax 1 Value and Code Are Correct    0
+    Verify Nett Cost In EO Value Is Correct    0
+    Verify Commission Fee Value Is Correct    0
+    Verify Discount Fee Value Is Correct    0
+    Verify Merchant Fee Value Is Correct    0
+    Verify Total Selling Price Value Is Correct    0
+    Verify CWT Absorb Checkbox For Merchant Fee Status Is Correct    False
+    Verify Tranx/Service Fee Value Is Correct    0
+    Verify Fuel Surcharge Value Is Correct    0
+    Get Current Segments From The PNR
+    Verify Air Segments Are Retrieved Correctly
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Verify Airline Code And Ticket Number Is Correct    \    0000000000
+    Set Vendor Contact    CWT Vendor
+    Select Consolidator Ticket Client Type    DU
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Set Commission Value    200
+    Set Discount Value    100
+    Set Fuel Surcharge Fee    0
+    Populate Airline Code And Ticket Number    111    1234567890
+    Set Passenger ID Value    ${EMPTY}
+    Get Passenger ID Value
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Select Air Segment    2
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Verify MI Filed Fare Number Field Is Correct
+    Verify MI Realised Saving Codes In Dropdown Are Correct    hk
+    Verify MI Missed Saving Codes In Dropdown Are Correct    hk
+    Verify MI Class Of Services In Dropdown Are Correct
+    Verify MI PT And ET Selection Are Available
+    Verify MI Default Field Values    HK
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    HK
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    Q - CLIENT NEGOTIATED RATE ACCEPTED
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    # Vendor Info and Remarks Section
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    PLEASE DELIVER TICKET TO OUR OFFICE BEFORE [TIME] HRS
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    Low Cost Carrier
+    Click Finish PNR    Amend To Verify That Low Cost Carrier, Discount And Commission Remarks Are Written
+
+Amend To Verify That Low Cost Carrier, Transaction Fee And Commission Remarks Are Written
+    Retrieve PNR And Populate Amend Workflow    country=HK
+    Click Panel    Client Info
+    Select Form Of Payment    BTA DC/DC**********2207/D0823/CVV***
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTA
+    Get Segment Number From TST
+    Click Panel    Other Svcs
+    Select Product And Vendor    Low Cost Carrier    Low Cost Carrier
+    Click Tab In Other Services Panel    Ticket Info
+    Verify Apply Formula Checkbox Status Is Correct    True
+    Get Current Segments From The PNR
+    Verify Air Segments Are Retrieved Correctly
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Verify Airline Code And Ticket Number Is Correct    \    0000000000
+    Select Consolidator Ticket Client Type    TF
+    Set Vendor Contact    CWT Vendor
+    Verify Form Of Payment Details Are Correct    BTA DC/DC**********2207/D0823/CVV***    Credit Card (CX)
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Set Commission Value    200
+    Set Discount Value    0
+    Set Fuel Surcharge Fee    0
+    Set Tranx/Service Fee Value    200
+    Populate Airline Code And Ticket Number    111    1234567890
+    Set Passenger ID Value    AA
+    Get Passenger ID Value
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Tick Select All Segments    Tick
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Verify MI Filed Fare Number Field Is Correct
+    Verify MI Realised Saving Codes In Dropdown Are Correct    hk
+    Verify MI Missed Saving Codes In Dropdown Are Correct    hk
+    Verify MI Class Of Services In Dropdown Are Correct
+    Verify MI PT And ET Selection Are Available
+    Verify MI Default Field Values    HK
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1235
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    HK
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    Q - CLIENT NEGOTIATED RATE ACCEPTED
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    # Vendor Info and Remarks Section
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    PLEASE DELIVER TICKET TO OUR OFFICE BEFORE [TIME] HRS
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    Low Cost Carrier
+    Click Finish PNR    Amend To Verify That Low Cost Carrier, Transaction Fee And Commission Remarks Are Written
+
+Amend To Verify That Low Cost Carrier, Transaction Fee And Fuel Surcharge Remarks Are Written
+    Retrieve PNR And Populate Amend Workflow    country=HK
+    Click Panel    Client Info
+    Select Form Of Payment    BTA TP CARD/TP***********4198/D0825/CVV***
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTA
+    Get Segment Number From TST
+    Click Panel    Other Svcs
+    Select Product And Vendor    Low Cost Carrier    Low Cost Carrier
+    Click Tab In Other Services Panel    Ticket Info
+    Verify Apply Formula Checkbox Status Is Correct    True
+    Get Current Segments From The PNR
+    Verify Air Segments Are Retrieved Correctly
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Verify Airline Code And Ticket Number Is Correct    \    0000000000
+    Set Vendor Contact    CWT Vendor
+    Select Consolidator Ticket Client Type    TF
+    Verify Form Of Payment Details Are Correct    BTA TP CARD/TP***********4198/D0825/CVV***    Credit Card (CX)
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Set Commission Value    0
+    Set Discount Value    0
+    Set Fuel Surcharge Fee    200
+    Set Tranx/Service Fee Value    100
+    Populate Airline Code And Ticket Number    111    1234567890
+    Set Passenger ID Value    AA
+    Get Passenger ID Value
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Select Air Segment    2    4
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Verify MI Filed Fare Number Field Is Correct
+    Verify MI Realised Saving Codes In Dropdown Are Correct    hk
+    Verify MI Missed Saving Codes In Dropdown Are Correct    hk
+    Verify MI Class Of Services In Dropdown Are Correct
+    Verify MI PT And ET Selection Are Available
+    Verify MI Default Field Values    HK
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    HK
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    Q - CLIENT NEGOTIATED RATE ACCEPTED
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    # Vendor Info and Remarks Section
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    PLEASE DELIVER TICKET TO OUR OFFICE BEFORE [TIME] HRS
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    Low Cost Carrier
+    Click Finish PNR    Amend To Verify That Low Cost Carrier, Transaction Fee And Fuel Surcharge Remarks Are Written
+
+Amend To Verify That Low Cost Carrier, Transaction Fee, Fuel Surcharge And Commission Remarks Are Written
+    Retrieve PNR And Populate Amend Workflow    country=HK
+    Click Panel    Client Info
+    Select Form Of Payment    BTA DC/DC**********2207/D0823/CVV***
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTA
+    Get Segment Number From TST
+    Click Panel    Other Svcs
+    Select Product And Vendor    Low Cost Carrier    Low Cost Carrier
+    Click Tab In Other Services Panel    Ticket Info
+    Verify Apply Formula Checkbox Status Is Correct    True
+    Get Current Segments From The PNR
+    Verify Air Segments Are Retrieved Correctly
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Verify Airline Code And Ticket Number Is Correct    \    0000000000
+    Tick Apply Formula Checkbox    Untick
+    Set Vendor Contact    CWT Vendor
+    Select Consolidator Ticket Client Type    TF
+    Verify Form Of Payment Details Are Correct    BTA DC/DC**********2207/D0823/CVV***    Credit Card (CX)
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Set Commission Value    200
+    Set Discount Value    0
+    Set Fuel Surcharge Fee    150
+    Set Tranx/Service Fee Value    250
+    Populate Airline Code And Ticket Number    111    1234567890
+    Set Passenger ID Value    AA
+    Get Passenger ID Value
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Select Air Segment    3
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Verify MI Filed Fare Number Field Is Correct
+    Verify MI Realised Saving Codes In Dropdown Are Correct    hk
+    Verify MI Missed Saving Codes In Dropdown Are Correct    hk
+    Verify MI Class Of Services In Dropdown Are Correct
+    Verify MI PT And ET Selection Are Available
+    Verify MI Default Field Values    HK
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    HK
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    Q - CLIENT NEGOTIATED RATE ACCEPTED
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    # Vendor Info and Remarks Section
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    PLEASE DELIVER TICKET TO OUR OFFICE BEFORE [TIME] HRS
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    Low Cost Carrier
+    Click Finish PNR    Amend To Verify That Low Cost Carrier, Transaction Fee, Fuel Surcharge And Commission Remarks Are Written
+
+Amend To Verify That Low Cost Carrier, Commission And Fuel Surcharge Remarks Are Written
+    Retrieve PNR And Populate Amend Workflow    country=HK
+    Click Panel    Client Info
+    Select Form Of Payment    BTA CARD/CA************1114/D0828/CVV****
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTA
+    Get Segment Number From TST
+    Click Panel    Other Svcs
+    Select Product And Vendor    Low Cost Carrier    TESTING VENDOR 1
+    Click Tab In Other Services Panel    Ticket Info
+    Verify Apply Formula Checkbox Status Is Correct    True
+    Get Current Segments From The PNR
+    Verify Air Segments Are Retrieved Correctly
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Verify Airline Code And Ticket Number Is Correct    \    0000000000
+    Tick Apply Formula Checkbox    Untick
+    Set Vendor Contact    CWT Vendor
+    Verify Form Of Payment Details Are Correct    BTA CARD/CA************1114/D0828/CVV****    Credit Card (CX)
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Set Commission Value    100
+    Set Discount Value    0
+    Set Fuel Surcharge Fee    150
+    Populate Airline Code And Ticket Number    111    1234567890
+    Set Passenger ID Value    AA
+    Get Passenger ID Value
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Tick Select All Segments    Tick
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Verify MI Filed Fare Number Field Is Correct
+    Verify MI Realised Saving Codes In Dropdown Are Correct    hk
+    Verify MI Missed Saving Codes In Dropdown Are Correct    hk
+    Verify MI Class Of Services In Dropdown Are Correct
+    Verify MI PT And ET Selection Are Available
+    Verify MI Default Field Values    HK
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    HK
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    Q - CLIENT NEGOTIATED RATE ACCEPTED
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    # Vendor Info and Remarks Section
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    WILL PICK UP TICKET BY [TIME] HRS
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    Low Cost Carrier
+    Click Finish PNR    Amend To Verify That Low Cost Carrier, Commission And Fuel Surcharge Remarks Are Written
+
+Amend To Verify That Low Cost Carrier, Commission And Transaction Fee Remarks Are Written
+    Retrieve PNR And Populate Amend Workflow    country=HK
+    Click Panel    Client Info
+    Select Form Of Payment    BTA CARD/CA************1114/D0828/CVV****
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTA
+    Get Segment Number From TST
+    Click Panel    Other Svcs
+    Select Product And Vendor    Low Cost Carrier    TESTING VENDOR 1
+    Click Tab In Other Services Panel    Ticket Info
+    Verify Apply Formula Checkbox Status Is Correct    True
+    Get Current Segments From The PNR
+    Verify Air Segments Are Retrieved Correctly
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Verify Airline Code And Ticket Number Is Correct    \    0000000000
+    Set Vendor Contact    CWT Vendor
+    Select Consolidator Ticket Client Type    TF
+    Verify Form Of Payment Details Are Correct    BTA CARD/CA************1114/D0828/CVV****    Credit Card (CX)
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Set Commission Value    250
+    Set Discount Value    0
+    Set Fuel Surcharge Fee    0
+    Set Tranx/Service Fee Value    50
+    Populate Airline Code And Ticket Number    111    1234567890
+    Set Passenger ID Value    ${EMPTY}
+    Get Passenger ID Value
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Select Air Segment    4
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Verify MI Filed Fare Number Field Is Correct
+    Verify MI Realised Saving Codes In Dropdown Are Correct    hk
+    Verify MI Missed Saving Codes In Dropdown Are Correct    hk
+    Verify MI Class Of Services In Dropdown Are Correct
+    Verify MI PT And ET Selection Are Available
+    Verify MI Default Field Values    HK
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1286
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    HK
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    Q - CLIENT NEGOTIATED RATE ACCEPTED
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    # Vendor Info and Remarks Section
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    WILL PICK UP TICKET BY [TIME] HRS
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    Low Cost Carrier
+    Click Finish PNR    Amend To Verify That Low Cost Carrier, Commission And Transaction Fee Remarks Are Written
+
+Amend To Verify That Low Cost Carrier, Commission, Transaction Fee And Fuel Surcharge Remarks Are Written
+    Retrieve PNR And Populate Amend Workflow    country=HK
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTA
+    Get Segment Number From TST
+    Click Panel    Other Svcs
+    Select Product And Vendor    Low Cost Carrier    TESTING VENDOR 1
+    Click Tab In Other Services Panel    Ticket Info
+    Verify Apply Formula Checkbox Status Is Correct    True
+    Get Current Segments From The PNR
+    Verify Air Segments Are Retrieved Correctly
+    Verify All Air Segments Are Selected/Not Selected    Not Selected
+    Verify Airline Code And Ticket Number Is Correct    \    0000000000
+    Set Vendor Contact    CWT Vendor
+    Select Consolidator Ticket Client Type    TF
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Invoice
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Set Commission Value    100
+    Set Discount Value    0
+    Set Fuel Surcharge Fee    150
+    Set Tranx/Service Fee Value    200
+    Populate Airline Code And Ticket Number    111    1234567890
+    Set Passenger ID Value    ${EMPTY}
+    Get Passenger ID Value
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Select Air Segment    2
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Verify MI Filed Fare Number Field Is Correct
+    Verify MI Realised Saving Codes In Dropdown Are Correct    hk
+    Verify MI Missed Saving Codes In Dropdown Are Correct    hk
+    Verify MI Class Of Services In Dropdown Are Correct
+    Verify MI PT And ET Selection Are Available
+    Verify MI Default Field Values    HK
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    HK
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    Q - CLIENT NEGOTIATED RATE ACCEPTED
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    # Vendor Info and Remarks Section
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    WILL PICK UP TICKET BY [TIME] HRS
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    Low Cost Carrier
+    Click Finish PNR    Amend To Verify That Low Cost Carrier, Commission, Transaction Fee And Fuel Surcharge Remarks Are Written

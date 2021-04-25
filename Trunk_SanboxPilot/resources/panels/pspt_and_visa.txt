@@ -1,0 +1,243 @@
+*** Settings ***
+Resource          ../common/utilities.txt
+Variables         ../variables/pspt_and_visa_control_objects.py
+Resource          ../common/core.txt
+
+*** Keywords ***
+Add And Select New Passport
+    [Arguments]    ${row_number}    ${doc_type}    ${nationality}    ${doc_number}    ${is_doc_valid}
+    Click Control Button    [NAME:btnAddPassport]
+    ${row_number}    Evaluate    ${row_number}-1
+    Control Click    ${title_power_express}    ${EMPTY}    [NAME:ccboDocumentType${row_number}]
+    Send    ${doc_type}
+    Control Click    ${title_power_express}    ${EMPTY}    [NAME:ccboNationality${row_number}]
+    Send    ${nationality}
+    Control Click    ${title_power_express}    ${EMPTY}    [NAME:ctxtPassportNumber${row_number}]
+    Send    ${doc_number}
+    Control Click    ${title_power_express}    ${EMPTY}    [NAME:ccboPassportValid${row_number}]
+    Send    ${is_doc_valid}
+    Set Expiration Date For Newly Added Passport    [NAME:cdtpExpiryDate${row_number}]
+    Control Click    ${title_power_express}    ${EMPTY}    [NAME:chkSelectPassport${row_number}]
+    [Teardown]    Take Screenshot
+
+Click Check Visa Requirements
+    Auto It Set Option    MouseCoordMode    2
+    Mouse Click    LEFT    352    669    1
+    Auto It Set Option    MouseCoordMode    0
+    Wait Until Control Object Is Visible    [NAME:grpESTA]
+    [Teardown]    Take Screenshot
+
+Click Check Visa Requirements No ESTA
+    Auto It Set Option    MouseCoordMode    2
+    Mouse Click    LEFT    352    669    1
+    Auto It Set Option    MouseCoordMode    0
+    Wait Until Control Object Is Visible    [NAME:PassportVisaInfo]
+    Wait Until Control Object Is Visible    [NAME:txtPassportVisaInfo]
+    [Teardown]    Take Screenshot
+
+Click Check Visa Requirements With Timestamp
+    Auto It Set Option    MouseCoordMode    2
+    Mouse Click    LEFT    352    669    1
+    Auto It Set Option    MouseCoordMode    0
+    Wait Until Control Object Is Visible    [NAME:grpESTA]
+    ${exp_overalltransaction_check_visa_time}    Get Time
+    Set Test Variable    ${exp_overalltransaction_check_visa_time}
+    [Teardown]    Take Screenshot
+
+Get Country Visited
+    [Arguments]    ${row_number}=0
+    ${object_name}    Determine Multiple Object Name Based On Active Tab    ctxtCountries${row_number}    False
+    ${country_visited}    Get Control Text Value    ${object_name}
+    Set Suite Variable    ${country_visited_${row_number}}    ${country_visited}
+
+Get Doc Number
+    [Arguments]    ${row_number}
+    ${object_name}    Determine Multiple Object Name Based On Active Tab    ctxtPassportNumber${row_number}    False
+    ${passport_number}    Get Control Text Value    ${object_name}
+    Set Suite Variable    ${passport_number_${row_number}}    ${passport_number}
+
+Get Document Type
+    [Arguments]    ${row_number}
+    ${object_name}    Determine Multiple Object Name Based On Active Tab    ccboDocumentType${row_number}    False
+    ${document_type}    Get Control Text Value    ${object_name}
+    Set Suite Variable    ${document_type_${row_number}}    ${document_type}
+
+Get Expiry Date
+    [Arguments]    ${row_number}
+    ${object_name}    Determine Multiple Object Name Based On Active Tab    cdtpExpiryDate${row_number}    False
+    ${expiry_date}    Get Control Text Value    ${object_name}
+    Set Suite Variable    ${expiry_date_${row_number}}    ${expiry_date}
+
+Get Is Doc Valid
+    [Arguments]    ${row_number}
+    ${object_name}    Determine Multiple Object Name Based On Active Tab    ccboPassportValid${row_number}    False
+    ${passport_valid}    Get Control Text Value    ${object_name}
+    Set Suite Variable    ${passport_valid_${row_number}}    ${passport_valid}
+
+Get Journey Type
+    [Arguments]    ${row_number}
+    ${object_name}    Determine Multiple Object Name Based On Active Tab    ccboJourneyType${row_number}    False
+    ${journey_type}    Get Control Text Value    ${object_name}
+    Set Suite Variable    ${journey_type_${row_number}}    ${journey_type}
+
+Get Nationality/Citizenship
+    [Arguments]    ${row_number}
+    ${object_name}    Determine Multiple Object Name Based On Active Tab    ccboNationality${row_number}    False
+    ${nationality}    Get Control Text Value    ${object_name}
+    Set Suite Variable    ${nationality_${row_number}}    ${nationality}
+
+Get Passport & Visa Info Panel Text
+    Click Control Button    [NAME:PassportVisaInfo]
+    Send    {HOME}
+    Sleep    1
+    Send    {UP 100}
+    Sleep    1
+    Send    {SHIFTDOWN}{DOWN 100}{SHIFTUP}
+    Sleep    1
+    Send    {CTRLDOWN}C{CTRLUP}
+    Sleep    1
+    ${data_clipboard}    Get Data From Clipboard
+    Set Test Variable    ${passport_and_visa_info_text}    ${data_clipboard}
+    [Teardown]    Take Screenshot
+
+Get Travel Document Details
+    [Arguments]    ${row_number}
+    Get Document Type    ${row_number}
+    Get Nationality/Citizenship    ${row_number}
+    Get Doc Number    ${row_number}
+    Get Expiry Date    ${row_number}
+    Get Is Doc Valid    ${row_number}
+    Take Screenshot
+
+Get Visa Required
+    [Arguments]    ${row_number}
+    ${object_name}    Determine Multiple Object Name Based On Active Tab    ccboVisa${row_number}    False
+    ${visa_required}    Get Control Text Value    ${object_name}
+    Set Suite Variable    ${visa_required_${row_number}}    ${visa_required}
+
+Get Visa Requirements
+    [Arguments]    ${row_number}
+    Get Country Visited    ${row_number}
+    Get Visa Required    ${row_number}
+    Get Journey Type    ${row_number}
+    Take Screenshot
+
+Popuate Pspt And Visa With Values
+    [Arguments]    ${row_number}    ${doc_type}    ${nationality}    ${doc_number}    ${is_doc_valid}
+    ${row_number}    Evaluate    ${row_number}-1
+    Control Click    ${title_power_express}    ${EMPTY}    [NAME:ccboDocumentType${row_number}]
+    Send    ${doc_type}
+    Control Click    ${title_power_express}    ${EMPTY}    [NAME:ccboNationality${row_number}]
+    Send    ${nationality}
+    Control Click    ${title_power_express}    ${EMPTY}    [NAME:ctxtPassportNumber${row_number}]
+    Send    ${doc_number}
+    Control Click    ${title_power_express}    ${EMPTY}    [NAME:ccboPassportValid${row_number}]
+    Send    ${is_doc_valid}
+    Set Expiration Date For Newly Added Passport    [NAME:cdtpExpiryDate${row_number}]
+    Control Click    ${title_power_express}    ${EMPTY}    [NAME:chkSelectPassport${row_number}]
+    [Teardown]    Take Screenshot
+
+Populate Pspt And Visa With Values
+    [Arguments]    ${document_needed}    ${nationality_needed}    ${passport_number}    ${expiry_date}    ${doc_validity}
+    Select Value From Combobox    ${combo_documenttype_0}    ${document_needed}
+    Select Value From Combobox    ${combo_nationality_citizenship}    ${nationality_needed}
+    Send Control Text Value    ${text_docnumber0}    ${passport_number}
+    Select Expiry Date X Months    ${expiry_date}
+    Click Control Button    ${combo_docvalid_0}
+    Send Control Text Value    ${combo_docvalid_0}    ${doc_validity}
+    Comment    Select Value From Dropdown List    ${combo_docvalid_0}    ${doc_validity}
+    [Teardown]    Take Screenshot
+
+Populate Pspt and Visa Panel With Default Values
+    ${is_domestic_trip_not_checked} =    Get Checkbox Status    ${check_box_domestic_trip}
+    Run Keyword If    '${is_domestic_trip_not_checked}' == 'False'    Control Click    ${title_power_express}    ${EMPTY}    ${check_box_domestic_trip}
+    [Teardown]    Take Screenshot
+
+Populate Visa Group Details With Values
+    [Arguments]    ${visa_required}    ${visa_trip_type}
+    Click Control Button    ${combo_visa_required_0}
+    Set Control Text Value    ${combo_visa_required_0}    ${visa_required}
+    Click Control Button    ${combo_journey_type_0}
+    Set Control Text Value    ${combo_journey_type_0}    ${visa_trip_type}
+    [Teardown]    Take Screenshot
+
+Select Expiry Date X Months
+    [Arguments]    ${number_of_months}=24    ${row_number}=0
+    ${expiry_date}    Set Departure Date X Months From Now In Syex Format    ${number_of_months}
+    @{expiry_date_array}    Split String    ${expiry_date}    /
+    Set Test Variable    ${expiry_month}    ${expiry_date_array[0]}
+    Set Test Variable    ${expiry_day}    ${expiry_date_array[1]}
+    Set Test Variable    ${expiry_year}    ${expiry_date_array[2]}
+    Set Suite Variable    ${expiry_date}
+    Control Click    ${title_power_express}    ${EMPTY}    [NAME:cdtpExpiryDate${row_number}]
+    Send    ${expiry_year}    1
+    Send    {LEFT}
+    Send    ${expiry_day}    1
+    Send    {LEFT}
+    Send    ${expiry_month}    1
+    Sleep    0.5
+    Send    {TAB}
+    Sleep    0.5
+
+Select Is Doc Valid
+    [Arguments]    ${is_doc_valid}    ${row_number}=0
+    Set Control Text Value    [NAME:ccboPassportValid${row_number}]    ${is_doc_valid}
+    ${current_value}    Get Control Text Value    [NAME:ccboPassportValid${row_number}]
+    Should Be Equal    ${current_value}    ${is_doc_valid}    Selected ${is_doc_valid} in [NAME:ccboPassportValid${row_number}]
+
+Select Nationality/Citizenship
+    [Arguments]    ${nationality}    ${row_number}=0
+    Select Value From Combobox    [NAME:ccboNationality${row_number}]    ${nationality}
+
+Select Visa Requirement
+    [Arguments]    ${visa_required}    ${row_number}=0
+    Set Control Text Value    [NAME:ccboVisa${row_number}]    ${visa_required}
+
+Set Document Number
+    [Arguments]    ${doc_number}    ${row_number}=0
+    Set Control Text Value    [NAME:ctxtPassportNumber${row_number}]    ${doc_number}
+
+Set Expiration Date For Newly Added Passport
+    [Arguments]    ${expiry_date_field}
+    ${expiry_date}    Generate Date X Months From Now    24    0    %#m/%#d/%Y
+    @{expiry_date_array}    Split String    ${expiry_date}    /
+    Set Test Variable    ${expiry_month}    ${expiry_date_array[0]}
+    Set Test Variable    ${expiry_day}    ${expiry_date_array[1]}
+    Set Test Variable    ${expiry_year}    ${expiry_date_array[2]}
+    Set Suite Variable    ${expiry_date}
+    Control Click    ${title_power_express}    ${EMPTY}    ${expiry_date_field}
+    Send    ${expiry_year}    1
+    Send    {LEFT}
+    Send    ${expiry_day}    1
+    Send    {LEFT}
+    Send    ${expiry_month}    1
+    Sleep    0.5
+    Send    {TAB}
+    Sleep    0.5
+
+Tick Domestic Trip
+    Tick Checkbox    ${check_box_domestic_trip}
+
+Tick Use Document
+    [Arguments]    ${row_number}=1
+    ${row_number}    Evaluate    ${row_number}-1
+    Click Control Button    [NAME:chkSelectPassport${row_number}]
+
+Untick Domestic Trip
+    Untick Checkbox    ${check_box_domestic_trip}
+
+Get Countries Visited
+    Wait Until Control Object Is Visible    [NAME:grpVisa]
+    @{countries_visited} =    Create List
+    : FOR    ${INDEX}    IN RANGE    0    11
+    \    ${country_visited} =    Control Get Text    ${title_power_express}    ${EMPTY}    [NAME:ctxtCountries${INDEX}]
+    \    Append To List    ${countries_visited}    ${country_visited}
+    \    Exit For Loop If    "${country_visited}" == "${EMPTY}"
+    [Return]    ${countries_visited}
+
+Select Country Of Residence
+    [Arguments]    ${country_of_residence}
+    Set Control Text Value    [NAME:ccboCountryResidence]    ${country_of_residence}
+    Send    {TAB}
+    ${current_value}    Get Control Text Value    [NAME:ccboCountryResidence]
+    Should Be Equal    ${current_value}    ${country_of_residence}

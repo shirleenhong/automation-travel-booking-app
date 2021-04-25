@@ -1,0 +1,54 @@
+*** Settings ***
+Variables         ../variables/apis_sfpd_control_objects.py
+Resource          ../common/utilities.txt
+
+*** Keywords ***
+Populate APIS/SFPD Address
+    [Arguments]    ${street}    ${city}    ${country}    ${state_code}    ${zip_code}
+    Click Given Object Using Coords    ${radio_address_Home}
+    Send Control Text Value    ${edit_address_street}    ${street}
+    Send Control Text Value    ${edit_address_city}    ${city}
+    Click Control Button    ${combo_address_country}
+    Send Control Text Value    ${combo_address_country}    ${country}
+    Select Value From Dropdown List    ${combo_address_statecode}    ${state_code}
+    Send Control Text Value    ${edit_address_zipcode}    ${zip_code}
+    [Teardown]    Take Screenshot
+
+Populate APIS/SFPD Panel With Default Values
+    ${chkbx_notknown_status}    Get Checkbox Status    ${check_box_notknown}
+    Run Keyword If    "${chkbx_notknown_status}" == "False"    Control Click    ${title_power_express}    ${EMPTY}    ${check_box_notknown}
+    ${chkbx_notknown_status2}    Get Checkbox Status    ${check_box_notknown2}
+    Run Keyword If    "${chkbx_notknown_status2}" == "False"    Control Click    ${title_power_express}    ${EMPTY}    ${check_box_notknown2}
+    ${chkbx_notknown_status3}    Get Checkbox Status    ${check_box_notknown3}
+    Run Keyword If    "${chkbx_notknown_status3}" == "False"    Control Click    ${title_power_express}    ${EMPTY}    ${check_box_notknown3}
+    ${chkbx_notknown_status4}    Get Checkbox Status    ${check_box_notknown4}
+    Run Keyword If    "${chkbx_notknown_status4}" == "False"    Control Click    ${title_power_express}    ${EMPTY}    ${check_box_notknown4}
+    [Teardown]    Take Screenshot
+
+Populate SFPD Gender
+    [Arguments]    ${gender_sfpd}
+    Log    Populating APIS/SFPD Panel...    INFO
+    Control Click    ${title_power_express}    ${EMPTY}    [NAME:ccboGenderSFPD]
+    Control Set Text    ${title_power_express}    ${EMPTY}    [NAME:ccboGenderSFPD]    ${gender_sfpd}
+    ${chkbx_notknown_status2}    Get Checkbox Status    ${check_box_notknown2}
+    Run Keyword If    "${chkbx_notknown_status2}" == "False"    Control Click    ${title_power_express}    ${EMPTY}    ${check_box_notknown2}
+    ${chkbx_notknown_status4}    Get Checkbox Status    ${check_box_notknown4}
+    Run Keyword If    "${chkbx_notknown_status4}" == "False"    Control Click    ${title_power_express}    ${EMPTY}    ${check_box_notknown4}
+    Take Screenshot
+
+Set APIS SFPD Expiration Date
+    [Arguments]    ${date_needed}
+    Click Control Button    ${edit_last_name_sfpd}
+    Send    {TAB}
+    Send    ${date_needed}
+    [Teardown]    Take Screenshot
+
+Tick Not Known
+    [Arguments]    ${tick_value}
+    Run Keyword If    '${tick_value.lower()}' == 'tick'    Click Control Button    ${check_box_notknown}
+    ...    ELSE    No Operation
+
+Tick SFPD Details Unknown
+    ${chkbx_notknown_status2}    Get Checkbox Status    ${check_box_notknown2}
+    Run Keyword If    "${chkbx_notknown_status2}" == "False"    Control Click    ${title_power_express}    ${EMPTY}    ${check_box_notknown2}
+    [Teardown]    Take Screenshot

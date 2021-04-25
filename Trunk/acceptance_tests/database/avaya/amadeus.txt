@@ -1,0 +1,262 @@
+*** Settings ***
+Suite Setup       Set Suite Variable    ${gds_switch}    amadeus
+Force Tags        amadeus    fr
+Resource          ../database_verification.txt
+
+*** Test Cases ***
+Verify Portrait Request Info Are Logged Into CTIIntegrationUsage Using Search By Traveler GUID
+    [Tags]    us6363    us6365    us6432    de7457
+    Open Power Express And Retrieve Profile    ${version}    Test    U003KXR    fr-FR    kronquillofr    FR QA Team Amadeus
+    Set Client And Traveler    FR Amadeus 1 - SyEx ¦ FR - Amadeus Sub2    Kristine    Syex
+    Drop Test Data To TestDropFolder    1-amadeus-testcall-guid.notification.xml
+    Wait Until Progress Info is Completed
+    Verify Test Data Notification Is Saved To Database    1
+    Verify Portrait Request XML Contains Correct Values Using Search By Traveler GUID
+    Verify CTI Integration Usage ID Contains The Correct Application Usage ID Value
+    Wait Until Progress Info Is Completed
+    Verify Search Traveller OTT Value Is NULL    Search Traveller CTI Guid
+    Click Clear All
+    Verify OTT Start Time Is Logged Correctly And Search Traveller Value Is Not NULL    Search Traveller CTI Guid
+    [Teardown]    Click Clear All
+
+Verify Portrait Request Info Are Logged Into CTIIntegrationUsage Using Search By VDN and External ID
+    [Tags]    us6363    us6365    us6432
+    Drop Test Data To TestDropFolder    3.1-amadeus-testcall-client-extid.notification.xml
+    Wait Until Progress Info is Completed
+    Verify Test Data Notification Is Saved To Database    3
+    Verify Portrait Request XML Contains Correct Values Using Search By VDN and External ID
+    Verify CTI Integration Usage ID Contains The Correct Application Usage ID Value
+    Wait Until Progress Info Is Completed
+    Click Clear All
+    Verify OTT Start Time Is Logged Correctly And Search Traveller Value Is Not NULL    Search Traveller CTI No Guid
+    [Teardown]    Click Clear All
+
+Verify Portrait Request Info Are Logged Into CTIIntegrationUsage Using Search By VDN and PIN (Single Client)
+    [Tags]    us6363    us6365    us6432    de7457
+    Set Client And Traveler    FR Amadeus 1 - SyEx ¦ FR - Amadeus Sub2    Kristine    Syex
+    Drop Test Data To TestDropFolder    3.2-amadeus-testcall-client-pin.notification.xml
+    Wait Until Progress Info is Completed
+    Verify Test Data Notification Is Saved To Database    1
+    Verify Portrait Request XML Contains Correct Values Using Search By VDN and PIN (Single Client)
+    Verify CTI Integration Usage ID Contains The Correct Application Usage ID Value
+    Wait Until Progress Info Is Completed
+    Verify Search Traveller OTT Value Is NULL    Search Traveller CTI No Guid
+    Click Clear All
+    Verify OTT Start Time Is Logged Correctly And Search Traveller Value Is Not NULL    Search Traveller CTI No Guid
+    [Teardown]    Click Clear All
+
+Verify Portrait Request Info Are Logged Into CTIIntegrationUsage Using Search By ANI
+    [Tags]    us6363    us6365    us6432    de7457
+    Set Client And Traveler    FR Amadeus 1 - SyEx ¦ FR - Amadeus Sub2    Kristine    Syex
+    Drop Test Data To TestDropFolder    4-amadeus-testcall-ani.notification.xml
+    Wait Until Progress Info is Completed
+    Verify Test Data Notification Is Saved To Database    2
+    Verify Portrait Request XML Contains Correct Values Using Search By ANI
+    Verify CTI Integration Usage ID Contains The Correct Application Usage ID Value
+    Wait Until Progress Info Is Completed
+    Verify Search Traveller OTT Value Is NULL    Search Traveller CTI No Guid
+    Click Clear All
+    Verify OTT Start Time Is Logged Correctly And Search Traveller Value Is Not NULL    Search Traveller CTI No Guid
+    [Teardown]    Click Clear All
+
+Verify Portrait Request Info Are Logged Into CTIIntegrationUsage Using Search By VDN and PIN (Multiple Client)
+    [Tags]    us6363    us6365    us6432    de7457
+    Set Client And Traveler    FR Amadeus 1 - SyEx ¦ FR - Amadeus Sub2    Kristine    Syex
+    Drop Test Data To TestDropFolder    5-amadeus-testcall-vdn-pin.notification.xml
+    Wait Until Progress Info is Completed
+    Verify Test Data Notification Is Saved To Database    2
+    Verify Portrait Request XML Contains Correct Values Using Search By VDN and PIN (Multiple Client)
+    Verify CTI Integration Usage ID Contains The Correct Application Usage ID Value
+    Wait Until Progress Info Is Completed
+    Verify Search Traveller OTT Value Is NULL    Search Traveller CTI No Guid
+    Click Clear All
+    Verify OTT Start Time Is Logged Correctly And Search Traveller Value Is Not NULL    Search Traveller CTI No Guid
+    [Teardown]    Click Clear All
+
+Verify Portrait Request Info Are Logged Into CTIIntegrationUsage Using Search By Traveler GUID, VDN and PIN (Multiple Client)
+    [Tags]    us6363    us6365    us6432    de7457
+    Set Client And Traveler    FR Amadeus 1 - SyEx ¦ FR - Amadeus Sub2    Kristine    Syex
+    Drop Test Data To TestDropFolder    6-amadeus-testcall-guid-vdn-pin.notification.xml
+    Wait Until Progress Info is Completed
+    Verify Test Data Notification Is Saved To Database    3
+    Verify Portrait Request XML Contains Correct Values Using Search By GUID, VDN and PIN (Multiple Client)
+    Verify CTI Integration Usage ID Contains The Correct Application Usage ID Value
+    Wait Until Progress Info Is Completed
+    Verify Search Traveller OTT Value Is NULL    Search Traveller CTI No Guid
+    Click Clear All
+    Verify OTT Start Time Is Logged Correctly And Search Traveller Value Is Not NULL    Search Traveller CTI No Guid
+    [Teardown]    Click Clear All
+
+Verify Portrait Request Info Are Logged Into CTIIntegrationUsage Using Search By Email
+    [Tags]    us6363    us6365    us6432    de7457
+    Change Locale, Profile, Team    en-US    tchua    FR QA Team Amadeus    u002txc
+    Click Search Email
+    Wait Until Progress Info is Completed
+    Verify Test Data Notification Is Saved To Database    1
+    Verify Portrait Request XML Contains Correct Values Using Search Email
+    Verify CTI Integration Usage ID Contains The Correct Application Usage ID Value
+    Wait Until Progress Info Is Completed
+    Click Clear All
+    Verify OTT Start Time Is Logged Correctly And Search Traveller Value Is Not NULL    Search Traveller CTI No Guid
+    [Teardown]    Click Clear All
+
+Verify that Power Express Stop looking for the profile automatically when No Match is returned from the CTI server
+    [Tags]    US6615
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    fr-FR    AutomationFR    FR QA Team Amadeus
+    Drop Test Data To TestDropFolder    1.1-amadeus-testcall-NOGuid.notification.xml
+    Wait Until Progress Info is Completed
+    Activate Power Express Window
+    Verify Error(Expected) In Status Strip Text    L"appelant n'a pas été trouvé avec les informations de la téléphonie. Merci de rechercher avec le nom de famille
+    Verify Entry Is Present In Perf Log File    BusinessFunctionMetric.SearchTravellerFailure-NoMatchfromCTIServer
+    Verify Search Traveller OTT Value is null for NON-GUID    Search Traveller CTI Guid
+
+*** Keywords ***
+Get CTI Integration Usage Id
+    ${computer_name}    Evaluate    os.environ['COMPUTERNAME']    os
+    @{resultset_cti_integration_usage}    Execute Query    select top 1 * from CTIIntegrationUsage where ComputerName = '${computer_name}' order by 1 desc    ApplicationUsage_Test
+    Set Test Variable    ${resultset_cti_integration_usage}
+    ${cti_integration_usage_id}    Set Variable    ${resultset_cti_integration_usage[0][0]}
+    ${application_usage_id}    Set Variable    ${resultset_cti_integration_usage[0][19]}
+    [Return]    ${cti_integration_usage_id}    ${application_usage_id}
+
+Verify Portrait Request XML Contains Correct Values Using Search By Traveler GUID
+    ${xml_parsed}    XML.Parse Xml    ${resultset_cti_integration_usage_request[0][2]}
+    Should Not Be Empty    ${xml_parsed}
+    XML.Log Element    ${xml_parsed}
+    XML.Element Attribute Should Be    ${xml_parsed}    guid    A:632D767    .//Traveler
+    XML.Element Attribute Should Be    ${xml_parsed}    {http://www.w3.org/2001/XMLSchema-instance}type    searchByTravelerGuid    .//SearchOption
+
+Verify Portrait Request XML Contains Correct Values Using Search By VDN and External ID
+    #first
+    ${xml_parsed}    XML.Parse Xml    ${resultset_cti_integration_usage_request[0][2]}
+    Should Not Be Empty    ${xml_parsed}
+    XML.Log Element    ${xml_parsed}
+    XML.Element Text Should Be    ${xml_parsed}    177535092    .//SearchOption/DialNumber
+    XML.Element Text Should Be    ${xml_parsed}    11833391    .//SearchOption/Pin
+    XML.Element Attribute Should Be    ${xml_parsed}    {http://www.w3.org/2001/XMLSchema-instance}type    searchByDialNumberPin    .//SearchOption
+    #second
+    ${xml_parsed}    XML.Parse Xml    ${resultset_cti_integration_usage_request[1][2]}
+    Should Not Be Empty    ${xml_parsed}
+    XML.Log Element    ${xml_parsed}
+    XML.Element Attribute Should Be    ${xml_parsed}    guid    A:19732    .//ClientTopGuid
+    XML.Element Text Should Be    ${xml_parsed}    00-00000000    .//TravelerPhoneNumber
+    XML.Element Attribute Should Be    ${xml_parsed}    {http://www.w3.org/2001/XMLSchema-instance}type    searchByTravelerPhoneNumber    .//SearchOption
+    #third
+    ${xml_parsed}    XML.Parse Xml    ${resultset_cti_integration_usage_request[2][2]}
+    Should Not Be Empty    ${xml_parsed}
+    XML.Log Element    ${xml_parsed}
+    XML.Element Attribute Should Be    ${xml_parsed}    clientTopGuid    A:19732    .//Client
+    XML.Element Attribute Should Be    ${xml_parsed}    clientSubGuid    A:225D6    .//Client
+    XML.Element Attribute Should Be    ${xml_parsed}    type    EmplId    .//TravelerExternalId
+    XML.Element Attribute Should Be    ${xml_parsed}    externalId    11833391    .//TravelerExternalId
+    XML.Element Attribute Should Be    ${xml_parsed}    {http://www.w3.org/2001/XMLSchema-instance}type    searchByTravelerExternalId    .//SearchOption
+
+Verify Portrait Request XML Contains Correct Values Using Search By VDN and PIN (Single Client)
+    ${xml_parsed}    XML.Parse Xml    ${resultset_cti_integration_usage_request[0][2]}
+    Should Not Be Empty    ${xml_parsed}
+    XML.Log Element    ${xml_parsed}
+    XML.Element Attribute Should Be    ${xml_parsed}    clientTopGuid    A:175F1    .//SearchOption/Client
+    XML.Element Attribute Should Be    ${xml_parsed}    clientSubGuid    A:427A8    .//SearchOption/Client
+    XML.Element Text Should Be    ${xml_parsed}    13542150    .//SearchOption/Pin
+    XML.Element Attribute Should Be    ${xml_parsed}    {http://www.w3.org/2001/XMLSchema-instance}type    searchByTravelerPin    .//SearchOption
+
+Verify Portrait Request XML Contains Correct Values Using Search By ANI
+    ${xml_parsed}    XML.Parse Xml    ${resultset_cti_integration_usage_request[0][2]}
+    Should Not Be Empty    ${xml_parsed}
+    XML.Log Element    ${xml_parsed}
+    XML.Element Text Should Be    ${xml_parsed}    33-24-5320987    .//SearchOption/TravelerPhoneNumber
+    XML.Element Attribute Should Be    ${xml_parsed}    {http://www.w3.org/2001/XMLSchema-instance}type    searchByTravelerPhoneNumber    .//SearchOption
+
+Verify Portrait Request XML Contains Correct Values Using Search By VDN and PIN (Multiple Client)
+    #first
+    ${xml_parsed}    XML.Parse Xml    ${resultset_cti_integration_usage_request[0][2]}
+    Should Not Be Empty    ${xml_parsed}
+    XML.Log Element    ${xml_parsed}
+    XML.Element Text Should Be    ${xml_parsed}    8669505733    .//SearchOption/DialNumber
+    XML.Element Text Should Be    ${xml_parsed}    11278885    .//SearchOption/Pin
+    XML.Element Attribute Should Be    ${xml_parsed}    {http://www.w3.org/2001/XMLSchema-instance}type    searchByDialNumberPin    .//SearchOption
+    #second
+    ${xml_parsed}    XML.Parse Xml    ${resultset_cti_integration_usage_request[1][2]}
+    XML.Log Element    ${xml_parsed}
+    XML.Element Text Should Be    ${xml_parsed}    33245320980    .//SearchOption/TravelerPhoneNumber
+    XML.Element Attribute Should Be    ${xml_parsed}    {http://www.w3.org/2001/XMLSchema-instance}type    searchByTravelerPhoneNumber    .//SearchOption
+
+Verify Portrait Request XML Contains Correct Values Using Search Email
+    ${xml_parsed}    XML.Parse Xml    ${resultset_cti_integration_usage_request[0][2]}
+    Should Not Be Empty    ${xml_parsed}
+    XML.Log Element    ${xml_parsed}
+    XML.Element Text Should Be    ${xml_parsed}    KWang2@Carlsonwagonlit.com    .//TravelerEmail
+    XML.Element Attribute Should Be    ${xml_parsed}    {http://www.w3.org/2001/XMLSchema-instance}type    searchByTravelerEmail    .//SearchOption
+
+Verify Test Data Notification Is Saved To Database
+    [Arguments]    ${expected_row_count}
+    ${cti_integration_usage_id}    ${application_usage_id}    Get CTI Integration Usage Id
+    @{resultset_cti_integration_usage_request}    Execute Query    select top 10 * from CTIIntegrationUsageRequest where CTIIntegrationUsageId = ${cti_integration_usage_id} order by 1 desc    ApplicationUsage_Test
+    ${resultset_length}    Get Length    ${resultset_cti_integration_usage_request}
+    Should Be Equal As Integers    ${expected_row_count}    ${resultset_length}    msg=Row count should be ${expected_row_count}
+    Set Test Variable    ${resultset_cti_integration_usage_request}
+
+Verify CTI Integration Usage ID Contains The Correct Application Usage ID Value
+    ${cti_integration_usage_id}    ${application_usage_id}    Get CTI Integration Usage Id
+    @{resultset_application_usage}    Execute Query    select top 1 * from ApplicationUsage where ApplicationUsageId = ${application_usage_id} order by 1 desc    ApplicationUsage_Test
+    Should Be Equal    ${resultset_cti_integration_usage[0][6]}    ${resultset_application_usage[0][9]}    CTI Usage Subunit is NOT the same as Application Usage Subunit
+    Should Be Equal    ${resultset_cti_integration_usage[0][8]}    ${resultset_application_usage[0][6]}    CTI Usage System User Guid is NOT the same as Application Usage System User Guid
+    Should Be Equal    ${resultset_cti_integration_usage[0][4]}    ${resultset_application_usage[0][5]}    CTI Usage Computer Name is NOT the same as Application Usage Computer Name
+
+Verify Portrait Request XML Contains Correct Values Using Search By GUID, VDN and PIN (Multiple Client)
+    #first
+    ${xml_parsed}    XML.Parse Xml    ${resultset_cti_integration_usage_request[0][2]}
+    Should Not Be Empty    ${xml_parsed}
+    XML.Log Element    ${xml_parsed}
+    XML.Element Text Should Be    ${xml_parsed}    9517534560    .//SearchOption/DialNumber
+    XML.Element Text Should Be    ${xml_parsed}    23192351    .//SearchOption/Pin
+    XML.Element Attribute Should Be    ${xml_parsed}    {http://www.w3.org/2001/XMLSchema-instance}type    searchByDialNumberPin    .//SearchOption
+    #second
+    ${xml_parsed}    XML.Parse Xml    ${resultset_cti_integration_usage_request[1][2]}
+    XML.Log Element    ${xml_parsed}
+    XML.Element Attribute Should Be    ${xml_parsed}    guid    A:8DCDD    .//ClientTopGuid
+    XML.Element Text Should Be    ${xml_parsed}    1-9807000    .//SearchOption/TravelerPhoneNumber
+    XML.Element Attribute Should Be    ${xml_parsed}    {http://www.w3.org/2001/XMLSchema-instance}type    searchByTravelerPhoneNumber    .//SearchOption
+    #third
+    ${xml_parsed}    XML.Parse Xml    ${resultset_cti_integration_usage_request[2][2]}
+    XML.Log Element    ${xml_parsed}
+    XML.Element Attribute Should Be    ${xml_parsed}    clientTopGuid    A:8DCDD    .//Client
+    XML.Element Attribute Should Be    ${xml_parsed}    clientSubGuid    A:C8861    .//Client
+    XML.Element Attribute Should Be    ${xml_parsed}    type    EmplId    .//TravelerExternalId
+    XML.Element Attribute Should Be    ${xml_parsed}    externalId    23192351    .//TravelerExternalId
+    XML.Element Attribute Should Be    ${xml_parsed}    {http://www.w3.org/2001/XMLSchema-instance}type    searchByTravelerExternalId    .//SearchOption
+
+Verify Search Traveller OTT Value Is NULL
+    [Arguments]    ${application_event_description}
+    &{application_event_dict}    Create Dictionary    Search By EMail=41    Search Traveller=42    Search Traveller CTI Guid=48    Search Traveller CTI No Guid=49
+    ${application_event_id}    Get From Dictionary    ${application_event_dict}    ${application_event_description}
+    ${computer_name}    Evaluate    os.environ['COMPUTERNAME']    os
+    @{search_traveller}    Execute Query    select top 2 * from applicationusage where computername = '${computer_name}' and ApplicationEventId = 42 order by applicationusageid desc    ApplicationUsage_Test
+    Log List    ${search_traveller}
+    Should Be Equal    ${search_traveller[0][-1]}    ${None}
+    Should Be Equal    ${search_traveller[1][-1]}    ${None}
+
+Verify OTT Start Time Is Logged Correctly And Search Traveller Value Is Not NULL
+    [Arguments]    ${application_event_description}
+    &{application_event_dict}    Create Dictionary    Search By EMail=41    Search Traveller=42    Search Traveller CTI Guid=48    Search Traveller CTI No Guid=49
+    ${application_event_id}    Get From Dictionary    ${application_event_dict}    ${application_event_description}
+    ${computer_name}    Evaluate    os.environ['COMPUTERNAME']    os
+    @{search_traveller}    Execute Query    select top 2 * from applicationusage where computername = '${computer_name}' and ApplicationEventId = 42 order by applicationusageid desc    ApplicationUsage_Test
+    Log List    ${search_traveller}
+    Should Be True    ${search_traveller[0][-1]} != ${None}
+    Should Be True    ${search_traveller[1][-1]} != ${None}
+    @{application_event_result}    Execute Query    select top 1 * from applicationusage where computername = '${computer_name}' and ApplicationEventId = ${application_event_id} order by applicationusageid desc    ApplicationUsage_Test
+    Should Be True    ${application_event_result[0][-1]} != ${None}
+    ${application_usage_id}    Set Variable    ${application_event_result[0][0]}
+    @{actual_time}    Execute Query    select * from applicationusagedetail where applicationusageid = ${application_usage_id}    ApplicationUsage_Test
+    Should Be True    ${actual_time[0][-1]} != ${None}
+
+Verify Search Traveller OTT Value is null for NON-GUID
+    [Arguments]    ${application_event_description}
+    Comment    &{application_event_dict}    Create Dictionary    Search Traveller CTI Guid=48    Search Traveller CTI No Guid=49
+    Comment    ${application_event_id}    Get From Dictionary    ${application_event_dict}    ${application_event_description}
+    ${computer_name}    Evaluate    os.environ['COMPUTERNAME']    os
+    @{search_traveller}    Execute Query    select top 2 * from applicationusage where computername = '${computer_name}' and ApplicationEventId = 110 order by applicationusageid desc    ApplicationUsage_Test
+    Log List    ${search_traveller}
+    Should Be Equal    ${search_traveller[0][-1]}    ${None}
+    Should Be Equal    ${search_traveller[1][-1]}    ${None}

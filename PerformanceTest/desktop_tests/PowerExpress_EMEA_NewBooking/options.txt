@@ -1,0 +1,9 @@
+-+
+-DCCI
+-D_IDA_XL
+-DWINNT
+-ID:\DesktopTest\PerformanceTest\desktop_tests\PowerExpress_EMEA_NewBooking
+-IC:\Program Files (x86)\Micro Focus\LoadRunner\include
+-ed:\desktoptest\performancetest\desktop_tests\powerexpress_emea_newbooking\\logfile.log
+d:\desktoptest\performancetest\desktop_tests\powerexpress_emea_newbooking\\combined_PowerExpress_EMEA_NewBooking.c
+d:\desktoptest\performancetest\desktop_tests\powerexpress_emea_newbooking\\pre_cci.c

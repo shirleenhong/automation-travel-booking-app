@@ -1,0 +1,62 @@
+*** Settings ***
+Suite Setup       Set Suite Variable    ${gds_switch}    sabre
+Force Tags        sabre    noram
+Resource          ../database_verification.txt
+
+*** Test Cases ***
+Verify Application Usage And Performance Log Are Recorded When Power Express Failed To Connect To Avaya One-X After Clear All : SO To Yes - AT TOPUNIT LEVEL
+    [Tags]    us5664
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    en-US    AutomationUS    US AUTO SABRE
+    Select GDS    Sabre
+    Delete Current Specific Log File    SyExPerfLog
+    Set Client And Traveler    Sabre 16 - Auto ¦ US4363    auto    name
+    Click Clear All Without Pop-up Handle
+    Verify Avaya One-X Warning Window Displays
+    Confirm Popup Window
+    Verify Application Usage Event Was Logged    Clear All
+    Verify Entry Is Present In Perf Log File    BusinessFunctionMetric.AvayaOne-XPopup
+    Verify Telephone Is Disconnected
+
+*** Keywords ***
+Verify Window Is Avaya Warning Message
+    [Arguments]    ${window_title}=Power Express    ${warning_message}=Unable to connect to Avaya One-X Agent
+    Wait Until Window Exists    Power Express
+    ${message}    Control Get Text    Power Express    ${EMPTY}    [NAME:txtMessageTextBox]
+    ${is_avaya_window}    Run Keyword And Continue On Failure    Should Contain    ${message}    Unable to connect to Avaya One-X Agent
+    Verify Application Usage Event Was Logged    Avaya One-X Not Connected
+    Confirm Popup Window
+    [Teardown]    Take Screenshot
+
+Wait Until Avaya One-X Warning Window Displays
+    Wait Until Keyword Succeeds    10    5    Verify Window Is Avaya Warning Message
+
+Verify Avaya One-X Warning Window Displays
+    Wait Until Avaya One-X Warning Window Displays
+
+Click Clear All Without Pop-up Handle
+    Activate Power Express Window
+    Wait Until Control Object Is Enabled    ${btn_clearAll}    ${title_power_express}    true
+    Control Focus    ${title_power_express}    ${EMPTY}    ${btn_clearAll}
+    Control Click    ${title_power_express}    ${EMPTY}    ${btn_clearAll}
+
+Verify Application Usage Event Was Logged
+    [Arguments]    ${actual_application_usage_event}
+    [Documentation]    \#verifies the FIRST/TOP application usage event logged
+    Set Test Variable    ${schema}    ApplicationUsage_Test
+    ${username}    Get UserName
+    Set Test Variable    ${sql_query}    SELECT TOP 1 b.*, a.ComputerName, a.ApplicationUsageDate FROM APPLICATIONUSAGE a join applicationevent b on b.applicationeventid = a.applicationeventid WHERE a.COMPUTERNAME like '%${username}%' ORDER BY a.applicationusageid DESC
+    Set Column Names
+    Verify Correct Value Is Reflected In OTT Table    ${column_applicationeventdescription}    ${actual_application_usage_event}
+
+Set Column Names
+    [Documentation]    necessary because query is by column ids not column names
+    Set Test Variable    ${column_applicationeventid}    0
+    Set Test Variable    ${column_applicationeventdescription}    1
+    Set Test Variable    ${column_computername}    2
+    Set Test Variable    ${column_applicationusagedate}    3
+
+Verify Telephony Is Inactive
+    Verify Image Does Exists    telephone_black.png
+
+Verify Telephone Is Disconnected
+    Verify Image Does Exists    telephone_red.png

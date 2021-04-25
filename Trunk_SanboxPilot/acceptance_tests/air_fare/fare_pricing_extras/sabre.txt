@@ -1,0 +1,177 @@
+*** Settings ***
+Force Tags        sabre    apac
+Resource          ../air_fare_verification.txt
+
+*** Test Cases ***
+[NB NZ] Verify That Ticketing Remarks Are Correctly Written For Itinerary With TTAS And DOM Segments (With And Without NETT Fare)
+    [Documentation]    Low Fare Trans Calculation SO is set to WPNIN
+    ...    Air Panel - Hide Realised Savings SO is set to Yes
+    ...    Client Fee Geographical Regions SO is set to INT, DOM & TTAS
+    [Tags]    us2560    de6153    de6221    valid_fail    de6285
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    en-US    AutomationNZ    NZ AUTO SABRE
+    Select GDS    Sabre
+    Set Client And Traveler    Sabre NZ 16 - Auto ¦ US2560 nz    Auto    KlayT
+    Click New Booking
+    Click Panel    Client Info
+    Click Update PNR
+    Book Flight X Months From Now    AKLSYD‡QF    01Y1    ${EMPTY}    5    0
+    Book Flight X Months From Now    SYDAKL‡QF    01Y1    WPAQF‡K10‡FCASH‡RQ‡S1-2    5    3
+    Book Flight X Months From Now    AKLNPL‡JQ    01Y1    ${EMPTY}    5    6
+    Book Flight X Months From Now    NPLAKL‡JQ    01Y1    WPAJQ‡K10‡FCASH‡RQ‡S3-4    5    9
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Set High Fare Field (If blank) with Charged Fare
+    Select Missed Saving Code Value    L - Lowest Fare Accepted
+    Verify Realised Saving Code Field Is Hidden
+    Verify Class Code Default Value Is Correct    NA - Published Fare
+    Verify Route Code Default Value    TTAS
+    Populate Air Fare Restrictions Using Default Values
+    Compute High Fare And Low Fare For Ticketing Remarks
+    Click Pricing Extras Tab
+    Set Nett Fare Field    2000
+    Set Commission Rebate Amount    0
+    Click Fare Tab    Fare 2
+    Set High Fare Field (If blank) with Charged Fare
+    Select Missed Saving Code Value    M - Miscellaneous
+    Verify Realised Saving Code Field Is Hidden
+    Verify Class Code Default Value Is Correct    NA - Published Fare
+    Verify Route Code Default Value    DOM
+    Populate Air Fare Restrictions Using Default Values
+    Compute High Fare And Low Fare For Ticketing Remarks
+    Click Pricing Extras Tab
+    Set Commission Rebate Amount    0
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Finish PNR
+    Retrieve PNR Details From Sabre Red    ${current_pnr}    *T‡    1
+    Verify Specific Line Is Written In The PNR    T‡T1F1 RTE-TTAS//TY-NETT//FQ-1//SEG-ALL//
+    Verify Specific Line Is Written In The PNR    T‡T1F1 BF\\-(USD|NZD)2000\\.00//TOTAL\\-(USD|NZD).*//    true
+    Verify Specific Line Is Written In The PNR    T‡T1F1 NETT\\-(USD|NZD)2000\\.00//MARKUP\\-0\\.00//    true
+    Verify Specific Line Is Written In The PNR    T‡T1F1 LF-${low_fare_1}//LC-L//RF-${high_fare_1}//
+    Verify Specific Line Is Written In The PNR    T‡T1F1 CLASS-NA//DISC-0.00//
+    Verify Specific Line Is Written In The PNR    T‡T2F2 RTE-DOM//TY-ETK//FQ-2//SEG-ALL//
+    Verify Specific Line Is Written In The PNR    T‡T2F2 BF\\-(USD|NZD).*//TOTAL\\-(USD|NZD).*//    true
+    Verify Specific Line Is Not Written In The PNR    T‡T2F2 NETT-
+    Verify Specific Line Is Not Written In The PNR    T‡T2F2 MARKUP-
+    Verify Specific Line Is Written In The PNR    T‡T2F2 LF-${low_fare_2}//LC-M//RF-${high_fare_2}//
+    Verify Specific Line Is Written In The PNR    T‡T2F2 CLASS-NA//DISC-0.00//
+    Verify Specific Line Is Written In The PNR    T‡TOTAL TICKETS-2//TICKETS TO ISSUE-1/2//BO-MATRIX//
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB AU] Verify That Ticketing Remarks Are Correctly Written For Itinerary With DOM Segments (With NETT Fare And Commission Rebate)
+    [Documentation]    Low Fare Trans Calculation SO is set to WPNC
+    ...    Air Panel - Hide Realised Savings SO is set to Yes
+    ...    Client Fee Geographical Regions SO is set to INT, DOM & TTAS
+    [Tags]    us2560    de6153    valid_fail    de6285
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    en-US    AutomationAU    AU AUTO SABRE
+    Select GDS    Sabre
+    Set Client And Traveler    Sabre AU 16 - Auto ¦ US2560    AutoSixteenSeven    OptimizeTrvlrFive
+    Click New Booking
+    Click Panel    Client Info
+    Click Update PNR
+    Book Flight X Months From Now    SYDMEL‡VA    01Y1    ${EMPTY}    5    0
+    Book Flight X Months From Now    MELSYD‡VA    01Y1    WPAVA‡K10‡FCASH‡RQ    5    3
+    Enter GDS Command    W-TestAddress
+    Enter GDS Command    5/
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Set High Fare Field    3333.22
+    Set Low Fare Field    22.52
+    Select Missed Saving Code Value    B - Passenger Requested Specific Supplier
+    Verify Realised Saving Code Field Is Hidden
+    Verify Class Code Default Value Is Correct    NA - Published Fare
+    Verify Route Code Default Value    DOM
+    Populate Air Fare Restrictions Using Default Values
+    Click Pricing Extras Tab
+    Set Nett Fare Field    400
+    Set Commission Rebate Amount    8
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Finish PNR
+    Retrieve PNR Details From Sabre Red    ${current_pnr}    *T‡    1
+    Verify Specific Line Is Written In The PNR    T‡T1F1 RTE-DOM//TY-NETT//FQ-1//SEG-ALL//
+    Verify Specific Line Is Written In The PNR    T‡T1F1 BF\\-(USD|AUD|NZD)400\\.00//TOTAL\\-(USD|AUD|NZD).*//    true
+    Verify Specific Line Is Written In The PNR    T‡T1F1 NETT\\-(USD|AUD|NZD)400\\.00//MARKUP\\-0\\.00//    true
+    Verify Specific Line Is Written In The PNR    T‡T1F1 LF-23//LC-B//RF-3333//
+    Verify Specific Line Is Written In The PNR    T‡T1F1 CLASS-NA//DISC-8.00//
+    Verify Specific Line Is Not Written In The PNR    T‡T2F2
+    Verify Specific Line Is Written In The PNR    T‡TOTAL TICKETS-1//TICKETS TO ISSUE-1//BO-MATRIX//
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB AU] Verify That Ticketing Remarks Are Correctly Written For Itinerary With DOM Segments (With Commission Rebate)
+    [Documentation]    Low Fare Trans Calculation SO is set to WPNC
+    ...    Air Panel - Hide Realised Savings SO is set to Yes
+    ...    Client Fee Geographical Regions SO is set to INT, DOM & TTAS
+    [Tags]    us2560    de6153    valid_fail    de6285
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    en-US    AutomationAU    AU AUTO SABRE
+    Select GDS    Sabre
+    Set Client And Traveler    Sabre AU 16 - Auto ¦ US2560    AutoSixteenSeven    OptimizeTrvlrFive
+    Click New Booking
+    Click Panel    Client Info
+    Click Update PNR
+    Book Flight X Months From Now    SYDMEL‡VA    01Y1    ${EMPTY}    5    0
+    Book Flight X Months From Now    MELSYD‡VA    01Y1    WPAVA‡K10‡FCASH‡RQ    5    3
+    Enter GDS Command    W-TestAddress
+    Enter GDS Command    5/
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Set High Fare Field    3333.62
+    Set Low Fare Field    22.22
+    Select Missed Saving Code Value    B - Passenger Requested Specific Supplier
+    Verify Realised Saving Code Field Is Hidden
+    Verify Class Code Default Value Is Correct    NA - Published Fare
+    Verify Route Code Default Value    DOM
+    Populate Air Fare Restrictions Using Default Values
+    Click Pricing Extras Tab
+    Set Commission Rebate Amount    6
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Finish PNR
+    Retrieve PNR Details From Sabre Red    ${current_pnr}    *T‡    1
+    Verify Specific Line Is Written In The PNR    T‡T1F1 RTE-DOM//TY-ETK//FQ-1//SEG-ALL//
+    Verify Specific Line Is Written In The PNR    T‡T1F1 BF\\-(NZD|AUD).*//TOTAL\\-(NZD|AUD).*//    true
+    Verify Specific Line Is Not Written In The PNR    T‡T1F1 NETT-
+    Verify Specific Line Is Not Written In The PNR    T‡T1F1 MARKUP-
+    Verify Specific Line Is Written In The PNR    T‡T1F1 LF-22//LC-B//RF-3334//
+    Verify Specific Line Is Written In The PNR    T‡T1F1 CLASS-NA//DISC-6.00//
+    Verify Specific Line Is Not Written In The PNR    T‡T2F2
+    Verify Specific Line Is Written In The PNR    T‡TOTAL TICKETS-1//TICKETS TO ISSUE-1//BO-MATRIX//
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB AU] Verify That Ticketing Remarks Are Correctly Written For Itinerary With INT Segments (Without NETT FARE And Commission Rebate)
+    [Documentation]    Low Fare Trans Calculation SO is set to WPNC
+    ...    Air Panel - Hide Realised Savings SO is set to Yes
+    ...    Client Fee Geographical Regions SO is set to INT, DOM & TTAS
+    [Tags]    us2560    de6153    valid_fail    de6285
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    en-US    AutomationAU    AU AUTO SABRE
+    Select GDS    Sabre
+    Set Client And Traveler    Sabre AU 16 - Auto ¦ US2560    AutoSixteenSeven    OptimizeTrvlrFive
+    Click New Booking
+    Click Panel    Client Info
+    Click Update PNR
+    Book Flight X Months From Now    MELLAX‡QF    01Y1    ${EMPTY}    5    0
+    Book Flight X Months From Now    LAXMEL‡QF    01Y1    WPAQF‡K10‡FCASH‡RQ    5    3
+    Enter GDS Command    W-TestAddress
+    Enter GDS Command    5/
+    Click Read Booking
+    Click Panel    Air Fare
+    Click Fare Tab    Fare 1
+    Set High Fare Field    7000.99
+    Set Low Fare Field    76.25
+    Select Missed Saving Code Value    B - Passenger Requested Specific Supplier
+    Verify Realised Saving Code Field Is Hidden
+    Verify Class Code Default Value Is Correct    NA - Published Fare
+    Verify Route Code Default Value    INT
+    Populate Air Fare Restrictions Using Default Values
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Finish PNR
+    Retrieve PNR Details From Sabre Red    ${current_pnr}    *T‡    1
+    Verify Specific Line Is Written In The PNR    T‡T1F1 RTE-INT//TY-ETK//FQ-1//SEG-ALL//
+    Verify Specific Line Is Written In The PNR    T‡T1F1 BF\\-AUD.*//TOTAL\\-AUD.*//    true
+    Verify Specific Line Is Not Written In The PNR    T‡T1F1 NETT-
+    Verify Specific Line Is Not Written In The PNR    T‡T1F1 MARKUP-
+    Verify Specific Line Is Written In The PNR    T‡T1F1 LF-76//LC-B//RF-7001//
+    Verify Specific Line Is Written In The PNR    T‡T1F1 CLASS-NA//DISC-0.00//
+    Verify Specific Line Is Not Written In The PNR    T‡T2F2
+    Verify Specific Line Is Written In The PNR    T‡TOTAL TICKETS-1//TICKETS TO ISSUE-1//BO-MATRIX//
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}

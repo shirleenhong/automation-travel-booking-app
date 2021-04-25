@@ -1,0 +1,13 @@
+[t2]
+FileName1=t2.xml
+URL1=https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/Home/Configuration
+Total=2
+RequestHeaderFile=t2_RequestHeader.txt
+RequestBodyFile=NONE
+ResponseHeaderFile=t2_ResponseHeader.txt
+ContentType=application/xml
+SnapshotXmlFile=snapshot_2.xml
+FileName2=t2_favicon_9B19689CB70C681E.ico
+URL2=https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/receiver/images/common/favicon_9B19689CB70C681E.ico
+[ProtocolInfo]
+ProtocolId=QTWeb

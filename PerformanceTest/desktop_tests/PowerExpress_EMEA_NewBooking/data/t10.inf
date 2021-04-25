@@ -1,0 +1,11 @@
+[t10]
+FileName1=t10.txt
+URL1=https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/Authentication/Logoff
+Total=1
+RequestHeaderFile=t10_RequestHeader.txt
+RequestBodyFile=NONE
+ResponseHeaderFile=t10_ResponseHeader.txt
+ContentType=text/plain
+SnapshotXmlFile=snapshot_10.xml
+[ProtocolInfo]
+ProtocolId=QTWeb

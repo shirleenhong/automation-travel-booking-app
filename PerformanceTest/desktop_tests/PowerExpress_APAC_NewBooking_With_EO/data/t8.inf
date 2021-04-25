@@ -1,0 +1,15 @@
+[t8]
+FileName1=t8.html
+URL1=https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/Authentication/GetUserName
+Total=3
+RequestHeaderFile=t8_RequestHeader.txt
+RequestBodyFile=NONE
+ResponseHeaderFile=t8_ResponseHeader.txt
+ContentType=image/png
+SnapshotXmlFile=snapshot_8.xml
+FileName2=t8_spinner_5CF0D1C8A76AAC8E.png
+URL2=https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/receiver/images/1x/spinner_5CF0D1C8A76AAC8E.png
+FileName3=t8_ico_search_E84E3D63D821F80D.png
+URL3=https://apac.cwtdesktop.uat.int.carlsonwagonlit.com/Citrix/InternalWeb/receiver/images/1x/ico_search_E84E3D63D821F80D.png
+[ProtocolInfo]
+ProtocolId=QTWeb

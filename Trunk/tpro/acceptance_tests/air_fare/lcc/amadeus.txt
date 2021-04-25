@@ -1,0 +1,2663 @@
+*** Settings ***
+Resource          ../../../../resources/panels/air_fare.txt
+Resource          ../air_fare_verification.txt
+Resource          ../../../../acceptance_tests/car/car_verification.txt
+Resource          ../../../../resources/panels/car.txt
+Resource          ../../car/car_verification.txt
+
+*** Test Cases ***
+[NB SG] Verify That LCC And BSP Are Retrieve In Air Fare Panel And Writes Correct Remarks
+    [Tags]    us1479    sg    team_c
+    Open Power Express And Retrieve Profile    ${version}    Test    u004hxc    en-GB    hcuellar    APAC QA
+    ...    Amadeus
+    Set Client And Traveler    APAC SYN CORP ¦ APAC SG LCC AUTOMATION - RANGE AMOUNT    BEAR    SGLCCAMT
+    Click New Booking
+    Click Panel    Client Info
+    Select Form Of Payment    BTA VI/VI***********0087/D0124
+    Populate Cust Refs Panel With Default Values
+    Click Update PNR
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC1    fare_total=100    taxes_total=78    servicefee_total=2    charge=20    grand_total=183
+    ...    booking_reference=A06PJTT    currency=PHP    country=SG
+    #LCC 1 Booking
+    Book Travel Fusion Air Segment    CEBUPACIFIC    5J    MNLCEB    6    S2    A06PJTT
+    Enter Travel Fusion Fare Remarks    LCC1    5J    S2    PHP    Airline
+    Enter Travel Fusion Other Remarks    LCC1    PHP    S2
+    #BSP 1 Booking
+    Book Flight X Months From Now    CEBSIN/ASQ    SS1Y1    FXP/S3    6    5
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC2    fare_total=200    taxes_total=100    servicefee_total=0    charge=250    grand_total=450
+    ...    booking_reference=A06PJTX    currency=PHP    country=SG
+    #LCC 2 Booking
+    Book Travel Fusion Air Segment    CEBUPACIFIC    5J    SINHKG    7    S4    A06PJTX
+    Enter Travel Fusion Fare Remarks    LCC2    5J    S4    PHP    Travel Fusion
+    Enter Travel Fusion Other Remarks    LCC2    PHP    S4
+    #BSP 2 Booking
+    Book Flight X Months From Now    SINMNL/APR    SS1Y1    FXP/S5    8    5
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Verify Fare Tab Is Visible In Sequence    LCC 1    Fare 1    LCC 2    Fare 2
+    #LCC Fare 1
+    Click Fare Tab    LCC 1
+    Verify LCC Fare Tab Details    MNL-CEB    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    True    LCC1
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Transaction Fee Value And Description Are Correct    LCC 1    40.00 + 30.00 (LCC) SGD Offline Fare Range Fee
+    Verify Fare Including Taxes Value Is Correct    LCC1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    BTA VI/VI***********0087/D0124
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 1    CEB
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    5J    LCC 1
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Set Airline Commission Percentage    2
+    Select Form Of Payment On Fare Quote Tab    LCC 1    BTA VI/VI***********0087/D0124
+    Get Charged Fare Value    LCC1
+    Get High Fare Value    LCC1
+    Get Low Fare Value    LCC1
+    Get Routing Name    LCC1
+    Get Point Of Turnaround    LCC1
+    Get Savings Code    LCC1
+    Get LFCC Field Value    LCC1
+    Get Fare Including Airline Taxes Value    LCC1
+    Get Transaction Fee Amount Value    LCC1
+    Get Total Amount    LCC1
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC1
+    Select Default Restricions in Fare Tab    LCC 1
+    #BSP Fare 1
+    Click Fare Tab    Fare 1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    BTA VI/VI***********0087/D0124
+    Comment    Select Form Of Payment On Fare Quote Tab    Fare 1    BTA VI/VI***********0087/D0124
+    Verify FOP Merchant Selected Is Displayed On Fare Quote Tab    ${EMPTY}
+    Select FOP Merchant On Fare Quote Tab    Fare 1    CWT
+    Verify High Fare Value Is Retrieved From TST    Fare 1    S3
+    Verify Charged Fare Value Is Retrieved From TST    Fare 1    S3
+    Verify Low Fare Value Is Retrieved From TST    Fare 1    S3    SGD
+    Verify Turnaround Value Is Correct    LCC 1    SIN
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    SQ    LCC 1
+    Populate Fare Quote Tabs with Default Values
+    Get Main Fees On Fare Quote Tab    Fare 1
+    Get Base Fare, Total Taxes, YQ Tax And LFCC From TST    Fare 1    S3
+    Get Fare Details    Fare 1    include_fare_restriction=False
+    Get LFCC Field Value    Fare 1
+    #LCC Fare 2
+    Click Fare Tab    LCC 2
+    Verify LCC Fare Tab Details    SIN-HKG    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    True    LCC2
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Transaction Fee Value And Description Are Correct    LCC 2    40.00 + 30.00 (LCC) SGD Offline Fare Range Fee
+    Verify Fare Including Taxes Value Is Correct    LCC2
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    BTA VI/VI***********0087/D0124
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 2    HKG
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    5J    LCC 2
+    Set Airline Commission Percentage    2
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Comment    Select Form Of Payment On Fare Quote Tab    LCC 2    PORTRAIT-A/AX***********0002/D0899-AX
+    Get Charged Fare Value    LCC2
+    Get High Fare Value    LCC2
+    Get Low Fare Value    LCC2
+    Get Routing Name    LCC2
+    Get Point Of Turnaround    LCC2
+    Get Savings Code    LCC2
+    Get LFCC Field Value    LCC2
+    Get Fare Including Airline Taxes Value    LCC2
+    Get Transaction Fee Amount Value    LCC2
+    Get Total Amount    LCC2
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC2
+    Select Default Restricions in Fare Tab    LCC 2
+    #BSP Fare 2
+    Click Fare Tab    Fare 2
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    BTA VI/VI***********0087/D0124
+    Comment    Select Form Of Payment On Fare Quote Tab    Fare 2    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Selected Is Displayed On Fare Quote Tab    ${EMPTY}
+    Select FOP Merchant On Fare Quote Tab    Fare 2    CWT
+    Verify High Fare Value Is Retrieved From TST    Fare 2    S5
+    Verify Charged Fare Value Is Retrieved From TST    Fare 2    S5
+    Verify Low Fare Value Is Retrieved From TST    Fare 2    S5    SGD
+    Verify Turnaround Value Is Correct    Fare 2    MNL
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    PR    Fare 2
+    Populate Fare Quote Tabs with Default Values
+    Get Main Fees On Fare Quote Tab    Fare 2
+    Get Base Fare, Total Taxes, YQ Tax And LFCC From TST    Fare 2    S5
+    Get Fare Details    Fare 2    include_fare_restriction=False
+    Get LFCC Field Value    Fare 2
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus
+    #LCC 1 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC1    SGD    SG
+    Comment    Verify Routing Itinerary Remarks Are Written    LCC1
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC1    022103    203    A06PJTT    VI***********0087/D0124    SG02
+    ...    S2
+    #BSP 1 Remarks
+    Verify Accounting Remarks For Main Sale    Fare 1    S3    03    VI***********0087/D0124    CWT    country=SG
+    Verify Routing Itinerary Remarks Are Written    Fare 1
+    #LCC 2 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC2    SGD    SG
+    Comment    Verify Routing Itinerary Remarks Are Written    LCC2
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC2    022103    203    A06PJTX    VI***********0087/D0124    SG04
+    ...    S4
+    #BSP 2 Remarks
+    Verify Accounting Remarks For Main Sale    Fare 2    S5    05    VI***********0087/D0124    CWT    country=SG
+    Verify Routing Itinerary Remarks Are Written    Fare 2
+    Verify Default Restriction Remarks Are Written    4
+    Verify Static Remarks For BSP Fares Are Displayed    2
+    Verify ViewTrip Itinerary Remarks Are Not Displayed
+
+[AB SG] Verify That LCC And BSP Are Retrieve In Air Fare Panel And Writes Correct Remarks
+    [Tags]    us1480    sg
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Verify Fare Tab Is Visible In Sequence    LCC 1    Fare 1    LCC 2    Fare 2
+    #LCC Fare 1
+    Click Fare Tab    LCC 1
+    Verify LCC Fare Tab Details    MNL-CEB    5.00    5.00    5.00    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY
+    ...    identifier=LCC1
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Transaction Fee Value And Description Are Correct    LCC 1    40.00 + 30.00 (LCC) SGD Offline Fare Range Fee
+    Verify Fare Including Taxes Value Is Correct    LCC 1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    BTA VI/VI***********0087/D0124
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 1    CEB
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    5J    LCC 1
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Comment    Select Form Of Payment On Fare Quote Tab    LCC 1    BTA VI/VI***********0087/D0124
+    Get Charged Fare Value    LCC1
+    Get High Fare Value    LCC1
+    Get Low Fare Value    LCC1
+    Get Routing Name    LCC1
+    Get Point Of Turnaround    LCC1
+    Get Savings Code    LCC1
+    Get LFCC Field Value    LCC1
+    Get Fare Including Airline Taxes Value    LCC1
+    Get Transaction Fee Amount Value    LCC1
+    Get Total Amount    LCC1
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC1
+    Select Default Restricions in Fare Tab    LCC 1
+    #BSP Fare 1
+    Click Fare Tab    Fare 1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    BTA VI/VI***********0087/D0124
+    Comment    Select Form Of Payment On Fare Quote Tab    Fare 1    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Selected Is Displayed On Fare Quote Tab    CWT
+    Select FOP Merchant On Fare Quote Tab    Fare 1    CWT
+    Verify High Fare Value Is Retrieved From TST    Fare 1    S3
+    Verify Charged Fare Value Is Retrieved From TST    Fare 1    S3
+    Verify Low Fare Value Is Retrieved From TST    Fare 1    S3    SGD
+    Verify Turnaround Value Is Correct    Fare 1    SIN
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    SQ    Fare 1
+    Populate Fare Quote Tabs with Default Values
+    Get Main Fees On Fare Quote Tab    Fare 1
+    Get Base Fare, Total Taxes, YQ Tax And LFCC From TST    Fare 1    S3
+    Get Fare Details    Fare 1    include_fare_restriction=False
+    Get LFCC Field Value    Fare 1
+    #LCC Fare 2
+    Click Fare Tab    LCC 2
+    Verify LCC Fare Tab Details    SIN-HKG    14.60    14.60    14.60    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY
+    ...    identifier=LCC2
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Fare Including Taxes Value Is Correct    LCC 2
+    Verify Transaction Fee Value And Description Are Correct    LCC 2    40.00 + 30.00 (LCC) SGD Offline Fare Range Fee
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    BTA VI/VI***********0087/D0124
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 2    HKG
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    5J    LCC 2
+    Select Form Of Payment On Fare Quote Tab    LCC 2    BTA VI/VI***********0087/D0124
+    Get Charged Fare Value    LCC2
+    Get High Fare Value    LCC2
+    Get Low Fare Value    LCC2
+    Get Routing Name    LCC2
+    Get Point Of Turnaround    LCC2
+    Get Savings Code    LCC2
+    Get LFCC Field Value    LCC2
+    Get Fare Including Airline Taxes Value    LCC2
+    Get Transaction Fee Amount Value    LCC2
+    Get Total Amount    LCC2
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC2
+    Select Default Restricions in Fare Tab    LCC 2
+    #BSP Fare 2
+    Click Fare Tab    Fare 2
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    BTA VI/VI***********0087/D0124
+    Comment    Select Form Of Payment On Fare Quote Tab    Fare 2    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Selected Is Displayed On Fare Quote Tab    CWT
+    Select FOP Merchant On Fare Quote Tab    Fare 2    CWT
+    Verify High Fare Value Is Retrieved From TST    Fare 2    S5
+    Verify Charged Fare Value Is Retrieved From TST    Fare 2    S5
+    Verify Low Fare Value Is Retrieved From TST    Fare 2    S5    SGD
+    Verify Turnaround Value Is Correct    Fare 2    MNL
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    PR    Fare 2
+    Populate Fare Quote Tabs with Default Values
+    Get Main Fees On Fare Quote Tab    Fare 2
+    Get Base Fare, Total Taxes, YQ Tax And LFCC From TST    Fare 2    S5
+    Get Fare Details    Fare 2    include_fare_restriction=False
+    Get LFCC Field Value    Fare 2
+    Click Finish PNR
+    Execute Simultaneous Change Handling    Amend To Verify That LCC And BSP Are Retrieve In Air Fare Panel And Writes Correct Remarks [SG]
+    Retrieve PNR Details from Amadeus
+    #LCC 1 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC1    SGD    SG
+    Comment    Verify Routing Itinerary Remarks Are Written    LCC1
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC1    022103    203    A06PJTT    VI***********0087/D0124    SG02
+    ...    S2
+    #BSP 1 Remarks
+    Verify Accounting Remarks For Main Sale    Fare 1    S3    03    VI***********0087/D0124    CWT    country=SG
+    Verify Routing Itinerary Remarks Are Written    Fare 1
+    #LCC 2 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC2    SGD    SG
+    Comment    Verify Routing Itinerary Remarks Are Written    LCC2
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC2    022103    203    A06PJTX    VI***********0087/D0124    SG04
+    ...    S4
+    #BSP 2 Remarks
+    Verify Accounting Remarks For Main Sale    Fare 2    S5    05    VI***********0087/D0124    CWT    country=SG
+    Verify Routing Itinerary Remarks Are Written    Fare 2
+    Verify Default Restriction Remarks Are Written    4
+    Verify Static Remarks For BSP Fares Are Displayed    2
+    Verify ViewTrip Itinerary Remarks Are Not Displayed
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB SG] Verify That LCC Bookings Are Retrieve In Air Fare Panel And Writes Correct Remarks
+    [Tags]    us1479    sg    team_c
+    Open Power Express And Retrieve Profile    ${version}    Test    u004hxc    en-GB    hcuellar    APAC QA
+    ...    Amadeus
+    Set Client And Traveler    APAC SYN CORP ¦ APAC SG LCC AUTOMATION    BEAR    SGLCC
+    Click New Booking
+    Click Panel    Client Info
+    Select Form Of Payment    PORTRAIT-A/AX***********0002/D0899-AX
+    Populate Cust Refs Panel With Default Values
+    Click Update PNR
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC1    fare_total=100    taxes_total=78    servicefee_total=2    charge=20    grand_total=183
+    ...    booking_reference=A06PJTT    currency=PHP    country=SG
+    #LCC 1 Booking
+    Book Travel Fusion Air Segment    CEBUPACIFIC    5J    MNLCEB    6    S2    A06PJTT
+    Enter Travel Fusion Fare Remarks    LCC1    5J    S2    PHP    Airline
+    Enter Travel Fusion Other Remarks    LCC1    PHP    S2
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC2    fare_total=200    taxes_total=100    servicefee_total=0    charge=250    grand_total=450
+    ...    booking_reference=A06PJTX    currency=PHP    country=SG
+    #LCC 2 Booking
+    Book Travel Fusion Air Segment    CEBUPACIFIC    5J    SINHKG    7    S3    A06PJTX
+    Enter Travel Fusion Fare Remarks    LCC2    5J    S3    PHP    Airline
+    Enter Travel Fusion Other Remarks    LCC2    PHP    S3
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    #LCC Fare 1
+    Click Fare Tab    LCC 1
+    Verify LCC Fare Tab Details    MNL-CEB    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    True    LCC1    True
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Fare Including Taxes Value Is Correct    LCC 1
+    Verify Transaction Fee Value And Description Are Correct    LCC 1    6.00 + 30.00 (LCC) SGD Offline Destination Fee Global
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 1    CEB
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    5J    LCC 1
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Set Airline Commission Percentage    2
+    Comment    Select Form Of Payment On Fare Quote Tab    LCC 1    PORTRAIT-A/AX***********0002/D0899-AX
+    Get Charged Fare Value    LCC1
+    Get High Fare Value    LCC1
+    Get Low Fare Value    LCC1
+    Get Routing Name    LCC1
+    Get Point Of Turnaround    LCC1
+    Get Savings Code    LCC1
+    Get LFCC Field Value    LCC1
+    Get Fare Including Airline Taxes Value    LCC1
+    Get Transaction Fee Amount Value    LCC1
+    Get Total Amount    LCC1
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC1
+    Select Default Restricions in Fare Tab    LCC 1
+    #LCC Fare 2
+    Click Fare Tab    LCC 2
+    Verify LCC Fare Tab Details    SIN-HKG    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    True    LCC2    True
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Fare Including Taxes Value Is Correct    LCC 2
+    Verify Transaction Fee Value And Description Are Correct    LCC 2    3.00 + 30.00 (LCC) SGD Offline Destination Fee APAC
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 2    HKG
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    5J    LCC 2
+    Set Airline Commission Percentage    2
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Comment    Select Form Of Payment On Fare Quote Tab    LCC 2    PORTRAIT-A/AX***********0002/D0899-AX
+    Get Charged Fare Value    LCC2
+    Get High Fare Value    LCC2
+    Get Low Fare Value    LCC2
+    Get Routing Name    LCC2
+    Get Point Of Turnaround    LCC2
+    Get Savings Code    LCC2
+    Get LFCC Field Value    LCC2
+    Get Fare Including Airline Taxes Value    LCC2
+    Get Transaction Fee Amount Value    LCC2
+    Get Total Amount    LCC2
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC2
+    Select Default Restricions in Fare Tab    LCC 2
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus
+    #LCC 1 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC1    SGD    SG
+    Comment    Verify Routing Itinerary Remarks Are Written    LCC1
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC1    022103    203    A06PJTT    AX***********0002/D0899    SG02
+    ...    S2
+    #LCC 2 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC2    SGD    SG
+    Comment    Verify Routing Itinerary Remarks Are Written    LCC2
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC2    022103    203    A06PJTX    AX***********0002/D0899    SG03
+    ...    S3
+    Verify Default Restriction Remarks Are Written    2
+    Verify Static Remarks On LCC Is Not Displayed
+    Verify ViewTrip Itinerary Remarks Are Not Displayed
+
+[AB SG] Verify That LCC Bookings Are Retrieve In Air Fare Panel And Writes Correct Remarks
+    [Tags]    us1480    sg
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Enter GDS Command    XE2
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC1    fare_total=300    taxes_total=100    servicefee_total=0    charge=250    grand_total=550
+    ...    booking_reference=A06PJTX    currency=PHP    country=SG
+    #LCC 1 Booking
+    Book Travel Fusion Air Segment    JETSTAR    3K    HKGMNL    6    S2    A06PJXT
+    Enter Travel Fusion Fare Remarks    LCC1    3K    S2    PHP    Airline
+    Enter Travel Fusion Other Remarks    LCC1    PHP    S2
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    #LCC Fare 1
+    Click Fare Tab    LCC 1
+    Verify LCC Fare Tab Details    HKG-MNL    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    True    LCC1    True
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Fare Including Taxes Value Is Correct    LCC 1
+    Verify Transaction Fee Value And Description Are Correct    LCC 1    6.00 + 30.00 (LCC) SGD Offline Destination Fee Global
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 1    MNL
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    3K    LCC 1
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Comment    Select Form Of Payment On Fare Quote Tab    LCC 1    PORTRAIT-A/AX***********0002/D0899-AX
+    Get Charged Fare Value    LCC1
+    Get High Fare Value    LCC1
+    Get Low Fare Value    LCC1
+    Get Routing Name    LCC1
+    Get Point Of Turnaround    LCC1
+    Get Savings Code    LCC1
+    Get LFCC Field Value    LCC1
+    Get Fare Including Airline Taxes Value    LCC1
+    Get Transaction Fee Amount Value    LCC1
+    Get Total Amount    LCC1
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC1
+    Select Default Restricions in Fare Tab    LCC 1
+    #LCC Fare 2
+    Click Fare Tab    LCC 2
+    Verify LCC Fare Tab Details    SIN-HKG    14.60    14.60    14.60    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Fare Including Taxes Value Is Correct    LCC 2
+    Verify Transaction Fee Value And Description Are Correct    LCC 2    3.00 + 30.00 (LCC) SGD Offline Destination Fee APAC
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 2    HKG
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    5J    LCC 2
+    Comment    Select Form Of Payment On Fare Quote Tab    LCC 2    PORTRAIT-A/AX***********0002/D0899-AX
+    Get Charged Fare Value    LCC2
+    Get High Fare Value    LCC2
+    Get Low Fare Value    LCC2
+    Get Routing Name    LCC2
+    Get Point Of Turnaround    LCC2
+    Get Savings Code    LCC2
+    Get LFCC Field Value    LCC2
+    Get Fare Including Airline Taxes Value    LCC2
+    Get Transaction Fee Amount Value    LCC2
+    Get Total Amount    LCC2
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC2
+    Select Default Restricions in Fare Tab    LCC 2
+    Click Finish PNR
+    Execute Simultaneous Change Handling    Amend To Verify That LCC Bookings Are Retrieve In Air Fare Panel And Writes Correct Remarks [SG]
+    Retrieve PNR Details from Amadeus
+    #LCC 1 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC1    SGD    SG
+    Comment    Verify Routing Itinerary Remarks Are Written    LCC1
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC1    022103    375    A06PJXT    AX***********0002/D0899    SG02
+    ...    S2
+    #LCC 2 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC2    SGD    SG
+    Comment    Verify Routing Itinerary Remarks Are Written    LCC2
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC2    022103    203    A06PJTX    AX***********0002/D0899    SG03
+    ...    S3
+    Verify Default Restriction Remarks Are Written    2
+    Verify Static Remarks On LCC Is Not Displayed
+    Verify ViewTrip Itinerary Remarks Are Not Displayed
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB SG] Verify That Power Express Converts Base Fare And Taxes Amount For Multiple LCC Fares
+    [Tags]    sg    us1807
+    Open Power Express And Retrieve Profile    ${version}    Test    u004hxc    en-GB    hcuellar    APAC QA
+    ...    Amadeus
+    Set Client And Traveler    APAC SYN CORP ¦ APAC SG LCC AUTOMATION - RANGE AMOUNT    BEAR    SGLCCAMT
+    Click New Booking
+    Click Panel    Client Info
+    Select Form Of Payment    BTA VI/VI***********0087/D0124
+    Populate Cust Refs Panel With Default Values
+    Click Update PNR
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC1    fare_total=65.36    taxes_total=53.86    servicefee_total=2.00    charge=3.35    grand_total=119.22
+    ...    booking_reference=A06PJTT    currency=PHP    country=SG
+    #LCC 1 Booking
+    Book Travel Fusion Air Segment    CEBUPACIFIC    5J    MNLSIN    6    S2    A06PJTT
+    Enter Travel Fusion Fare Remarks    LCC1    5J    S2    PHP    Airline
+    Enter Travel Fusion Other Remarks    LCC1    PHP    S2
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC2    fare_total=2065.36    taxes_total=1005.34    servicefee_total=0.00    charge=500.55    grand_total=3070.70
+    ...    booking_reference=A06PJTX    currency=KRW    country=SG
+    #LCC 2 Booking
+    Book Travel Fusion Air Segment    AIR ASIA    AK    ICNMNL    7    S3    A06PJTX
+    Enter Travel Fusion Fare Remarks    LCC2    AK    S3    KRW    Travel Fusion
+    Enter Travel Fusion Other Remarks    LCC2    KRW    S3
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Verify Fare Tab Is Visible In Sequence    LCC 1    LCC 2
+    #LCC Fare 1
+    Click Fare Tab    LCC 1
+    Verify LCC Fare Tab Details    MNL-SIN    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    True    LCC1    True
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Transaction Fee Value And Description Are Correct    LCC 1    40.00 + 30.00 (LCC) SGD Offline Fare Range Fee
+    Verify Fare Including Taxes Value Is Correct    LCC1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    BTA VI/VI***********0087/D0124
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 1    SIN
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    5J    LCC 1
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Select Form Of Payment On Fare Quote Tab    LCC 1    BTA VI/VI***********0087/D0124
+    Get Charged Fare Value    LCC1
+    Get High Fare Value    LCC1
+    Get Low Fare Value    LCC1
+    Get Routing Name    LCC1
+    Get Point Of Turnaround    LCC1
+    Get Savings Code    LCC1
+    Get LFCC Field Value    LCC1
+    Get Fare Including Airline Taxes Value    LCC1
+    Get Transaction Fee Amount Value    LCC1
+    Get Total Amount    LCC1
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC1
+    Select Default Restricions in Fare Tab    LCC 1
+    #LCC Fare 2
+    Click Fare Tab    LCC 2
+    Verify LCC Fare Tab Details    ICN-MNL    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    True    LCC2    True
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Transaction Fee Value And Description Are Correct    LCC 2    40.00 + 30.00 (LCC) SGD Offline Fare Range Fee
+    Verify Fare Including Taxes Value Is Correct    LCC2
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    BTA VI/VI***********0087/D0124
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 2    MNL
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    AK    LCC 2
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Select Form Of Payment On Fare Quote Tab    LCC 2    BTA VI/VI***********0087/D0124
+    Get Charged Fare Value    LCC2
+    Get High Fare Value    LCC2
+    Get Low Fare Value    LCC2
+    Get Routing Name    LCC2
+    Get Point Of Turnaround    LCC2
+    Get Savings Code    LCC2
+    Get LFCC Field Value    LCC2
+    Get Fare Including Airline Taxes Value    LCC2
+    Get Transaction Fee Amount Value    LCC2
+    Get Total Amount    LCC2
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC2
+    Select Default Restricions in Fare Tab    LCC 2
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus
+    #LCC 1 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC1    SGD    SG
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC1    022103    203    A06PJTT    VI***********0087/D0124    SG02
+    ...    S2
+    #LCC 2 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC2    SGD    SG
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC2    022103    807    A06PJTX    VI***********0087/D0124    SG03
+    ...    S3
+
+[AB SG] Verify That Power Express Converts Base Fare And Taxes Amount For Multiple LCC Fares
+    [Tags]    sg    us1807
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Generate Fee Data For Travel Fusion    LCC3    fare_total=1050.45    taxes_total=150.50    servicefee_total=3.00    charge=3.35    grand_total=1200.95
+    ...    booking_reference=LEN001    currency=THB    country=SG
+    #LCC 3 Booking
+    Book Travel Fusion Air Segment    NOK AIRLINES    DD    BKKSIN    8    S4    LEN001
+    Enter Travel Fusion Fare Remarks    LCC3    DD    S4    THB    Airline
+    Enter Travel Fusion Other Remarks    LCC3    THB    S4
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Verify Fare Tab Is Visible In Sequence    LCC 1    LCC 2    LCC 3
+    #LCC Fare 1
+    Click Fare Tab    LCC 1
+    Verify LCC Fare Tab Details    MNL-SIN    ${high_fare_value_LCC1}    ${charged_fare_LCC1}    ${low_fare_LCC1}    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY
+    ...    identifier=LCC1
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Transaction Fee Value And Description Are Correct    LCC 1    40.00 + 30.00 (LCC) SGD Offline Fare Range Fee
+    Verify Fare Including Taxes Value Is Correct    LCC1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    BTA VI/VI***********0087/D0124
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 1    SIN
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    5J    LCC 1
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Select Form Of Payment On Fare Quote Tab    LCC 1    BTA VI/VI***********0087/D0124
+    Get Charged Fare Value    LCC1
+    Get High Fare Value    LCC1
+    Get Low Fare Value    LCC1
+    Get Routing Name    LCC1
+    Get Point Of Turnaround    LCC1
+    Get Savings Code    LCC1
+    Get LFCC Field Value    LCC1
+    Get Fare Including Airline Taxes Value    LCC1
+    Get Transaction Fee Amount Value    LCC1
+    Get Total Amount    LCC1
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC1
+    Select Default Restricions in Fare Tab    LCC 1
+    #LCC Fare 2
+    Click Fare Tab    LCC 2
+    Verify LCC Fare Tab Details    ICN-MNL    ${high_fare_value_LCC2}    ${charged_fare_LCC2}    ${low_fare_LCC2}    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY
+    ...    identifier=LCC2
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Fare Including Taxes Value Is Correct    LCC 2
+    Verify Transaction Fee Value And Description Are Correct    LCC 2    40.00 + 30.00 (LCC) SGD Offline Fare Range Fee
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    BTA VI/VI***********0087/D0124
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 2    MNL
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    AK    LCC 2
+    Select Form Of Payment On Fare Quote Tab    LCC 2    BTA VI/VI***********0087/D0124
+    Get Charged Fare Value    LCC2
+    Get High Fare Value    LCC2
+    Get Low Fare Value    LCC2
+    Get Routing Name    LCC2
+    Get Point Of Turnaround    LCC2
+    Get Savings Code    LCC2
+    Get LFCC Field Value    LCC2
+    Get Fare Including Airline Taxes Value    LCC2
+    Get Transaction Fee Amount Value    LCC2
+    Get Total Amount    LCC2
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC2
+    Select Default Restricions in Fare Tab    LCC 2
+    #LCC Fare 3
+    Click Fare Tab    LCC 3
+    Verify LCC Fare Tab Details    BKK-SIN    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    True    LCC3
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Transaction Fee Value And Description Are Correct    LCC3    40.00 + 30.00 (LCC) SGD Offline Fare Range Fee
+    Verify Fare Including Taxes Value Is Correct    LCC3
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 3    SIN
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    DD    LCC 3
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Select Form Of Payment On Fare Quote Tab    LCC3    BTA VI/VI***********0087/D0124
+    Get Charged Fare Value    LCC3
+    Get High Fare Value    LCC3
+    Get Low Fare Value    LCC3
+    Get Routing Name    LCC3
+    Get Point Of Turnaround    LCC3
+    Get Savings Code    LCC3
+    Get LFCC Field Value    LCC3
+    Get Fare Including Airline Taxes Value    LCC3
+    Get Transaction Fee Amount Value    LCC3
+    Get Total Amount    LCC3
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC3
+    Select Default Restricions in Fare Tab    LCC 3
+    Click Finish PNR
+    Execute Simultaneous Change Handling    Amend To Verify That Power Express Converts Base Fare And Taxes Amount For Multiple LCC Fares [SG]
+    Retrieve PNR Details from Amadeus
+    #LCC 1 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC1    SGD    SG
+    Comment    Verify Routing Itinerary Remarks Are Written    LCC1
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC1    022103    203    A06PJTT    VI***********0087/D0124    SG02
+    ...    S2
+    #LCC 2 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC2    SGD    SG
+    Comment    Verify Routing Itinerary Remarks Are Written    LCC2
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC2    022103    807    A06PJTX    VI***********0087/D0124    SG03
+    ...    S3
+    #LCC 3 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC3    SGD    SG
+    Comment    Verify Routing Itinerary Remarks Are Written    LCC2
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC3    022103    596    LEN001    VI***********0087/D0124    SG04
+    ...    S4
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB SG] Verify That Accounting Remarks Are Written Correctly When FOP Is A TMP Card For LCC Segments
+    [Tags]    sg    us1790    team_c
+    Open Power Express And Retrieve Profile    ${version}    Test    u004hxc    en-GB    hcuellar    APAC QA
+    ...    Amadeus
+    Set Client And Traveler    APAC SYN CORP ¦ APAC SG LCC AUTOMATION    BEAR    SGLCC
+    Click New Booking
+    Click Panel    Client Info
+    Select Form Of Payment    PORTRAIT-A/AX***********0002/D0899-AX
+    Populate Cust Refs Panel With Default Values
+    Click Update PNR
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC1    fare_total=100    taxes_total=78    servicefee_total=2    charge=20    grand_total=183
+    ...    booking_reference=A06PJTT    currency=SGD    country=SG
+    #LCC 1 Booking
+    Book Travel Fusion Air Segment    CEBUPACIFIC    5J    MNLSIN    6    S2    A06PJTT
+    Enter Travel Fusion Fare Remarks    LCC1    5J    S2    SGD    Airline
+    Enter Travel Fusion Other Remarks    LCC1    PHP    S2
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC2    fare_total=200    taxes_total=100    servicefee_total=0    charge=250    grand_total=450
+    ...    booking_reference=A06PJTX    currency=SGD    country=SG
+    #LCC 2 Booking
+    Book Travel Fusion Air Segment    CEBUPACIFIC    5J    SINHKG    7    S3    A06PJTX
+    Enter Travel Fusion Fare Remarks    LCC2    5J    S3    SGD    Airline
+    Enter Travel Fusion Other Remarks    LCC2    PHP    S3
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare    w
+    Click Panel    Air Fare
+    #LCC Fare 1
+    Click Fare Tab    LCC 1
+    Verify LCC Fare Tab Details    MNL-SIN    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    True    LCC1    True
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Fare Including Taxes Value Is Correct    LCC1
+    Verify Transaction Fee Value And Description Are Correct    LCC 1    15.18 + 30.00 (LCC) SGD Offline Destination Fee SG
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 1    SIN
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    5J    LCC 1
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Set Airline Commission Percentage    2
+    Manually Set Form Of Payment - Card Details On Fare Quote Tab    LCC1    DC    3644031458720369    1222
+    Get Charged Fare Value    LCC1
+    Get High Fare Value    LCC1
+    Get Low Fare Value    LCC1
+    Get Routing Name    LCC1
+    Get Point Of Turnaround    LCC1
+    Get Savings Code    LCC1
+    Get LFCC Field Value    LCC1
+    Get Fare Including Airline Taxes Value    LCC1
+    Get Transaction Fee Amount Value    LCC1
+    Get Total Amount    LCC1
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC1
+    Select Default Restricions in Fare Tab    LCC 1
+    #LCC Fare 2
+    Click Fare Tab    LCC 2
+    Verify LCC Fare Tab Details    SIN-HKG    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    True    LCC2    True
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Fare Including Taxes Value Is Correct    LCC2
+    Verify Transaction Fee Value And Description Are Correct    LCC 2    3.00 + 30.00 (LCC) SGD Offline Destination Fee APAC
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 2    HKG
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    5J    LCC 2
+    Set Airline Commission Percentage    2
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Select Form Of Payment On Fare Quote Tab    LCC 2    PORTRAIT-A/AX***********0002/D0899-AX
+    Get Charged Fare Value    LCC2
+    Get High Fare Value    LCC2
+    Get Low Fare Value    LCC2
+    Get Routing Name    LCC2
+    Get Point Of Turnaround    LCC2
+    Get Savings Code    LCC2
+    Get LFCC Field Value    LCC2
+    Get Fare Including Airline Taxes Value    LCC2
+    Get Transaction Fee Amount Value    LCC2
+    Get Total Amount    LCC2
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC2
+    Select Default Restricions in Fare Tab    LCC 2
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus
+    #LCC 1 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC1    SGD    SG
+    Comment    Verify Routing Itinerary Remarks Are Written    LCC1
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC1    022103    203    A06PJTT    DC************0369/D1222    SG02
+    ...    S2    true
+    #LCC 2 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC2    SGD    SG
+    Comment    Verify Routing Itinerary Remarks Are Written    LCC2
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC2    022103    203    A06PJTX    AX***********0002/D0899    SG03
+    ...    S3    false
+    Verify Default Restriction Remarks Are Written    2
+
+[AB SG] Verify That Accounting Remarks Are Written Correctly When FOP Is A TMP Card For LCC Segments
+    [Tags]    sg    us1790    team_c
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Verify Fare Tab Is Visible In Sequence    LCC 1    LCC 2
+    #LCC Fare 1
+    Click Fare Tab    LCC 1
+    Verify LCC Fare Tab Details    MNL-SIN    198.00    198.00    198.00    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY
+    ...    identifier=LCC1
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Fare Including Taxes Value Is Correct    LCC1
+    Verify Transaction Fee Value And Description Are Correct    LCC 1    15.18 + 30.00 (LCC) SGD Offline Destination Fee SG
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    ${EMPTY}
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 1    SIN
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    5J    LCC 1
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Select Form Of Payment On Fare Quote Tab    LCC 1    PORTRAIT-A/AX***********0002/D0899-AX
+    Get Charged Fare Value    LCC1
+    Get High Fare Value    LCC1
+    Get Low Fare Value    LCC1
+    Get Routing Name    LCC1
+    Get Point Of Turnaround    LCC1
+    Get Savings Code    LCC1
+    Get LFCC Field Value    LCC1
+    Get Fare Including Airline Taxes Value    LCC1
+    Get Transaction Fee Amount Value    LCC1
+    Get Total Amount    LCC1
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC1
+    Select Default Restricions in Fare Tab    LCC 1
+    #LCC Fare 2
+    Click Fare Tab    LCC 2
+    Verify LCC Fare Tab Details    SIN-HKG    550.00    550.00    550.00    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Fare Including Taxes Value Is Correct    LCC2
+    Verify Transaction Fee Value And Description Are Correct    LCC 2    3.00 + 30.00 (LCC) SGD Offline Destination Fee APAC
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 2    HKG
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    5J    LCC 2
+    Manually Set Form Of Payment - Card Details On Fare Quote Tab    LCC2    DC    3644031458720369    1222
+    Get Charged Fare Value    LCC2
+    Get High Fare Value    LCC2
+    Get Low Fare Value    LCC2
+    Get Routing Name    LCC2
+    Get Point Of Turnaround    LCC2
+    Get Savings Code    LCC2
+    Get LFCC Field Value    LCC2
+    Get Fare Including Airline Taxes Value    LCC2
+    Get Transaction Fee Amount Value    LCC2
+    Get Total Amount    LCC2
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC2
+    Select Default Restricions in Fare Tab    LCC 2
+    Click Finish PNR
+    Execute Simultaneous Change Handling    Amend To Verify That Accounting Remarks Are Written Correctly When FOP Is A TMP Card For LCC Segments [SG]
+    Retrieve PNR Details from Amadeus
+    #LCC 1 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC1    SGD    SG
+    Comment    Verify Routing Itinerary Remarks Are Written    LCC1
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC1    022103    203    A06PJTT    PORTRAIT-A/AX***********0002/D0899-AX    SG02
+    ...    S2    false
+    #LCC 2 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC2    SGD    SG
+    Comment    Verify Routing Itinerary Remarks Are Written    LCC2
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC2    022103    203    A06PJTX    DC************0369/D1222    SG03
+    ...    S3    true
+    Verify Default Restriction Remarks Are Written    2
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB HK] Verify That LCC Bookings Are Retrieve In Air Fare Panel And Writes Correct Remarks
+    [Tags]    us1479    team_c    hk
+    Open Power Express And Retrieve Profile    ${version}    Test    u004hxc    en-GB    hcuellar    APAC QA
+    ...    Amadeus
+    Set Client And Traveler    APAC SYN CORP ¦ APAC HK LCC AUTOMATION    BEAR    HKLCC
+    Click New Booking
+    Click Panel    Client Info
+    Select Form Of Payment    PORTRAIT-A/AX***********0002/D0899-AX
+    Populate Cust Refs Panel With Default Values
+    Click Update PNR
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC1    fare_total=100    taxes_total=78    servicefee_total=2    charge=2    grand_total=180
+    ...    booking_reference=A06PJT    currency=SGD
+    #LCC 1 Booking
+    Book Travel Fusion Air Segment    CEBUPACIFIC    5J    MNLSIN    6    S2    A06PJT
+    Enter Travel Fusion Fare Remarks    LCC1    5J    S2    SGD    Airline
+    Enter Travel Fusion Other Remarks    LCC1    SGD    S2
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC2    fare_total=101    taxes_total=79    servicefee_total=2    charge=3    grand_total=183
+    ...    booking_reference=A06PJB    currency=INR
+    #LCC 2 Booking
+    Book Travel Fusion Air Segment    NOKAIRLINES    DD    SINDEL    7    S3    A06PJB
+    Enter Travel Fusion Fare Remarks    LCC2    DD    S3    INR    Travel Fusion
+    Enter Travel Fusion Other Remarks    LCC2    INR    S3
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    #LCC Fare 1
+    Click Fare Tab    LCC 1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify LCC Fare Tab Details    MNL-SIN    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    True    LCC1    True
+    Verify Fare Including Taxes Value Is Correct    LCC1
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Transaction Fee Value And Description Are Correct    LCC 1    6 + 30 (LCC) HKD Offline Destination Fee Global
+    Comment    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    ${EMPTY}
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 1    SIN
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    5J    LCC1
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Select Form Of Payment On Fare Quote Tab    LCC1    PORTRAIT-A/AX***********0002/D0899-AX
+    Populate Fare Quote Tabs with Default Values
+    Get LFCC Field Value    LCC1
+    Get Point Of Turnaround    LCC1
+    Get Charged Fare Value    LCC1
+    Get High Fare Value    LCC1
+    Get Low Fare Value    LCC1
+    Get Routing Name    LCC1
+    Get Savings Code    LCC1
+    Get Fare Including Airline Taxes Value    LCC1
+    Get Fuel Surcharge Value    LCC1
+    Get Transaction Fee Amount Value    LCC1
+    Get Total Amount    LCC1
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC1
+    Select Air Fare Restrictions Radio Button    LCC 1    Default
+    #LCC Fare 2
+    Click Fare Tab    LCC 2
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify LCC Fare Tab Details    SIN-DEL    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    True    LCC2    True
+    Verify Fare Including Taxes Value Is Correct    LCC2
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Transaction Fee Value And Description Are Correct    LCC 2    6 + 30 (LCC) HKD Offline Destination Fee Global
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC2    DEL
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    DD    LCC2
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Comment    Select Form Of Payment On Fare Quote Tab    LCC1    PORTRAIT-A/AX***********0002/D0899-AX
+    Populate Fare Quote Tabs with Default Values
+    Get LFCC Field Value    LCC2
+    Get Point Of Turnaround    LCC2
+    Get Charged Fare Value    LCC2
+    Get High Fare Value    LCC2
+    Get Low Fare Value    LCC2
+    Get Routing Name    LCC2
+    Get Savings Code    LCC2
+    Get Fare Including Airline Taxes Value    LCC2
+    Get Fuel Surcharge Value    LCC2
+    Get Transaction Fee Amount Value    LCC2
+    Get Total Amount    LCC2
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC2
+    Select Air Fare Restrictions Radio Button    LCC 2    Default
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus
+    #LCC 1 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC1    HKD    HK
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC1    00003152    203    A06PJT    AX***********0002/D0899-AX    SG02
+    ...    S2
+    #LCC 2 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC2    HKD    HK
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC2    00003152    596    A06PJB    AX***********0002/D0899-AX    SG03
+    ...    S3
+    Verify Default Restriction Remarks Are Written    2
+    Verify Static Remarks On LCC Is Not Displayed
+    Verify ViewTrip Itinerary Remarks Are Not Displayed
+    [Teardown]
+
+[AB HK] Verify That LCC Bookings Are Retrieve In Air Fare Panel And Writes Correct Remarks
+    [Tags]    us1480    hk
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Enter GDS Command    XE2
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC1    fare_total=300    taxes_total=100    servicefee_total=0    charge=250    grand_total=550
+    ...    booking_reference=A06PJTX    currency=PHP    country=HK
+    #LCC 1 Booking
+    Book Travel Fusion Air Segment    JETSTAR    3K    HKGMNL    6    S2    A06PJXX
+    Enter Travel Fusion Fare Remarks    LCC1    3K    S2    PHP    Airline
+    Enter Travel Fusion Other Remarks    LCC1    PHP    S2
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    #LCC Fare 1
+    Click Fare Tab    LCC 1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify LCC Fare Tab Details    HKG-MNL    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    True    LCC1    True
+    Verify Fare Including Taxes Value Is Correct    LCC1
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Transaction Fee Value And Description Are Correct    LCC 1    6 + 30 (LCC) HKD Offline Destination Fee Global
+    Comment    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    ${EMPTY}
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 1    MNL
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    3K    LCC 1
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Select Form Of Payment On Fare Quote Tab    LCC 1    PORTRAIT-A/AX***********0002/D0899-AX
+    Get Charged Fare Value    LCC1
+    Get High Fare Value    LCC1
+    Get Low Fare Value    LCC1
+    Get Routing Name    LCC1
+    Get Point Of Turnaround    LCC1
+    Get Savings Code    LCC1
+    Get LFCC Field Value    LCC1
+    Get Fare Including Airline Taxes Value    LCC1
+    Get Fuel Surcharge Value    LCC1
+    Get Transaction Fee Amount Value    LCC1
+    Get Total Amount    LCC1
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC1
+    Select Air Fare Restrictions Radio Button    LCC 1    Default
+    #LCC Fare 1
+    Comment    Click Fare Tab    LCC 1
+    Comment    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Comment    Verify LCC Fare Tab Details    MNL-SIN    1055    1055    1055    LC - LOW COST CARRIER FARE ACCEPTED
+    ...    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    false    LCC1
+    Comment    Verify Fare Including Taxes Value Is Correct    LCC1
+    Comment    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Comment    Verify Transaction Fee Value And Description Are Correct    LCC 1    6 + 30 (LCC) HKD Offline Destination Fee Global
+    Comment    Comment    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    ${EMPTY}
+    Comment    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Comment    Verify Turnaround Value Is Correct    LCC 1    SIN
+    Comment    Verify Route Code Default Value    INTL
+    Comment    Verify LFCC Field Value    5J    LCC1
+    Comment    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Comment    Comment    Select Form Of Payment On Fare Quote Tab    LCC1    PORTRAIT-A/AX***********0002/D0899-AX
+    Comment    Populate Fare Quote Tabs with Default Values
+    Comment    Get LFCC Field Value    LCC1
+    Comment    Get Point Of Turnaround    LCC1
+    Comment    Get Charged Fare Value    LCC1
+    Comment    Get High Fare Value    LCC1
+    Comment    Get Low Fare Value    LCC1
+    Comment    Get Routing Name    LCC1
+    Comment    Get Savings Code    LCC1
+    Comment    Get Fare Including Airline Taxes Value    LCC1
+    Comment    Get Fuel Surcharge Value    LCC1
+    Comment    Get Transaction Fee Amount Value    LCC1
+    Comment    Get Total Amount    LCC1
+    Comment    Verify Total Amount Value Is Correct Based On Computed Value    LCC1
+    Comment    Select Air Fare Restrictions Radio Button    LCC 1    Default
+    #LCC Fare 2
+    Click Fare Tab    LCC 2
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify LCC Fare Tab Details    SIN-DEL    29    29    29    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY
+    ...    false    LCC2
+    Verify Fare Including Taxes Value Is Correct    LCC2
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Transaction Fee Value And Description Are Correct    LCC 2    6 + 30 (LCC) HKD Offline Destination Fee Global
+    Comment    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    ${EMPTY}
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC2    DEL
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    DD    LCC2
+    Select Form Of Payment On Fare Quote Tab    LCC 2    PORTRAIT-A/AX***********0002/D0899-AX
+    Get Charged Fare Value    LCC2
+    Get High Fare Value    LCC2
+    Get Low Fare Value    LCC2
+    Get Routing Name    LCC2
+    Get Point Of Turnaround    LCC2
+    Get Savings Code    LCC2
+    Get LFCC Field Value    LCC2
+    Get Fare Including Airline Taxes Value    LCC2
+    Get Fuel Surcharge Value    LCC2
+    Get Transaction Fee Amount Value    LCC2
+    Get Total Amount    LCC2
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC2
+    Select Air Fare Restrictions Radio Button    LCC 2    Default
+    Click Finish PNR
+    Execute Simultaneous Change Handling    Amend To Verify That LCC Bookings Are Retrieve In Air Fare Panel And Writes Correct Remarks [HK]
+    Retrieve PNR Details from Amadeus
+    #LCC 1 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC1    HKD    HK
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC1    00003152    375    A06PJXX    AX***********0002/D0899    SG02
+    ...    S2
+    #LCC 2 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC2    HKD    HK
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC2    00003152    596    A06PJB    AX***********0002/D0899    SG03
+    ...    S3
+    Verify Default Restriction Remarks Are Written    2
+    Verify Static Remarks On LCC Is Not Displayed
+    Verify ViewTrip Itinerary Remarks Are Not Displayed
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB HK] Verify That LCC And BSP Are Retrieve In Air Fare Panel And Writes Correct Remarks
+    [Tags]    us1479    team_c    hk
+    Open Power Express And Retrieve Profile    ${version}    Test    u004hxc    en-GB    hcuellar    APAC QA
+    ...    Amadeus
+    Set Client And Traveler    APAC SYN CORP ¦ APAC HK LCC AUTOMATION - RANGE PERCENT    BEAR    HKLCCBSP
+    Click New Booking
+    Click Panel    Client Info
+    Select Form Of Payment    PORTRAIT-A/AX***********0002/D0899-AX
+    Populate Cust Refs Panel With Default Values
+    Click Update PNR
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC1    fare_total=100    taxes_total=78    servicefee_total=2    charge=2    grand_total=180
+    ...    booking_reference=A06PJT    currency=SGD
+    #LCC 1 Booking
+    Book Travel Fusion Air Segment    CEBUPACIFIC    5J    MNLSIN    6    S2    A06PJT
+    Enter Travel Fusion Fare Remarks    LCC1    5J    S2    SGD    Airline
+    Enter Travel Fusion Other Remarks    LCC1    SGD    S2
+    #BSP 1 Booking
+    Book Flight X Months From Now    SINHKG/ASQ    SS1Y1    FXP/S3    6    5
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC2    fare_total=101    taxes_total=79    servicefee_total=2    charge=3    grand_total=183
+    ...    booking_reference=A06PJB    currency=INR
+    #LCC 2 Booking
+    Book Travel Fusion Air Segment    NOKAIRLINES    DD    HKGDEL    7    S4    A06PJB
+    Enter Travel Fusion Fare Remarks    LCC2    DD    S4    INR    Travel Fusion
+    Enter Travel Fusion Other Remarks    LCC2    INR    S4
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    #LCC Fare 1
+    Click Fare Tab    LCC 1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify LCC Fare Tab Details    MNL-SIN    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    True    LCC1    True
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Fare Including Taxes Value Is Correct    LCC1
+    Verify Transaction Fee Value And Description Are Correct    LCC 1    18 + 30 (LCC) HKD Offline Fare Range Fee
+    Comment    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    ${EMPTY}
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 1    SIN
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    5J    LCC1
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Comment    Get Fare Details    LCC1    include_fare_restriction=False
+    Comment    Select Form Of Payment On Fare Quote Tab    LCC1    PORTRAIT-A/AX***********0002/D0899-AX
+    Populate Fare Quote Tabs with Default Values
+    Get LFCC Field Value    LCC1
+    Get Point Of Turnaround    LCC1
+    Get Charged Fare Value    LCC1
+    Get High Fare Value    LCC1
+    Get Low Fare Value    LCC1
+    Get Routing Name    LCC1
+    Get Savings Code    LCC1
+    Get Fare Including Airline Taxes Value    LCC1
+    Get Fuel Surcharge Value    LCC1
+    Get Transaction Fee Amount Value    LCC1
+    Get Total Amount    LCC1
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC1
+    Comment    Select Default Restricions in Fare Tab    LCC 1
+    #BSP Fare 1
+    Click Fare Tab    Fare 1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Comment    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    ${EMPTY}
+    Comment    Select Form Of Payment On Fare Quote Tab    Fare 1    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Selected Is Displayed On Fare Quote Tab    ${EMPTY}
+    Select FOP Merchant On Fare Quote Tab    Fare 1    CWT
+    Verify High Fare Value Is Retrieved From TST    Fare 1    S3
+    Verify Charged Fare Value Is Retrieved From TST    Fare 1    S3
+    Verify Low Fare Value Is Retrieved From TST    Fare 1    S3    HKD
+    Verify Turnaround Value Is Correct    Fare 1    HKG
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    SQ    Fare 1
+    Populate Fare Quote Tabs with Default Values
+    Get Main Fees On Fare Quote Tab    Fare 1
+    Get Base Fare, Total Taxes, YQ Tax And LFCC From TST    Fare 1    S3
+    Get LFCC Field Value    Fare 1
+    Get Routing, Turnaround and Route Code    Fare 1
+    Get Savings Code    Fare 1
+    Get Point Of Turnaround    Fare 1
+    Get Charged Fare Value    Fare 1
+    Get High Fare Value    Fare 1
+    Get Low Fare Value    Fare 1
+    Get Routing Name    Fare 1
+    Get Transaction Fee Amount Value    Fare 1
+    Verify Total Amount Value Is Correct Based On Computed Value    Fare 1
+    Comment    Select Default Restricions in Fare Tab    Fare 1
+    #LCC Fare 2
+    Click Fare Tab    LCC 2
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify LCC Fare Tab Details    HKG-DEL    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    True    LCC2    True
+    Verify Fare Including Taxes Value Is Correct    LCC2
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Transaction Fee Value And Description Are Correct    LCC 2    1 + 30 (LCC) HKD Offline Fare Range Fee
+    Comment    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    ${EMPTY}
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC2    DEL
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    DD    LCC2
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Comment    Get Fare Details    LCC2    include_fare_restriction=False
+    Comment    Select Form Of Payment On Fare Quote Tab    LCC2    PORTRAIT-A/AX***********0002/D0899-AX
+    Populate Fare Quote Tabs with Default Values
+    Get LFCC Field Value    LCC2
+    Get Point Of Turnaround    LCC2
+    Get Charged Fare Value    LCC2
+    Get High Fare Value    LCC2
+    Get Low Fare Value    LCC2
+    Get Routing Name    LCC2
+    Get Savings Code    LCC2
+    Get Fare Including Airline Taxes Value    LCC2
+    Get Fuel Surcharge Value    LCC2
+    Get Transaction Fee Amount Value    LCC2
+    Get Total Amount    LCC2
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC2
+    Comment    Select Default Restricions in Fare Tab    LCC 2
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus
+    #LCC 1 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC1    HKD    HK
+    Comment    Verify Routing Itinerary Remarks Are Written    LCC1
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC1    00003152    203    A06PJT    AX***********0002/D0899-AX    SG02
+    ...    S2
+    #LCC 2 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC2    HKD    HK
+    Comment    Verify Routing Itinerary Remarks Are Written    LCC2
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC2    00003152    596    A06PJB    AX***********0002/D0899-AX    SG04
+    ...    S4
+    #BSP 1 Remarks
+    Verify Accounting Remarks For Main Sale    Fare 1    S3    03    AX***********0002/D0899    CWT    country=HK
+    Verify Routing Itinerary Remarks Are Written    Fare 1
+    Verify Default Restriction Remarks Are Written    3
+    Verify Static Remarks For BSP Fares Are Displayed    1
+    Verify ViewTrip Itinerary Remarks Are Not Displayed
+    [Teardown]
+
+[AB HK] Verify That LCC And BSP Are Retrieve In Air Fare Panel And Writes Correct Remarks
+    [Tags]    us1480    hk
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Delete Air Segment    2
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC1    fare_total=250    taxes_total=82    servicefee_total=2    charge=4    grand_total=336
+    ...    booking_reference=A06PJI    currency=SGD
+    #LCC 1 Booking
+    Book Travel Fusion Air Segment    CEBUPACIFIC    5J    CEBSIN    6    S2    A06PJI
+    Enter Travel Fusion Fare Remarks    LCC1    5J    S2    SGD    Airline
+    Enter Travel Fusion Other Remarks    LCC1    SGD    S2
+    #BSP 2 Booking
+    Book Flight X Months From Now    DELBOM/A9W    SS1Y1    FXP/S5    7    10
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC3    fare_total=200    taxes_total=90    servicefee_total=2    charge=3    grand_total=293
+    ...    booking_reference=A06PJF    currency=INR
+    #LCC 3 Booking
+    Book Travel Fusion Air Segment    NOKAIRLINES    DD    BOMPEK    8    S6    A06PJF
+    Enter Travel Fusion Fare Remarks    LCC3    DD    S6    INR    Travel Fusion
+    Enter Travel Fusion Other Remarks    LCC3    INR    S6
+    Click Read Booking
+    Click Panel    Air Fare
+    #LCC Fare 1
+    Click Fare Tab    LCC 1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify LCC Fare Tab Details    CEB-SIN    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    True    LCC1    True
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Fare Including Taxes Value Is Correct    LCC1
+    Verify Transaction Fee Value And Description Are Correct    LCC 1    45 + 30 (LCC) HKD Offline Fare Range Fee
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 1    SIN
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    5J    LCC1
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Comment    Get Fare Details    LCC1    include_fare_restriction=False
+    Comment    Select Form Of Payment On Fare Quote Tab    LCC1    PORTRAIT-A/AX***********0002/D0899-AX
+    Populate Fare Quote Tabs with Default Values
+    Get LFCC Field Value    LCC1
+    Get Point Of Turnaround    LCC1
+    Get Charged Fare Value    LCC1
+    Get High Fare Value    LCC1
+    Get Low Fare Value    LCC1
+    Get Routing Name    LCC1
+    Get Savings Code    LCC1
+    Get Fare Including Airline Taxes Value    LCC1
+    Get Fuel Surcharge Value    LCC1
+    Get Transaction Fee Amount Value    LCC1
+    Get Total Amount    LCC1
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC1
+    Comment    Select Default Restricions in Fare Tab    LCC 1
+    #BSP Fare 1
+    Click Fare Tab    Fare 1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Selected Is Displayed On Fare Quote Tab    CWT
+    Verify High Fare Value Is Retrieved From TST    Fare 1    S3
+    Verify Charged Fare Value Is Retrieved From TST    Fare 1    S3
+    Verify Low Fare Value Is Retrieved From TST    Fare 1    S3    HKD
+    Verify Turnaround Value Is Correct    Fare 1    HKG
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    SQ    Fare 1
+    Populate Fare Quote Tabs with Default Values
+    Get Main Fees On Fare Quote Tab    Fare 1
+    Get Base Fare, Total Taxes, YQ Tax And LFCC From TST    Fare 1    S3
+    Get LFCC Field Value    Fare 1
+    Get Routing, Turnaround and Route Code    Fare 1
+    Get Savings Code    Fare 1
+    Get Point Of Turnaround    Fare 1
+    Get Charged Fare Value    Fare 1
+    Get High Fare Value    Fare 1
+    Get Low Fare Value    Fare 1
+    Get Routing Name    Fare 1
+    Get Transaction Fee Amount Value    Fare 1
+    Verify Total Amount Value Is Correct Based On Computed Value    Fare 1
+    Comment    Select Default Restricions in Fare Tab    Fare 1
+    #LCC Fare 2
+    Click Fare Tab    LCC 2
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify LCC Fare Tab Details    HKG-DEL    29    29    29    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY
+    ...    False    LCC2
+    Verify Fare Including Taxes Value Is Correct    LCC2
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Transaction Fee Value And Description Are Correct    LCC 2    1 + 30 (LCC) HKD Offline Fare Range Fee
+    Comment    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC2    DEL
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    DD    LCC2
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Comment    Get Fare Details    LCC2    include_fare_restriction=False
+    Select Form Of Payment On Fare Quote Tab    LCC2    PORTRAIT-A/AX***********0002/D0899-AX
+    Populate Fare Quote Tabs with Default Values
+    Get LFCC Field Value    LCC2
+    Get Point Of Turnaround    LCC2
+    Get Charged Fare Value    LCC2
+    Get High Fare Value    LCC2
+    Get Low Fare Value    LCC2
+    Get Routing Name    LCC2
+    Get Savings Code    LCC2
+    Get Fare Including Airline Taxes Value    LCC2
+    Get Fuel Surcharge Value    LCC2
+    Get Transaction Fee Amount Value    LCC2
+    Get Total Amount    LCC2
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC2
+    Comment    Select Default Restricions in Fare Tab    LCC 2
+    #BSP Fare 2
+    Click Fare Tab    Fare 2
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Comment    Select Form Of Payment On Fare Quote Tab    Fare 2    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Selected Is Displayed On Fare Quote Tab    ${EMPTY}
+    Select FOP Merchant On Fare Quote Tab    Fare 2    Airline
+    Comment    Verify High Fare Value Is Retrieved From TST    Fare 2    S5
+    Verify Charged Fare Value Is Retrieved From TST    Fare 2    S5
+    Verify Low Fare Value Is Retrieved From TST    Fare 2    S5    HKD
+    Verify Turnaround Value Is Correct    Fare 2    BOM
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    9W    Fare 2
+    Populate Fare Quote Tabs with Default Values
+    Get Main Fees On Fare Quote Tab    Fare 2
+    Get Base Fare, Total Taxes, YQ Tax And LFCC From TST    Fare 2    S5
+    Get LFCC Field Value    Fare 2
+    Get Routing, Turnaround and Route Code    Fare 2
+    Get Savings Code    Fare 2
+    Get Point Of Turnaround    Fare 2
+    Get Charged Fare Value    Fare 2
+    Get High Fare Value    Fare 2
+    Get Low Fare Value    Fare 2
+    Get Routing Name    Fare 2
+    Get Transaction Fee Amount Value    Fare 2
+    Verify Total Amount Value Is Correct Based On Computed Value    Fare 2
+    #LCC Fare 3
+    Click Fare Tab    LCC 3
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify LCC Fare Tab Details    BOM-PEK    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    True    LCC3    True
+    Verify Fare Including Taxes Value Is Correct    LCC3
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Transaction Fee Value And Description Are Correct    LCC3    1 + 30 (LCC) HKD Offline Fare Range Fee
+    Comment    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    ${EMPTY}
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC3    BJS
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    DD    LCC3
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Comment    Get Fare Details    LCC3    include_fare_restriction=False
+    Select Form Of Payment On Fare Quote Tab    LCC3    PORTRAIT-A/AX***********0002/D0899-AX
+    Populate Fare Quote Tabs with Default Values
+    Get LFCC Field Value    LCC3
+    Get Point Of Turnaround    LCC3
+    Get Charged Fare Value    LCC3
+    Get High Fare Value    LCC3
+    Get Low Fare Value    LCC3
+    Get Routing Name    LCC3
+    Get Savings Code    LCC3
+    Get Fare Including Airline Taxes Value    LCC3
+    Get Fuel Surcharge Value    LCC3
+    Get Transaction Fee Amount Value    LCC3
+    Get Total Amount    LCC3
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC3
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Finish PNR
+    Execute Simultaneous Change Handling    Amend To Verify That LCC And BSP Are Retrieve In Air Fare Panel And Writes Correct Remarks [HK]
+    Retrieve PNR Details from Amadeus
+    #LCC 1 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC1    HKD    HK
+    Comment    Verify Routing Itinerary Remarks Are Written    LCC1
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC1    00003152    203    A06PJI    AX***********0002/D0899-AX    SG02
+    ...    S2
+    Verify Fuel Surcharge Remarks Per TST For Travel Fusion    LCC1    00001    203    A06PJI    AX***********0002/D0899-AX    SG02
+    ...    S2
+    #LCC 2 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC2    HKD    HK
+    Comment    Verify Routing Itinerary Remarks Are Written    LCC2
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC2    00003152    596    A06PJB    AX***********0002/D0899-AX    SG04
+    ...    S4
+    Verify Fuel Surcharge Remarks Per TST For Travel Fusion    LCC2    00001    596    A06PJB    AX***********0002/D0899-AX    SG04
+    ...    S4
+    #LCC 2 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC3    HKD    HK
+    Comment    Verify Routing Itinerary Remarks Are Written    LCC2
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC3    00003152    596    A06PJF    AX***********0002/D0899-AX    SG06
+    ...    S6
+    Verify Fuel Surcharge Remarks Per TST For Travel Fusion    LCC3    00001    596    A06PJF    AX***********0002/D0899-AX    SG06
+    ...    S6
+    #BSP 1 Remarks
+    Verify Accounting Remarks For Main Sale    Fare 1    S3    03    AX***********0002/D0899    CWT    country=HK
+    Verify Routing Itinerary Remarks Are Written    Fare 1
+    #BSP 1 Remarks
+    Verify Accounting Remarks For Main Sale    Fare 2    S5    05    AX***********0002/D0899    Airline    country=HK
+    Verify Routing Itinerary Remarks Are Written    Fare 2
+    Verify Default Restriction Remarks Are Written    5
+    Verify Static Remarks For BSP Fares Are Displayed    2
+    Verify ViewTrip Itinerary Remarks Are Not Displayed
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB HK] Verify That Power Express Converts Base Fare And Taxes Amount For Multiple LCC Fares
+    [Tags]    us1807    team_c    hk
+    Open Power Express And Retrieve Profile    ${version}    Test    u004hxc    en-GB    hcuellar    APAC QA
+    ...    Amadeus
+    Set Client And Traveler    APAC SYN CORP ¦ APAC HK LCC AUTOMATION - RANGE PERCENT    BEAR    HKLCCBSP
+    Click New Booking
+    Click Panel    Client Info
+    Select Form Of Payment    PORTRAIT-A/AX***********0002/D0899-AX
+    Populate Cust Refs Panel With Default Values
+    Click Update PNR
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC1    fare_total=12500.55    taxes_total=7410.86    servicefee_total=605.70    charge=300.35    grand_total=20212.46
+    ...    booking_reference=A06PJTT    currency=JPY    country=HK
+    #LCC 1 Booking
+    Book Travel Fusion Air Segment    CEBUPACIFIC    5J    NRTMNL    6    S2    A06PJTT
+    Enter Travel Fusion Fare Remarks    LCC1    5J    S2    JPY    Airline
+    Enter Travel Fusion Other Remarks    LCC1    JPY    S2
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC2    fare_total=28065.36    taxes_total=7005.34    servicefee_total=0.00    charge=3500.55    grand_total=38571.25
+    ...    booking_reference=A06PJTX    currency=KRW    country=HK
+    #LCC 2 Booking
+    Book Travel Fusion Air Segment    AIR ASIA    AK    ICNMNL    7    S3    A06PJTX
+    Enter Travel Fusion Fare Remarks    LCC2    AK    S3    KRW    Travel Fusion
+    Enter Travel Fusion Other Remarks    LCC2    KRW    S3
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Verify Fare Tab Is Visible In Sequence    LCC 1    LCC 2
+    #LCC Fare 1
+    Click Fare Tab    LCC 1
+    Verify LCC Fare Tab Details    NRT-MNL    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    True    LCC1    True
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Transaction Fee Value And Description Are Correct    LCC 1    28 + 30 (LCC) HKD Offline Fare Range Fee
+    Verify Fare Including Taxes Value Is Correct    LCC1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 1    MNL
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    5J    LCC 1
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Select Form Of Payment On Fare Quote Tab    LCC 1    PORTRAIT-A/AX***********0002/D0899-AX
+    Get Charged Fare Value    LCC1
+    Get High Fare Value    LCC1
+    Get Low Fare Value    LCC1
+    Get Routing Name    LCC1
+    Get Point Of Turnaround    LCC1
+    Get Savings Code    LCC1
+    Get Class Code Value    LCC1
+    Get LFCC Field Value    LCC1
+    Get Fare Including Airline Taxes Value    LCC1
+    Get Fuel Surcharge Value    LCC1
+    Get Transaction Fee Amount Value    LCC1
+    Get Total Amount    LCC1
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC1
+    Select Default Restricions in Fare Tab    LCC 1
+    #LCC Fare 2
+    Click Fare Tab    LCC 2
+    Verify LCC Fare Tab Details    ICN-MNL    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    True    LCC2    True
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Transaction Fee Value And Description Are Correct    LCC 2    5 + 30 (LCC) HKD Offline Fare Range Fee
+    Verify Fare Including Taxes Value Is Correct    LCC2
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 2    MNL
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    AK    LCC 2
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Select Form Of Payment On Fare Quote Tab    LCC 2    PORTRAIT-A/AX***********0002/D0899-AX
+    Get Charged Fare Value    LCC2
+    Get High Fare Value    LCC2
+    Get Low Fare Value    LCC2
+    Get Routing Name    LCC2
+    Get Point Of Turnaround    LCC2
+    Get Savings Code    LCC2
+    Get Class Code Value    LCC2
+    Get LFCC Field Value    LCC2
+    Get Fare Including Airline Taxes Value    LCC2
+    Get Fuel Surcharge Value    LCC2
+    Get Transaction Fee Amount Value    LCC2
+    Get Total Amount    LCC2
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC2
+    Select Default Restricions in Fare Tab    LCC 2
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus
+    #LCC 1 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC1    HKD    HK    true
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC1    00003152    203    A06PJTT    AX***********0002/D0899    SG02
+    ...    S2
+    #LCC 2 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC2    HKD    HK    true
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC2    00003152    807    A06PJTX    AX***********0002/D0899    SG03
+    ...    S3
+
+[AB HK] Verify That Power Express Converts Base Fare And Taxes Amount For Multiple LCC Fares
+    [Tags]    us1807    team_c    hk
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Generate Fee Data For Travel Fusion    LCC3    fare_total=1050.45    taxes_total=150.50    servicefee_total=3.00    charge=3.35    grand_total=1200.95
+    ...    booking_reference=LEN001    currency=THB    country=HK
+    #LCC 1 Booking
+    Book Travel Fusion Air Segment    NOK AIRLINES    DD    BKKSIN    8    S4    A06PJXX
+    Enter Travel Fusion Fare Remarks    LCC3    DD    S4    THB    Airline
+    Enter Travel Fusion Other Remarks    LCC3    THB    S4
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Verify Fare Tab Is Visible In Sequence    LCC 1    LCC 2    LCC 3
+    #LCC Fare 1
+    Click Fare Tab    LCC 1
+    Verify LCC Fare Tab Details    NRT-MNL    ${EMPTY}    ${EMPTY}    ${EMPTY}    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY
+    ...    True    identifier=LCC1
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Transaction Fee Value And Description Are Correct    LCC 1    28 + 30 (LCC) HKD Offline Fare Range Fee
+    Verify Fare Including Taxes Value Is Correct    LCC1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 1    MNL
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    5J    LCC 1
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Select Form Of Payment On Fare Quote Tab    LCC 1    PORTRAIT-A/AX***********0002/D0899-AX
+    Get Charged Fare Value    LCC1
+    Get High Fare Value    LCC1
+    Get Low Fare Value    LCC1
+    Get Routing Name    LCC1
+    Get Point Of Turnaround    LCC1
+    Get Savings Code    LCC1
+    Get Class Code Value    LCC1
+    Get LFCC Field Value    LCC1
+    Get Fare Including Airline Taxes Value    LCC1
+    Get Fuel Surcharge Value    LCC1
+    Get Transaction Fee Amount Value    LCC1
+    Get Total Amount    LCC1
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC1
+    Select Default Restricions in Fare Tab    LCC 1
+    #LCC Fare 2
+    Click Fare Tab    LCC 2
+    Verify LCC Fare Tab Details    ICN-MNL    ${EMPTY}    ${EMPTY}    ${EMPTY}    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY
+    ...    True    identifier=LCC2
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Fare Including Taxes Value Is Correct    LCC2
+    Verify Transaction Fee Value And Description Are Correct    LCC 2    5 + 30 (LCC) HKD Offline Fare Range Fee
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 2    MNL
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    AK    LCC 2
+    Select Form Of Payment On Fare Quote Tab    LCC 2    PORTRAIT-A/AX***********0002/D0899-AX
+    Get Charged Fare Value    LCC2
+    Get High Fare Value    LCC2
+    Get Low Fare Value    LCC2
+    Get Routing Name    LCC2
+    Get Point Of Turnaround    LCC2
+    Get Savings Code    LCC2
+    Get Class Code Value    LCC2
+    Get LFCC Field Value    LCC2
+    Get Fare Including Airline Taxes Value    LCC2
+    Get Fuel Surcharge Value    LCC2
+    Get Transaction Fee Amount Value    LCC2
+    Get Total Amount    LCC2
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC2
+    Select Default Restricions in Fare Tab    LCC 2
+    #LCC Fare 3
+    Click Fare Tab    LCC 3
+    Verify LCC Fare Tab Details    BKK-SIN    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    True    LCC3    True
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Transaction Fee Value And Description Are Correct    LCC3    6 + 30 (LCC) HKD Offline Fare Range Fee
+    Verify Fare Including Taxes Value Is Correct    LCC3
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC3    SIN
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    DD    LCC 3
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Select Form Of Payment On Fare Quote Tab    LCC3    PORTRAIT-A/AX***********0002/D0899-AX
+    Get Charged Fare Value    LCC3
+    Get High Fare Value    LCC3
+    Get Low Fare Value    LCC3
+    Get Routing Name    LCC3
+    Get Point Of Turnaround    LCC3
+    Get Savings Code    LCC3
+    Get Class Code Value    LCC3
+    Get LFCC Field Value    LCC3
+    Get Fare Including Airline Taxes Value    LCC3
+    Get Fuel Surcharge Value    LCC3
+    Get Transaction Fee Amount Value    LCC3
+    Get Total Amount    LCC3
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC3
+    Select Default Restricions in Fare Tab    LCC 3
+    Click Finish PNR
+    Execute Simultaneous Change Handling    Amend To Verify That Power Express Converts Base Fare And Taxes Amount For Multiple LCC Fares [HK]
+    Retrieve PNR Details from Amadeus
+    #LCC 1 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC1    HKD    HK
+    Comment    Verify Routing Itinerary Remarks Are Written    LCC1
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC1    00003152    203    A06PJTT    AX***********0002/D0899    SG02
+    ...    S2
+    #LCC 2 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC2    HKD    HK
+    Comment    Verify Routing Itinerary Remarks Are Written    LCC2
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC2    00003152    807    A06PJTX    AX***********0002/D0899    SG03
+    ...    S3
+    #LCC 3 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC3    HKD    HK
+    Comment    Verify Routing Itinerary Remarks Are Written    LCC3
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC3    00003152    596    A06PJXX    AX***********0002/D0899    SG04
+    ...    S4
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB HK] Verify That Accounting Remarks Are Written Correctly When FOP Is A TMP Card For LCC Segments
+    [Tags]    us1790    team_c    hk
+    Open Power Express And Retrieve Profile    ${version}    Test    u004hxc    en-GB    hcuellar    APAC QA
+    ...    Amadeus
+    Set Client And Traveler    APAC SYN CORP ¦ APAC HK LCC AUTOMATION - RANGE PERCENT    BEAR    HKLCCBSP
+    Click New Booking
+    Click Panel    Client Info
+    Select Form Of Payment    PORTRAIT-A/AX***********0002/D0899-AX
+    Populate Cust Refs Panel With Default Values
+    Click Update PNR
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC1    fare_total=100    taxes_total=78    servicefee_total=2    charge=20    grand_total=183
+    ...    booking_reference=A06PJTT    currency=HKD    country=HK
+    #LCC 1 Booking
+    Book Travel Fusion Air Segment    CEBUPACIFIC    5J    MNLHKG    6    S2    A06PJTT
+    Enter Travel Fusion Fare Remarks    LCC1    5J    S2    HKD    Airline
+    Enter Travel Fusion Other Remarks    LCC1    PHP    S2
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC2    fare_total=200    taxes_total=100    servicefee_total=0    charge=250    grand_total=450
+    ...    booking_reference=A06PJTX    currency=HKD    country=HK
+    #LCC 2 Booking
+    Book Travel Fusion Air Segment    CEBUPACIFIC    5J    HKGSIN    7    S3    A06PJTX
+    Enter Travel Fusion Fare Remarks    LCC2    5J    S3    HKD    Airline
+    Enter Travel Fusion Other Remarks    LCC2    HKD    S3
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    #LCC Fare 1
+    Click Fare Tab    LCC 1
+    Verify LCC Fare Tab Details    MNL-HKG    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    True    LCC1    True
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Fare Including Taxes Value Is Correct    LCC1
+    Verify Transaction Fee Value And Description Are Correct    LCC 1    3 + 30 (LCC) HKD Offline Fare Range Fee
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 1    HKG
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    5J    LCC 1
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Set Airline Commission Percentage    2
+    Manually Set Form Of Payment - Card Details On Fare Quote Tab    LCC1    DC    3644031458720369    1222
+    Get Charged Fare Value    LCC1
+    Get High Fare Value    LCC1
+    Get Low Fare Value    LCC1
+    Get Routing Name    LCC1
+    Get Point Of Turnaround    LCC1
+    Get Savings Code    LCC1
+    Get LFCC Field Value    LCC1
+    Get Fare Including Airline Taxes Value    LCC1
+    Get Transaction Fee Amount Value    LCC1
+    Get Total Amount    LCC1
+    Get Fuel Surcharge Value    LCC1
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC1
+    Select Default Restricions in Fare Tab    LCC 1
+    #LCC Fare 2
+    Click Fare Tab    LCC 2
+    Verify LCC Fare Tab Details    HKG-SIN    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    True    LCC2    True
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Fare Including Taxes Value Is Correct    LCC2
+    Verify Transaction Fee Value And Description Are Correct    LCC 2    9 + 30 (LCC) HKD Offline Fare Range Fee
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 2    SIN
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    5J    LCC 2
+    Set Airline Commission Percentage    2
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Select Form Of Payment On Fare Quote Tab    LCC 2    PORTRAIT-A/AX***********0002/D0899-AX
+    Get Charged Fare Value    LCC2
+    Get High Fare Value    LCC2
+    Get Low Fare Value    LCC2
+    Get Routing Name    LCC2
+    Get Point Of Turnaround    LCC2
+    Get Savings Code    LCC2
+    Get LFCC Field Value    LCC2
+    Get Fare Including Airline Taxes Value    LCC2
+    Get Transaction Fee Amount Value    LCC2
+    Get Total Amount    LCC2
+    Get Fuel Surcharge Value    LCC2
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC2
+    Select Default Restricions in Fare Tab    LCC 2
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus
+    #LCC 1 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC1    HKD    HK
+    Comment    Verify Routing Itinerary Remarks Are Written    LCC1
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC1    00003152    203    A06PJTT    DC************0369/D1222    SG02
+    ...    S2    false
+    #LCC 2 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC2    HKD    HK
+    Comment    Verify Routing Itinerary Remarks Are Written    LCC2
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC2    00003152    203    A06PJTX    AX***********0002/D0899    SG03
+    ...    S3    false
+    Verify Default Restriction Remarks Are Written    2
+
+[AB HK] Verify That Accounting Remarks Are Written Correctly When FOP Is A TMP Card For LCC Segments
+    [Tags]    us1790    team_c    hk
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Verify Fare Tab Is Visible In Sequence    LCC 1    LCC 2
+    #LCC Fare 1
+    Click Fare Tab    LCC 1
+    Verify LCC Fare Tab Details    MNL-HKG    198    198    198    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY
+    ...    identifier=LCC1
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Fare Including Taxes Value Is Correct    LCC1
+    Verify Transaction Fee Value And Description Are Correct    LCC 1    3 + 30 (LCC) HKD Offline Fare Range Fee
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    ${EMPTY}
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 1    HKG
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    5J    LCC 1
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Select Form Of Payment On Fare Quote Tab    LCC 1    PORTRAIT-A/AX***********0002/D0899-AX
+    Get Charged Fare Value    LCC1
+    Get High Fare Value    LCC1
+    Get Low Fare Value    LCC1
+    Get Routing Name    LCC1
+    Get Point Of Turnaround    LCC1
+    Get Savings Code    LCC1
+    Get LFCC Field Value    LCC1
+    Get Fare Including Airline Taxes Value    LCC1
+    Get Transaction Fee Amount Value    LCC1
+    Get Total Amount    LCC1
+    Get Fuel Surcharge Value    LCC1
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC1
+    Select Default Restricions in Fare Tab    LCC 1
+    #LCC Fare 2
+    Click Fare Tab    LCC 2
+    Verify LCC Fare Tab Details    HKG-SIN    550    550    550    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Fare Including Taxes Value Is Correct    LCC2
+    Verify Transaction Fee Value And Description Are Correct    LCC 2    9 + 30 (LCC) HKD Offline Fare Range Fee
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 2    SIN
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    5J    LCC 2
+    Manually Set Form Of Payment - Card Details On Fare Quote Tab    LCC2    DC    3644031458720369    1222
+    Get Charged Fare Value    LCC2
+    Get High Fare Value    LCC2
+    Get Low Fare Value    LCC2
+    Get Routing Name    LCC2
+    Get Point Of Turnaround    LCC2
+    Get Savings Code    LCC2
+    Get LFCC Field Value    LCC2
+    Get Fare Including Airline Taxes Value    LCC2
+    Get Transaction Fee Amount Value    LCC2
+    Get Total Amount    LCC2
+    Get Fuel Surcharge Value    LCC2
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC2
+    Select Default Restricions in Fare Tab    LCC 2
+    Click Finish PNR
+    Execute Simultaneous Change Handling    Amend To Verify That Accounting Remarks Are Written Correctly When FOP Is A TMP Card For LCC Segments [HK]
+    Retrieve PNR Details from Amadeus
+    #LCC 1 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC1    HKD    HK
+    Comment    Verify Routing Itinerary Remarks Are Written    LCC1
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC1    00003152    203    A06PJTT    AX***********0002/D0899    SG02
+    ...    S2    false
+    #LCC 2 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC2    HKD    HK
+    Comment    Verify Routing Itinerary Remarks Are Written    LCC2
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC2    00003152    203    A06PJTX    DC************0369/D1222    SG03
+    ...    S3    false
+    Verify Default Restriction Remarks Are Written    2
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB SG] Verify That LCC Fare With Power Hotel And Car Booking Is Pre-populated From Client Info's FOP When Single Use FOP
+    [Tags]    us1710    power_hotel    sg
+    Open Power Express And Retrieve Profile    ${version}    Test    u004hxc    en-GB    hcuellar    APAC QA
+    ...    Amadeus
+    Set Client And Traveler    APAC SYN CORP ¦ APAC SG LCC AUTOMATION - RANGE AMOUNT    BEAR    SGLCCAMT
+    Click New Booking
+    Click Panel    Client Info
+    Manually Set Value In Form Of Payment    AX    378282246310005    1223
+    Populate Cust Refs Panel With Default Values
+    Click Update PNR
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC1    fare_total=100    taxes_total=78    servicefee_total=2    charge=20    grand_total=183
+    ...    booking_reference=A06PJTT    currency=PHP    country=SG
+    #LCC 1 Booking
+    Book Travel Fusion Air Segment    CEBUPACIFIC    5J    MNLCEB    6    S2    A06PJTT
+    Enter Travel Fusion Fare Remarks    LCC1    5J    S2    PHP    Airline
+    Enter Travel Fusion Other Remarks    LCC1    PHP    S2
+    #Add Active Car
+    Book Active Car Segment    LAX    5    1    7    7    ET
+    ...    1    CCAR
+    #hotel Booking
+    Simulate Power Hotel Segment Booking Using Default Values
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    #LCC Fare 1
+    Click Fare Tab    LCC 1
+    Verify LCC Fare Tab Details    MNL-CEB    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    True    LCC1    True
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Transaction Fee Value And Description Are Correct    LCC 1    40.00 + 30.00 (LCC) SGD Offline Fare Range Fee
+    Verify Fare Including Taxes Value Is Correct    LCC1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    AX***********0005/D1223
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 1    CEB
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    5J    LCC 1
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Set Airline Commission Percentage    2
+    Get Charged Fare Value    LCC1
+    Get High Fare Value    LCC1
+    Get Low Fare Value    LCC1
+    Get Routing Name    LCC1
+    Get Point Of Turnaround    LCC1
+    Get Savings Code    LCC1
+    Get LFCC Field Value    LCC1
+    Get Fare Including Airline Taxes Value    LCC1
+    Get Transaction Fee Amount Value    LCC1
+    Get Total Amount    LCC1
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC1
+    Select Default Restricions in Fare Tab    LCC 1
+    Click Finish PNR
+    Retrieve PNR Details from Amadeus
+    #LCC 1 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC1    SGD    SG
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC1    022103    203    A06PJTT    AX***********0005/D1223    SG04
+    ...    S4
+    #power Hotel Remarks
+    Verify Power Hotel Remarks Are Written In The PNR
+    #Car Remarks
+    Verify Correct Car Segment Related Remarks Are Written In The PNR    S2
+
+[AB SG] Verify That LCC Fare With Power Hotel And Car Booking Is Pre-populated From Client Info's FOP When Single Use FOP
+    [Tags]    us1710    power_hotel    sg
+    #Amend Booking
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Select Form Of Payment    BTA VI/VI***********0087/D0124
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare    Car
+    Populate Car Tab With Values    ${EMPTY}    ${EMPTY}    ${EMPTY}    XI - CORPORATE CONTRACT ACCEPTED    J - PASSENGER AUTHORISED TO CAR GRADE OUTSIDE POLICY    1 - Prepaid
+    ...    Yes    10    Manual    TEST REMARKS 2
+    Click Panel    Air Fare
+    #LCC Fare 1
+    Click Fare Tab    LCC 1
+    Verify LCC Fare Tab Details    MNL-CEB    5.00    5.00    5.00    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY
+    ...    identifier=LCC1
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Transaction Fee Value And Description Are Correct    LCC 1    40.00 + 30.00 (LCC) SGD Offline Fare Range Fee
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    ${EMPTY}
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 1    CEB
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    5J    LCC 1
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Select Form Of Payment On Fare Quote Tab    LCC 1    BTA VI/VI***********0087/D0124
+    Get Charged Fare Value    LCC1
+    Get High Fare Value    LCC1
+    Get Low Fare Value    LCC1
+    Get Routing Name    LCC1
+    Get Point Of Turnaround    LCC1
+    Get Savings Code    LCC1
+    Get LFCC Field Value    LCC1
+    Get Fare Including Airline Taxes Value    LCC1
+    Get Transaction Fee Amount Value    LCC1
+    Get Total Amount    LCC1
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC1
+    Select Default Restricions in Fare Tab    LCC 1
+    Click Finish PNR    Amend to Verify That LCC Fare With Power Hotel And Car Booking Is Pre-populated From Client Info's FOP When Single Use FOP
+    Execute Simultaneous Change Handling    Amend to Verify That LCC Fare With Power Hotel And Car Booking Is Pre-populated From Client Info's FOP When Single Use FOP
+    Retrieve PNR Details from Amadeus
+    #LCC 1 Remarks
+    Verify Itinerary Remarks Are Written For LCC    LCC1    SGD    SG
+    Verify Travel Fusion Remarks Are Written In The Accounting Lines    LCC1    022103    203    A06PJTT    BTA VI/VI***********0087/D0124    SG04
+    ...    S4
+    #power Hotel Remarks
+    Verify Power Hotel Remarks Are Written In The PNR
+    #Car Remarks
+    Verify Correct Car Segment Related Remarks Are Written In The PNR    S2    #de399
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Populate Main Fees
+    [Arguments]    ${transaction_fee}    ${airline_commission}=${EMPTY}    ${nett_fare}=${EMPTY}    ${commission_return}=${EMPTY}    ${merchant_fee_percent}=${EMPTY}    ${markup_percent}=${EMPTY}
+    ...    ${fuel_surcharge}=${EMPTY}
+    ${point_of_obj}    Determine Multiple Object Name Based On Active Tab    ctxtTotalAmount
+    ${index}    Remove All Non-Integer (retain period)    ${point_of_obj}
+    ${isenabled_transactionFee}    Determine Control Object Is Enable On Active Tab    cbTransactionFee
+    ${is_enabled_nett}    Determine Control Object Is Enable On Active Tab    txtNetFare
+    ${is_enabled_fuelSur}    Determine Control Object Is Enable On Active Tab    ctxtFuelSurcharge
+    ${is_enabled_merchantFee}    Determine Control Object Is Enable On Active Tab    ctxtMerchantFeePercent
+    ${is_enabled_markUp}    Determine Control Object Is Enable On Active Tab    ctxtMarkUpPercent
+    Run Keyword If    '${is_enabled_nett}' == 'True'    Set Nett Fare Field    ${index}    ${nett_fare}
+    Run Keyword If    '${isenabled_transactionFee}' == 'True'    Set Transaction Fee    ${transaction_fee}
+    Run Keyword If    '${is_enabled_fuelSur}' == 'True'    Set Fuel Surcharge Field    ${fuel_surcharge}
+    Run Keyword If    '${is_enabled_merchantFee}' == 'True'    Set Merchant Fee Percentage Field    ${merchant_fee_percent}
+    Run Keyword If    '${is_enabled_markUp}' == 'True'    Set MarkUp Percentage    ${index}    ${markup_percent}
+    ${isenabled_airlineComm}    Determine Control Object Is Enable On Active Tab    ctxtAirlineCommissionPercent
+    ${isenabled_commReturn}    Determine Control Object Is Enable On Active Tab    ctxtCommissionPercent
+    Run Keyword If    '${isenabled_airlineComm}' == 'True'    Set Airline Commission Percentage    ${airline_commission}
+    Run Keyword If    '${isenabled_commReturn}' == 'True'    Set Commission Rebate Percentage    ${commission_return}
+
+Verify Fare Tab Is Visible In Sequence
+    [Arguments]    @{fare_tab_name}
+    Wait Until Control Object Is Visible    [NAME:TabControl1]
+    ${visible_tab}    Get Visible Tab
+    Run Keyword And Continue On Failure    Lists Should Be Equal    ${visible_tab}    ${fare_tab_name}
+    [Teardown]    Take Screenshot
+
+Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)
+    [Arguments]    @{exclude_field}
+    &{dict}    Create Dictionary    Fare Incl Taxes=ctxtFareIncludingTaxes    Airline Comm=ctxtAirlineCommissionPercent    Commission Return Amount=ctxtCommissionRebateAmount    Commission Return Percent=ctxtCommissionPercent    Nett Fare=txtNetFare
+    ...    Merchant Fee Amount=ctxtMerchantFeeAmount    Merchant Fee Percent=ctxtMerchantFeePercent    Transaction Fee=cbTransactionFee    MarkUp Amount=ctxtMarkUpAmount    MarkUp Percent=ctxtMarkUpPercent    Total=ctxtTotalAmount
+    Remove From Dictionary    ${dict}    @{exclude_field}
+    ${values}    Get Dictionary Values    ${dict}
+    : FOR    ${field}    IN    @{values}
+    \    ${obj_name}    Determine Multiple Object Name Based On Active Tab    ${field}
+    \    Verify Control Object Is Disabled    ${obj_name}
+
+Amend to Verify That LCC Fare With Power Hotel And Car Booking Is Pre-populated From Client Info's FOP When Single Use FOP
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Select Form Of Payment    BTA VI/VI***********0087/D0124
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare    Car
+    Populate Car Tab With Values    ${EMPTY}    ${EMPTY}    ${EMPTY}    XI - CORPORATE CONTRACT ACCEPTED    J - PASSENGER AUTHORISED TO CAR GRADE OUTSIDE POLICY    1 - Prepaid
+    ...    Yes    10    Manual    TEST REMARKS 2
+    Click Panel    Air Fare
+    #LCC Fare 1
+    Click Fare Tab    LCC 1
+    Verify LCC Fare Tab Details    MNL-CEB    6.10    6.10    6.10    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY
+    ...    identifier=LCC1
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Transaction Fee Value And Description Are Correct    LCC 1    40.00 + 30.00 (LCC) SGD Offline Fare Range Fee
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    ${EMPTY}
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 1    CEB
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    5J    LCC 1
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Select Form Of Payment On Fare Quote Tab    LCC 1    BTA VI/VI***********0087/D0124
+    Get Charged Fare Value    LCC1
+    Get High Fare Value    LCC1
+    Get Low Fare Value    LCC1
+    Get Routing Name    LCC1
+    Get Point Of Turnaround    LCC1
+    Get Savings Code    LCC1
+    Get LFCC Field Value    LCC1
+    Get Fare Including Airline Taxes Value    LCC1
+    Get Transaction Fee Amount Value    LCC1
+    Get Total Amount    LCC1
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC1
+    Select Default Restricions in Fare Tab    LCC 1
+    Click Finish PNR    Amend to Verify That LCC Fare With Power Hotel And Car Booking Is Pre-populated From Client Info's FOP When Single Use FOP
+
+Amend To Verify That LCC And BSP Are Retrieve In Air Fare Panel And Writes Correct Remarks [SG]
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Verify Fare Tab Is Visible In Sequence    LCC 1    Fare 1    LCC 2    Fare 2
+    #LCC Fare 1
+    Click Fare Tab    LCC 1
+    Verify LCC Fare Tab Details    MNL-CEB    6.10    6.10    6.10    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY
+    ...    identifier=LCC1
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Transaction Fee Value And Description Are Correct    LCC 1    40.00 + 30.00 (LCC) SGD Offline Fare Range Fee
+    Verify Fare Including Taxes Value Is Correct    0000
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 1    CEB
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    5J    LCC 1
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Comment    Select Form Of Payment On Fare Quote Tab    LCC 1    PORTRAIT-A/AX***********0002/D0899-AX
+    Get Charged Fare Value    LCC1
+    Get High Fare Value    LCC1
+    Get Low Fare Value    LCC1
+    Get Routing Name    LCC1
+    Get Point Of Turnaround    LCC1
+    Get Savings Code    LCC1
+    Get LFCC Field Value    LCC1
+    Get Fare Including Airline Taxes Value    LCC1
+    Get Transaction Fee Amount Value    LCC1
+    Get Total Amount    LCC1
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC1
+    Select Default Restricions in Fare Tab    LCC 1
+    #BSP Fare 1
+    Click Fare Tab    Fare 1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Comment    Select Form Of Payment On Fare Quote Tab    Fare 1    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Selected Is Displayed On Fare Quote Tab    ${EMPTY}
+    Select FOP Merchant On Fare Quote Tab    Fare 1    CWT
+    Verify High Fare Value Is Retrieved From TST    Fare 1    S3
+    Verify Charged Fare Value Is Retrieved From TST    Fare 1    S3
+    Verify Low Fare Value Is Retrieved From TST    Fare 1    S3    SGD
+    Verify Turnaround Value Is Correct    Fare 1    SIN
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    SQ    Fare 1
+    Populate Fare Quote Tabs with Default Values
+    Get Main Fees On Fare Quote Tab    Fare 1
+    Get Base Fare, Total Taxes, YQ Tax And LFCC From TST    Fare 1    S3
+    Get Fare Details    Fare 1    include_fare_restriction=False
+    Get LFCC Field Value    Fare 1
+    #LCC Fare 2
+    Click Fare Tab    LCC 2
+    Verify LCC Fare Tab Details    SIN-HKG    14.60    14.60    14.60    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY
+    ...    identifier=LCC2
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Fare Including Taxes Value Is Correct    0000
+    Verify Transaction Fee Value And Description Are Correct    LCC 2    40.00 + 30.00 (LCC) SGD Offline Fare Range Fee
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 2    HKG
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    5J    LCC 2
+    Select Form Of Payment On Fare Quote Tab    LCC 2    PORTRAIT-A/AX***********0002/D0899-AX
+    Get Charged Fare Value    LCC2
+    Get High Fare Value    LCC2
+    Get Low Fare Value    LCC2
+    Get Routing Name    LCC2
+    Get Point Of Turnaround    LCC2
+    Get Savings Code    LCC2
+    Get LFCC Field Value    LCC2
+    Get Fare Including Airline Taxes Value    LCC2
+    Get Transaction Fee Amount Value    LCC2
+    Get Total Amount    LCC2
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC2
+    Select Default Restricions in Fare Tab    LCC 2
+    #BSP Fare 2
+    Click Fare Tab    Fare 2
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Comment    Select Form Of Payment On Fare Quote Tab    Fare 2    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Selected Is Displayed On Fare Quote Tab    ${EMPTY}
+    Select FOP Merchant On Fare Quote Tab    Fare 2    CWT
+    Verify High Fare Value Is Retrieved From TST    Fare 2    S5
+    Verify Charged Fare Value Is Retrieved From TST    Fare 2    S5
+    Verify Low Fare Value Is Retrieved From TST    Fare 2    S5    SGD
+    Verify Turnaround Value Is Correct    Fare 2    CEB
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    SQ    Fare 2
+    Populate Fare Quote Tabs with Default Values
+    Get Main Fees On Fare Quote Tab    Fare 2
+    Get Base Fare, Total Taxes, YQ Tax And LFCC From TST    Fare 2    S5
+    Get Fare Details    Fare 2    include_fare_restriction=False
+    Get LFCC Field Value    Fare 2
+    Click Finish PNR
+
+Amend To Verify That LCC Bookings Are Retrieve In Air Fare Panel And Writes Correct Remarks [SG]
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Enter GDS Command    XE2
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC1    fare_total=300    taxes_total=100    servicefee_total=0    charge=250    grand_total=550
+    ...    booking_reference=A06PJTX    currency=PHP    country=SG
+    #LCC 1 Booking
+    Book Travel Fusion Air Segment    JETSTAR    3K    HKGMNL    6    S2    A06PJXT
+    Enter Travel Fusion Fare Remarks    LCC1    3K    S2    PHP    Airline
+    Enter Travel Fusion Other Remarks    LCC1    PHP    S2
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    #LCC Fare 1
+    Click Fare Tab    LCC 1
+    Verify LCC Fare Tab Details    HKG-MNL    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    True    LCC1
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Fare Including Taxes Value Is Correct    0000
+    Verify Transaction Fee Value And Description Are Correct    LCC 1    6.00 + 30.00 (LCC) SGD Offline Destination Fee Global
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 1    MNL
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    3K    LCC 1
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Comment    Select Form Of Payment On Fare Quote Tab    LCC 1    PORTRAIT-A/AX***********0002/D0899-AX
+    Get Charged Fare Value    LCC1
+    Get High Fare Value    LCC1
+    Get Low Fare Value    LCC1
+    Get Routing Name    LCC1
+    Get Point Of Turnaround    LCC1
+    Get Savings Code    LCC1
+    Get LFCC Field Value    LCC1
+    Get Fare Including Airline Taxes Value    LCC1
+    Get Transaction Fee Amount Value    LCC1
+    Get Total Amount    LCC1
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC1
+    Select Default Restricions in Fare Tab    LCC 1
+    #LCC Fare 2
+    Click Fare Tab    LCC 2
+    Verify LCC Fare Tab Details    SIN-HKG    14.60    14.60    14.60    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Fare Including Taxes Value Is Correct    0000
+    Verify Transaction Fee Value And Description Are Correct    LCC 2    6.00 + 30.00 (LCC) SGD Offline Destination Fee Global
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 2    HKG
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    5J    LCC 2
+    Comment    Select Form Of Payment On Fare Quote Tab    LCC 2    PORTRAIT-A/AX***********0002/D0899-AX
+    Get Charged Fare Value    LCC2
+    Get High Fare Value    LCC2
+    Get Low Fare Value    LCC2
+    Get Routing Name    LCC2
+    Get Point Of Turnaround    LCC2
+    Get Savings Code    LCC2
+    Get LFCC Field Value    LCC2
+    Get Fare Including Airline Taxes Value    LCC2
+    Get Transaction Fee Amount Value    LCC2
+    Get Total Amount    LCC2
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC2
+    Select Default Restricions in Fare Tab    LCC 2
+    Click Finish PNR
+
+Amend To Verify That Power Express Converts Base Fare And Taxes Amount For Multiple LCC Fares [SG]
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Generate Fee Data For Travel Fusion    LCC3    fare_total=1050.45    taxes_total=150.50    servicefee_total=3.00    charge=3.35    grand_total=1200.95
+    ...    booking_reference=LEN001    currency=THB    country=SG
+    #LCC 3 Booking
+    Book Travel Fusion Air Segment    NOK AIRLINES    DD    BKKSIN    8    S4    LEN001
+    Enter Travel Fusion Fare Remarks    LCC3    DD    S4    THB    Airline
+    Enter Travel Fusion Other Remarks    LCC3    THB    S4
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Verify Fare Tab Is Visible In Sequence    LCC 1    LCC 2    LCC 3
+    #LCC Fare 1
+    Click Fare Tab    LCC 1
+    Verify LCC Fare Tab Details    MNL-SIN    ${high_fare_value_LCC1}    ${charged_fare_LCC1}    ${low_fare_LCC1}    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY
+    ...    identifier=LCC1
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Transaction Fee Value And Description Are Correct    LCC 1    40.00 + 30.00 (LCC) SGD Offline Fare Range Fee
+    Verify Fare Including Taxes Value Is Correct    LCC1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    ${EMPTY}
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 1    SIN
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    5J    LCC 1
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Select Form Of Payment On Fare Quote Tab    LCC 1    PORTRAIT/AX***********0002/D0899-AX
+    Get Charged Fare Value    LCC1
+    Get High Fare Value    LCC1
+    Get Low Fare Value    LCC1
+    Get Routing Name    LCC1
+    Get Point Of Turnaround    LCC1
+    Get Savings Code    LCC1
+    Get LFCC Field Value    LCC1
+    Get Fare Including Airline Taxes Value    LCC1
+    Get Transaction Fee Amount Value    LCC1
+    Get Total Amount    LCC1
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC1
+    Select Default Restricions in Fare Tab    LCC 1
+    #LCC Fare 2
+    Click Fare Tab    LCC 2
+    Verify LCC Fare Tab Details    ICN-MNL    ${high_fare_value_LCC2}    ${charged_fare_LCC2}    ${low_fare_LCC2}    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY
+    ...    identifier=LCC2
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Fare Including Taxes Value Is Correct    LCC 2
+    Verify Transaction Fee Value And Description Are Correct    LCC 2    40.00 + 30.00 (LCC) SGD Offline Fare Range Fee
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    ${EMPTY}
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 2    MNL
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    AK    LCC 2
+    Select Form Of Payment On Fare Quote Tab    LCC 2    PORTRAIT/AX***********0002/D0899-AX
+    Get Charged Fare Value    LCC2
+    Get High Fare Value    LCC2
+    Get Low Fare Value    LCC2
+    Get Routing Name    LCC2
+    Get Point Of Turnaround    LCC2
+    Get Savings Code    LCC2
+    Get LFCC Field Value    LCC2
+    Get Fare Including Airline Taxes Value    LCC2
+    Get Transaction Fee Amount Value    LCC2
+    Get Total Amount    LCC2
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC2
+    Select Default Restricions in Fare Tab    LCC 2
+    #LCC Fare 3
+    Click Fare Tab    LCC 3
+    Verify LCC Fare Tab Details    BKK-SIN    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    True    LCC3
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Transaction Fee Value And Description Are Correct    LCC3    40.00 + 30.00 (LCC) SGD Offline Fare Range Fee
+    Verify Fare Including Taxes Value Is Correct    LCC3
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 3    SIN
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    DD    LCC 3
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Select Form Of Payment On Fare Quote Tab    LCC3    PORTRAIT/AX***********0002/D0899-AX
+    Get Charged Fare Value    LCC3
+    Get High Fare Value    LCC3
+    Get Low Fare Value    LCC3
+    Get Routing Name    LCC3
+    Get Point Of Turnaround    LCC3
+    Get Savings Code    LCC3
+    Get LFCC Field Value    LCC3
+    Get Fare Including Airline Taxes Value    LCC3
+    Get Transaction Fee Amount Value    LCC3
+    Get Total Amount    LCC3
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC3
+    Select Default Restricions in Fare Tab    LCC 3
+    Click Finish PNR
+
+Amend To Verify That Accounting Remarks Are Written Correctly When FOP Is A TMP Card For LCC Segments [SG]
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Verify Fare Tab Is Visible In Sequence    LCC 1    LCC 2
+    #LCC Fare 1
+    Click Fare Tab    LCC 1
+    Verify LCC Fare Tab Details    MNL-SIN    198.00    198.00    198.00    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY
+    ...    identifier=LCC1
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Fare Including Taxes Value Is Correct    LCC1
+    Verify Transaction Fee Value And Description Are Correct    LCC 1    16.00 + 30.00 (LCC) SGD Offline Destination Fee SG
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    ${EMPTY}
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 1    SIN
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    5J    LCC 1
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Select Form Of Payment On Fare Quote Tab    LCC 1    PORTRAIT-A/AX***********0002/D0899-AX
+    Get Charged Fare Value    LCC1
+    Get High Fare Value    LCC1
+    Get Low Fare Value    LCC1
+    Get Routing Name    LCC1
+    Get Point Of Turnaround    LCC1
+    Get Savings Code    LCC1
+    Get LFCC Field Value    LCC1
+    Get Fare Including Airline Taxes Value    LCC1
+    Get Transaction Fee Amount Value    LCC1
+    Get Total Amount    LCC1
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC1
+    Select Default Restricions in Fare Tab    LCC 1
+    #LCC Fare 2
+    Click Fare Tab    LCC 2
+    Verify LCC Fare Tab Details    SIN-HKG    550.00    550.00    550.00    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Fare Including Taxes Value Is Correct    LCC2
+    Verify Transaction Fee Value And Description Are Correct    LCC 2    3.00 + 30.00 (LCC) SGD Offline Destination Fee APAC
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 2    HKG
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    5J    LCC 2
+    Manually Set Form Of Payment - Card Details On Fare Quote Tab    LCC2    DC    3644031458720369    1222
+    Get Charged Fare Value    LCC2
+    Get High Fare Value    LCC2
+    Get Low Fare Value    LCC2
+    Get Routing Name    LCC2
+    Get Point Of Turnaround    LCC2
+    Get Savings Code    LCC2
+    Get LFCC Field Value    LCC2
+    Get Fare Including Airline Taxes Value    LCC2
+    Get Transaction Fee Amount Value    LCC2
+    Get Total Amount    LCC2
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC2
+    Select Default Restricions in Fare Tab    LCC 2
+    Click Finish PNR
+
+Amend To Verify That LCC Bookings Are Retrieve In Air Fare Panel And Writes Correct Remarks [HK]
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Enter GDS Command    XE2
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC1    fare_total=300    taxes_total=100    servicefee_total=0    charge=250    grand_total=550
+    ...    booking_reference=A06PJTX    currency=PHP    country=HK
+    #LCC 1 Booking
+    Book Travel Fusion Air Segment    JETSTAR    3K    HKGMNL    6    S2    A06PJXX
+    Enter Travel Fusion Fare Remarks    LCC1    3K    S2    PHP    Airline
+    Enter Travel Fusion Other Remarks    LCC1    PHP    S2
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    #LCC Fare 1
+    Click Fare Tab    LCC 1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify LCC Fare Tab Details    HKG-MNL    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    True    LCC1
+    Verify Fare Including Taxes Value Is Correct    LCC1
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Transaction Fee Value And Description Are Correct    LCC 1    6 + 30 (LCC) HKD Offline Destination Fee Global
+    Comment    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    ${EMPTY}
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 1    MNL
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    3K    LCC 1
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Select Form Of Payment On Fare Quote Tab    LCC 1    PORTRAIT-A/AX***********0002/D0899-AX
+    Get Charged Fare Value    LCC1
+    Get High Fare Value    LCC1
+    Get Low Fare Value    LCC1
+    Get Routing Name    LCC1
+    Get Point Of Turnaround    LCC1
+    Get Savings Code    LCC1
+    Get LFCC Field Value    LCC1
+    Get Fare Including Airline Taxes Value    LCC1
+    Get Fuel Surcharge Value    LCC1
+    Get Transaction Fee Amount Value    LCC1
+    Get Total Amount    LCC1
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC1
+    Select Air Fare Restrictions Radio Button    LCC 1    Default
+    #LCC Fare 1
+    Comment    Click Fare Tab    LCC 1
+    Comment    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Comment    Verify LCC Fare Tab Details    MNL-SIN    1055    1055    1055    LC - LOW COST CARRIER FARE ACCEPTED
+    ...    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    false    LCC1
+    Comment    Verify Fare Including Taxes Value Is Correct    LCC1
+    Comment    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Comment    Verify Transaction Fee Value And Description Are Correct    LCC 1    6 + 30 (LCC) HKD Offline Destination Fee Global
+    Comment    Comment    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    ${EMPTY}
+    Comment    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Comment    Verify Turnaround Value Is Correct    LCC 1    SIN
+    Comment    Verify Route Code Default Value    INTL
+    Comment    Verify LFCC Field Value    5J    LCC1
+    Comment    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Comment    Comment    Select Form Of Payment On Fare Quote Tab    LCC1    PORTRAIT-A/AX***********0002/D0899-AX
+    Comment    Populate Fare Quote Tabs with Default Values
+    Comment    Get LFCC Field Value    LCC1
+    Comment    Get Point Of Turnaround    LCC1
+    Comment    Get Charged Fare Value    LCC1
+    Comment    Get High Fare Value    LCC1
+    Comment    Get Low Fare Value    LCC1
+    Comment    Get Routing Name    LCC1
+    Comment    Get Savings Code    LCC1
+    Comment    Get Fare Including Airline Taxes Value    LCC1
+    Comment    Get Fuel Surcharge Value    LCC1
+    Comment    Get Transaction Fee Amount Value    LCC1
+    Comment    Get Total Amount    LCC1
+    Comment    Verify Total Amount Value Is Correct Based On Computed Value    LCC1
+    Comment    Select Air Fare Restrictions Radio Button    LCC 1    Default
+    #LCC Fare 2
+    Click Fare Tab    LCC 2
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify LCC Fare Tab Details    SIN-DEL    29    29    29    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY
+    ...    false    LCC2
+    Verify Fare Including Taxes Value Is Correct    LCC2
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Transaction Fee Value And Description Are Correct    LCC 2    6 + 30 (LCC) HKD Offline Destination Fee Global
+    Comment    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    ${EMPTY}
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC2    DEL
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    DD    LCC2
+    Select Form Of Payment On Fare Quote Tab    LCC 2    PORTRAIT-A/AX***********0002/D0899-AX
+    Get Charged Fare Value    LCC2
+    Get High Fare Value    LCC2
+    Get Low Fare Value    LCC2
+    Get Routing Name    LCC2
+    Get Point Of Turnaround    LCC2
+    Get Savings Code    LCC2
+    Get LFCC Field Value    LCC2
+    Get Fare Including Airline Taxes Value    LCC2
+    Get Fuel Surcharge Value    LCC2
+    Get Transaction Fee Amount Value    LCC2
+    Get Total Amount    LCC2
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC2
+    Select Air Fare Restrictions Radio Button    LCC 2    Default
+    Click Finish PNR
+
+Amend To Verify That LCC And BSP Are Retrieve In Air Fare Panel And Writes Correct Remarks [HK]
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Delete Air Segment    2
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC1    fare_total=250    taxes_total=82    servicefee_total=2    charge=4    grand_total=336
+    ...    booking_reference=A06PJI    currency=SGD
+    #LCC 1 Booking
+    Book Travel Fusion Air Segment    CEBUPACIFIC    5J    CEBSIN    6    S2    A06PJI
+    Enter Travel Fusion Fare Remarks    LCC1    5J    S2    SGD    Airline
+    Enter Travel Fusion Other Remarks    LCC1    SGD    S2
+    #BSP 2 Booking
+    Book Flight X Months From Now    DELHKG/ACX    SS1Y1    FXP/S5    7    10
+    #Generate Test Data
+    Generate Fee Data For Travel Fusion    LCC3    fare_total=200    taxes_total=90    servicefee_total=2    charge=3    grand_total=293
+    ...    booking_reference=A06PJF    currency=INR
+    #LCC 3 Booking
+    Book Travel Fusion Air Segment    NOKAIRLINES    DD    HKGPEK    8    S6    A06PJF
+    Enter Travel Fusion Fare Remarks    LCC3    DD    S6    INR    Travel Fusion
+    Enter Travel Fusion Other Remarks    LCC3    INR    S6
+    Click Read Booking
+    Click Panel    Air Fare
+    #LCC Fare 1
+    Click Fare Tab    LCC 1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify LCC Fare Tab Details    CEB-SIN    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    True    LCC1
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Fare Including Taxes Value Is Correct    LCC1
+    Verify Transaction Fee Value And Description Are Correct    LCC 1    45 + 30 (LCC) HKD Offline Fare Range Fee
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 1    SIN
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    5J    LCC1
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Comment    Get Fare Details    LCC1    include_fare_restriction=False
+    Comment    Select Form Of Payment On Fare Quote Tab    LCC1    PORTRAIT-A/AX***********0002/D0899-AX
+    Populate Fare Quote Tabs with Default Values
+    Get LFCC Field Value    LCC1
+    Get Point Of Turnaround    LCC1
+    Get Charged Fare Value    LCC1
+    Get High Fare Value    LCC1
+    Get Low Fare Value    LCC1
+    Get Routing Name    LCC1
+    Get Savings Code    LCC1
+    Get Fare Including Airline Taxes Value    LCC1
+    Get Fuel Surcharge Value    LCC1
+    Get Transaction Fee Amount Value    LCC1
+    Get Total Amount    LCC1
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC1
+    Comment    Select Default Restricions in Fare Tab    LCC 1
+    #BSP Fare 1
+    Click Fare Tab    Fare 1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Selected Is Displayed On Fare Quote Tab    CWT
+    Verify High Fare Value Is Retrieved From TST    Fare 1    S3
+    Verify Charged Fare Value Is Retrieved From TST    Fare 1    S3
+    Verify Low Fare Value Is Retrieved From TST    Fare 1    S3    HKD
+    Verify Turnaround Value Is Correct    Fare 1    HKG
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    SQ    Fare 1
+    Populate Fare Quote Tabs with Default Values
+    Get Main Fees On Fare Quote Tab    Fare 1
+    Get Base Fare, Total Taxes, YQ Tax And LFCC From TST    Fare 1    S3
+    Get LFCC Field Value    Fare 1
+    Get Routing, Turnaround and Route Code    Fare 1
+    Get Savings Code    Fare 1
+    Get Point Of Turnaround    Fare 1
+    Get Charged Fare Value    Fare 1
+    Get High Fare Value    Fare 1
+    Get Low Fare Value    Fare 1
+    Get Routing Name    Fare 1
+    Get Transaction Fee Amount Value    Fare 1
+    Verify Total Amount Value Is Correct Based On Computed Value    Fare 1
+    Comment    Select Default Restricions in Fare Tab    Fare 1
+    #LCC Fare 2
+    Click Fare Tab    LCC 2
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify LCC Fare Tab Details    HKG-DEL    29    29    29    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY
+    ...    False    LCC2
+    Verify Fare Including Taxes Value Is Correct    LCC2
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Transaction Fee Value And Description Are Correct    LCC 2    1 + 30 (LCC) HKD Offline Fare Range Fee
+    Comment    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC2    DEL
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    DD    LCC2
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Comment    Get Fare Details    LCC2    include_fare_restriction=False
+    Select Form Of Payment On Fare Quote Tab    LCC2    PORTRAIT-A/AX***********0002/D0899-AX
+    Populate Fare Quote Tabs with Default Values
+    Get LFCC Field Value    LCC2
+    Get Point Of Turnaround    LCC2
+    Get Charged Fare Value    LCC2
+    Get High Fare Value    LCC2
+    Get Low Fare Value    LCC2
+    Get Routing Name    LCC2
+    Get Savings Code    LCC2
+    Get Fare Including Airline Taxes Value    LCC2
+    Get Fuel Surcharge Value    LCC2
+    Get Transaction Fee Amount Value    LCC2
+    Get Total Amount    LCC2
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC2
+    Comment    Select Default Restricions in Fare Tab    LCC 2
+    #BSP Fare 2
+    Click Fare Tab    Fare 2
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Comment    Select Form Of Payment On Fare Quote Tab    Fare 2    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Selected Is Displayed On Fare Quote Tab    ${EMPTY}
+    Select FOP Merchant On Fare Quote Tab    Fare 2    Airline
+    Comment    Verify High Fare Value Is Retrieved From TST    Fare 2    S5
+    Verify Charged Fare Value Is Retrieved From TST    Fare 2    S5
+    Verify Low Fare Value Is Retrieved From TST    Fare 2    S5    HKD
+    Verify Turnaround Value Is Correct    Fare 2    HKG
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    CX    Fare 2
+    Populate Fare Quote Tabs with Default Values
+    Get Main Fees On Fare Quote Tab    Fare 2
+    Get Base Fare, Total Taxes, YQ Tax And LFCC From TST    Fare 2    S5
+    Get LFCC Field Value    Fare 2
+    Get Routing, Turnaround and Route Code    Fare 2
+    Get Savings Code    Fare 2
+    Get Point Of Turnaround    Fare 2
+    Get Charged Fare Value    Fare 2
+    Get High Fare Value    Fare 2
+    Get Low Fare Value    Fare 2
+    Get Routing Name    Fare 2
+    Get Transaction Fee Amount Value    Fare 2
+    Verify Total Amount Value Is Correct Based On Computed Value    Fare 2
+    #LCC Fare 3
+    Click Fare Tab    LCC 3
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify LCC Fare Tab Details    HKG-PEK    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    True    LCC3
+    Verify Fare Including Taxes Value Is Correct    LCC3
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Transaction Fee Value And Description Are Correct    LCC3    1 + 30 (LCC) HKD Offline Fare Range Fee
+    Comment    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    ${EMPTY}
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC3    BJS
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    DD    LCC3
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Comment    Get Fare Details    LCC3    include_fare_restriction=False
+    Select Form Of Payment On Fare Quote Tab    LCC3    PORTRAIT-A/AX***********0002/D0899-AX
+    Populate Fare Quote Tabs with Default Values
+    Get LFCC Field Value    LCC3
+    Get Point Of Turnaround    LCC3
+    Get Charged Fare Value    LCC3
+    Get High Fare Value    LCC3
+    Get Low Fare Value    LCC3
+    Get Routing Name    LCC3
+    Get Savings Code    LCC3
+    Get Fare Including Airline Taxes Value    LCC3
+    Get Fuel Surcharge Value    LCC3
+    Get Transaction Fee Amount Value    LCC3
+    Get Total Amount    LCC3
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC3
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Finish PNR
+
+Amend To Verify That Power Express Converts Base Fare And Taxes Amount For Multiple LCC Fares [HK]
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Generate Fee Data For Travel Fusion    LCC3    fare_total=1050.45    taxes_total=150.50    servicefee_total=3.00    charge=3.35    grand_total=1200.95
+    ...    booking_reference=LEN001    currency=THB    country=HK
+    #LCC 1 Booking
+    Book Travel Fusion Air Segment    NOK AIRLINES    DD    BKKSIN    8    S4    A06PJXX
+    Enter Travel Fusion Fare Remarks    LCC3    DD    S4    THB    Airline
+    Enter Travel Fusion Other Remarks    LCC3    THB    S4
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Verify Fare Tab Is Visible In Sequence    LCC 1    LCC 2    LCC 3
+    #LCC Fare 1
+    Click Fare Tab    LCC 1
+    Verify LCC Fare Tab Details    NRT-MNL    ${EMPTY}    ${EMPTY}    ${EMPTY}    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY
+    ...    True    identifier=LCC1
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Transaction Fee Value And Description Are Correct    LCC 1    28 + 30 (LCC) HKD Offline Fare Range Fee
+    Verify Fare Including Taxes Value Is Correct    LCC1
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 1    MNL
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    5J    LCC 1
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Select Form Of Payment On Fare Quote Tab    LCC 1    PORTRAIT-A/AX***********0002/D0899-AX
+    Get Charged Fare Value    LCC1
+    Get High Fare Value    LCC1
+    Get Low Fare Value    LCC1
+    Get Routing Name    LCC1
+    Get Point Of Turnaround    LCC1
+    Get Savings Code    LCC1
+    Get Class Code Value    LCC1
+    Get LFCC Field Value    LCC1
+    Get Fare Including Airline Taxes Value    LCC1
+    Get Fuel Surcharge Value    LCC1
+    Get Transaction Fee Amount Value    LCC1
+    Get Total Amount    LCC1
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC1
+    Select Default Restricions in Fare Tab    LCC 1
+    #LCC Fare 2
+    Click Fare Tab    LCC 2
+    Verify LCC Fare Tab Details    ICN-MNL    ${EMPTY}    ${EMPTY}    ${EMPTY}    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY
+    ...    True    identifier=LCC2
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Fare Including Taxes Value Is Correct    LCC2
+    Verify Transaction Fee Value And Description Are Correct    LCC 2    5 + 30 (LCC) HKD Offline Fare Range Fee
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 2    MNL
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    AK    LCC 2
+    Select Form Of Payment On Fare Quote Tab    LCC 2    PORTRAIT-A/AX***********0002/D0899-AX
+    Get Charged Fare Value    LCC2
+    Get High Fare Value    LCC2
+    Get Low Fare Value    LCC2
+    Get Routing Name    LCC2
+    Get Point Of Turnaround    LCC2
+    Get Savings Code    LCC2
+    Get Class Code Value    LCC2
+    Get LFCC Field Value    LCC2
+    Get Fare Including Airline Taxes Value    LCC2
+    Get Fuel Surcharge Value    LCC2
+    Get Transaction Fee Amount Value    LCC2
+    Get Total Amount    LCC2
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC2
+    Select Default Restricions in Fare Tab    LCC 2
+    #LCC Fare 3
+    Click Fare Tab    LCC 3
+    Verify LCC Fare Tab Details    BKK-SIN    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    True    LCC3
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Transaction Fee Value And Description Are Correct    LCC3    6 + 30 (LCC) HKD Offline Fare Range Fee
+    Verify Fare Including Taxes Value Is Correct    LCC3
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC3    SIN
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    DD    LCC 3
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Select Form Of Payment On Fare Quote Tab    LCC3    PORTRAIT-A/AX***********0002/D0899-AX
+    Get Charged Fare Value    LCC3
+    Get High Fare Value    LCC3
+    Get Low Fare Value    LCC3
+    Get Routing Name    LCC3
+    Get Point Of Turnaround    LCC3
+    Get Savings Code    LCC3
+    Get Class Code Value    LCC3
+    Get LFCC Field Value    LCC3
+    Get Fare Including Airline Taxes Value    LCC3
+    Get Fuel Surcharge Value    LCC3
+    Get Transaction Fee Amount Value    LCC3
+    Get Total Amount    LCC3
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC3
+    Select Default Restricions in Fare Tab    LCC 3
+    Click Finish PNR
+
+Amend To Verify That Accounting Remarks Are Written Correctly When FOP Is A TMP Card For LCC Segments [HK]
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Click Panel    Air Fare
+    Verify Fare Tab Is Visible In Sequence    LCC 1    LCC 2
+    #LCC Fare 1
+    Click Fare Tab    LCC 1
+    Verify LCC Fare Tab Details    MNL-HKG    198    198    198    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY
+    ...    identifier=LCC1
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Fare Including Taxes Value Is Correct    LCC1
+    Verify Transaction Fee Value And Description Are Correct    LCC 1    3 + 30 (LCC) HKD Offline Fare Range Fee
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    ${EMPTY}
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 1    HKG
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    5J    LCC 1
+    Populate Air Fare Savings Code    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY    CW - Business Class CWT Negotiated Fare
+    Select Form Of Payment On Fare Quote Tab    LCC 1    PORTRAIT-A/AX***********0002/D0899-AX
+    Get Charged Fare Value    LCC1
+    Get High Fare Value    LCC1
+    Get Low Fare Value    LCC1
+    Get Routing Name    LCC1
+    Get Point Of Turnaround    LCC1
+    Get Savings Code    LCC1
+    Get LFCC Field Value    LCC1
+    Get Fare Including Airline Taxes Value    LCC1
+    Get Transaction Fee Amount Value    LCC1
+    Get Total Amount    LCC1
+    Get Fuel Surcharge Value    LCC1
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC1
+    Select Default Restricions in Fare Tab    LCC 1
+    #LCC Fare 2
+    Click Fare Tab    LCC 2
+    Verify LCC Fare Tab Details    HKG-SIN    550    550    550    LC - LOW COST CARRIER FARE ACCEPTED    J - PASSENGER AUTHORISED TO TRAVEL OUTSIDE POLICY
+    Verify Main Fees Fields Are Disabled (Except Given Field Name If Any)    Transaction Fee
+    Verify Fare Including Taxes Value Is Correct    LCC2
+    Verify Transaction Fee Value And Description Are Correct    LCC 2    9 + 30 (LCC) HKD Offline Fare Range Fee
+    Verify Form Of Payment Selected Is Displayed On Fare Quote Tab    PORTRAIT-A/AX***********0002/D0899-AX
+    Verify FOP Merchant Field Is Not Visible On Fare Quote Tab
+    Verify Turnaround Value Is Correct    LCC 2    SIN
+    Verify Route Code Default Value    INTL
+    Verify LFCC Field Value    5J    LCC 2
+    Manually Set Form Of Payment - Card Details On Fare Quote Tab    LCC2    DC    3644031458720369    1222
+    Get Charged Fare Value    LCC2
+    Get High Fare Value    LCC2
+    Get Low Fare Value    LCC2
+    Get Routing Name    LCC2
+    Get Point Of Turnaround    LCC2
+    Get Savings Code    LCC2
+    Get LFCC Field Value    LCC2
+    Get Fare Including Airline Taxes Value    LCC2
+    Get Transaction Fee Amount Value    LCC2
+    Get Total Amount    LCC2
+    Get Fuel Surcharge Value    LCC2
+    Verify Total Amount Value Is Correct Based On Computed Value    LCC2
+    Select Default Restricions in Fare Tab    LCC 2
+    Click Finish PNR

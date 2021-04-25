@@ -1,0 +1,17 @@
+[t5]
+FileName1=t5.html
+URL1=https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/ExplicitAuth/Login
+Total=4
+RequestHeaderFile=t5_RequestHeader.txt
+RequestBodyFile=NONE
+ResponseHeaderFile=t5_ResponseHeader.txt
+ContentType=application/vnd.citrix.authenticateresponse-1+xml
+SnapshotXmlFile=snapshot_5.xml
+FileName2=t5_authspinner_B0BCD339560CA593.gif
+URL2=https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/images/common/authspinner_B0BCD339560CA593.gif
+FileName3=t5_Citrix_HalfLogonLogo.png
+URL3=https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/custom/Citrix_HalfLogonLogo.png
+FileName4=t5_spinner_white_auth_button_53FD5A337A529DA7.gif
+URL4=https://emea.cwtdesktop.pilot.int.carlsonwagonlit.com/Citrix/PilotWeb/receiver/images/1x/spinner_white_auth_button_53FD5A337A529DA7.gif
+[ProtocolInfo]
+ProtocolId=QTWeb

@@ -1,0 +1,109 @@
+*** Settings ***
+Resource          ../../resources/common/global_resources.txt
+
+*** Keyword ***
+Verify Country Of Residence Contains Expected Value
+    [Arguments]    ${expected_country_of_residence}
+    Verify Control Object Text Value Is Correct    [NAME:ccboCountryResidence]    ${expected_country_of_residence}
+    [Teardown]    Take Screenshot
+
+Verify Country Of Residence Is Not Pre-Populated
+    Verify Field Is Empty    [NAME:ccboCountryResidence]
+    [Teardown]    Take Screenshot
+
+Verify ESTA Header In The Lower Right Section Is Displayed
+    [Arguments]    ${header}
+    Verify Control Object Text Value Is Correct    [NAME:grpESTA]    ${header}
+    [Teardown]    Take Screenshot
+
+Verify ESTA/ETA Warning Message Is Displayed
+    [Arguments]    ${warning_message}
+    Verify Control Object Text Contains Expected Value    [NAME:rtxtESTA]    ${warning_message}
+    [Teardown]    Take Screenshot
+
+Verify Is Doc Valid? Field Contains Expected Value
+    [Arguments]    ${expected_is_doc_valid}    ${row_number}=1
+    ${row_number}    Evaluate    ${row_number}-1
+    Verify Control Object Text Value Is Correct    [NAME:ccboPassportValid${row_number}]    ${expected_is_doc_valid}
+    [Teardown]    Take Screenshot
+
+Verify Is Doc Valid? Field Is Not Pre-Populated
+    [Arguments]    ${row_number}=1
+    ${row_number}    Evaluate    ${row_number}-1
+    Verify Field Is Empty    [NAME:ccboPassportValid${row_number}]
+    [Teardown]    Take Screenshot
+
+Verify Passport & Visa Info Panel Is Displayed
+    Verify Control Object Is Visible    [NAME:PassportVisaInfo]
+    Verify Control Object Is Visible    [NAME:txtPassportVisaInfo]
+    [Teardown]    Take Screenshot
+
+Verify Passport & Visa Info Panel Is Not Displayed
+    Verify Control Object Is Not Visible    [NAME:PassportVisaInfo]
+    Verify Control Object Is Not Visible    [NAME:txtPassportVisaInfo]
+    [Teardown]    Take Screenshot
+
+Verify Passport And Visa Information Remarks Are Not Written In The PNR
+    [Arguments]    ${nationality}    ${passport_held}    ${visa_check}
+    Verify Specific Line Is Not Written In The PNR    ********** PASSPORT AND VISA INFORMATION **********
+    Verify Specific Line Is Not Written In The PNR    PASSPORT AND VISA INFORMATION
+    Verify Specific Line Is Not Written In The PNR    TRAVELLERS NATIONALITY: ${nationality}
+    Verify Specific Line Is Not Written In The PNR    VALID PASSPORT HELD: ${passport_held}
+    Verify Specific Line Is Not Written In The PNR    VISA CHECK: {visa_check}
+    Verify Specific Line Is Not Written In The PNR    FOR INTERNATIONAL TRAVEL PLEASE ENSURE YOUR PASSPORT IS
+    Verify Specific Line Is Not Written In The PNR    VALID FOR MINIMUM 6 MONTHS AT TIME OF TRAVEL
+
+Verify Passport Details Is Written Only Once In The PNR
+    [Arguments]    @{passport_details}
+    : FOR    ${exp_passport_detail}    IN    @{passport_details}
+    \    ${is_found}    Run Keyword And Return Status    Verify Text Contains Expected Value X Times Only    ${pnr_details}    ${exp_passport_detail}    1
+    \    Run Keyword if    "${is_found}" == "True"    Log    ${exp_passport_detail} Is Found In The List Values
+    \    ...    ELSE    Fail    ${exp_passport_detail} Is Not Found In The List Values
+
+Verify Pspt & Visa And APIS/SFPD Panels Are Shown For Non-Mindef
+    Run Keyword And Continue On Failure    Verify Actual Panel Contains Expected Panel    Pspt and Visa
+    Run Keyword And Continue On Failure    Verify Actual Panel Contains Expected Panel    APIS/SFPD
+
+Verify Pspt And Visa Info Panel Contains Text
+    [Arguments]    ${expected_text}
+    Verify Text Contains Expected Value    ${passport_and_visa_info_text}    ${expected_text}
+
+Verify Pspt And Visa Info Panel Does Not Contain Text
+    [Arguments]    ${expected_text}
+    Verify Text Does Not Contain Value    ${passport_and_visa_info_text}    ${expected_text}
+
+Verify Visa Details Fields Are Displayed
+    Verify Control Object Is Visible    [NAME:grpVisaDetails]
+    Verify Control Object Is Visible    [NAME:ccboCountryResidence]
+
+Verify Visa Required? Field Contains Expected Value
+    [Arguments]    ${expected_visa_requirement}    ${row_number}=1
+    ${row_number}    Evaluate    ${row_number}-1
+    Verify Control Object Text Value Is Correct    [NAME:ccboVisa${row_number}]    ${expected_visa_requirement}
+    [Teardown]    Take Screenshot
+
+Verify Visa Required? Field Is Not Pre-Populated
+    [Arguments]    ${row_number}=1
+    ${row_number}    Evaluate    ${row_number}-1
+    Verify Field Is Empty    [NAME:ccboVisa${row_number}]
+    [Teardown]    Take Screenshot
+
+Verify Visa Requirements Fields Are Displayed
+    Verify Control Object Is Visible    [NAME:grpVisa]
+    Verify Control Object Is Visible    [NAME:ctxtCountries0]
+    Verify Control Object Is Visible    [NAME:ccboVisa0]
+    Verify Control Object Is Visible    [NAME:ccboJourneyType0]
+
+Verify Travel Document Details Are Correct
+    [Arguments]    ${expected_document_type}    ${expected_nationality_citizenship}    ${expected_doc_number}    ${expected_expiry_date}
+    Verify Control Object Text Value Is Correct    ${combo_documenttype_0}    ${expected_document_type}
+    Verify Control Object Text Value Is Correct    ${combo_nationality_citizenship_0}    ${expected_nationality_citizenship}
+    Verify Control Object Text Value Is Correct    ${text_docnumber0}    ${expected_doc_number}
+    Verify Control Object Text Value Is Correct    ${date_expirydate_0}    ${expected_expiry_date}
+    [Teardown]    Take Screenshot
+
+Verify Countries Visited
+    [Arguments]    @{expected_countries_visited}
+    @{countries_visited} =    Get Countries Visited
+    List Should Contain Sub List    ${countries_visited}    ${expected_countries_visited}
+    [Teardown]    Take Screenshot

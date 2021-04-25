@@ -1,0 +1,319 @@
+*** Settings ***
+Force Tags        visa_processing
+Resource          ../other_services.txt
+
+*** Test Cases ***
+[NB OS] Verify That Visa Processing Behaves Correctly And Written In The PNR When FOP Is CX
+    [Tags]    horton    US463    us1291    us1322    us1456    us1620
+    ...    de486    de547
+    Create PNR Using Credit Card As FOP    HK    True    False    False    BTA CARD/CA************1114/D0828/CVV****
+    Click Panel    Other Svcs
+    Select Product And Vendor    VISA PROCESSING    CWT VISA
+    Click Visa Info Tab
+    Verify Form Of Payment Details Are Correct    BTA CARD/CA************1114/D0828/CVV****    Credit Card (CX)
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CX)    BTA VI/VI***********0235/D0623/CVV***
+    Populate Other Services Visa Processing Fees    500    200    150
+    Get Other Services Visa Processing Cost
+    Compute Visa Processing Fees    2
+    Verify Visa Processing Selling Price Value Is Correct
+    Verify Visa Processing Commission Value Is Correct
+    Verify Visa Processing Total Selling Price Is Correct
+    Tick Merchant Fee CheckBox for Nett Cost
+    Verify Merchant Fee CheckBox For Nett Cost Is Ticked
+    Get Other Services Visa Processing Cost
+    Compute Visa Processing Fees    2
+    Verify Visa Processing Selling Price Value Is Correct
+    Verify Visa Processing Commission Value Is Correct
+    Verify Visa Processing Total Selling Price Is Correct
+    Untick Merchant Fee CheckBox For Nett Cost
+    Verify Merchant Fee CheckBox For Nett Cost Is Unticked
+    Get Other Services Visa Processing Cost
+    Compute Visa Processing Fees    2
+    Verify Visa Processing Selling Price Value Is Correct
+    Verify Visa Processing Commission Value Is Correct
+    Verify Visa Processing Total Selling Price Is Correct
+    Tick Merchant Fee CheckBox For CWT Handling
+    Verify Merchant Fee CheckBox For CWT Handling Is Ticked
+    Get Other Services Visa Processing Cost
+    Compute Visa Processing Fees    2
+    Verify Visa Processing Selling Price Value Is Correct
+    Verify Visa Processing Commission Value Is Correct
+    Verify Visa Processing Total Selling Price Is Correct
+    Untick Merchant Fee CheckBox For CWT Handling
+    Verify Merchant Fee CheckBox For CWT Handling Is Unticked
+    Get Other Services Visa Processing Cost
+    Compute Visa Processing Fees    2
+    Verify Visa Processing Selling Price Value Is Correct
+    Verify Visa Processing Commission Value Is Correct
+    Verify Visa Processing Total Selling Price Is Correct
+    Populate Other Services Visa Processing Cost    Vendor Contact    500    200    150
+    Populate Visa Processing Country Details    Philippines    Other    Single    Days    Normal
+    Set Passenger ID Value    AA
+    Get Other Services Visa Processing Cost
+    Get Other Services Form Of Payment Details
+    Get Other Service Visa Processing Country Details
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    VENDOR INVOICE NO [INVOICE NO] /DATE [DATE]
+    Select Itinerary Remarks    PLEASE VERIFY VISA TYPE AND VALIDITY
+    Click Add Button In EO Panel    Visa Info
+    Verify EO Product Added On EO Grid    VISA PROCESSING
+    Click Finish PNR
+    Click Panel    Other Svcs
+    Get Exchange Order Number    v1
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Specific Line Is Written In The PNR X Times    RIR PLEASE VERIFY VISA TYPE AND VALIDITY    1
+    Verify BA And TA Remarks    ${uid}
+    Verify That Accounting Lines For Visa Processing Are Written When FOP is CX    VISA PROCESSING    CWT VISA
+
+[AB AOS] Verify That Visa Processing Behaves Correctly And Written In The PNR When FOP Is CX
+    [Tags]    horton    us832    us1291    us1322    us1462    us1620
+    Retrieve PNR And Populate Amend Workflow    HK    fop_dropdown_value=BTA CARD/CA************1114/D0828/CVV****
+    Click Panel    Other Svcs
+    Click Amend EO    ${eo_number}
+    Click Visa Info Tab
+    Get Other Services Visa Processing Cost
+    Verify Vendor Contact Value Is Correct    Vendor Contact
+    Verify Visa Processing Nett Cost Value Is Correct    500
+    Verify Visa Processing Vendor Handling Value Is Correct    200
+    Verify Visa Processing CWT Handling Value Is Correct    150
+    Verify Visa Processing Selling Price Value Is Correct    850
+    Verify Visa Processing Commission Value Is Correct    150
+    Verify Visa Processing Total Selling Price Is Correct    850
+    Verify Form Of Payment Details Are Correct    BTA VI/VI***********0235/D0623/CVV***    Credit Card (CX)
+    Verify Visa Processing Country Details    Philippines    Other    Single    Days    Normal    AA
+    Verify Passenger ID    AA
+    Verify Exchange Order Number    ${eo_number}
+    Populate Other Services Visa Processing Cost    Visa Processing Test    800    300    200
+    Populate Visa Processing Country Details    Philippines    Other    Single    Days    Normal    AB
+    Set Passenger ID Value    22
+    Get Other Services Visa Processing Cost
+    Get Other Services Form Of Payment Details
+    Get Other Service Visa Processing Country Details
+    Click Vendor Info Tab
+    Verify Vendor Value Is Correct    CWT VISA
+    Verify Address 1 Value Is Correct    27/F ING TOWER
+    Verify Address 2 Value Is Correct    308 DES VOEUX ROAD
+    Verify City Value Is Correct    CENTRAL
+    Verify Country Value Is Correct    HK
+    Verify Email Value Is Correct    automationtest@cwt.com
+    Verify Contact No Value Is Correct
+    Verify Fax No Value Is Correct    1111
+    Verify Credit Terms Values Is Correct    0
+    Verify Support Email Value Is Correct    automationtest@cwt.com
+    Click Remarks Tab
+    Verify Exchange Order Remarks Are Correct    VENDOR INVOICE NO [INVOICE NO] /DATE [DATE]
+    Click Update Button In EO Panel    Visa Info
+    Click Finish PNR    Amend Verify That Visa Processing Behaves Correctly And Written In The PNR When FOP Is CX
+    Execute Simultaneous Change Handling    Amend Verify That Visa Processing Behaves Correctly And Written In The PNR When FOP Is CX
+    Generate Data For Specific Product    False    P1    06    VISA PROCESSING    VI    000811
+    ...    ${EMPTY}    New
+    Click Panel    Other Svcs
+    Get Exchange Order Number    visa
+    Verify Exchange Order Number Is Retained    ${eo_number_v1}
+    Retrieve PNR Details From Amadeus    command=RTY
+    Verify That Accounting Lines For Visa Processing Are Written When FOP is CX    VISA PROCESSING    CWT VISA
+
+[HK AB CEO] Verify That Visa Processing Accounting Remarks Are Not Written in PNR When EO Product Is Cancelled
+    [Tags]    us1570    team_chiu
+    Retrieve PNR And Populate Amend Workflow    HK
+    Click Panel    Other Svcs
+    Cancel EO    ${eo_number_visa}    Visa Info    HK
+    Click Finish PNR    Amend Booking For Verify That Visa Processing Accouting Remarks Are Not Written In PNR When EO Product Is Cancelled
+    Execute Simultaneous Change Handling    Amend Booking For Verify That Visa Processing Accouting Remarks Are Not Written In PNR When EO Product Is Cancelled
+    Verify PNR Is Successfully Created    False    1 Exchange Order(s) Successfully Cancelled!
+    Click Panel    Other Svcs
+    Verify Exchange Order Is Cancelled In EO Grid    ${eo_number_visa}
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Visa Processing Remarks Are Not Written In PNR    VISA PROCESSING    Credit Card (CX)
+    [Teardown]
+
+[AB OS] Verify That Visa Processing Behaves Correctly And Written In The PNR When FOP Is CX
+    [Tags]    horton    US463    us1322    us1462    us1620    de486
+    Retrieve PNR And Populate Amend Workflow    HK    fop_dropdown_value=BTA CARD/CA************1114/D0828/CVV****
+    Click Panel    Other Svcs
+    Select Product And Vendor    VISA PROCESSING    CWT VISA
+    Click Visa Info Tab
+    Verify Form Of Payment Details Are Correct    BTA CARD/CA************1114/D0828/CVV****    Credit Card (CX)
+    Populate Other Services Visa Processing Fees    500    200    150
+    Get Other Services Visa Processing Cost
+    Compute Visa Processing Fees    2
+    Verify Visa Processing Selling Price Value Is Correct
+    Verify Visa Processing Commission Value Is Correct
+    Verify Visa Processing Total Selling Price Is Correct
+    Tick Merchant Fee CheckBox For CWT Handling
+    Tick Merchant Fee CheckBox for Nett Cost
+    Get Other Services Visa Processing Cost
+    Compute Visa Processing Fees    2
+    Verify Visa Processing Selling Price Value Is Correct
+    Verify Visa Processing Commission Value Is Correct
+    Verify Visa Processing Total Selling Price Is Correct
+    Populate Visa Processing Country Details    Philippines    Other    Single    Days    Normal
+    Get Other Services Visa Processing Cost
+    Get Other Services Form Of Payment Details
+    Get Other Service Visa Processing Country Details
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    VENDOR INVOICE NO [INVOICE NO] /DATE [DATE]
+    Select Itinerary Remarks    PLEASE VERIFY VISA TYPE AND VALIDITY
+    Click Visa Info Tab
+    Click Add Button In EO Panel    Visa Info
+    Click Finish PNR    Amend Verify That Visa Processing Behaves Correctly And Written In The PNR When FOP Is CC
+    Execute Simultaneous Change Handling    Amend Verify That Visa Processing Behaves Correctly And Written In The PNR When FOP Is CC
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify That Accounting Lines For Visa Processing Are Written When FOP is CX    VISA PROCESSING    CWT VISA
+    Verify Specific Line Is Written In The PNR X Times    RIR PLEASE VERIFY VISA TYPE AND VALIDITY    2
+
+[AB OS] Verify That Visa Processing Behaves Correctly And Written In The PNR When FOP Is Invoice
+    [Tags]    horton    US463    us1322    us1462    us1620
+    Retrieve PNR And Populate Amend Workflow    HK    fop_dropdown_value=Invoice
+    Click Panel    Client Info
+    Select Form Of Payment    Invoice
+    Click Panel    Other Svcs
+    Select Product And Vendor    VISA PROCESSING    CWT VISA
+    Click Visa Info Tab
+    Verify Form Of Payment Details Are Correct    Invoice
+    Verify FOP Info In Other Services
+    Populate Other Services Visa Processing Fees    1000    320    410
+    Get Other Services Visa Processing Cost
+    Get Other Services Form Of Payment Details
+    Compute Visa Processing Fees    2
+    Verify Visa Processing Selling Price Value Is Correct
+    Verify Visa Processing Commission Value Is Correct
+    Verify Visa Processing Total Selling Price Is Correct
+    Populate Visa Processing Country Details    Philippines    Other    Multiple    Days    Normal
+    Get Other Services Visa Processing Cost
+    Get Other Services Form Of Payment Details
+    Get Other Service Visa Processing Country Details
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    VENDOR INVOICE NO [INVOICE NO] /DATE [DATE]
+    Select Itinerary Remarks    PLEASE VERIFY VISA TYPE AND VALIDITY
+    Click Add Button In EO Panel    Visa Info
+    Click Finish PNR    Amend Verify That Visa Processing Behaves Correctly And Written In The PNR When FOP Is Invoice
+    Execute Simultaneous Change Handling    Amend Verify That Visa Processing Behaves Correctly And Written In The PNR When FOP Is Invoice
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify That Accounting Lines For Visa Processing Are Written When FOP Is Invoice    VISA PROCESSING    CWT VISA
+    Verify Specific Line Is Written In The PNR X Times    RIR PLEASE VERIFY VISA TYPE AND VALIDITY    3
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Amend Verify That Visa Processing Behaves Correctly And Written In The PNR When FOP Is CX
+    Retrieve PNR And Populate Amend Workflow    HK    fop_dropdown_value=BTA CARD/CA************1114/D0828/CVV****
+    Click Panel    Other Svcs
+    Click Amend EO    ${eo_number}
+    Click Visa Info Tab
+    Get Other Services Visa Processing Cost
+    Verify Vendor Contact Value Is Correct    Vendor Contact
+    Verify Visa Processing Nett Cost Value Is Correct    500
+    Verify Visa Processing Vendor Handling Value Is Correct    200
+    Verify Visa Processing CWT Handling Value Is Correct    150
+    Verify Visa Processing Selling Price Value Is Correct    850
+    Verify Visa Processing Commission Value Is Correct    150
+    Verify Visa Processing Total Selling Price Is Correct    850
+    Verify Form Of Payment Details Are Correct    BTA VI/VI***********0235/D0623/CVV***    Credit Card (CX)
+    Verify Visa Processing Country Details    Philippines    Other    Single    Days    Normal    AA
+    Verify Passenger ID    AA
+    Verify Exchange Order Number    ${eo_number}
+    Populate Other Services Visa Processing Cost    Visa Processing Test    800    300    200
+    Populate Visa Processing Country Details    Philippines    Other    Single    Days    Normal    AB
+    Set Passenger ID Value    22
+    Get Other Services Visa Processing Cost
+    Get Other Services Form Of Payment Details
+    Get Other Service Visa Processing Country Details
+    Click Vendor Info Tab
+    Verify Vendor Value Is Correct    CWT VISA
+    Verify Address 1 Value Is Correct    27/F ING TOWER
+    Verify Address 2 Value Is Correct    308 DES VOEUX ROAD
+    Verify City Value Is Correct    CENTRAL
+    Verify Country Value Is Correct    HK
+    Verify Email Value Is Correct    automationtest@cwt.com
+    Verify Contact No Value Is Correct
+    Verify Fax No Value Is Correct    1111
+    Verify Credit Terms Values Is Correct    0
+    Verify Support Email Value Is Correct    automationtest@cwt.com
+    Click Remarks Tab
+    Verify Exchange Order Remarks Are Correct    VENDOR INVOICE NO [INVOICE NO] /DATE [DATE]
+    Click Update Button In EO Panel    Visa Info
+    Click Finish PNR    Amend Verify That Visa Processing Behaves Correctly And Written In The PNR When FOP Is CX
+
+Amend Verify That Visa Processing Behaves Correctly And Written In The PNR When FOP Is CC
+    Retrieve PNR And Populate Amend Workflow    HK    fop_dropdown_value=BTA CARD/CA************1114/D0828/CVV****
+    Click Panel    Other Svcs
+    Select Product And Vendor    VISA PROCESSING    CWT VISA
+    Click Visa Info Tab
+    Verify FOP Info In Other Services
+    Verify Form Of Payment Details Are Correct    BTA CARD/CA************1114/D0828/CVV****    Credit Card (CC)
+    Populate Other Services Visa Processing Fees    500    200    150
+    Get Other Services Visa Processing Cost
+    Compute Visa Processing Fees    2
+    Verify Visa Processing Selling Price Value Is Correct
+    Verify Visa Processing Commission Value Is Correct
+    Verify Visa Processing Total Selling Price Is Correct
+    Tick Merchant Fee CheckBox For CWT Handling
+    Tick Merchant Fee CheckBox for Nett Cost
+    Get Other Services Visa Processing Cost
+    Compute Visa Processing Fees    2
+    Verify Visa Processing Selling Price Value Is Correct
+    Verify Visa Processing Commission Value Is Correct
+    Verify Visa Processing Total Selling Price Is Correct
+    Populate Visa Processing Country Details    Philippines    Other    Single    Days    Normal
+    Get Other Services Visa Processing Cost
+    Get Other Services Form Of Payment Details
+    Get Other Service Visa Processing Country Details
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    VENDOR INVOICE NO [INVOICE NO] /DATE [DATE]
+    Select Itinerary Remarks    PLEASE VERIFY VISA TYPE AND VALIDITY
+    Click Visa Info Tab
+    Click Add Button In EO Panel    Visa Info
+    Click Finish PNR    Amend Verify That Visa Processing Behaves Correctly And Written In The PNR When FOP Is CC
+
+Amend Verify That Visa Processing Behaves Correctly And Written In The PNR When FOP Is Invoice
+    Retrieve PNR And Populate Amend Workflow    HK    fop_dropdown_value=Invoice
+    Click Panel    Other Svcs
+    Select Product And Vendor    VISA PROCESSING    CWT VISA
+    Click Visa Info Tab
+    Verify Form Of Payment Details Are Correct    Invoice
+    Verify FOP Info In Other Services
+    Populate Other Services Visa Processing Fees    1000    320    410
+    Get Other Services Visa Processing Cost
+    Get Other Services Form Of Payment Details
+    Compute Visa Processing Fees    2
+    Verify Visa Processing Selling Price Value Is Correct
+    Verify Visa Processing Commission Value Is Correct
+    Verify Visa Processing Total Selling Price Is Correct
+    Populate Visa Processing Country Details    Philippines    Other    Single    Days    Normal
+    Get Other Services Visa Processing Cost
+    Get Other Services Form Of Payment Details
+    Get Other Service Visa Processing Country Details
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Remarks Tab
+    Select Exchange Order Remarks    VENDOR INVOICE NO [INVOICE NO] /DATE [DATE]
+    Select Itinerary Remarks    PLEASE VERIFY VISA TYPE AND VALIDITY
+    Click Add Button In EO Panel    Visa Info
+    Click Finish PNR    Amend Verify That Visa Processing Behaves Correctly And Written In The PNR When FOP Is Invoice
+
+Verify That Accounting Lines For Visa Processing Are Not Written When FOP is CX
+    [Arguments]    ${product}    ${vendor}    ${country}=hk
+    Run Keyword If    "${visa_processing_line1}" != "${EMPTY}"    Verify Specific Line Is Not Written In The PNR    ${visa_processing_line1}
+    Run Keyword If    "${visa_processing_line2}" != "${EMPTY}"    Verify Specific Line Is Not Written In The PNR    ${visa_processing_line2}
+    Run Keyword If    "${visa_processing_line3}" != "${EMPTY}"    Verify Specific Line Is Not Written In The PNR    ${visa_processing_line3}
+    Run Keyword If    "${visa_processing_line4}" != "${EMPTY}"    Verify Specific Line Is Not Written In The PNR    ${visa_processing_line4}
+    Verify Specific Line Is Not Written In The PNR    RM \\*MSX\\/FF35-AMA\\/FF36-M\\/FF47-CWT
+    Verify Specific Line Is Not Written In The PNR    RM \\*MSX\\/FF VISA PROCESSING
+
+Amend Booking For Verify That Visa Processing Accouting Remarks Are Not Written In PNR When EO Product Is Cancelled
+    Retrieve PNR And Populate Amend Workflow    HK
+    Click Panel    Other Svcs
+    Cancel EO    ${eo_number_visa}    Visa Info    HK
+    Click Finish PNR    Amend Booking For Verify That Visa Processing Accouting Remarks Are Not Written In PNR When EO Product Is Cancelled

@@ -1,0 +1,1286 @@
+*** Settings ***
+Resource          ../../../acceptance_tests/gds/gds_verification.txt
+
+*** Keywords ***
+Verify Exchange Order Remarks Are Not Written In The RIR Lines
+    [Arguments]    @{exchange_order_remarks_list}
+    Comment    Click Panel    Other Svcs
+    Comment    Click Remarks Tab
+    Comment    @{exchange_order_remarks_list}    Get All Remarks From EO Grid
+    : FOR    ${eo_remark}    IN    @{exchange_order_remarks_list}
+    \    ${eo_remark}    Convert To Uppercase    ${eo_remark}
+    \    Verify Specific Line Is Not Written In The PNR    RIR ${eo_remark}
+
+Verify Hotel Accounting Remarks
+    [Arguments]    ${product_name}    ${product_code}    ${vendor_code}    ${country}=SG
+    ${fop_exp_date}    Set Variable If    "${form_of_payment}" != "Cash" or "${form_of_payment}" != "Invoice" or "${form_of_payment}" != "NonRef"    ${expiry_month}${short_expiry_year}    ${EMPTY}
+    ${market_identifier}    Set Variable If    "${country}" == "SG"    S    A
+    ${fop_code}    Run Keyword If    "${form_of_payment}" == "Credit Card (CX)"    Get Credit Card Vendor Code    ${form_of_payment_vendor}
+    ...    ELSE    Set Variable    CC
+    ${card_num}    Run Keyword If    "${form_of_payment}" == "Credit Card (CX)"    Masking For Remarks    ${credit_card_number}    ${form_of_payment_vendor}
+    ${id}    Set Variable If    '${passenger_id}'=='${EMPTY}'    1    ${passenger_id}    #
+    ${is_included}    Verify If Product Is Included In List For Commission Line Update    ${product_name}    ${country}
+    ${expected_fee_values}    Set Variable If    "${is_included}" == "True"    RM *MSX/${market_identifier}${total_selling_price}/SF${total_selling_price}/C${total_selling_price}    RM *MSX/${market_identifier}${total_selling_price}/SF${total_selling_price}/C${commission}
+    Verify Specific Remark Is Written In The PNR    RM *MS/PC${product_code}/V${vendor_code}/TK${eo_number}/PX${id}
+    Run Keyword If    "${form_of_payment.lower()}" == "cash" or "${form_of_payment.lower()}" == "invoice"    Verify Specific Remark Is Written In The PNR    ${expected_fee_values}/FS
+    ...    ELSE    Verify Specific Remark Is Written In The PNR    ${expected_fee_values}/F${fop_code}
+    Run Keyword If    "${form_of_payment}" == "Credit Card (CX)"    Verify Specific Remark Is Written In The PNR    RM \\*MSX/CCN${form_of_payment_vendor}.*EXP${fop_exp_date}/D${total_selling_price}    True
+    Verify Specific Remark Is Written In The PNR    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    Verify Specific Remark Is Written In The PNR    RM *MSX/FF ${product_name.upper()}
+    #Variables for verification of not written
+    Set Suite Variable    ${hotel_accounting_line1}    RM *MS/PC${product_code}/V${vendor_code}/TK${eo_number}/PX${id}
+    Run Keyword If    "${form_of_payment.lower()}" == "cash" or "${form_of_payment.lower()}" == "invoice"    Set Suite Variable    ${hotel_accounting_line2}    ${expected_fee_values}/FS
+    ...    ELSE    Set Suite Variable    ${hotel_accounting_line2}    ${expected_fee_values}/F${fop_code}
+    Set Suite Variable    ${hotel_accounting_line3}    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    Set Suite Variable    ${hotel_accounting_line4}    RM *MSX/FF ${product_name.upper()}
+    Run Keyword If    "${form_of_payment}" == "Credit Card (CX)"    Set Suite Variable    ${hotel_accounting_line5}    RM \\*MSX/CCN${form_of_payment_vendor}.*EXP${fop_exp_date}/D${total_selling_price}
+
+Verify Itinerary Remarks Are Re-Written In The RIR Lines
+    [Arguments]    ${rewrite_times}    @{itin_remarks_list}
+    : FOR    ${itin_remark}    IN    @{itin_remarks_list}
+    \    ${itin_remark}    Convert To Uppercase    ${itin_remark}
+    \    Verify Specific Line Is Written In The PNR X Times    RIR ${itin_remark}    ${rewrite_times}
+
+Verify Other Services Cash Or Invoice Fees Accounting Remarks Are Written
+    [Arguments]    ${country}    ${product_name}=${EMPTY}
+    ${gst_amount}    Get Variable Value    ${gst_amount}    ${EMPTY}
+    ${gst_computed_value}    Evaluate    ${total_selling_price} * 7 * 0.01
+    ${gst_computed_value}    Run Keyword If    "${country}" == "SG"    Round APAC    ${gst_computed_value}    SG
+    ${market_identifier}    Set Variable If    "${country}" == "SG"    S    A
+    ${is_included}    Verify If Product Is Included In List For Commission Line Update    ${product_name}    ${country}
+    ${is_gst_applied}    Set Variable If    "${gst_amount}" != "${EMPTY}"    ${True}    ${False}
+    ${total_selling_price_value}    Round Apac    ${total_selling_price}    ${country}
+    ${expected_fee_values}    Set Variable If    "${is_included}" == "True"    RM *MSX/${market_identifier}${total_selling_price_value}/SF${total_selling_price_value}/C${total_selling_price_value}    RM *MSX/${market_identifier}${total_selling_price_value}/SF${total_selling_price_value}/C${commission}
+    Run Keyword And Continue On Failure    Run Keyword If    "${gst_amount}" != "${EMPTY}" and "${country}" == "SG"    Verify Specific Line Is Written In The PNR    ${expected_fee_values}/G${gst_computed_value}/FS
+    Run Keyword And Continue On Failure    Run Keyword If    "${gst_amount}" == "${EMPTY}" and "${country}" == "SG"    Verify Specific Line Is Written In The PNR    ${expected_fee_values}/FS
+    Run Keyword And Continue On Failure    Run Keyword If    "${country}" == "HK"    Verify Specific Line Is Written In The PNR    ${expected_fee_values}/FS/FF8-FF
+    #Variables for Not Written Remarks Verification
+    Run Keyword If    "${gst_amount}" != "${EMPTY}" and "${country}" == "SG"    Set Suite Variable    ${gst_acc_rem_sg_1}    ${expected_fee_values}/G${gst_computed_value}/FS
+    Run Keyword If    "${gst_amount}" == "${EMPTY}" and "${country}" == "SG"    Set Suite Variable    ${gst_acc_rem_sg_1}    ${expected_fee_values}/FS
+    Run Keyword If    "${country}" == "HK"    Set Suite Variable    ${gst_acc_rem_hk_1}    ${expected_fee_values}/FS/FF8-FF
+    ${fees_line}    Set Variable If    "${country}" == "SG"    ${gst_acc_rem_sg_1}    ${gst_acc_rem_hk_1}
+    Set Suite Variable    ${fees_line_${product_name}}    ${fees_line}
+
+Verify Other Services Credit Card Fees Accounting Remarks Are Written
+    [Arguments]    ${credit_card_number}    ${fop_vendor}    ${expiry_month}    ${expiry_year}    ${fop}    ${country}
+    ...    ${card_number_is_masked}=True    ${product_name}=${EMPTY}
+    [Documentation]    Ideal Usage:
+    ...
+    ...    Verify Other Services Credit Card Fees Accounting Remarks Are Written 5555000044440000 TP 12 2026 Credit Card (CX) SG
+    ...
+    ...    ..which verifies if the following line is written in the PNR (by default it will expect a masked credit card number)
+    ...
+    ...    RM *MSX/CCN${fop_vendor}${masked_credit_card_number}EXP${expiry_month}${last_two_digit_expiry_year}/D${total_selling_price}
+    ...
+    ...    Alternative Usage:
+    ...
+    ...    Verify Other Services Credit Card Fees Accounting Remarks Are Written 5555000044440000 JC 12 2026 Credit Card (CX) SG False
+    ...
+    ...    ..giving a False value to the last parameter verifies if the following line is written in the PNR and the card number is not masked
+    ...
+    ...    RM *MSX/CCN${fop_vendor}${credit_card_number}EXP${expiry_month}${last_two_digit_expiry_year}/D${total_selling_price}
+    ${last_two_digit_expiry_year}    Get Substring    ${expiry_year}    2
+    ${credit_card_length_excluding_last_four_digits}    Get Length    ${credit_card_number[:-4]}
+    ${masked_characters_excluding_last_four}    Evaluate    "".join(["X" * ${credit_card_length_excluding_last_four_digits}])
+    ${masked_credit_card_number}    Replace String    ${credit_card_number}    ${credit_card_number[:-4]}    ${masked_characters_excluding_last_four}
+    ${masked_credit_card_number}    Set Variable If    '${card_number_is_masked.lower()}' == 'false'    ${credit_card_number}    ${masked_credit_card_number}
+    ${cx_fee_code}    Set Variable If    "${fop_vendor}" == "VI" or "${fop_vendor}" == "CA" or "${fop_vendor}" == "MC" or "${fop_vendor}" == "JC"    CX4    "${fop_vendor}" == "AX"    CX2    "${fop_vendor}" == "TP"
+    ...    CX5    "${fop_vendor}" == "DC"    CX3
+    ${gst_amount}    Get Variable Value    ${gst_amount}    ${EMPTY}
+    ${is_gst_applied}    Set Variable If    "${gst_amount}" != "${EMPTY}"    ${True}    ${False}
+    ${total_selling_price}    Get Variable Value    ${total_selling_price_${product_name}}    ${total_selling_price}
+    ${gst_amount}    Get Variable Value    ${gst_amount_${product_name}}    ${gst_amount}
+    ${total_selling_price_value}    Round Apac    ${total_selling_price}    ${country}
+    ${gst_computed_value}    Evaluate    ${total_selling_price} * 7 * 0.01
+    ${gst_computed_value}    Run Keyword If    "${country}" == "SG"    Round APAC    ${gst_computed_value}    SG
+    ${selling_price}    Get Variable Value    ${selling_price_${identifier}}    ${selling_price}
+    ${merchant_fee}    Get Variable Value    ${merchant_fee_${identifier}}    ${merchant_fee}
+    ${selling_price_with_gst}    Run Keyword If    "${gst_amount}" != "${EMPTY}" and "${country}" == "SG"    Evaluate    ${selling_price} + ${gst_amount} + ${merchant_fee}
+    ...    ELSE    Set Variable    ${total_selling_price}
+    ${selling_price_with_gst}    Round APAC    ${selling_price_with_gst}    ${country}
+    ${market_identifier}    Set Variable If    "${country}" == "SG"    S    A
+    ${is_included}    Verify If Product Is Included In List For Commission Line Update    ${product_name}    ${country}
+    ${expected_fee_values}    Set Variable If    "${is_included}" == "True"    RM *MSX/${market_identifier}${total_selling_price_value}/SF${total_selling_price_value}/C${total_selling_price_value}    RM *MSX/${market_identifier}${total_selling_price_value}/SF${total_selling_price_value}/C${commission}
+    Run Keyword If    "${fop}" == "Credit Card (CX)" and ${is_gst_applied} and "${country}" == "SG"    Verify Specific Line Is Written In The PNR    ${expected_fee_values}/G${gst_computed_value}/F${cx_fee_code}
+    Run Keyword If    "${fop}" == "Credit Card (CX)" and not ${is_gst_applied} and "${country}" == "SG"    Verify Specific Line Is Written In The PNR    ${expected_fee_values}/F${cx_fee_code}
+    Run Keyword If    "${fop}" == "Credit Card (CC)" and ${is_gst_applied} and "${country}" == "SG"    Verify Specific Line Is Written In The PNR    ${expected_fee_values}/G${gst_computed_value}/FCC
+    Run Keyword If    "${fop}" == "Credit Card (CC)" and not ${is_gst_applied} and "${country}" == "SG"    Verify Specific Line Is Written In The PNR    ${expected_fee_values}/FCC
+    #For HK
+    Run Keyword If    "${fop}" == "Credit Card (CX)" and "${country}" == "HK"    Verify Specific Line Is Written In The PNR    ${expected_fee_values}/F${cx_fee_code}
+    Run Keyword If    "${fop}" == "Credit Card (CC)" and "${country}" == "HK"    Verify Specific Line Is Written In The PNR    ${expected_fee_values}/FCC
+    #For HK and SG
+    Verify Specific Line Is Written In The PNR    RM \\*MSX/CCN${fop_vendor}.*EXP${expiry_month}${last_two_digit_expiry_year}/D${selling_price_with_gst}    true
+    #Set Lines To A Variable For Not Written Checking
+    ${other_services_cc_line2}    Run Keyword If    "${fop}" == "Credit Card (CX)" and ${is_gst_applied} and "${country}" == "SG"    Set Variable    ${expected_fee_values}/G${gst_amount}/F${cx_fee_code}
+    ...    ELSE IF    "${fop}" == "Credit Card (CX)" and not ${is_gst_applied} and "${country}" == "SG"    Set Variable    ${expected_fee_values}/F${cx_fee_code}
+    ...    ELSE IF    "${fop}" == "Credit Card (CC)" and ${is_gst_applied} and "${country}" == "SG"    Set Variable    ${expected_fee_values}/G${gst_amount}/FCC
+    ...    ELSE IF    "${fop}" == "Credit Card (CC)" and not ${is_gst_applied} and "${country}" == "SG"    Set Variable    ${expected_fee_values}/FCC
+    ...    ELSE IF    "${fop}" == "Credit Card (CX)" and "${country}" == "HK"    Set Variable    ${expected_fee_values}/F${cx_fee_code}
+    ...    ELSE IF    "${fop}" == "Credit Card (CC)" and "${country}" == "HK"    Set Variable    ${expected_fee_values}/FCC
+    Set Suite Variable    ${other_services_cc_line2}
+    Set Suite Variable    ${fees_line_${product_name}}    ${other_services_cc_line2}
+    Set Suite Variable    ${other_services_cc_line3}    RM \\*MSX/CCN${fop_vendor}.*EXP${expiry_month}${last_two_digit_expiry_year}/D${selling_price_with_gst}
+    Set Suite Variable    ${credit_card_line_${product_name}}    ${other_services_cc_line3}
+
+Verify Other Services Generic Accounting Remarks
+    [Arguments]    ${product_name}    ${vendor_name}    ${fop}    ${country}
+    ${product_code_number}    Get Product Code    ${country}    ${product_name}
+    ${vendor_code_number}    Get Vendor Code    ${country}    ${product_name}    ${vendor_name}
+    ${eo_number}    Get Variable Value    ${eo_number_${product_name}}    ${eo_number}
+    ${passenger_id}    Get Variable Value    ${passenger_id}    1
+    ${passenger_id}    Set Variable If    "${passenger_id}" == "${EMPTY}" or "${passenger_id}" == "None"    1    ${passenger_id}
+    ${product_code_number}    Evaluate    str(${product_code_number})
+    Run Keyword If    "${product_code_number[0]}"=="0"    Set Test Variable    ${product_code_number}    ${product_code_number[1:]}
+    Verify Specific Line Is Written In The PNR    RM *MS/PC${product_code_number}/V${vendor_code_number}/TK${eo_number}/PX${passenger_id}
+    Verify Specific Line Is Written In The PNR    RM *MSX/FF ${product_name.upper()}
+    Set Suite Variable    ${accounting_remarks_first_line}    RM *MS/PC${product_code_number}/V${vendor_code_number}/TK${eo_number}/PX${passenger_id}
+    Set Suite Variable    ${accounting_remarks_last_line}    RM *MSX/FF ${product_name.upper()}
+    Set Suite Variable    ${product_vendor_line_${product_name}}    ${accounting_remarks_first_line}
+    Set Suite Variable    ${product_description_line_${product_name}}    ${accounting_remarks_last_line}
+
+Verify Other Services Insurance Accounting General Remarks
+    [Arguments]    ${product_name}    ${vendor_name}    ${fop}    ${country}
+    Set Suite Variable    ${product_name}
+    Verify Other Services Generic Accounting Remarks    ${product_name}    ${vendor_name}    ${fop}    SG
+    ${additional_info_date}    Convert Date To Gds Format    ${additional_info_date}    %m/%d/%Y    True
+    Run Keyword If    "${bta_description}" != "${EMPTY}"    Verify Multiple Remarks Are Written In The PNR    RM *MSX/FF40-${bta_description.upper()}/FF41-${additional_info_date}/FF34-AB    RM *MSX/FF35-AMA/FF36-M/FF47-CWT
+    Run Keyword If    "${bta_description}" == "${EMPTY}"    Verify Specific Remark Is Written In The PNR    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    #Variables for remarks not written
+    Run Keyword If    "${bta_description}" != "${EMPTY}"    Set Suite Variable    ${insurance_acc_rem_1}    RM *MSX/FF40-${bta_description.upper()}/FF41-${additional_info_date}/FF34-AB
+    Run Keyword If    "${bta_description}" != "${EMPTY}"    Set Suite Variable    ${insurance_acc_rem_2}    RM *MSX/FF35-AMA/FF36-M/FF47-CWT
+    Run Keyword If    "${bta_description}" == "${EMPTY}"    Set Suite Variable    ${insurance_acc_rem_3}    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+
+Verify Other Services Transaction Credit Card Info Remarks
+    [Arguments]    ${fop}    ${country}    ${credit_card_number}=${EMPTY}    ${fop_vendor}=${EMPTY}    ${expiry_month}=${EMPTY}    ${expiry_year}=${EMPTY}
+    ...    ${card_number_is_masked}=True
+    [Documentation]    Set ${card_number_is_masked} to:
+    ...
+    ...    TRUE if Credit Card is displayed as XXXXXXXXXX0001
+    ...
+    ...    FALSE if Credit Card is displayed as 4444333322221111
+    ${last_two_digit_expiry_year}    Get Substring    ${expiry_year}    2
+    ${credit_card_length_excluding_last_four_digits}    Get Length    ${credit_card_number[:-4]}
+    ${masked_characters_excluding_last_four}    Evaluate    "".join(["X" * ${credit_card_length_excluding_last_four_digits}])
+    ${masked_credit_card_number}    Replace String    ${credit_card_number}    ${credit_card_number[:-4]}    ${masked_characters_excluding_last_four}
+    ${cc_number}    Set Variable If    '${card_number_is_masked.lower()}' == 'false'    ${credit_card_number}    ${masked_credit_card_number}
+    ${tax_1}    Get Variable Value    ${tax_value1}    0
+    ${tax_2}    Get Variable Value    ${tax_value2}    0
+    ${apply_formula_checkbox_status}    Get Variable Value    ${apply_formula_checkbox_status}    True
+    ${total_selling_price}    Run Keyword If    "${country}" == "HK" and ("${product.upper()}" == "CONSOLIDATOR TICKET" or "${product.upper()}" == "LOW COST CARRIER") and "${apply_formula_checkbox_status}" == "True"    Set Variable    ${gross_fare}
+    ...    ELSE IF    "${country.upper()}" == "SG" and ("${product.upper()}" == "CONSOLIDATOR TICKET" or "${product.upper()}" == "LOW COST CARRIER")    Evaluate    ${selling_fare}+${tax_1}+${tax_2} + ${commission} - ${discount}
+    ...    ELSE    Set Variable    ${total_selling_price}
+    ${total_selling_price}    Round Apac    ${total_selling_price}    ${country}
+    Run Keyword If    "${fop}" != "Cash" or "${fop}" != "Invoice" or "${fop}" != "NonRef"    Verify Specific Line Is Written In The PNR    RM.\*MSX/CCN${fop_vendor}.*${credit_card_number[-4:]}EXP${expiry_month}${last_two_digit_expiry_year}/D${total_selling_price}    True
+    Set Suite Variable    ${transaction_credit _card_remark}    RM.\*MSX/CCN${fop_vendor}.*${credit_card_number[-4:]}EXP${expiry_month}${last_two_digit_expiry_year}/D${total_selling_price}
+
+Verify Other Services Transaction Fee Additional and BTA Description Remarks
+    [Arguments]    ${fop}    ${ticket_type}    ${identifier}=${EMPTY}
+    ${bta_description}    Set Variable If    "${identifier}"!="${EMPTY}"    ${bta_description_${identifier}}    ${bta_description}
+    ${info_date_for_remarks}    Set Variable If    "${identifier}"!="${EMPTY}"    ${info_date_for_remarks_${identifier}}    ${info_date_for_remarks}
+    ${transaction_fee_bta_cash}    Set Variable If    ('${fop}' == 'Cash' or '${fop}' == 'Invoice' or '${fop}' == 'NonRef') and '${ticket_type}' != 'Consolidator Ticket'    RM *MSX/FF40-${bta_description.upper()}/FF41-${info_date_for_remarks}    RM *MSX/FF40-${bta_description.upper()}/FF41-${info_date_for_remarks}
+    ${transaction_fee_bta_cx}    Set Variable If    '${fop}' == 'Credit Card (CX)' and '${ticket_type}' != 'BSP (without File Fare)'    RM *MSX/FF8-FF/FF40-${bta_description.upper()}/FF41-${info_date_for_remarks}    RM *MSX/FF8-FF/FF40-${bta_description.upper()}
+    ${transaction_fee_bta_cc}    Set Variable If    '${fop}' == 'Credit Card (CC)'    RM *MSX/FF8-FF/FF40-${bta_description.upper()}/FF41-${info_date_for_remarks}    RM *MSX/FF8-FF/FF40-${bta_description.upper()}/FF41-${info_date_for_remarks}
+    Run Keyword If    '${fop}' == 'Cash' or '${fop}' == 'Invoice'    Verify Specific Remark Is Written In The PNR    ${transaction_fee_bta_cash}
+    ...    ELSE IF    '${fop}' == 'Credit Card (CX)'    Verify Specific Remark Is Written In The PNR    ${transaction_fee_bta_cx}
+    ...    ELSE    Verify Specific Remark Is Written In The PNR    ${transaction_fee_bta_cc}
+    ${bta_description_line4}    Set Variable If    '${fop}' == 'Cash' or '${fop}' == 'Invoice'    ${transaction_fee_bta_cash}    '${fop}' == 'Credit Card (CX)'    ${transaction_fee_bta_cx}    ${transaction_fee_bta_cc}
+    Set Suite Variable    ${bta_description_line4}
+
+Verify Other Services Transaction Fee Booking Method Remarks
+    [Arguments]    ${fop}    ${ticket_type}    ${identifier}=${EMPTY}
+    ${info_date_for_remarks}    Get Variable Value    ${info_date_for_remarks_${identifier}}    ${info_date_for_remarks}
+    Run Keyword If    '${ticket_type}' != 'BSP (without File Fare)'    Verify Specific Remark Is Written In The PNR    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    Run Keyword If    '${ticket_type}' == 'BSP (without File Fare)' and ('${fop}' == 'Cash' or '${fop}' == 'Invoice' or '${fop}' == 'NonRef')    Verify Multiple Remarks Are Written In The PNR    RM *MSX/FF34-AB/FF35-AMA/FF36-M    RM *MSX/FF47-CWT
+    Run Keyword If    '${ticket_type}' == 'BSP (without File Fare)' and '${fop}' == 'Credit Card (CX)'    Verify Multiple Remarks Are Written In The PNR    RM *MSX/FF41-${info_date_for_remarks}/FF34-AB/FF35-AMA/FF36-M    RM *MSX/FF47-CWT
+    Run Keyword If    '${ticket_type}' == 'BSP (without File Fare)' and '${fop}' == 'Credit Card (CC)'    Verify Specific Remark Is Written In The PNR    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    ${booking_line3}    Set Variable If    '${ticket_type}' != 'BSP (without File Fare)'    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT    '${ticket_type}' == 'BSP (without File Fare)' and ('${fop}' == 'Cash' or '${fop}' == 'Invoice' or '${fop}' == 'NonRef')    RM *MSX/FF34-AB/FF35-AMA/FF36-M    '${ticket_type}' == 'BSP (without File Fare)' and '${fop}' == 'Credit Card (CX)'
+    ...    RM *MSX/FF41-${info_date_for_remarks}/FF34-AB/FF35-AMA/FF36-M    '${ticket_type}' == 'BSP (without File Fare)' and '${fop}' == 'Credit Card (CC)'    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT    RM *MSX/FF47-CWT
+    Set Suite Variable    ${booking_line3}
+
+Verify Other Services General Notepad Remarks
+    [Arguments]    ${product_name}=${product}
+    Get Agent Login ID from Amadeus
+    @{date_time}    Split String    ${date_for_eo}    ${SPACE}
+    ${eo_date}    Convert Date To Gds Format    ${date_time[0]}    %d/%m/%Y    true
+    ${eo_date}    Get Substring    ${eo_date}    \    -2
+    ${eo_time}    Split String    ${date_time[1]}    :
+    ${utc_time}    Set Variable    ${eo_time[0]}${eo_time[1]}Z
+    ${eo_number}    Get Variable Value    ${eo_number_${product_name}}    ${eo_number}
+    Run Keyword If    "${product_name.upper()}" == "BSP Ticket" or "${product_name.upper()}" == "ADDITIONAL BSP AIR" or "${product_name.upper()}" == "BSP AIR TICKET" or "${product_name.upper()}" == "AA Segment Booking Fee"    Verify MCO Remarks Are Written Correctly In The PNR    ${eo_date}    ${agent_id[4:].upper()}
+    Verify Specific Remark Is Written In The PNR    RM XO\\*XO NUMBER ${eo_number} ISSUED ${agent_id[4:].upper()} \\d{2}${eo_date[2:5]}\\s\\d{4}\\w    true    multi_line_search_flag=true
+    Verify Specific Remark Is Written In The PNR    RM XO\\*FOR SERVICE TYPE: ${product_name.upper()} ${agent_id[4:].upper()} \\d{2}${eo_date[2:5]}\\s\\d{4}\\w    true    multi_line_search_flag=true
+
+Verify Other Services Transaction Fee Generic Accounting Remarks
+    [Arguments]    ${product_name}    ${vendor_name}    ${fop}    ${ticket_type}    ${segment_sg}    ${segment_s}
+    ...    ${country}=SG    ${airline_code}=${EMPTY}    ${identifier}=${EMPTY}
+    [Documentation]    Note: This keyword is for the Transaction Fee Group:
+    ...    1. \ Transaction Fee
+    ...    2. \ Reissue-Revalidation Fee
+    ...
+    ...    Usage:
+    ...
+    ...    ${fop} = Form Of Payment
+    ...
+    ...    ${ticket_type} = BSP (without File Fare) / BSP (with File Fare) / Consolidator Ticket
+    ...
+    ...
+    ...    ${airline_code}= airline code of the validating carrier. example: PR = 079.
+    ...
+    ...    To determine airline code, enter cryptic command DNA xx where xx is the validating carrier.
+    ...
+    ...    To determine validating carrier, check the FV line of the TST.
+    ...
+    ...
+    ...    ${sg_segment} = selected segment: \ \ 01020304 (consecutive segments) / 01050709 (for non-consecutive)
+    ...
+    ...    ${s_segment} = selected segment: \ \ \ 1-4 (consecutive segments) / 1,5,7,9 (for non-consecutive)
+    ...    \ \ \ \ \ \ \ \ \ \ \ \
+    ${product_code_number}    Get Product Code    ${country}    ${product_name}
+    ${vendor_code_number}    Get Vendor Code    ${country}    ${product_name}    ${vendor_name}
+    ${market_identifier}    Set Variable If    "${country}" == "SG"    S    A
+    ${id}    Set Variable If    "${passenger_id}" == "${EMPTY}"    1    ${passenger_id}
+    ${fop_code}    Run Keyword If    "${fop}" == "Credit Card (CX)"    Get Credit Card Vendor Code    ${form_of_payment_vendor}
+    ...    ELSE IF    "${fop}" == "Credit Card (CC)"    Set Variable    CC
+    ...    ELSE    Set Variable    S
+    ${total_selling_price}    Set Variable If    "${identifier}"!="${EMPTY}"    ${total_selling_price_${identifier}}    ${total_selling_price}
+    ${eo_number}    Set Variable If    "${identifier}"!="${EMPTY}"    ${eo_number_${identifier}}    ${eo_number}
+    Set Suite Variable    ${airline_code}
+    Run Keyword If    '${ticket_type}' == 'BSP (without File Fare)'    Verify Specific Remark Is Written In The PNR    RM *MS/PC${product_code_number}/V${vendor_code_number}/TK${ticket_prefix}${ticket_no}/PX${id}
+    ...    ELSE IF    '${ticket_type}' == 'BSP (with File Fare)'    Verify Specific Remark Is Written In The PNR    RM *MS/PC${product_code_number}/V${vendor_code_number}/AC${airline_code}/TK/PX${id}
+    ...    ELSE    Verify Specific Remark Is Written In The PNR    RM *MS/PC${product_code_number}/V${vendor_code_number}/TK${consolidator_ticket_prefix}${consolidator_ticket_number}/PX${id}
+    ${transactionfee_fees_line2}    Run Keyword If    ('${product_name.upper()}' == 'TRANSACTION FEE' or '${product_name.upper()}' == 'SVC FEE FOR SURCHARGES') and ('${fop}' == 'Cash' or '${fop}' == 'Invoice' or '${fop}' == 'NonRef')    Set Variable    RM *MSX/${market_identifier}${total_selling_price}/SF${total_selling_price}/C${total_selling_price}/FS/FF8-FF/SG${segment_sg}/S${segment_s}
+    ...    ELSE IF    ('${product_name.upper()}' == 'TRANSACTION FEE' or '${product_name.upper()}' == 'SVC FEE FOR SURCHARGES') and ('${fop}' == 'Credit Card (CX)' or '${fop}' == 'Credit Card (CC)')    Set Variable    RM *MSX/${market_identifier}${total_selling_price}/SF${total_selling_price}/C${total_selling_price}/F${fop_code}/SG${segment_sg}/S${segment_s}
+    ${revalidation_fees_line2}    Run Keyword If    ('${product_name.upper()}' == 'REISSUE-REVALIDATION FEE' or'${product_name.upper()}' == 'REVALIDATION FEE') and ('${fop}' == 'Cash' or '${fop}' == 'Invoice' or '${fop}' == 'NonRef')    Set Variable    RM *MSX/${market_identifier}${total_selling_price}/SF${total_selling_price}/C${total_selling_price}/FS/FF8-FF
+    ...    ELSE IF    ('${product_name.upper()}' == 'REISSUE-REVALIDATION FEE' or'${product_name.upper()}' == 'REVALIDATION FEE') and ('${fop}' == 'Credit Card (CX)' or '${fop}' == 'Credit Card (CC)')    Set Variable    RM *MSX/${market_identifier}${total_selling_price}/SF${total_selling_price}/C${total_selling_price}/F${fop_code}
+    ${discount_aircommission_fees_line2}    Run Keyword If    '${product_name.upper()}' == 'AIR COMMISSION RETURNED' or '${product_name.upper()}' == 'DISCOUNT'    Set Variable    RM *MSX/${market_identifier}-${total_selling_price}/SF-${total_selling_price}/C-${total_selling_price}/F${fop_code}/SG${segment_sg}/S${segment_s}
+    ${product_vendor_line1}    Set Variable If    '${ticket_type}' == 'BSP (without File Fare)'    RM *MS/PC${product_code_number}/V${vendor_code_number}/TK${ticket_prefix}${ticket_no}/PX${id}    '${ticket_type}' == 'BSP (with File Fare)'    RM *MS/PC${product_code_number}/V${vendor_code_number}/AC${airline_code}/TK/PX${id}    RM *MS/PC${product_code_number}/V${vendor_code_number}/TK${consolidator_ticket_prefix}${consolidator_ticket_number}/PX${id}
+    ${fees_line2}    Set Variable If    '${product_name.upper()}' == 'REISSUE-REVALIDATION FEE' or'${product_name.upper()}' == 'REVALIDATION FEE'    ${revalidation_fees_line2}    '${product_name.upper()}' == 'AIR COMMISSION RETURNED' or '${product_name.upper()}' == 'DISCOUNT'    ${discount_aircommission_fees_line2}    ${transactionfee_fees_line2}
+    Verify Specific Remark Is Written In The PNR    ${fees_line2}
+    Set Suite Variable    ${product_vendor_line1}
+    Set Suite Variable    ${fees_line2}
+    Verify Other Services Transaction Fee Additional and BTA Description Remarks    ${fop}    ${ticket_type}    ${identifier}
+    Verify Other Services Transaction Fee Booking Method Remarks    ${fop}    ${ticket_type}    ${identifier}
+    Verify Specific Remark Is Written In The PNR    RM *MSX/FF ${product_name.upper()}/XO-${eo_number}
+    Set Suite Variable    ${product_description_line5}    RM *MSX/FF ${product_name.upper()}/XO-${eo_number}
+
+Verify Other Services Visa Cost Accounting General Remarks
+    [Arguments]    ${product_name}    ${vendor_name}    ${fop}
+    Set Suite Variable    ${product_name}
+    Verify Other Services Generic Accounting Remarks    ${product_name}    ${vendor_name}    ${fop}    SG
+    &{entries_dict}    Create Dictionary    Single=SGL    Double=DBL    Multiple=MUL
+    &{processing_dict}    Create Dictionary    Normal=NOR    Express=URG
+    ${entries}    Get Variable Value    ${entries_${product_name}}    ${entries}
+    ${processing}    Get Variable Value    ${processing_${product_name}}    ${processing}
+    ${country_other_services}    Get Variable Value    ${country_other_services_${product_name}}    ${country_other_services}
+    ${type}    Get Variable Value    ${type_${product_name}}    ${type}
+    ${entries}    Get From Dictionary    ${entries_dict}    ${entries}
+    ${processing}    Get From Dictionary    ${processing_dict}    ${processing}
+    Verify Specific Line Is Written In The PNR    RM *MSX/FF40-${country_other_services.upper()}/FF41-${type.upper()} ${entries} ${processing}
+    Verify Specific Line Is Written In The PNR    RM *MSX/FF34-AB/FF35-AMA
+    Verify Specific Line Is Written In The PNR    RM *MSX/FF ${product_name.upper()}
+    Set Suite Variable    ${accounting_remarks_visa_cost_line_4}    RM *MSX/FF40-${country_other_services.upper()}/FF41-${type.upper()} ${entries} ${processing}
+    Set Suite Variable    ${accounting_remarks_visa_cost_line_5}    RM *MSX/FF34-AB/FF35-AMA
+
+Verify Other Services Visa Handling Accounting General Remarks
+    [Arguments]    ${product_name}    ${vendor_name}    ${fop}    ${country}
+    Verify Other Services Generic Accounting Remarks    ${product_name}    ${vendor_name}    ${fop}    ${country}
+    Run Keyword If    "${fop}" == "Credit Card (CX)"    Run Keywords    Verify Specific Line Is Written In The PNR    RM *MSX/FF35-AMA/FF36-M/FF47-CWT
+    ...    AND    Verify Specific Line Is Written In The PNR    RM *MSX/FF40-${country_other_services.upper()}/FF41-${type.upper()} ${entries_remark} ${processing_remark}/FF34-AB
+    Run Keyword If    '${fop}' == 'Cash' or '${fop}' == 'Invoice' or '${fop}' == 'NonRef'    Run Keywords    Verify Specific Line Is Written In The PNR    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    ...    AND    Verify Specific Line Is Written In The PNR    RM *MSX/FF40-${country_other_services.upper()}/FF41-${type.upper()} ${entries_remark} ${processing_remark}
+    ${booking_fee_line}    Set Variable If    "${fop}" == "Credit Card (CX)"    RM *MSX/FF35-AMA/FF36-M/FF47-CWT    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    ${visa_info_line}    Set Variable If    "${fop}" == "Credit Card (CX)"    RM *MSX/FF40-${country_other_services.upper()}/FF41-${type.upper()} ${entries_remark} ${processing_remark}/FF34-AB    RM *MSX/FF40-${country_other_services.upper()}/FF41-${type.upper()} ${entries_remark} ${processing_remark}
+    Verify Specific Line Is Written In The PNR    ${booking_fee_line}
+    Verify Specific Line Is Written In The PNR    ${visa_info_line}
+    Set Suite Variable    ${booking_fee_line_${product_name}}    ${booking_fee_line}
+    Set Suite Variable    ${visa_info_line_${product_name}}    ${visa_info_line}
+
+Verify Other Services With GST Accounting General Remarks
+    [Arguments]    ${product_name}    ${vendor_name}    ${fop}
+    Set Suite Variable    ${product_name}
+    Verify Other Services Generic Accounting Remarks    ${product_name}    ${vendor_name}    ${fop}    SG
+    ${bta_description}    Get Variable Value    ${bta_description_${product_name}}    ${bta_description}
+    ${additional_info_date}    Get Variable Value    ${additional_info_date_${product_name}}    ${additional_info_date}
+    ${additional_info_date}    Convert Date To Gds Format    ${additional_info_date}    %m/%d/%Y    true
+    Run Keyword If    "${bta_description}" != "${EMPTY}"    Verify Multiple Remarks Are Written In The PNR    RM *MSX/FF8-FF/FF40-${bta_description.upper()}/FF41-${additional_info_date}    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    Run Keyword If    "${bta_description}" == "${EMPTY}"    Verify Specific Remark Is Written In The PNR    RM *MSX/FF8-FF/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    ${gst_line2}    Set Variable If    "${bta_description}" != "${EMPTY}"    RM *MSX/FF8-FF/FF40-${bta_description.upper()}/FF41-${additional_info_date}    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    ${gst_line3}    Set Variable If    "${bta_description}" == "${EMPTY}"    RM *MSX/FF8-FF/FF34-AB/FF35-AMA/FF36-M/FF47-CWT    ${EMPTY}
+    Set Suite Variable    ${gst_line2}
+    Set Suite Variable    ${gst_line3}
+
+Verify Other Services Without GST Service Accounting General Remarks
+    [Arguments]    ${product_name}    ${vendor_name}    ${fop}    ${country}    ${identifier}=${EMPTY}
+    Set Suite Variable    ${product_name}
+    Verify Other Services Generic Accounting Remarks    ${product_name}    ${vendor_name}    ${fop}    ${country}
+    ${additional_info_date}    Convert Date    ${additional_info_date}    result_format=%d%b%y    date_format=%m/%d/%Y
+    ${additional_info_date}    Convert To Uppercase    ${additional_info_date}
+    Log Many    BTA Description is : "${bta_description}"    FOP is : ${fop}
+    Run Keyword And Continue On Failure    Run Keyword If    "${bta_description}" != "${EMPTY}" and ("${fop}" == "Cash" or "${fop}" == "Invoice")    Verify Multiple Remarks Are Written In The PNR    RM *MSX/FF40-${bta_description.upper()}/FF41-${additional_info_date}/FF34-AB    RM *MSX/FF35-AMA/FF36-M/FF47-CWT
+    Run Keyword And Continue On Failure    Run Keyword If    "${bta_description}" != "${EMPTY}" and ("${fop}" != "Cash" and "${fop}" != "Invoice")    Verify Multiple Remarks Are Written In The PNR    RM *MSX/FF8-FF/FF40-${bta_description.upper()}/FF41-${additional_info_date}    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    Run Keyword And Continue On Failure    Run Keyword If    "${bta_description}" == "${EMPTY}" and ("${fop}" != "Cash" and "${fop}" != "Invoice")    Verify Specific Remark Is Written In The PNR    RM *MSX/FF8-FF/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    Run Keyword And Continue On Failure    Run Keyword If    "${bta_description}" == "${EMPTY}" and ("${fop}" == "Cash" or "${fop}" == "Invoice")    Verify Specific Remark Is Written In The PNR    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    #Variable for Not Written verification of Remarks
+    Run Keyword If    "${bta_description}" != "${EMPTY}" and ("${fop}" == "Cash" or "${fop}" == "Invoice")    Set Suite Variable    ${without_gst_acc_rem_1}    RM *MSX/FF40-${bta_description.upper()}/FF41-${additional_info_date}/FF34-AB
+    Run Keyword If    "${bta_description}" != "${EMPTY}" and ("${fop}" == "Cash" or "${fop}" == "Invoice")    Set Suite Variable    ${without_gst_acc_rem_2}    RM *MSX/FF35-AMA/FF36-M/FF47-CWT
+    Run Keyword If    "${bta_description}" != "${EMPTY}" and ("${fop}" != "Cash" and "${fop}" != "Invoice")    Set Suite Variable    ${without_gst_acc_rem_1}    RM *MSX/FF8-FF/FF40-${bta_description.upper()}/FF41-${additional_info_date}
+    Run Keyword If    "${bta_description}" != "${EMPTY}" and ("${fop}" != "Cash" and "${fop}" != "Invoice")    Set Suite Variable    ${without_gst_acc_rem_2}    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    Run Keyword If    "${bta_description}" == "${EMPTY}" and ("${fop}" != "Cash" and "${fop}" != "Invoice")    Set Suite Variable    ${without_gst_acc_rem_3}    RM *MSX/FF8-FF/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    Run Keyword If    "${bta_description}" == "${EMPTY}" and ("${fop}" == "Cash" or "${fop}" == "Invoice")    Set Suite Variable    ${without_gst_acc_rem_3}    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+
+Verify Visa Handling Remarks Are Written When FOP Is Cash Or Invoice In The PNR
+    [Arguments]    ${product_name}    ${product_code}    ${vendor_code}    ${country}=SG
+    ${market_identifier}    Set Variable If    "${country}" == "SG"    S    A
+    ${passenger_id}    Get Variable Value    ${passenger_id}    1
+    ${gst}    Get Variable Value    ${gst}    ${EMPTY}
+    ${gst_computed_value}    Evaluate    ${total_selling_price} * 7 * 0.01
+    ${gst_computed_value}    Run Keyword If    "${country}" == "SG"    Round APAC    ${gst_computed_value}    SG
+    ${selling_price_with_gst}    Run Keyword If    "${gst}" != "${EMPTY}"    Evaluate    ${total_selling_price} + ${gst}
+    ...    ELSE    Set Variable    ${total_selling_price}
+    ${selling_price_with_gst}    Round APAC    ${selling_price_with_gst}    ${country}
+    Verify Specific Remark Is Written In The PNR    RM *MS/PC${product_code}/V${vendor_code}/TK${eo_number}/PX${passenger_id}
+    Run Keyword If    "${gst}" != "${EMPTY}"    Verify Specific Remark Is Written In The PNR    RM *MSX/${market_identifier}${total_selling_price}/SF${total_selling_price}/C${total_selling_price}/G${gst_computed_value}/FS
+    ...    ELSE    Verify Specific Remark Is Written In The PNR    RM *MSX/${market_identifier}${total_selling_price}/SF${total_selling_price}/C${total_selling_price}/FS
+    Verify Specific Remark Is Written In The PNR    RM *MSX/FF40-${country_other_services.upper()}/FF41-${type.upper()} ${entries_remark} ${processing_remark}
+    Comment    Verify Specific Remark Is Written In The PNR    RM *MSX/FF34-AB/FF35-OTH/FF36-M/FF47-CWT
+    Comment    Verify Specific Remark Is Written In The PNR    RM *MSX/FF ${product_name.upper()}
+
+Verify Visa Handling Remarks Are Written When FOP Is Credit Card In The PNR
+    [Arguments]    ${product_name}    ${product_code}    ${vendor_code}    ${country}=SG
+    ${fop_exp_date}    Set Variable    ${expiry_month}${short_expiry_year}
+    ${credit_card_length_excluding_last_four_digits}    Get Length    ${credit_card_number[:-4]}
+    ${masked_credit_card_number}    Replace String    ${credit_card_number}    ${credit_card_number[:-4]}    .*
+    ${market_identifier}    Set Variable If    "${country}" == "SG"    S    A
+    ${passenger_id}    Get Variable Value    ${passenger_id}    1
+    ${gst}    Get Variable Value    ${gst_amount}    ${EMPTY}
+    ${fop_code}    Run Keyword If    "${fop_type}" == "Credit Card (CX)"    Get Credit Card Vendor Code    ${form_of_payment_vendor}
+    ...    ELSE    Set Variable    CC
+    ${gst_computed_value}    Evaluate    ${total_selling_price} * 7 * 0.01
+    ${gst_computed_value}    Run Keyword If    "${country}" == "SG"    Round APAC    ${gst_computed_value}    SG
+    ${selling_price_with_gst}    Run Keyword If    "${gst}" != "${EMPTY}" and "${country}" == "SG"    Evaluate    ${selling_price} + ${gst} + ${merchant_fee}
+    ...    ELSE    Set Variable    ${total_selling_price}    #update computation to include SG and HK /D value for DE490
+    ${selling_price_with_gst}    Round APAC    ${selling_price_with_gst}    ${country}
+    Verify Specific Remark Is Written In The PNR    RM *MS/PC${product_code}/V${vendor_code}/TK${eo_number}/PX${passenger_id}
+    Run Keyword If    "${gst}" != "${EMPTY}"    Verify Specific Remark Is Written In The PNR    RM *MSX/${market_identifier}${total_selling_price}/SF${total_selling_price}/C${total_selling_price}/G${gst_computed_value}/F${fop_code}
+    ...    ELSE    Verify Specific Remark Is Written In The PNR    RM *MSX/${market_identifier}${total_selling_price}/SF${total_selling_price}/C${total_selling_price}/F${fop_code}
+    Verify Specific Remark Is Written In The PNR    RM \\*MSX\\/CCN${form_of_payment_vendor}${masked_credit_card_number}EXP${fop_exp_date}\\/D${selling_price_with_gst}    true
+    Verify Specific Remark Is Written In The PNR    RM *MSX/FF40-${country_other_services.upper()}/FF41-${type.upper()} ${entries_remark} ${processing_remark}/FF34-AB
+    Comment    Verify Specific Remark Is Written In The PNR    RM *MSX/FF35-OTH/FF36-M/FF47-CWT
+    Comment    Verify Specific Remark Is Written In The PNR    RM *MSX/FF ${product_name.upper()}
+    #Set Lines To A Variable For Not Written Checking
+    ${visa_handling_line2}    Set Variable If    "${gst}" != "${EMPTY}"    RM *MSX/${market_identifier}${total_selling_price}/SF${total_selling_price}/C${total_selling_price}/G${gst_computed_value}/F${fop_code}    RM *MSX/${market_identifier}${total_selling_price}/SF${total_selling_price}/C${total_selling_price}/F${fop_code}
+    Set Suite Variable    ${visa_handling_line2}
+    Set Suite Variable    ${visa_handling_line3}    RM *MSX/CCN${form_of_payment_vendor}${masked_credit_card_number}EXP${fop_exp_date}/D${selling_price_with_gst}
+
+Verify Other Services Consolidator Ticket And LCC Generic Accounting Remarks
+    [Arguments]    ${product_name}    ${vendor_name}    ${fop}    ${country}=SG    ${identifier}=${EMPTY}
+    [Documentation]    Usage:
+    ...
+    ...    ${fop} = Form Of Payment
+    ...
+    ...    ${sg_segment} = selected segment: \ \ 01020304 (consecutive segments) / 01050709 (for non-consecutive)
+    ...
+    ...    ${s_segment} = selected segment: \ \ \ 1-4 (consecutive segments) / 1,5,7,9 (for non-consecutive)
+    ...    \ \ \ \ \ \ \ \ \ \ \ \
+    ${product_code_number}    Get Product Code    ${country}    ${product_name}
+    ${vendor_code_number}    Get Vendor Code    ${country}    ${product_name}    ${vendor_name}
+    ${market_identifier}    Set Variable If    "${country}" == "SG"    S    A
+    ${id}    Set Variable If    "${passenger_id}" == "${EMPTY}"    1    ${passenger_id}
+    ${fop_code}    Run Keyword If    "${fop}" == "Credit Card (CX)"    Get Credit Card Vendor Code    ${form_of_payment_vendor}
+    ...    ELSE IF    "${fop}" == "Credit Card (CC)"    Set Variable    CC
+    ...    ELSE    Set Variable    S
+    ${commission}    Get Variable Value    ${commission_${product_name}}    ${commission}
+    ${fare}    Set Variable If    "${country}" == "SG"    ${selling_fare}    ${nett_fare}
+    ${fare}    Round APAC    ${fare}    ${country}
+    ${sf_value}    Run Keyword If    "${country.upper()}"=="HK" and "${product_name.upper()}"!="CONSOLIDATOR TICKET" and "${product_name.upper()}"!="LOW COST CARRIER"    Evaluate    ${fare} + ${commission}+${merchant_fee}
+    ...    ELSE IF    "${country.upper()}"=="HK" and ("${product_name.upper()}"=="CONSOLIDATOR TICKET" or "${product_name.upper()}"=="LOW COST CARRIER")    Evaluate    ${fare} + ${commission}
+    ...    ELSE    Set Variable    ${selling_fare_${identifier}}
+    ${sf_value}    Round APAC    ${sf_value}    ${country}
+    Verify Multiple Remarks Are Written In The PNR    RM *MS/PC${product_code_number}/V${vendor_code_number}/AC${airline_code}/TK${eo_number}/PO${airline_ticket_number}/PX${id}    RM *MSX/${market_identifier}${sf_value}/SF${sf_value}/C${commission}/SG${segment_long}/S${segment_short}    RM *MSX/NF${fare}
+    ${tax_acctg_line}    Set Variable If    "${country}"== "SG" and "${tax_value1}" > "0" and "${tax_value2}" > "0"    RM *MSX/TX${tax_value1}${tax_code1}${tax_value2}${tax_code2}/F${fop_code}/R${mi_reference_fare}/L${mi_low_fare}    "${country}"=="SG" and "${tax_value1}" > "0" and "${tax_value2}" == "0"    RM *MSX/TX${tax_value1}${tax_code1}/F${fop_code}/R${mi_reference_fare}/L${mi_low_fare}    "${country}"=="SG" and "${tax_value1}" == "0" and "${tax_value2}" > "0"
+    ...    RM *MSX/TX${tax_value2}${tax_code2}/F${fop_code}/R${mi_reference_fare}/L${mi_low_fare}    "${country}"=="HK" and "${tax_value1}" > "0"    RM *MSX/TX${tax_value1}${tax_code1}/F${fop_code}/R${mi_reference_fare}/L${mi_low_fare}    RM *MSX/F${fop_code}/R${mi_reference_fare}/L${mi_low_fare}
+    Verify Specific Remark Is Written In The PNR    ${tax_acctg_line}
+    Verify Specific Remark Is Written In The PNR    RM *MSX/E${mi_missed_saving_code.upper()}/FF7-${mi_final_destination.upper()}/FF8-${mi_class_of_service.upper()}/FF81-${mi_low_fare_carrier.upper()}/FF38-${et_pt}
+    ${conso_generic_line2}    Set Variable    ${tax_acctg_line}
+    ${conso_generic_line3}    Set Variable    RM *MSX/E${mi_missed_saving_code.upper()}/FF7-${mi_final_destination.upper()}/FF8-${mi_class_of_service.upper()}/FF81-${mi_low_fare_carrier.upper()}/FF38-${et_pt}
+    Set Suite Variable    ${conso_generic_line2}
+    Set Suite Variable    ${conso_generic_line3}
+    Verify Specific Remark Is Written In The PNR    RM *MSX/FF ${product_name.upper()}
+
+Verify Other Services Consolidator Ticket and LCC With Additional Fee Remarks
+    [Arguments]    ${product_name}    ${fop}    ${amount}    ${country}=SG
+    [Documentation]    Usage:
+    ...
+    ...    ${amount} = Transaction/Service Fee or Discount Amount or Fuel Surcharge Amount
+    ...
+    ...    ${fop} = Form Of Payment
+    ...
+    ...    ${sg_segment} = selected segment: \ \ 01020304 (consecutive segments) / 01050709 (for non-consecutive)
+    ...
+    ...    ${s_segment} = selected segment: \ \ \ 1-4 (consecutive segments) / 1,5,7,9 (for non-consecutive)
+    ...
+    ...
+    ...    FOP code in Booking remarks for Discount is always FS.
+    ${product_code_number}    Get Product Code    ${country}    ${product_name}
+    ${vendor_code_number}    Set Variable If    "${country}" == "SG" and "${product_name.upper()}" == "TRANSACTION FEE"    021007    "${country}" == "SG" and "${product_name.upper()}" == "AIR COMMISSION RETURNED"    027000    000001
+    ${market_identifier}    Set Variable If    "${country}" == "SG"    S    A
+    ${passenger_id}    Set Variable If    "${passenger_id}" == "${EMPTY}"    1    ${passenger_id}
+    ${fop_code}    Run Keyword If    "${fop}" == "Credit Card (CX)"    Get Credit Card Vendor Code    ${form_of_payment_vendor}
+    ...    ELSE IF    "${fop}" == "Credit Card (CC)"    Set Variable    CC
+    ...    ELSE    Set Variable    S
+    ${amount}    Round APAC    ${amount}    ${country}
+    Verify Specific Line Is Written In The PNR    RM *MS/PC${product_code_number}/V${vendor_code_number}/AC${airline_code}/TK${eo_number}/PX${passenger_id}
+    Run Keyword If    "${product_name.upper()}" == "TRANSACTION FEE"    Verify Specific Line Is Written In The PNR    RM *MSX/${market_identifier}${amount}/SF${amount}/C${amount}/SG${segment_long}/S${segment_short}
+    ...    ELSE IF    "${product_name.upper()}" == "SVC FEE FOR SURCHARGES"    Verify Specific Line Is Written In The PNR    RM *MSX/${market_identifier}${amount}/SF${amount}/C${amount}/F${fop_code}
+    ...    ELSE    Verify Specific Line Is Written In The PNR    RM *MSX/${market_identifier}-${amount}/SF-${amount}/C-${amount}/SG${segment_long}/S${segment_short}
+    Run Keyword If    ("${fop}" != "Cash" and "${fop}" != "Invoice") and "${product_name.upper()}" == "TRANSACTION FEE"    Verify Specific Line Is Written In The PNR    RM \\*MSX/F${fop_code}/CCN${form_of_payment_vendor}.*EXP${expiry_month}${expiry_year}/D${amount}    True
+    ...    ELSE IF    ("${fop}" != "Cash" and "${fop}" != "Invoice") and "${product_name.upper()}" == "SVC FEE FOR SURCHARGES"    Verify Specific Line Is Written In The PNR    RM \\*MSX/CCN${form_of_payment_vendor}.*EXP${expiry_month}${expiry_year}/D${amount}    True
+    Run Keyword If    "${product_name.upper()}" == "SVC FEE FOR SURCHARGES" or ("${product_name.upper()}" == "TRANSACTION FEE" and ("${fop}" != "Cash" and "${fop}" !="Invoice"))    Verify Specific Line Is Written In The PNR    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    ...    ELSE IF    "${product_name.upper()}" == "DISCOUNT"    Verify Specific Line Is Written In The PNR    RM *MSX/FS/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    ...    ELSE IF    "${product_name.upper()}" == "TRANSACTION FEE" and ("${fop}" == "Cash" or "${fop}" =="Invoice")    Verify Specific Line Is Written In The PNR    RM *MSX/F${fop_code}/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    ${conso_line2}    Set Variable If    "${product_name.upper()}" == "TRANSACTION FEE"    RM *MSX/${market_identifier}${amount}/SF${amount}/C${amount}/SG${segment_long}/S${segment_short}    "${product_name.upper()}" == "SVC FEE FOR SURCHARGES"    RM *MSX/${market_identifier}${amount}/SF${amount}/C${amount}/F${fop_code}    RM *MSX/${market_identifier}-${amount}/SF-${amount}/C-${amount}/SG${segment_long}/S${segment_short}
+    ${conso_line3}    Set Variable If    ("${fop}" != "Cash" and "${fop}" !="Invoice") and "${product_name.upper()}" == "TRANSACTION FEE"    RM \\*MSX/F${fop_code}/CCN${form_of_payment_vendor}.*EXP${expiry_month}${short_expiry_year}/D${amount}    ("${fop}" != "Cash" and "${fop}" !="Invoice") and "${product_name.upper()}" == "SVC FEE FOR SURCHARGES"    RM \\*MSX/CCN${form_of_payment_vendor}.*EXP${expiry_month}${short_expiry_year}/D${amount}
+    ${conso_line4}    Set Variable If    "${product_name.upper()}" == "SVC FEE FOR SURCHARGES" or ("${product_name.upper()}" == "TRANSACTION FEE" and ("${fop}" != "Cash" and "${fop}" !="Invoice"))    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT    "${product_name.upper()}" == "DISCOUNT"    RM *MSX/FS/FF34-AB/FF35-AMA/FF36-M/FF47-CWT    "${product_name.upper()}" == "TRANSACTION FEE" and ("${fop}" == "Cash" or "${fop}" =="Invoice")
+    ...    RM *MSX/F${fop_code}/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    Set Suite Variable    ${conso_line2}
+    Set Suite Variable    ${conso_line3}
+    Set Suite Variable    ${conso_line4}
+    Verify Specific Line Is Written In The PNR    RM *MSX/FF ${product_name.upper()}
+
+Verify Itinerary Remarks Are Written For Non Air Other Services
+    [Documentation]    This Keyword can be used For The Below Non-Air Other Services
+    ...    * Despatch
+    ...    * Ets Call Charges
+    ...    * Ferry
+    ...    * Merchant fee
+    ...    * Mice Domestic
+    ...    * MICE international
+    ...    * Oths handling Fee
+    ...    * Rebate
+    ...    * Tour Domestic
+    ...    * Transaction Fee-Air only
+    ...    * VAT
+    Log    ${date}
+    Log    ${date}
+    Run Keyword If    "${details1}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RIR ${details1.upper()}/S${segment_number.strip()}    false    false    true
+    Run Keyword If    "${details2}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RIR ${details2.upper()}/S${segment_number.strip()}    false    false    true
+    Run Keyword If    "${details3}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RIR ${details3.upper()}/S${segment_number.strip()}    false    false    true
+    Set Suite Variable    ${previous_rir_${eo_number}}    RIR ${details1.upper()}/S${segment_number.strip()}
+
+Verify Itinerary Remarks Are Written In The PNR
+    [Arguments]    ${product}
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    ${product}    Convert To Lowercase    ${product}
+    Run Keyword If    "${product}" in @{non_air_products}    Verify Itinerary Remarks Are Written For Non Air Other Services
+    Run Keyword If    ("${product}" in @{non_air_products}) and "${product}"=="tour intl"    Verify Itinerary Remarks Are Written For Tour Intl
+
+Verify General Remarks Lines When Product is Insurance
+    Run Keyword And Continue On Failure    Run Keyword If    "${employee_number}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT EMPLOYEE NO:${employee_number} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${employee_name}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT EMPLOYEE NAME:${employee_name.upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${passport_number}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT PSPT NO:${passport_number} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${area}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT AREA:${area.upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${assignee_name}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT ASSIGNEE NAME:${assignee_name.upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${gender}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT GENDER:${gender.upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${date_of_birth}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT DOB:${date_of_birth.upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${address_of_house}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT HOUSE BUILDING NO:${address_of_house.upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${street_name}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT STREET NAME:${street_name.upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${sub_area}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT SUB AREA/CITY:${sub_area.upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${pin_code}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT PIN CODE:${pin_code} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${state}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT STATE:${state.upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${country_other_services}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT COUNTRY:${country_other_services.upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${mobile_number}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT MOBILE NO:${mobile_number} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${marital_status}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT MARITAL STATUS:${marital_status.upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${departure_date_insurance}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT DEPARTURE DATE:${departure_date_insurance.upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${arrival_date}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT ARRIVAL DATE:${arrival_date.upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+
+Verify General Remarks Are Written Correctly
+    [Arguments]    ${product}
+    Get Agent Login ID from Amadeus
+    Retrieve PNR Details From Amadeus    RTY
+    log    ${product.lower()}
+    Log    ${date_for_eo}
+    ${eo_date}    Convert Date To Gds Format    ${date_for_eo[:-6]}    %m/%d/%Y
+    Set Test Variable    ${eo_date}
+    Set Test Variable    ${eo_time}    ${date_for_eo[-5:-3]}${date_for_eo[-2:]}Z
+    Set Test Variable    ${a_sign}    ${agent_id[-2:]}
+    #Verification of Remarks Lines
+    Run Keyword If    "${product.lower()}"=="air conso-dom"    Verify General Remarks Lines When Product is Air Conso-Dom
+    Run Keyword If    "${product.lower()}"=="insurance"    Verify General Remarks Lines When Product is Insurance
+    Run Keyword If    "${product.lower()}"=="train- dom"    Verify General Remarks Lines When Product is Train Dom
+    Run Keyword If    "${product.lower()}"=="transaction charges"    Verify General Remarks Lines When Product is Transaction Charges
+
+Verify General Remarks Lines When Product is Air Conso-Dom
+    Run Keyword And Continue On Failure    Run Keyword If    "${pos_remark_1}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT\\*POS REMARK 1:${pos_remark_1.upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${pos_remark_2}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT\\*POS REMARK 2:${pos_remark_2.upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${pos_remark_3}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT\\*POS REMARK 3:${pos_remark_3.upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${centralized_desk_1}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT\\*CENTRALIZED DESK1:${centralized_desk_1.upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${centralized_desk_2}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT\\*CENTRALIZED DESK2:${centralized_desk_2.upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${transaction_type}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT\\*RESERVATION: ${transaction_type.upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${airlines_pnr}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT\\*AIRLINE PNR: ${airlines_pnr.upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${fare_break_up_1}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT\\*FARE BREAK UP1: ${fare_break_up_1.upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${fare_break_up_2}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT\\*FARE BREAK UP 2:${fare_break_up_2.upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${cancellation_penalty}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT\\*CANCELLATION PENALTY:${cancellation_penalty.upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${lcc_queue_back_remark}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT\\*LCC QUEUEBACK REMARK:${lcc_queue_back_remark.upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${gstin}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM GSTIN${gstin.upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${email_in_request}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM EMAIL ${email_in_request.upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${entity_name}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM ENTITY NAME${entity_name.upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${phone_no}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM PHONE NO ${phone_no} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+
+Verify Acounting Lines For Merchant Fee (TF) Are Not Written
+    [Arguments]    ${fop}=${EMPTY}    ${segment_number}=${EMPTY}
+    Comment    Verify Specific Line Is Not Written In The PNR    RM *MS/PC40/V00800004/TK${eo_number}/PX1    false    false    false
+    Comment    Verify PO And GSA Line Is Written Depending On Air Product    ${product}
+    Set FOP Type For Accounting Lines    ${fop}
+    Verify Specific Line Is Not Written In The PNR    RM *MSX/S0/SF0/C0/SG${segment_number}/${fop_type}    false    false    false
+    Run Keyword if    "${fop}"=="Credit Card (CC)"    Verify Specific Line Is Not Written In The PNR    RM *MSX/CCN${charges_cc_type}${charges_card_number}EXP${charges_cc_expiry_date}/D0    false    false    false
+    ${value1}    Evaluate    ${merchant_fee_tf}*0.01*14
+    ${value1}    Round Apac    ${value1}    IN
+    ${value2}    Evaluate    ${merchant_fee_tf}*0.01*0.5
+    ${value2}    Round Apac    ${value2}    IN
+    ${value3}    Evaluate    ${merchant_fee_tf}*0.01*0.5
+    ${value3}    Round Apac    ${value3}    IN
+    ${f99_merchant_fee_tf}    Evaluate    ${value1}+${value2}+${value3}
+    ${f99_merchant_fee_tf}    Round Apac    ${f99_merchant_fee_tf}    IN
+    Set Suite Variable    ${f99_merchant_fee_tf}
+    Verify Specific Line Is Not Written In The PNR    RM *MSX/FF99-14P${value1}*0.5P${value2}*0.5P${value3}    false    false    false
+    Comment    Verify Specific Line Is Not Written In The PNR    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT    false    false    false
+    Comment    Verify Specific Line Is Not Written In The PNR    RM *MSX/FF MERCHANT FEE    false    false    false
+
+Verify Acounting Lines For Merchant Fee (TF) Are Written
+    [Arguments]    ${product}=${EMPTY}    ${fop}=${EMPTY}    ${segment_number}=${EMPTY}
+    Verify Specific Line Is Written In The PNR    RM *MS/PC40/V00800004/TK${eo_number}/PX1    false    false    false
+    Verify PO And GSA Line Is Written Depending On Air Product    ${product}
+    Set FOP Type For Accounting Lines    ${fop}
+    Verify Specific Line Is Written In The PNR    RM *MSX/S${merchant_fee_tf}/SF${merchant_fee_tf}/C${merchant_fee_tf}/SG${segment_number}/${fop_type}    false    false    false
+    Run Keyword And Continue On Failure    Run Keyword if    "${fop}"=="Credit Card (CC)"    Verify Specific Line Is Written In The PNR    RM *MSX/CCN${charges_cc_type}${charges_card_number}EXP${charges_cc_expiry_date}/D${merchant_fee_tf}    false    false
+    ...    false
+    ${value1}    Evaluate    ${merchant_fee_tf}*0.01*14
+    ${value1}    Round Apac    ${value1}    IN
+    ${value2}    Evaluate    ${merchant_fee_tf}*0.01*0.5
+    ${value2}    Round Apac    ${value2}    IN
+    ${value3}    Evaluate    ${merchant_fee_tf}*0.01*0.5
+    ${value3}    Round Apac    ${value3}    IN
+    ${f99_merchant_fee_tf}    Evaluate    ${value1}+${value2}+${value3}
+    ${f99_merchant_fee_tf}    Round Apac    ${f99_merchant_fee_tf}    IN
+    Set Suite Variable    ${f99_merchant_fee_tf}
+    Verify Specific Line Is Written In The PNR    RM *MSX/FF99-14P${value1}*0.5P${value2}*0.5P${value3}    false    false    false
+    Verify Specific Line Is Written In The PNR    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT    false    false    false
+    Verify Specific Line Is Written In The PNR    RM *MSX/FF MERCHANT FEE    false    false    false
+
+Verify Acounting Lines For VAT For Merchant Fee (TF) Are Not Written
+    [Arguments]    ${fop}=${EMPTY}    ${segment_number}=${EMPTY}
+    Set FOP Type For Accounting Lines    ${fop}
+    Comment    Verify Specific Line Is Not Written In The PNR    RM *MS/PC87/V00800011/TK${eo_number}/PX1
+    Comment    Verify PO And GSA Line Is Written Depending On Air Product    ${product}
+    Verify Specific Line Is Not Written In The PNR    RM *MSX/S0/SF0/C0/SG${segment_number}/${fop_type}
+    Run Keyword And Continue On Failure    Run Keyword if    "${fop}"=="Credit Card (CC)"    Verify Specific Line Is Not Written In The PNR    RM *MSX/CCN${charges_cc_type}${charges_card_number}EXP${charges_cc_expiry_date}/D0
+    Comment    Verify Specific Line Is Not Written In The PNR    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    Comment    Verify Specific Line Is Not Written In The PNR    RM*MSX/FF MERCHANT FEE
+
+Verify Acounting Lines For VAT For Merchant Fee (TF) Are Written
+    [Arguments]    ${fop}=${EMPTY}    ${segment_number}=${EMPTY}    ${product}=${EMPTY}
+    Set FOP Type For Accounting Lines    ${fop}
+    Verify Specific Line Is Written In The PNR    RM *MS/PC87/V00800011/TK${eo_number}/PX1
+    Verify PO And GSA Line Is Written Depending On Air Product    ${product}
+    Verify Specific Line Is Written In The PNR    RM *MSX/S${f99_merchant_fee_tf}/SF${f99_merchant_fee_tf}/C0/SG${segment_number}/${fop_type}
+    Run Keyword And Continue On Failure    Run Keyword if    "${fop}"=="Credit Card (CC)"    Verify Specific Line Is Written In The PNR    RM *MSX/CCN${charges_cc_type}${charges_card_number}EXP${charges_cc_expiry_date}/D${f99_merchant_fee_tf}
+    Verify Specific Line Is Written In The PNR    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    Verify Specific Line Is Written In The PNR    RM *MSX/FF VAT
+
+Verify Specific Remark For Charges PO and GSA Is Not Written In The PNR
+    Run Keyword If    "${charges_other_related_no}"!="${EMPTY}" and "${charges_vendor_ref_no}"!="${EMPTY}"    Verify Specific Line Is Not Written In The PNR    RM *MSX/PO${charges_other_related_no.upper()}/GSA${charges_vendor_ref_no.upper()}
+    ...    ELSE IF    "${charges_other_related_no}"=="${EMPTY}" and "${charges_vendor_ref_no}"!="${EMPTY}"    Verify Specific Line Is Not Written In The PNR    RM *MSX/GSA${charges_vendor_ref_no.upper()}
+    ...    ELSE IF    "${charges_other_related_no}"!="${EMPTY}"and "${charges_vendor_ref_no}"== "${EMPTY}"    Verify Specific Line Is Not Written In The PNR    RM *MSX/PO${charges_other_related_no.upper()}
+
+Verify Accounting Lines For Main EO Are Written
+    [Arguments]    ${product}    ${client_mi_remark}=${EMPTY}    ${fop}=${EMPTY}    ${segment_number}=${EMPTY}
+    [Documentation]    ${segment_number} is a value coming from Request tab > Selected Air Segments. Sample Format: 020304
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTY
+    Get Vendor
+    Get Charges Product Code And GST And OT1 And OT2    ${product}
+    #Line1
+    Verify Specific Remark Is Written In The PNR    RM *MS/PC${product_code}/V${current_os_vendor_code}/TK${eo_number}/PX1
+    #Line2
+    Verify PO And GSA Line Is Written Depending On Air Product    ${product}
+    #Line3
+    Set FOP Type For Accounting Lines    ${fop}
+    Verify Specific Remark Is Written In The PNR    RM *MSX/S${base_amount}/SF${base_amount}/C${total_iata_com}/SG${segment_number}/${fop_type}
+    #Line4
+    Run Keyword If    ("${oth_tax2}"!="${EMPTY}" and "${oth_tax_code2}"!="${EMPTY}") and ("${oth_tax3}"!="${EMPTY}" and "${oth_tax_code3}"!="${EMPTY}")    Verify Specific Remark Is Written In The PNR    RM *MSX/TX${oth_tax1}${oth_tax_code1.upper()}${oth_tax2}${oth_tax_code2.upper()}${oth_tax3}${oth_tax_code3.upper()}${yq_tax}YQ
+    Run Keyword If    ("${oth_tax2}"!="${EMPTY}" and "${oth_tax_code2}"!="${EMPTY}") and ("${oth_tax3}"=="${EMPTY}" and "${oth_tax_code3}"=="${EMPTY}")    Verify Specific Remark Is Written In The PNR    RM *MSX/TX${oth_tax1}${oth_tax_code1.upper()}${oth_tax2}${oth_tax_code2.upper()}${yq_tax}YQ
+    Run Keyword If    ("${oth_tax2}"=="${EMPTY}" and "${oth_tax_code2}"=="${EMPTY}") and ("${oth_tax3}"!="${EMPTY}" and "${oth_tax_code3}"!="${EMPTY}")    Verify Specific Remark Is Written In The PNR    RM *MSX/TX${oth_tax1}${oth_tax_code1.upper()}${oth_tax3}${oth_tax_code3.upper()}${yq_tax}YQ
+    Run Keyword If    ("${oth_tax2}"=="${EMPTY}" and "${oth_tax_code2}"=="${EMPTY}") and ("${oth_tax3}"=="${EMPTY}" and "${oth_tax_code3}"=="${EMPTY}")    Verify Specific Remark Is Written In The PNR    RM *MSX/TX${oth_tax1}${oth_tax_code1.upper()}${yq_tax}YQ
+    #Line5 only if FOP Type is CC
+    ${charges_cc_expiry_date}    Remove String    ${charges_cc_expiry_date}    /
+    Run Keyword If    "${fop}"=="Credit Card (CC)"    Verify Specific Remark Is Written In The PNR    RM *MSX/CCN${charges_cc_type}${charges_card_number}EXP${charges_cc_expiry_date}/D${reference_fare}
+    ...    ELSE    Verify Specific Remark Is Not Written In The PNR    RM *MSX/CCN${charges_cc_type}${charges_card_number}EXP${charges_cc_expiry_date}/D${reference_fare}
+    #Line6
+    Calculate VAT/GST
+    Verify Specific Remark Is Written In The PNR    RM *MSX/FF99-${vat_gst}P${computed_value_vat_gst}*${ot1_percentage}P${computed_value_ot1}*${ot2_percentage}P${computed_value_ot2}
+    #Line7
+    Verify Specific Remark Is Written In The PNR    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT/FF96-YQ${yq_tax}/R${reference_fare}
+    #Line8
+    Run Keyword If    "${low_fare_carrier}"!="${EMPTY}"    Verify Specific Remark Is Written In The PNR    RM *MSX/L${low_fare}/FF8-${class_service}/FF30-${realise_saving_code}/E${missed_saving_code}/FF81-${low_fare_carrier.upper()}
+    Run Keyword If    "${low_fare_carrier}"=="${EMPTY}"    Verify Specific Remark Is Written In The PNR    RM *MSX/L${low_fare}/FF8-${class_service}/FF30-${realise_saving_code}/E${missed_saving_code}
+    #Line9
+    ${issue_in_exchange_for}    Set Variable If    "${product.lower()}"!="air bsp" and "${product.lower()}"!="air domestic"    ${EMPTY}    ${issue_in_exchange_for}
+    Run Keyword If    ("${declined_airline_1}"!="${EMPTY}" and "${declined_fare_1}"!="${EMPTY}") and ("${declined_airline_2}"!="${EMPTY}" and "${declined_fare_2}"!="${EMPTY}")    Verify Specific Remark Is Written In The PNR    RM *MSX/FF90-${declined_airline_1.upper()}/FF91-${declined_fare_1}/FF92-${declined_airline_2.upper()}/FF93-${declined_fare_2}
+    Run Keyword If    ("${declined_airline_1}"!="${EMPTY}" and "${declined_fare_1}"!="${EMPTY}") and ("${declined_airline_2}"=="${EMPTY}" and "${declined_fare_2}"=="${EMPTY}")    Verify Specific Remark Is Written In The PNR    RM *MSX/FF90-${declined_airline_1.upper()}/FF91-${declined_fare_1}
+    Run Keyword If    ("${declined_airline_1}"=="${EMPTY}" and "${declined_fare_1}"=="${EMPTY}") and ("${declined_airline_2}"!="${EMPTY}" and "${declined_fare_2}"!="${EMPTY}")    Verify Specific Remark Is Written In The PNR    RM *MSX/FF92-${declined_airline_2.upper()}/FF93-${declined_fare_2}
+    Run Keyword If    ("${declined_airline_1}"=="${EMPTY}" and "${declined_fare_1}"=="${EMPTY}") and ("${declined_airline_2}"=="${EMPTY}" and "${declined_fare_2}"=="${EMPTY}")    Verify Specific Remark Is Not Written In The PNR    RM *MSX/FF90-${declined_airline_1.upper()}/FF91-${declined_fare_1}/FF92-${declined_airline_2.upper()}/FF93-${declined_fare_2}
+    #Line10
+    Run Keyword If    ("${product.lower()}"=="air bsp" or "${product.lower()}"=="air domestic") and "${issue_in_exchange_for}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM *MSX/EX${issue_in_exchange_for.upper()}
+    Run Keyword If    ("${product.lower()}"=="air bsp" or "${product.lower()}"=="air domestic") and "${issue_in_exchange_for}"=="${EMPTY}"    Verify Specific Line Is Not Written In The PNR    RM *MSX/EX${issue_in_exchange_for.upper()}
+    #Line11 - Client MI
+    Run Keyword If    "${client_mi_remark}"!="${EMPTY}"    Verify Specific Remark Is Written In The PNR    ${client_mi_remark}
+    #Line12
+    Verify Specific Line Is Written In The PNR    RM *MSX/FF ${product.upper()}
+
+Verify PO And GSA Line Is Written Depending On Air Product
+    [Arguments]    ${product}
+    ${charges_vendor_ref_no}    Set Variable If    "${product.lower()}"=="air bsp" or "${product.lower()}"=="air domestic"    ${EMPTY}    ${charges_vendor_ref_no}
+    Run Keyword If    (("${product.lower()}"=="air bsp" or "${product.lower()}"=="air domestic") and "${charges_other_related_no}"!="${EMPTY}") or (("${product.lower()}"!="air bsp" and "${product.lower()}"!="air domestic") and "${charges_other_related_no}"!="${EMPTY}" and "${charges_vendor_ref_no}"=="${EMPTY}")    Verify Specific Remark Is Written In The PNR    RM *MSX/PO${charges_other_related_no.upper()}
+    Run Keyword If    ("${product.lower()}"=="air bsp add on" or "${product.lower()}"=="air dom add on" or "${product.lower()}"=="air conso-dom" or "${product.lower()}"=="air sales-non bsp int") and "${charges_other_related_no}"!="${EMPTY}" and "${charges_vendor_ref_no}"!="${EMPTY}"    Verify Specific Remark Is Written In The PNR    RM *MSX/PO${charges_other_related_no.upper()}/GSA${charges_vendor_ref_no.upper()}
+    Run Keyword If    ("${product.lower()}"=="air bsp add on" or "${product.lower()}"=="air dom add on" or "${product.lower()}"=="air conso-dom" or "${product.lower()}"=="air sales-non bsp int") and "${charges_other_related_no}"=="${EMPTY}" and "${charges_vendor_ref_no}"!="${EMPTY}"    Verify Specific Remark Is Written In The PNR    RM *MSX/GSA${charges_vendor_ref_no.upper()}
+    Run Keyword If    ("${product.lower()}"=="air bsp" or "${product.lower()}"=="air domestic") and "${charges_other_related_no}"=="${EMPTY}"    Verify Specific Remark Is Not Written In The PNR    RM *MSX/PO${charges_other_related_no.upper()}
+    Run Keyword If    ("${product.lower()}"=="air bsp add on" or "${product.lower()}"=="air dom add on" or "${product.lower()}"=="air conso-dom" or "${product.lower()}"=="air sales-non bsp int") and "${charges_other_related_no}"=="${EMPTY}" and "${charges_vendor_ref_no}"=="${EMPTY}"    Verify Specific Remark Is Not Written In The PNR    RM *MSX/PO${charges_other_related_no.upper()}/GSA${charges_vendor_ref_no.upper()}
+
+Verify Accounting Lines For VAT For Main EO Are Written
+    [Arguments]    ${product}    ${fop}=${EMPTY}    ${segment_number}=${EMPTY}
+    Retrieve PNR Details From Amadeus    ${current_pnr}    RTY
+    #Line1
+    Verify Specific Remark Is Written In The PNR    RM *MS/PC87/V00800011/TK${eo_number}/PX1
+    #Line2
+    Verify PO And GSA Line Is Written Depending On Air Product    ${product}
+    #Line3
+    Comment    Set FOP Type For Accounting Lines
+    Verify Specific Remark Is Written In The PNR    RM *MSX/S${total_vat_gst}/SF${total_vat_gst}/C0/SG${segment_number}/${fop_type}
+    #Line4 only if FOP Type is CC
+    ${charges_cc_expiry_date}    Remove String    ${charges_cc_expiry_date}    /
+    Run Keyword If    "${fop}"=="Credit Card (CC)"    Verify Specific Remark Is Written In The PNR    RM *MSX/CCN${charges_cc_type}${charges_card_number}EXP${charges_cc_expiry_date}/D${total_vat_gst}
+    ...    ELSE    Verify Specific Remark Is Not Written In The PNR    RM *MSX/CCN${charges_cc_type}${charges_card_number}EXP${charges_cc_expiry_date}/D${total_vat_gst}
+    #Line5
+    Verify Specific Remark Is Written In The PNR    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    #Line6
+    Verify Specific Remark Is Written In The PNR    RM *MSX/FF VAT
+
+Verify Acounting Lines For Merchant Fee Of EO Are Written
+    [Arguments]    ${product}    ${fop}=${EMPTY}    ${segment_number}=${EMPTY}
+    Verify Specific Line Is Written In The PNR    RM *MS/PC40/V00800004/TK${eo_number}/PX1
+    Verify PO And GSA Line Is Written Depending On Air Product    ${product}
+    Set FOP Type For Accounting Lines    ${fop}
+    Verify Specific Line Is Written In The PNR    RM *MSX/S${total_merchant_fee}/SF${total_merchant_fee}/C${total_merchant_fee}/SG${segment_number}/${fop_type}
+    ${charges_cc_expiry_date}    Replace String    ${charges_cc_expiry_date}    /    ${EMPTY}
+    Log    ${charges_cc_expiry_date}
+    Set Suite Variable    ${charges_cc_expiry_date}
+    Verify Specific Line Is Written In The PNR    RM *MSX/CCN${charges_cc_type}${charges_card_number}EXP${charges_cc_expiry_date}/D${total_merchant_fee}
+    ${value1}    Evaluate    ${total_merchant_fee}*0.01*14
+    ${value1}    Round Apac    ${value1}    IN
+    ${value2}    Evaluate    ${total_merchant_fee}*0.01*0.5
+    ${value2}    Round Apac    ${value2}    IN
+    ${value3}    Evaluate    ${total_merchant_fee}*0.01*0.5
+    ${value3}    Round Apac    ${value3}    IN
+    Verify Specific Line Is Written In The PNR    RM *MSX/FF99-14P${value1}*0.5P${value2}*0.5P${value3}
+    Verify Specific Line Is Written In The PNR    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    Verify Specific Line Is Written In The PNR    RM *MSX/FF MERCHANT FEE
+    ${ff99_value}    Evaluate    ${value1}+${value2}+${value3}
+    Set Suite Variable    ${ff99_value}
+
+Verify Acounting Lines For VAT For Merchant Fee Of EO Are Written
+    [Arguments]    ${product}    ${fop}=${EMPTY}    ${segment_number}=${EMPTY}
+    Run Keyword And Continue On Failure    Verify Specific Line Is Written In The PNR    RM *MS/PC87/V00800011/TK${eo_number}/PX1
+    Run Keyword And Continue On Failure    Run Keyword if    ("${product.lower()}"=="air bsp" or "${product.lower()}"=="air domestic") and "${charges_other_related_no}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM *MSX/PO${charges_other_related_no.upper()}
+    Verify PO And GSA Line Is Written Depending On Air Product    ${product}
+    Set FOP Type For Accounting Lines    ${fop}
+    Run Keyword And Continue On Failure    Verify Specific Line Is Written In The PNR    RM *MSX/S${ff99_value}/SF${ff99_value}/C0/SG${segment_number}/${fop_type}
+    Run Keyword And Continue On Failure    Verify Specific Line Is Written In The PNR    RM *MSX/CCN${charges_cc_type}${charges_card_number}EXP${charges_cc_expiry_date}/D${ff99_value}
+    Run Keyword And Continue On Failure    Verify Specific Line Is Written In The PNR    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    Run Keyword And Continue On Failure    Verify Specific Line Is Written In The PNR    RM *MSX/FF VAT
+
+Verify Accounting Lines For Transaction Fee Are Written
+    [Arguments]    ${product}    ${fop}=${EMPTY}    ${segment_number}=${EMPTY}
+    Calculate FF99 Value In Charges
+    Set FOP Type For Accounting Lines    ${fop}
+    #Verify PNR Remarks
+    Verify Specific Remark Is Written In The PNR    RM *MS/PC35/V00800001/TK${eo_number}/PX1
+    Run Keyword And Continue On Failure    Verify PO And GSA Line Is Written Depending On Air Product    ${product}
+    Run Keyword And Continue On Failure    Verify Specific Remark Is Written In The PNR    RM *MSX/S${fee}/SF${fee}/C${fee}/SG${segment_number}/${fop_type}
+    Run Keyword And Continue On Failure    Run Keyword If    "${fop}"=="Credit Card (CC)"    Verify Specific Remark Is Written In The PNR    RM *MSX/CCN${charges_cc_type.upper()}${charges_card_number}EXP${charges_cc_expiry_date}/D${fee}
+    Run Keyword And Continue On Failure    Verify Specific Remark Is Written In The PNR    RM *MSX/FF99-${ff99_string}
+    Run Keyword And Continue On Failure    Verify Specific Remark Is Written In The PNR    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    Run Keyword And Continue On Failure    Verify Specific Remark Is Written In The PNR    RM *MSX/FF TRANSACTION FEE-AIR ONLY
+
+Verify Accounting Lines For VAT For Transaction Fee Are Written
+    [Arguments]    ${product}    ${fop}=${EMPTY}    ${segment_number}=${EMPTY}
+    Calculate FF99 Value In Charges
+    Set FOP Type For Accounting Lines    ${fop}
+    #Verify Accounting Lines
+    Verify Specific Remark Is Written In The PNR    RM *MS/PC87/V00800011/TK${eo_number}/PX1
+    Run Keyword And Continue On Failure    Verify PO And GSA Line Is Written Depending On Air Product    ${product}
+    Run Keyword And Continue On Failure    Verify Specific Remark Is Written In The PNR    RM *MSX/S${ff99_value}/SF${ff99_value}/C0/SG${segment_number}/${fop_type}
+    Run Keyword If    "${fop}"=="Credit Card (CC)"    Verify Specific Remark Is Written In The PNR    RM *MSX/CCN${charges_cc_type.upper()}${charges_card_number}EXP${charges_cc_expiry_date}/D${ff99_value}
+    Verify Specific Remark Is Written In The PNR    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    Verify Specific Remark Is Written In The PNR    RM *MSX/FF VAT
+
+Verify Accounting Lines For Rebate Are Written
+    [Arguments]    ${product}    ${fop}=${EMPTY}    ${segment_number}=${EMPTY}
+    Set FOP Type For Accounting Lines    ${fop}
+    #Verify Accounting Lines
+    Run Keyword And Continue On Failure    Verify Specific Remark Is Written In The PNR    RM *MS/PC50/V00800003/TK${eo_number}/PX1
+    Run Keyword And Continue On Failure    Verify PO And GSA Line Is Written Depending On Air Product    ${product}
+    Run Keyword And Continue On Failure    Verify Specific Remark Is Written In The PNR    RM *MSX/S-${total_discount}/SF-${total_discount}/C-${total_discount}/SG${segment_number}/${fop_type}
+    ${charges_cc_expiry_date}    Remove String    ${charges_cc_expiry_date}    /
+    Run Keyword And Continue On Failure    Run Keyword If    "${fop}"=="Credit Card (CC)"    Verify Specific Remark Is Written In The PNR    RM *MSX/CCN${charges_cc_type}${charges_card_number}EXP${charges_cc_expiry_date}/D-${total_discount}
+    Run Keyword And Continue On Failure    Verify Specific Remark Is Written In The PNR    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    Run Keyword And Continue On Failure    Verify Specific Remark Is Written In The PNR    RM *MSX/FF REBATE
+
+Verify Acounting Lines For Merchant Fee Of EO Are Not Written
+    [Arguments]    ${fop}=${EMPTY}    ${segment_number}=${EMPTY}
+    Verify Specific Line Is Not Written In The PNR    RM *MS/PC40/V00800004/TK${eo_number}/PX1
+    Set FOP Type For Accounting Lines    ${fop}
+    Verify Specific Line Is Not Written In The PNR    RM *MSX/S${total_merchant_fee}/SF${total_merchant_fee}/C${total_merchant_fee}/SG${segment_number}/${fop_type}
+    Verify Specific Line Is Not Written In The PNR    RM *MSX/CCN${charges_cc_type}${charges_card_number}EXP${charges_cc_expiry_date}/D${total_merchant_fee}
+    ${value1}    Evaluate    ${total_merchant_fee}*0.01*14
+    ${value1}    Round Apac    ${value1}    India
+    ${value2}    Evaluate    ${total_merchant_fee}*0.01*0.5
+    ${value2}    Round Apac    ${value2}    India
+    ${value3}    Evaluate    ${total_merchant_fee}*0.01*0.5
+    ${value3}    Round Apac    ${value3}    India
+    Verify Specific Line Is Not Written In The PNR    RM *MSX/FF99-14P${value1}*0.5P${value2}*0.5P${value3}/FF34-AB/FF35-OTH
+    Comment    Verify Specific Line Is Not Written In The PNR    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    Comment    Verify Specific Line Is Not Written In The PNR    RM*MSX/FF MERCHANT FEE
+
+Verify Acounting Lines For VAT For Merchant Fee Of EO Are Not Written
+    [Arguments]    ${fop}=${EMPTY}    ${segment_number}=${EMPTY}
+    Comment    Verify Specific Line Is Not Written In The PNR    RM *MS/PC87/V00800011/TK${eo_number}/PX1
+    Set FOP Type For Accounting Lines    ${fop}
+    Verify Specific Line Is Not Written In The PNR    RM *MSX/S0/SF0/C0/SG${segment_number}/${fop_type}
+    Verify Specific Line Is Not Written In The PNR    RM *MSX/CCN${charges_cc_type}${charges_card_number}EXP${charges_cc_expiry_date}/D0
+    Comment    Verify Specific Line Is Not Written In The PNR    RM*MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    Comment    Verify Specific Line Is Not Written In The PNR    RM*MSX/FF VAT
+
+Verify Accounting Lines For Transaction Fee Are Not Written
+    [Arguments]    ${product}    ${fop}=${EMPTY}    ${segment_number}=${EMPTY}
+    Set FOP Type For Accounting Lines    ${fop}
+    #Verify PNR Remarks
+    Comment    Verify Specific Remark Is Not Written In The PNR    RM *MS/PC35/V00800001/TK${eo_number}/PX1
+    Comment    Verify PO And GSA Line Is Written Depending On Air Product    ${product}
+    Verify Specific Remark Is Not Written In The PNR    RM *MSX/S0/SF0/C0/SG${segment_number}/${fop_type}
+    Run Keyword If    "${fop}"=="Credit Card (CC)"    Verify Specific Remark Is Not Written In The PNR    RM *MSX/CCN${charges_cc_type.upper()}${charges_card_number}EXP${charges_cc_expiry_date}/D0
+    Verify Specific Remark Is Not Written In The PNR    RM *MSX/FF99-14P0*0.5P0*0.5P0
+    Comment    Verify Specific Remark Is Not Written In The PNR    RM *MSX/FF TRANSACTION FEE-AIR ONLY
+
+Verify Accounting Lines For VAT For Transaction Fee Are Not Written
+    [Arguments]    ${product}    ${fop}=${EMPTY}    ${segment_number}=${EMPTY}
+    Set FOP Type For Accounting Lines    ${fop}
+    #Verify Accounting Lines
+    Comment    Verify Specific Remark Is Not Written In The PNR    RM *MS/PC87/V00800011/TK${eo_number}/PX1
+    Comment    Run Keyword And Continue On Failure    Verify PO And GSA Line Is Written Depending On Air Product    ${product}
+    Verify Specific Remark Is Not Written In The PNR    RM *MSX/S0/SF0/C0/SG${segment_number}/${fop_type}
+    Run Keyword And Continue On Failure    Run Keyword If    "${fop}"=="Credit Card (CC)"    Verify Specific Remark Is Not Written In The PNR    RM *MSX/CCN${charges_cc_type.upper()}${charges_card_number}EXP${charges_cc_expiry_date}/D0
+    Comment    Run Keyword If    Verify Specific Remark Is Not Written In The PNR    RM *MSX/FF VAT
+
+Verify Accounting Lines For Rebate Are Not Written
+    [Arguments]    ${product}    ${fop}    ${segment_number}=${EMPTY}
+    Set FOP Type For Accounting Lines    ${fop}
+    #Verify Accounting Lines
+    Comment    Run Keyword And Continue On Failure    Run Keyword If    ${total_discount_c}==0    Verify Specific Remark Is Not Written In The PNR    RM *MS/PC50/V00800003/TK${eo_number}/PX1
+    Run Keyword And Continue On Failure    Verify Specific Remark Is Not Written In The PNR    RM *MSX/S-${total_discount}/SF-${total_discount}/C-${total_discount}/SG${segment_number}/${fop_type}
+    Run Keyword And Continue On Failure    Run Keyword If    "${fop}"=="Credit Card (CC)"    Verify Specific Remark Is Not Written In The PNR    RM *MSX/CCN${charges_cc_type}${charges_card_number}EXP${charges_cc_expiry_date}/D-${total_discount}
+    Comment    Run Keyword And Continue On Failure    Run Keyword If    ${total_discount_c}==0    Verify Specific Remark Is Not Written In The PNR    RM *MSX/FF REBATE
+
+Verify If Product Is Included In List For Commission Line Update
+    [Arguments]    ${product}    ${country}
+    [Documentation]    This keyword generates a list based on the Products specified in US1096 where the value for the "\C" in the accounting remarks are taken from the "Total Selling Price" instead of "Commission"
+    @{sg_product_list}    Create List    24 HOURS EMERGENCY SVCS    AIR COMMISSION RETURNED    AIRLINE PENALTY FEE    CAR - LOCAL BOOKING FEE    CAR - OVERSEAS BOOKING FEE
+    ...    CWT REFUND ADMIN FEE    CWT TO GO HOTEL FEE    DOCUMENTATION FEE    HOTEL - LOCAL BOOKING FEE    HOTEL - OVERSEAS BOOKING FEE    MANAGEMENT FEE
+    ...    MISC - LOCAL BOOKING FEE    MISC - OVERSEAS BOOKING FEE    REISSUE-REVALIDATION FEE    TRANSACTION FEE    VISA HANDLING FEE
+    @{hk_product_list}    Create List    24 EMERGENCY SERVICE FEE    C2G HOTEL FEE    DOC BANK FEE    HANDLING FEE    LOW COST CARRIER SVC FEE
+    ...    REVALIDATION FEE    SVC Fee for Surcharges    TRANSACTION FEE    WF - CWT NEGOTIATED FARE SAVING ACCEPTED    XX - NO SAVING
+    ${us1096_product_list}    Set Variable If    '${country.upper()}' == 'SG'    ${sg_product_list}    ${hk_product_list}
+    ${is_found}    Set Variable    False
+    : FOR    ${entry}    IN    @{us1096_product_list}
+    \    ${is_found}    Set Variable If    "${entry}" == "${product.upper()}"    True    False
+    \    Run Keyword If    "${is_found}" == "True"    Exit For Loop
+    Comment    ${text}    Set Variable If    "${is_found}" == "True"    ${product} is found    ${product} is NOT found
+    Comment    Log    ${text}
+    Log    ${is_found}
+    Comment    ${product_list}    Run Keyword If    ${country} == 'sg'    Create List    24 HOURS EMERGENCY SVCS    AIR COMMISSION RETURNED
+    ...    AIRLINE PENALTY FEE    CAR - LOCAL BOOKING FEE    CAR - OVERSEAS BOOKING FEE    CWT REFUND ADMIN FEE    CWT TO GO HOTEL FEE    DOCUMENTATION FEE
+    ...    HOTEL - LOCAL BOOKING FEE    HOTEL - OVERSEAS BOOKING FEE    MANAGEMENT FEE    MISC - LOCAL BOOKING FEE    MISC - OVERSEAS BOOKING FEE    REISSUE-REVALIDATION FEE
+    ...    TRANSACTION FEE    VISA HANDLING FEE
+    ...    ELSE IF    Create List    24 EMERGENCY SERVICE FEE    C2G HOTEL FEE    DOC BANK FEE    HANDLING FEE
+    ...    LOW COST CARRIER SVC FEE    REVALIDATION FEE    SVC Fee for Surcharges    TRANSACTION FEE    WF - CWT NEGOTIATED FARE SAVING ACCEPTED    XX - NO SAVING
+    ...    ELSE    Create List    No Product
+    Comment    Run Keyword And Return Status    Should Contain
+    [Return]    ${is_found}
+
+Verify Itinerary Remarks Are Written For Train
+    [Arguments]    ${identifier}
+    ${date_value}    Set Variable    ${date_value${identifier.lower()}}
+    ${time_value}    Set Variable    ${time_value${identifier.lower()}}
+    ${origin}    Set Variable    ${origin${identifier.lower()}}
+    ${destination}    Set Variable    ${destination${identifier.lower()}}
+    ${train_number}    Set Variable    ${train_number${identifier.lower()}}
+    ${name}    Set Variable    ${name${identifier.lower()}}
+    ${class_cabin}    Set Variable    ${class_cabin${identifier.lower()}}
+    ${time_value}    Convert Time From IN To GDS Format    ${time_value}
+    ${date_value}    Convert Date From IN To GDS Format    ${date_value}
+    Get Passive Segment Number    ${date_passive_segment}
+    Verify Specific Line Is Written In The PNR    RIR ${date_value} ${time_value} ${origin.upper()}/${destination.upper()}/S${segment_number.strip()}    false    false    true
+    Verify Specific Line Is Written In The PNR    RIR NO:${train_number} NAME:${name.upper()} CLASS:${class_cabin.upper()}/S${segment_number.strip()}    false    false    true
+
+Verify BA And TA Remarks
+    [Arguments]    ${user_id}
+    ${power_express_label}    Win Get Title    ${title_power_express}    ${EMPTY}
+    ${is_logged_in_as}    Run Keyword And Return Status    Should Contain    ${power_express_label}    logged in as
+    ${user_id}    Run Keyword If    ${is_logged_in_as}    Get Regexp Matches    ${power_express_label}    .*logged in as (\\w*).*    1
+    ...    ELSE    Get Regexp Matches    ${power_express_label}    .*\\[(\\w*)    1
+    &{selco_sign_in}    Create Dictionary    UEXR493=7041ER    U004HXC=7034HC    U003AXO=0162AO    #U003JDC=
+    ${login_in}    Get From Dictionary    ${selco_sign_in}    ${user_id[0]}
+    Verify Multiple Remarks Are Written In The PNR    RM *BA/${login_in}    RM *TA/${login_in}
+
+Verify General Remarks Lines When Product is Train Dom
+    Run Keyword And Continue On Failure    Run Keyword If    "${custom_field_values[0]}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT\\*TICKET TYPE:${custom_field_values[0].upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${custom_field_values[1]}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT\\*ID TYPE:${custom_field_values[1].upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${custom_field_values[2]}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT\\*ID ISSUING AUTH:${custom_field_values[2].upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${custom_field_values[3]}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT\\*ID NUMBER:${custom_field_values[3].upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${custom_field_values[4]}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT\\*NO. OF PAX:${custom_field_values[4].upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${custom_field_values[5]}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT\\*TVL WITHIN 24HRS:${custom_field_values[5].upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${custom_field_values[6]}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT\\*AGE:${custom_field_values[6].upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${custom_field_values[7]}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT\\*GENDER:${custom_field_values[7].upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${custom_field_values[8]}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT\\*TRAVEL DESK EMAIL:${custom_field_values[8].upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+
+Verify General Remarks Lines When Product is Transaction Charges
+    Run Keyword And Continue On Failure    Run Keyword If    "${custom_field_values[0]}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT\\*ID TYPE:${custom_field_values[0].upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${custom_field_values[1]}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT\\*ID NO:${custom_field_values[1].upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+    Run Keyword And Continue On Failure    Run Keyword If    "${custom_field_values[5]}"!="${EMPTY}"    Verify Specific Line Is Written In The PNR    RM DT\\*TICKET TYPE:${custom_field_values[5].upper()} ${a_sign} ${eo_date}\\s\\d{4}Z    true
+
+Verify MCO Remarks Are Written Correctly In The PNR
+    [Arguments]    ${eo_date}    ${last_2_digit_agent_id}
+    ${first_name} =    Get First Name
+    ${last_name} =    Get Last Name
+    log    ${last_name}/${first_name}
+    Verify Specific Line Is Written In The PNR    RM M\\*\\s\\W{11}\\sMCO REQUEST\\s\\W{11}\\s${last_2_digit_agent_id} ${eo_date}\\s\\d{4}\\w    true
+    Verify Specific Line Is Written In The PNR    RM M\\*TRAVELLER\\-${last_name}/${first_name} ${last_2_digit_agent_id} ${eo_date}\\s\\d{4}\\w    true
+    Verify Specific Line Is Written In The PNR    RM M\\*SERVICE\\-${mco_type_of_service.upper()} ${last_2_digit_agent_id} ${eo_date}\\s\\d{4}\\w    true
+    Verify Specific Line Is Written In The PNR    RM M\\*LOCATION OF ISSUANCE\\-${mco_location_of_issuance.upper()} ${last_2_digit_agent_id} ${eo_date}\\s\\d{4}\\w    true
+    Verify Specific Line Is Written In The PNR    RM M\\*CONTACT\\-${mco_contact.upper()} ${last_2_digit_agent_id} ${eo_date}\\s\\d{4}\\w    true
+    Verify Specific Line Is Written In The PNR    RM M\\*FOP\\-${mco_fop.upper()} ${last_2_digit_agent_id} ${eo_date}\\s\\d{4}\\w    true
+    Verify Specific Line Is Written In The PNR    RM M\\*EQUIV AMT PAID\\-${mco_equiv_amt_paid} ${last_2_digit_agent_id} ${eo_date}\\s\\d{4}\\w    true
+    Verify Specific Line Is Written In The PNR    RM M\\*RATE OF EXCHANGE\\-${mco_exchange_rate} ${last_2_digit_agent_id} ${eo_date}\\s\\d{4}\\w    true
+    Verify Specific Line Is Written In The PNR    RM M\\*HEADLINE CURRENCY\\-${mco_headline_currency.upper()} ${last_2_digit_agent_id} ${eo_date}\\s\\d{4}\\w    true
+    Verify Specific Line Is Written In The PNR    RM M\\*TAXES\\-${mco_taxes} ${last_2_digit_agent_id} ${eo_date}\\s\\d{4}\\w    true
+    Run Keyword If    "${mco_issue_in_exchange_for}" != "${EMPTY}"    Verify Specific Line Is Written In The PNR    RM M\\*ISSUED IN EXCH FOR\\-${mco_issue_in_exchange_for.upper()} ${last_2_digit_agent_id} ${eo_date}\\s\\d{4}\\w    true
+    Run Keyword If    "${mco_in_conjunction_with}" != "${EMPTY}"    Verify Specific Line Is Written In The PNR    RM M\\*IN CONJUCTION WITH\\-${mco_in_conjunction_with.upper()} ${last_2_digit_agent_id} ${eo_date}\\s\\d{4}\\w    true
+    Run Keyword If    "${mco_original_fop}" != "${EMPTY}"    Verify Specific Line Is Written In The PNR    RM M\\*IN ORIGINAL FOP\\-${mco_original_fop.upper()} ${last_2_digit_agent_id} ${eo_date}\\s\\d{4}\\w    true
+    Run Keyword If    "${mco_original_place_of_issue}" != "${EMPTY}"    Verify Specific Line Is Written In The PNR    RM M\\*IN ORIGINAL PLACE OF ISSUE\\-${mco_original_place_of_issue.upper()} ${last_2_digit_agent_id} ${eo_date}\\s\\d{4}\\w    true
+    ${is_first_entry}    Set Variable    True
+    : FOR    ${remarks}    IN    @{actual_free_text_remarks}
+    \    Run Keyword If    "${is_first_entry}" == "True"    Verify Specific Line Is Written In The PNR    RM M\\*REMARKS\\-${remarks.upper()} MCO ${last_2_digit_agent_id} ${eo_date}\\s\\d{4}\\w    true
+    \    ...    ELSE    Verify Specific Line Is Written In The PNR    RM M\\*${remarks.upper()} ${last_2_digit_agent_id} ${eo_date}\\s\\d{4}\\w    true
+    \    ${is_first_entry}    Set Variable If    "${is_first_entry}" == "True"    False
+    Verify Specific Line Is Written In The PNR    RM M\\*\\s\\W{34}\\s${last_2_digit_agent_id} ${eo_date}\\s\\d{4}\\w    true
+
+Verify That Previous Accounting Lines For Visa Processing Are Deleted
+    Run Keyword And Continue On Failure    Verify Specific Remark Is Not Written In The PNR    ${visa_processing_line2}
+    Run Keyword And Continue On Failure    Verify Specific Remark Is Not Written In The PNR    ${visa_processing_line3}
+    Run Keyword And Continue On Failure    Verify Specific Line Is Written In The PNR X Times    ${visa_processing_line4}    1
+    Run Keyword And Continue On Failure    Verify Specific Remark Is Not Written In The PNR    ${visa_processing_line1}
+    Run Keyword And Continue On Failure    Verify Specific Line Is Written In The PNR X Times    RM *MSX/FF35-AMA/FF36-M/FF47-CWT    1
+    Run Keyword And Continue On Failure    Verify Specific Line Is Written In The PNR X Times    RM *MSX/FF VISA PROCESSING    1
+
+Verify Other Services Consolidator Ticket and LCC With Additional Fee Remarks Are Not Written
+    [Documentation]    This Keyword is to check whether Accounting lines are not appending.
+    ...
+    ...    ***Accounting Lines Need to be amended***Not Appended
+    ...
+    ...
+    ...
+    ...    Below Lines are coming From Previous scripts,Keyword Name is "( Verify Other Services Consolidator Ticket and LCC With Additional Fee Remarks)"
+    ...    Line2
+    ...    Line3
+    ...    Line4
+    ${conso_2}    Get Variable Value    ${conso_line2}    None
+    ${conso_3}    Get Variable Value    ${conso_line3}    None
+    ${conso_4}    Get Variable Value    ${conso_line4}    None
+    Run Keyword If    "${conso_2}"!="${EMPTY}" and "${conso_2}"!="None"    Verify Specific Line Is Not Written In The PNR    ${conso_2}
+    Run Keyword If    "${conso_3}"!="${EMPTY}" and "${conso_3}"!="None"    Verify Specific Line Is Not Written In The PNR    ${conso_3}
+    Run Keyword If    "${conso_4}"!="${EMPTY}" and "${conso_4}"!="None"    Verify Specific Line Is Not Written In The PNR    ${conso_4}
+
+Verify BSP Ticket Accounting Remarks Are Written Not Written
+    [Documentation]    This Keyword is to check whether Accounting lines are not appending.
+    ...
+    ...    ***Accounting Lines Need to be amended***Not Appended
+    ...
+    ...
+    ...
+    ...    Below Lines are coming From Previous scripts,Keyword Name is "( Verify BSP Ticket Accounting Remarks Are Written)"
+    ...    Line2
+    ...    Line3
+    ...    Line4
+    Run Keyword And Continue On Failure    Run Keyword If    "${bsp_line2}"!="${EMPTY}"    Verify Specific Line Is Not Written In The PNR    ${bsp_line2}
+    Run Keyword And Continue On Failure    Run Keyword If    "${bsp_line3}"!="${EMPTY}"    Verify Specific Line Is Not Written In The PNR    ${bsp_line3}
+    Run Keyword And Continue On Failure    Run Keyword If    "${bsp_line4}"!="${EMPTY}"    Verify Specific Line Is Not Written In The PNR    ${bsp_line4}    multi_line_search_flag =true
+    Run Keyword And Continue On Failure    Run Keyword If    "${bsp_line5}"!="${EMPTY}"    Verify Specific Line Is Not Written In The PNR    ${bsp_line5}
+    Run Keyword And Continue On Failure    Run Keyword If    "${bsp_line6}"!="${EMPTY}"    Verify Specific Line Is Not Written In The PNR    ${bsp_line6}    multi_line_search_flag =true
+    Run Keyword And Continue On Failure    Run Keyword If    "${bsp_line7}"!="${EMPTY}"    Verify Specific Line Is Not Written In The PNR    ${bsp_line7}
+
+Verify Other Services Consolidator Ticket And LCC Generic Accounting Remarks Are Not Written
+    [Documentation]    This Keyword is to check whether Accounting lines are not appending.
+    ...
+    ...    ***Accounting Lines Need to be amended***Not Appended
+    ...
+    ...
+    ...
+    ...    Below Lines are coming From Previous scripts,Keyword Name is "(Verify Other Services Consolidator Ticket And LCC Generic Accounting Remarks)"
+    ...    Line2
+    ...    Line3
+    ...    Line4
+    ${conso_generic_2}    Get Variable Value    ${conso_generic_line2}    None
+    ${conso_generic_3}    Get Variable Value    ${conso_generic_line3}    None
+    Run Keyword If    "${conso_generic_2}"!="${EMPTY}" and "${conso_generic_2}"!="None"    Verify Specific Line Is Not Written In The PNR    ${conso_generic_line2}
+    Run Keyword If    "${conso_generic_3}"!="${EMPTY}" and "${conso_generic_3}"!="None"    Verify Specific Line Is Not Written In The PNR    ${conso_generic_line3}
+
+Verify Other Services With GST Accounting General Remarks Are Not Written
+    [Documentation]    This Keyword is to check whether Accounting lines are not appending.
+    ...
+    ...    ***Accounting Lines Need to be amended***Not Appended
+    ...
+    ...
+    ...
+    ...    Below Lines are coming From Previous scripts,Keyword Name is "(Verify Other Services With GST Accounting General Remarks)"
+    ...    Line2
+    ...    Line3
+    ...    Line4
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${accounting_remarks_first_line}
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${gst_line2}
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${gst_line3}//$    true
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${accounting_remarks_last_line}
+    Verify Other Services Credit Card Fees Accounting Remarks Are Not Written
+
+Verify Other Services Transaction Fee Generic Accounting Remarks Are Not Written
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${product_vendor_line1}
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${fees_line2}
+    Comment    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${booking_line3}
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${bta_description_line4}
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${product_description_line5}
+
+Verify Previous Accounting Remarks For Other Services Without GST Are Deleted When FOP is CX And BTA Is Not Blank
+    Run Keyword And Continue On Failure    Verify Specific Remark Is Not Written In The PNR    RM *MSX/A730/SF730/C730/FCC
+    Run Keyword And Continue On Failure    Verify Specific Remark Is Not Written In The PNR    RM *MSX/CCNVI4444333322221111EXP0123/D730
+    Verify Specific Line Is Written In The PNR X Times    ${accounting_remarks_first_line}    1
+    Verify Specific Line Is Written In The PNR X Times    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT    2
+    Verify Specific Line Is Written In The PNR X Times    ${accounting_remarks_last_line}    1
+
+Verify Previous Accounting Remarks For Other Services Without GST Are Deleted When FOP is CX And BTA Is Blank
+    Run Keyword And Continue On Failure    Verify Specific Remark Is Not Written In The PNR    RM *MSX/A745/SF745/C115/FCX5
+    Run Keyword And Continue On Failure    Verify Specific Remark Is Not Written In The PNR    RM *MSX/CCNTP3530111333300000EXP1222/D745
+    Run Keyword And Continue On Failure    Verify Specific Line Is Written In The PNR X Times    ${accounting_remarks_first_line}    1
+    Run Keyword And Continue On Failure    Verify Specific Line Is Written In The PNR X Times    RM *MSX/FF8-FF/FF34-AB/FF35-AMA/FF36-M/FF47-CWT    1
+    Run Keyword And Continue On Failure    Verify Specific Line Is Written In The PNR X Times    ${accounting_remarks_last_line}    1
+
+Verify Previous Accounting Remarks For Hotel Info are Overwritten
+    Verify Specific Line Is Written In The PNR X Times    ${hotel_accounting_line1}    1
+    Verify Specific Line Is Written In The PNR X Times    ${hotel_accounting_line2}    1
+    Verify Specific Line Is Written In The PNR X Times    ${hotel_accounting_line3}    2
+    Verify Specific Line Is Written In The PNR X Times    ${hotel_accounting_line4}    2
+
+Verify Previous Accounting Remarks Are Not Written Twice When MCO/MPD Tab is Present
+    Run Keyword And Continue On Failure    Verify Specific Line Is Written In The PNR X Times    RM *MS/PC0/V000252/AC123/TK2222222222/PX1    1
+    Run Keyword And Continue On Failure    Verify Specific Line Is Written In The PNR X Times    RM *MSX/A4800/SF4800/C0/SG02/S2    1
+    Run Keyword And Continue On Failure    Verify Specific Line Is Written In The PNR X Times    RM *MSX/FS/R4900/L4444/EI/FF7-ABC/FF8-FC/FF81-BB    1
+    Run Keyword And Continue On Failure    Verify Specific Line Is Written In The PNR X Times    RM *MSX/FF38-ET/FF30-RF/FF31-N/FF34-AB/FF35-AMA/FF36-M    1
+    Run Keyword And Continue On Failure    Verify Specific Line Is Written In The PNR X Times    RM *MSX/EX4444444444    1
+
+Verify Other Services Credit Card Fees Accounting Remarks Are Not Written
+    Comment    Verify Other Services Credit Card Fees Accounting Remarks Are Written    #For reference
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${other_services_cc_line2}
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${other_services_cc_line3}
+
+Verify Visa Handling Remarks Are Not Written When FOP Is Credit Card In The PNR
+    Verify Specific Line Is Not Written In The PNR    ${visa_handling_line2}
+    Verify Specific Line Is Not Written In The PNR    ${visa_handling_line3}
+
+Verify Arrival To Tab Field Values
+    [Arguments]    ${expected_arrivalfrom_location}    ${expected_arrivalfrom_desc}    ${expected_arrivalfrom_tel}
+    Get Location Value
+    Get Description Value
+    Verify Actual Value Matches Expected Value    ${location_value}    ${expected_arrivalfrom_location}
+    Verify Actual Value Matches Expected Value    ${description_value}    ${expected_arrivalfrom_desc}
+    Get Tel Value
+    Verify Actual Value Matches Expected Value    ${tel_value}    ${expected_arrivalfrom_tel}
+
+Verify Arrival From Tab Field Values
+    [Arguments]    ${expected_arrivalto_location}    ${expected_arrivalto_desc}
+    Get Location Value
+    Get Description Value
+    Verify Actual Value Matches Expected Value    ${location_value}    ${expected_arrivalto_location}
+    Verify Actual Value Matches Expected Value    ${description_value}    ${expected_arrivalto_desc}
+    Get Flight Value
+    Verify Actual Value Matches Expected Value    ${actual_default_flight_value}    ${actual_default_flight_value_arrival_from}
+    Get Date & Time Value
+    Comment    Verify Actual Value Matches Expected Value    ${date_and_time}    ${expected_arrivalto_date&time}
+
+Verify Departure From Tab Field Values
+    [Arguments]    ${expected_departurefrom_location}    ${expected_departurefrom_desc}    ${expected_departurefrom_tel}
+    Get Location Value
+    Get Description Value
+    Verify Actual Value Matches Expected Value    ${location_value}    ${expected_departurefrom_location}
+    Verify Actual Value Matches Expected Value    ${description_value}    ${expected_departurefrom_desc}
+    Get Tel Value
+    Verify Actual Value Matches Expected Value    ${tel_value}    ${expected_departurefrom_tel}
+
+Verify Departure To Tab Field Values
+    [Arguments]    ${expected_departureto_location}    ${expected_departureto_desc}
+    Get Location Value
+    Verify Actual Value Matches Expected Value    ${location_value}    ${expected_departureto_location}
+    Get Description Value
+    Verify Actual Value Matches Expected Value    ${description_value}    ${expected_departureto_desc}
+    Get Flight Value
+    Verify Actual Value Matches Expected Value    ${actual_default_flight_value}    ${actual_default_flight_value_departure_to}
+    Get Date & Time Value
+    Comment    Verify Actual Value Matches Expected Value    ${date_and_time}    ${expected_departureto_date&time}
+
+Verify Vendor Info Fields for Car Transfer Product
+    [Arguments]    ${expected_vendor}
+    ${vendor}    Get Control Text Value
+    Set Suite Variable    ${vendor}
+    Verify Actual Value Matches Expected Value    ${vendor}    ${expected_vendor}
+
+Verify That Car Remarks Are Written In PNR When FOP is CX
+    [Arguments]    ${product_name}    ${vendor_name}    ${country}=SG
+    ${product_code_number}    Get Product Code    ${country}    ${product_name}
+    ${vendor_code_number}    Get Vendor Code    ${country}    ${product_name}    ${vendor_name}
+    ${fop_exp_date}    Set Variable    ${expiry_month}${short_expiry_year}
+    ${market_identifier}    Set Variable If    "${country}" == "SG"    S    A
+    ${passenger_id}    Get Variable Value    ${passenger_id}    1
+    ${gst}    Get Variable Value    ${gst}    ${EMPTY}
+    ${gst_computed_value}    Evaluate    ${total_selling_price} * 7 * 0.01
+    ${gst_computed_value}    Run Keyword If    "${country}" == "SG"    Round APAC    ${gst_computed_value}    SG
+    ${card_vendor_type}    Get Variable Value    ${form_of_payment_vendor}    ${EMPTY}
+    ${fop_code}    Run Keyword If    "${fop_type}" == "Credit Card (CX)"    Get Credit Card Vendor Code    ${card_vendor_type}
+    ...    ELSE    Set Variable    CC
+    ${selling_price_with_gst}    Run Keyword If    "${gst}" != "${EMPTY}" and "${country}" == "SG"    Evaluate    ${selling_price} + ${gst} + ${merchant_fee}
+    ...    ELSE    Set Variable    ${total_selling_price}
+    ${selling_price_with_gst}    Round APAC    ${selling_price_with_gst}    ${country}
+    ${is_included}    Verify If Product Is Included In List For Commission Line Update    ${product_name}    ${country}
+    ${fee}    Set Variable If    "${is_included}" == "True"    ${total_selling_price}    ${commission}
+    ${departure_from}    Set Variable If    "${date_time_checkbox_departure_to}" == "True" and "${date_time_checkbox_arrival_from}" == "False"    ${location_value_departure_from.upper()}    "${date_time_checkbox_departure_to}" == "False" and "${date_time_checkbox_arrival_from}" == "True"    ${location_value_arrival_from.upper()}    ${location_value_departure_from.upper()}
+    ${departure_to}    Set Variable If    "${date_time_checkbox_departure_to}" == "True" and "${date_time_checkbox_arrival_from}" == "False"    ${location_value_departure_to.upper()}    "${date_time_checkbox_departure_to}" == "False" and "${date_time_checkbox_arrival_from}" == "True"    ${location_value_arrival_to.upper()}    ${location_value_departure_to.upper()}
+    ${eo_number}    Get Variable Value    ${eo_number_${product_name}}    ${eo_number}
+    Verify Specific Remark Is Written In The PNR    RM *MS/PC${product_code_number}/V${vendor_code_number}/TK${eo_number}/PX${passenger_id}
+    Run Keyword If    "${country}" == "HK"    Verify Specific Remark Is Written In The PNR    RM *MSX/A${total_selling_price}/SF${total_selling_price}/C${fee}/F${fop_code}
+    ...    ELSE    Verify Specific Remark Is Written In The PNR    RM *MSX/S${total_selling_price}/SF${total_selling_price}/C${commission}/G${gst_computed_value}/F${fop_code}
+    ${card_number}    Get Variable Value    ${cc_number}    ${EMPTY}
+    ${card_number}    Set Variable If    '${card_number}'=='${EMPTY}'    ${credit_card_number}    ${EMPTY}
+    Verify Other Services Credit Card Fees Accounting Remarks Are Written    ${card_number}    ${card_vendor_type}    ${fop_exp_date}    ${short_expiry_year}    ${form_of_payment}    ${country}
+    ${date_and_time}    Split String    ${date_and_time_departure_to}    ${SPACE}
+    ${date}    Set Variable    ${date_and_time[0]}
+    ${time}    Set Variable    ${date_and_time[1]}
+    ${date_to}    Convert Date To Gds Format    ${date}    %d/%m/%Y    is_year_needed=true
+    Verify Specific Line Is Written In The PNR    RM \\*MSX/FF40-${departure_from.upper()}-${departure_to.upper()}/FF41-${date_to}\\s\\d{4}    true
+    Verify Specific Remark Is Written In The PNR    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    Verify Specific Remark Is Written In The PNR    RM *MSX/FF ${product_name.upper()}
+
+Verify That Car Remarks Are Written In PNR When FOP is Cash Or Invoice
+    [Arguments]    ${product}    ${vendor}    ${fop}    ${country}
+    Verify Other Services Generic Accounting Remarks    ${product}    ${vendor}    ${fop}    ${country}
+    ${gst_amount}    Get Variable Value    ${gst}    0
+    ${gst_computed_value}    Evaluate    ${total_selling_price} * 7 * 0.01
+    ${gst_computed_value}    Run Keyword If    "${country}" == "SG"    Round APAC    ${gst_computed_value}    SG
+    ${total_selling_price}    Round APAC    ${total_selling_price}    ${country}
+    ${is_included}    Verify If Product Is Included In List For Commission Line Update    ${product}    ${country}
+    ${fee}    Set Variable If    "${is_included}" == "True"    ${total_selling_price}    ${commission}
+    ${fee}    Round APAC    ${fee}    ${country}
+    ${departure_from}    Set Variable If    "${date_time_checkbox_departure_to}" == "True" and "${date_time_checkbox_arrival_from}" == "False"    ${location_value_departure_from.upper()}    "${date_time_checkbox_departure_to}" == "False" and "${date_time_checkbox_arrival_from}" == "True"    ${location_value_arrival_from.upper()}    ${location_value_departure_from.upper()}
+    ${departure_to}    Set Variable If    "${date_time_checkbox_departure_to}" == "True" and "${date_time_checkbox_arrival_from}" == "False"    ${location_value_departure_to.upper()}    "${date_time_checkbox_departure_to}" == "False" and "${date_time_checkbox_arrival_from}" == "True"    ${location_value_arrival_to.upper()}    ${location_value_departure_to.upper()}
+    Run Keyword If    "${country}" == "SG"    Verify Specific Line Is Written In The PNR    RM *MSX/S${total_selling_price}/SF${total_selling_price}/C${fee}/G${gst_computed_value}/FS
+    Run Keyword If    "${country}" == "HK"    Verify Specific Line Is Written In The PNR    RM *MSX/A${total_selling_price}/SF${total_selling_price}/C${fee}/FS/FF40-${departure_from}-${departure_to.upper()}
+    ${date_and_time}    Split String    ${date_and_time_departure_to}    ${SPACE}
+    ${date}    Set Variable    ${date_and_time[0]}
+    ${time}    Set Variable    ${date_and_time[1]}
+    ${date_to}    Convert Date To Gds Format    ${date}    %d/%m/%Y    is_year_needed=true
+    Run Keyword If    "${country}" == "SG"    Verify Specific Line Is Written In The PNR    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    Run Keyword If    "${country}" == "HK"    Verify Specific Line Is Written In The PNR    RM *MSX/FF36-M/FF47-CWT
+    Set Suite Variable    ${accounting_remarks_second_line_h}    RM *MSX/A${total_selling_price}/SF${total_selling_price}/C${fee}/FS/FF40-${departure_from}-${departure_to.upper()}
+    Set Suite Variable    ${accounting_remarks_third_line_h}    RM *MSX/FF36-M/FF47-CWT
+    Set Suite Variable    ${accounting_remarks_second_line_s}    RM *MSX/S${total_selling_price}/SF${total_selling_price}/C${fee}/G${gst_computed_value}/FS
+    Set Suite Variable    ${accounting_remarks_third_line_s}    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+
+Verify Other Service Air Product Accounting Remarks Are Written
+    [Arguments]    ${product_name}    ${vendor_name}    ${fop}    ${country}    ${identifier}=${EMPTY}
+    ${product_code_number}    Get Product Code    ${country}    ${product_name}
+    ${vendor_code_number}    Get Vendor Code    ${country}    ${product_name}    ${vendor_name}
+    ${eo_number}    Get Variable Value    ${eo_number_${product_name}}    ${eo_number}
+    ${passenger_id}    Get Variable Value    ${passenger_id}    1
+    ${passenger_id}    Set Variable If    "${passenger_id}" == "${EMPTY}" or "${passenger_id}" == "None"    1    ${passenger_id}
+    Log    ${ac_no}
+    Comment    Run Keyword If    '${conjunction_number}'=='${EMPTY}'    Set Test Variable    ${ticket_and_conjunction}    ${ticket_number}
+    ...    ELSE    Set Test Variable    ${ticket_and_conjunction}    ${ticket_number}${conjunction_number}
+    ${product_code_number}    Evaluate    str(${product_code_number})
+    Run Keyword If    "${product_code_number[0]}"=="0"    Set Test Variable    ${product_code_number}    ${product_code_number[1:]}
+    Verify Specific Line Is Written In The PNR    RM *MS/PC${product_code_number}/V${vendor_code_number}/AC${ac_no}/TK${ticket_number}${conjunction_number}/PX${passenger_id}
+    Verify Specific Line Is Written In The PNR    RM *MSX/FF ${product_name.upper()}/XO-${eo_number}
+    Set Suite Variable    ${air_product_acc_rem_1}    RM *MS/PC${product_code_number}/V${vendor_code_number}/AC${ac_no}/TK${ticket_number}${conjunction_number}/PX${passenger_id}
+    Set Suite Variable    ${air_product_acc_rem_2}    RM *MSX/FF ${product_name.upper()}/XO-${eo_number}
+
+Verify Other Services Doc Bank Fee Service Accounting Remarks
+    [Arguments]    ${product_name}    ${vendor_name}    ${fop}    ${country}    ${identifier}=${EMPTY}
+    Set Suite Variable    ${product_name}
+    ${market_identifier}    Set Variable If    "${country}" == "SG"    S    A
+    ${fop_code}    Run Keyword If    "${fop}" == "Credit Card (CX)"    Get Credit Card Vendor Code    ${form_of_payment_vendor}
+    ...    ELSE    Set Variable    S
+    ${gst_amount}    Get Variable Value    ${gst_amount_${identifier}}    ${gst_amount}
+    ${total_selling_price}    Get Variable Value    ${total_selling_price_${identifier}}    ${total_selling_price}
+    ${commission}    Get Variable Value    ${commission_${identifier}}    ${commission}
+    ${bta_description}    Get Variable Value    ${bta_description_${identifier}}    ${bta_description}
+    ${gst_computed_value}    Evaluate    ${total_selling_price} * 7 * 0.01
+    ${gst_computed_value}    Run Keyword If    "${country}" == "SG"    Round APAC    ${gst_computed_value}    SG
+    ${selling_price_with_gst}    Run Keyword If    "${gst_amount}" != "${EMPTY}" and "${country}" == "SG"    Evaluate    ${selling_price} + ${gst_amount} + ${merchant_fee}
+    ...    ELSE    Set Variable    ${total_selling_price}
+    ${selling_price_with_gst}    Round APAC    ${selling_price_with_gst}    ${country}
+    Verify Other Service Air Product Accounting Remarks Are Written    ${product_name}    ${vendor_name}    ${fop}    ${country}
+    ${expected_fee_values}    Set Variable If    '${country}' == 'SG'    RM *MSX/${market_identifier}${total_selling_price}/SF${total_selling_price}/C${commission}    RM *MSX/${market_identifier}${total_selling_price}/SF${total_selling_price}/C${total_selling_price}
+    Run Keyword If    "${country}" == "SG"    Verify Specific Line Is Written In The PNR    ${expected_fee_values}/G${gst_computed_value}/F${fop_code}
+    Run Keyword If    "${country}" == "HK" and "${fop}" != "Credit Card (CX)"    Verify Specific Line Is Written In The PNR    ${expected_fee_values}/FS/FF8-FF
+    ...    ELSE IF    "${country}" == "HK" and "${fop}" == "Credit Card (CX)"    Verify Specific Line Is Written In The PNR    ${expected_fee_values}/F${fop_code}
+    Run Keyword If    "${fop}" == "Credit Card (CX)"    Verify Specific Remark Is Written In The PNR    RM \\*MSX/CCN${form_of_payment_vendor}.*EXP${expiry_month_${identifier}}${expiry_year_${identifier}}/D${selling_price_with_gst}    true
+    ${additional_info_date}    Convert Date    ${additional_info_date}    result_format=%d%b%y    date_format=%m/%d/%Y
+    ${additional_info_date}    Convert To Uppercase    ${additional_info_date}
+    Log Many    BTA Description is : "${bta_description}"    FOP is : ${fop}
+    Run Keyword If    "${bta_description}" != "${EMPTY}" and ("${country}" == "HK" and "${fop}" != "Credit Card (CX)")    Verify Specific Line Is Written In The PNR    RM *MSX/FF40-${bta_description.upper()}/FF41-${additional_info_date}/FF34-AB
+    ...    ELSE IF    "${bta_description}"!= "${EMPTY}"    Verify Specific Line Is Written In The PNR    RM *MSX/FF8-FF/FF40-${bta_description.upper()}/FF41-${additional_info_date}
+    Run Keyword If    "${bta_description}" != "${EMPTY}" and ("${country}" == "HK" and "${fop}" != "Credit Card (CX)")    Verify Specific Line Is Written In The PNR    RM *MSX/FF35-AMA/FF36-M/FF47-CWT
+    ...    ELSE IF    "${bta_description}"!= "${EMPTY}"    Verify Specific Line Is Written In The PNR    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    Run Keyword If    "${bta_description}"== "${EMPTY}" and ("${country}" == "HK" and "${fop}" != "Credit Card (CX)")    Verify Specific Line Is Written In The PNR    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    ...    ELSE IF    "${bta_description}"== "${EMPTY}"    Verify Specific Line Is Written In The PNR    RM *MSX/FF8-FF/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    #Remarks lines to be verified as Not Written
+    Run Keyword If    "${country}" == "SG"    Set Suite Variable    ${doc_bank_acc_rem_sg_1}    ${expected_fee_values}/G${gst_computed_value}/F${fop_code}
+    Run Keyword If    "${country}" == "HK" and "${fop}" != "Credit Card (CX)"    Set Suite Variable    ${doc_bank_acc_rem_hk_1}    ${expected_fee_values}/FS/FF8-FF
+    ...    ELSE IF    "${country}" == "HK" and "${fop}" == "Credit Card (CX)"    Set Suite Variable    ${doc_bank_acc_rem_hk_1}    ${expected_fee_values}/F${fop_code}
+    Run Keyword If    "${fop}" == "Credit Card (CX)"    Set Suite Variable    ${doc_bank_acc_rem_cc_regex_1}    RM \\*MSX/CCN${form_of_payment_vendor}.*EXP${expiry_month_${identifier}}${expiry_year_${identifier}}/D${selling_price_with_gst}
+    Run Keyword If    "${bta_description}" != "${EMPTY}" and ("${country}" == "HK" and "${fop}" != "Credit Card (CX)")    Set Suite Variable    ${doc_bank_acc_rem_hk_2}    RM *MSX/FF40-${bta_description.upper()}/FF41-${additional_info_date}/FF34-AB
+    ...    ELSE IF    "${bta_description}"!= "${EMPTY}"    Set Suite Variable    ${doc_bank_acc_rem_sg_2}    RM *MSX/FF8-FF/FF40-${bta_description.upper()}/FF41-${additional_info_date}
+    Run Keyword If    "${bta_description}" != "${EMPTY}" and ("${country}" == "HK" and "${fop}" != "Credit Card (CX)")    Set Suite Variable    ${doc_bank_acc_rem_hk_3}    RM *MSX/FF35-AMA/FF36-M/FF47-CWT
+    ...    ELSE IF    "${bta_description}"!= "${EMPTY}"    Set Suite Variable    ${doc_bank_acc_rem_sg_3}    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    Run Keyword If    "${bta_description}"== "${EMPTY}" and ("${country}" == "HK" and "${fop}" != "Credit Card (CX)")    Set Suite Variable    ${doc_bank_acc_rem_hk_4}    RM *MSX/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+    ...    ELSE IF    "${bta_description}"== "${EMPTY}"    Set Suite Variable    ${doc_bank_acc_rem_sg_4}    RM *MSX/FF8-FF/FF34-AB/FF35-AMA/FF36-M/FF47-CWT
+
+Verify Other Services Doc Bank Fee Service Accounting Remarks Are Not Written
+    [Arguments]    ${product}    ${country}    ${fop}    # Product name, Two Letter country code, FOP type
+    Comment    Verify Other Services Doc Bank Fee Service Accounting Remarks    #Lines Written for reference
+    #For General Accounting Remarks
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${air_product_acc_rem_1}
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${air_product_acc_rem_2}
+    #For Country Specific Doc Bank Fee Remarks Verification
+    Run Keyword And Continue On Failure    Run Keyword If    "${country}" == "SG"    Verify Specific Line Is Not Written In The PNR    ${doc_bank_acc_rem_sg_1}
+    Run Keyword And Continue On Failure    Run Keyword If    "${country}" == "HK"    Verify Specific Line Is Not Written In The PNR    ${doc_bank_acc_rem_hk_1}
+    Run Keyword And Continue On Failure    Run Keyword If    "${fop}" == "Credit Card (CX)"    Verify Specific Line Is Not Written In The PNR    ${doc_bank_acc_rem_cc_regex_1}    True
+    Run Keyword And Continue On Failure    Run Keyword If    "${bta_description}" != "${EMPTY}" and ("${country}" == "HK" and "${fop}" != "Credit Card (CX)")    Verify Specific Line Is Not Written In The PNR    ${doc_bank_acc_rem_hk_2}
+    ...    ELSE IF    "${bta_description}"!= "${EMPTY}"    Verify Specific Line Is Not Written In The PNR    ${doc_bank_acc_rem_sg_2}
+    Run Keyword And Continue On Failure    Run Keyword If    "${bta_description}" != "${EMPTY}" and ("${country}" == "HK" and "${fop}" != "Credit Card (CX)")    Verify Specific Line Is Not Written In The PNR    ${doc_bank_acc_rem_hk_3}
+    ...    ELSE IF    "${bta_description}"!= "${EMPTY}"    Verify Specific Line Is Not Written In The PNR    ${doc_bank_acc_rem_sg_3}
+    Comment    Run Keyword And Continue On Failure    Run Keyword If    "${bta_description}"== "${EMPTY}" and ("${country}" == "HK" and "${fop}" != "Credit Card (CX)")    Verify Specific Line Is Not Written In The PNR    ${doc_bank_acc_rem_hk_4}
+    ...    ELSE IF    "${bta_description}"== "${EMPTY}"    Verify Specific Line Is Not Written In The PNR    ${doc_bank_acc_rem_sg_4}
+
+Verify Other Services Insurance Accounting General Remarks Are Not Written
+    #Remarks written keywords for reference
+    Comment    Verify Other Services Insurance Accounting General Remarks
+    #For Other Service Generic Accounting Remarks
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${accounting_remarks_first_line}
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${accounting_remarks_last_line}
+    #For Insurance Accounting Remarks
+    Run Keyword If    "${bta_description}" != "${EMPTY}"    Verify Specific Line Is Not Written In The PNR    ${insurance_acc_rem_1}
+    Run Keyword If    "${bta_description}" != "${EMPTY}"    Verify Specific Line Is Not Written In The PNR    ${insurance_acc_rem_2}
+    Run Keyword If    "${bta_description}" == "${EMPTY}"    Verify Specific Line Is Not Written In The PNR    ${insurance_acc_rem_3}
+
+Verify Insurance Remarks Are Not Written When FOP Is Credit Card In The PNR
+    Comment    Verify Insurance Remarks Are Written When FOP Is Credit Card In The PNR    Insurance    9    003075    HK    #us1322
+    Comment    Verify Insurance Remarks Are Written When FOP Is Cash or Invoice In The PNR    Insurance    9    000001    HK
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${insurance_acc_rem_cc_1}
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${insurance_acc_rem_cc_2}
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${insurance_acc_rem_cc_regex_1}    True
+    Run Keyword And Continue On Failure    Run Keyword If    "${bta_description}" != "${EMPTY}"    Verify Specific Line Is Not Written In The PNR    ${insurance_acc_rem_cc_regex_2}    True
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${insurance_acc_rem_cc_3}
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${insurance_acc_rem_cc_4}
+
+Verify Hotel Accounting Remarks Are Not Written
+    Comment    Verify Hotel Accounting Remarks    #For reference
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${hotel_accounting_line1}
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${hotel_accounting_line2}
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${hotel_accounting_line3}
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${hotel_accounting_line4}
+    Run Keyword And Continue On Failure    Run Keyword If    "${form_of_payment}" == "Credit Card (CX)"    Verify Specific Line Is Not Written In The PNR    ${hotel_accounting_line5}    True
+
+Verify Other Services Without GST Service Accounting General Remarks Are Not Written
+    Comment    Verify Other Services Without GST Service Accounting General Remarks    #For reference
+    #General Accounting Remarks
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${accounting_remarks_first_line}
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${accounting_remarks_last_line}
+    #Without GST Remarks Not Written
+    Run Keyword And Continue On Failure    Run Keyword If    "${bta_description}" != "${EMPTY}"    Verify Specific Line Is Not Written In The PNR    ${without_gst_acc_rem_1}
+    Run Keyword And Continue On Failure    Run Keyword If    "${bta_description}" != "${EMPTY}"    Verify Specific Line Is Not Written In The PNR    ${without_gst_acc_rem_2}
+    Comment    Run Keyword And Continue On Failure    Run Keyword If    "${bta_description}" == "${EMPTY}"    Verify Specific Line Is Not Written In The PNR    ${without_gst_acc_rem_3}
+
+Verify Other Services Cash Or Invoice Fees Accounting Remarks Are Not Written
+    [Arguments]    ${country}
+    [Documentation]    \#This keyword should be
+    ...    fully functioning after completion TA22066 (US1570). -Ely 30JAN18
+    Comment    Verify Other Services Cash Or Invoice Fees Accounting Remarks Are Written    #For Reference
+    Run Keyword And Continue On Failure    Run Keyword If    "${country}" == "SG"    Verify Specific Line Is Not Written In The PNR    ${gst_acc_rem_sg_1}
+    Run Keyword And Continue On Failure    Run Keyword If    "${country}" == "HK"    Verify Specific Line Is Not Written In The PNR    ${gst_acc_rem_hk_1}
+
+Verify GST Accounting Remarks Are Not Written When FOP Is Credit Card
+    #Existing keyword called "Verify Other Services With GST Accounting General Remarks Are Not Written", dont seem fitting for the purpose i.e. verifying if formerly known GST remarks are not existing.    Verify Other Services With GST Accounting General Remarks Are Not Written    dont seem fitting for the purpose i.e. verifying if formerly known GST remarks are not existing.
+    Log    This keyword should be fully functioning after completion TA22066 (US1570). -Ely 30JAN18
+
+Verify Other Services Transaction Credit Card Info Remarks Are Not Written
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${transaction_credit _card_remark}
+
+Verify Train And Ferry Remarks Are Not Written In PNR
+    [Arguments]    ${product_name}    ${FOP}
+    Run Keyword And Continue On Failure    Verify Specific Remark Is Not Written In The PNR    ${product_vendor_line_${product_name}}
+    Run Keyword And Continue On Failure    Verify Specific Remark Is Not Written In The PNR    ${fees_line_${product_name}}//$
+    Run Keyword And Continue On Failure    Run Keyword If    "${FOP}" == "Credit Card (CX)"    Verify Specific Remark Is Not Written In The PNR    ${credit_card_line_${product_name}}    reg_exp_flag=true
+    Run Keyword And Continue On Failure    Verify Specific Remark Is Not Written In The PNR    ${location_line_${product_name}}
+    Run Keyword And Continue On Failure    Verify Specific Remark Is Not Written In The PNR    ${booking_line_${product_name}}//$
+    Run Keyword And Continue On Failure    Verify Specific Remark Is Not Written In The PNR    ${product_description_line_${product_name}}//$
+
+Verify Visa Handling Fee Remarks Are Not Written In PNR
+    [Arguments]    ${product_name}    ${FOP}    ${no_of_times}=1
+    Run Keyword And Continue On Failure    Verify Specific Remark Is Not Written In The PNR    ${product_vendor_line_${product_name}}
+    Run Keyword And Continue On Failure    Verify Specific Remark Is Not Written In The PNR    ${fees_line_${product_name}}
+    Run Keyword And Continue On Failure    Run Keyword If    "${FOP}" == "Credit Card (CX)"    Verify Specific Remark Is Not Written In The PNR    ${credit_card_line_${product_name}}    ${reg_exp_flag}=True
+    Run Keyword And Continue On Failure    Verify Specific Remark Is Not Written In The PNR    ${visa_info_line_${product_name}}
+    Run Keyword And Continue On Failure    Verify Specific Remark Is Not Written In The PNR    ${booking_fee_line_${product_name}}
+    Run Keyword And Continue On Failure    Verify Specific Line Is Written In The PNR X Times    ${product_description_line_${product_name}}    ${no_of_times}
+
+Verify Visa Processing Remarks Are Not Written In PNR
+    [Arguments]    ${product_name}    ${FOP}
+    ${fees_line}    Get Variable Value    ${product_vendor_line_${product_name}}    ${visa_processing_line1}
+    ${fees_line}    Get Variable Value    ${fees_line_${product_name}}    ${visa_processing_line2}
+    Comment    ${credit_card_line}    Get Variable Value    ${credit_card_line_${product_name}}    ${visa_processing_line3}
+    ${location_line}    Get Variable Value    ${location_line_${product_name}}    ${visa_processing_line4}
+    Run Keyword And Continue On Failure    Verify Specific Remark Is Not Written In The PNR    ${fees_line}
+    Run Keyword And Continue On Failure    Verify Specific Remark Is Not Written In The PNR    ${fees_line}
+    Run Keyword And Continue On Failure    Run Keyword If    "${FOP}" == "Credit Card (CX)"    Verify Specific Remark Is Not Written In The PNR    ${visa_processing_line3}
+    Run Keyword And Continue On Failure    Verify Specific Remark Is Not Written In The PNR    ${location_line}
+    Run Keyword And Continue On Failure    Verify Specific Remark Is Not Written In The PNR    RM \\*MSX\\/FF36-M\\/FF47-CWT    true
+    Run Keyword And Continue On Failure    Verify Specific Remark Is Not Written In The PNR    RM \\*MSX\\/FF VISA PROCESSING    true
+
+Verify That Car Remarks Are Not Written In PNR When FOP is Cash Or Invoice
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${accounting_remarks_first_line}
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${accounting_remarks_second_line_s}
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${accounting_remarks_second_line_h}
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${accounting_remarks_third_line_s}
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${accounting_remarks_third_line_h}
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${accounting_remarks_last_line}
+
+Verify Other Services Visa Cost Accounting General Remarks Are Not Written
+    Comment    #Verify Other Services Visa Cost Accounting General Remarks    For Reference
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${accounting_remarks_first_line}
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${accounting_remarks_visa_cost_line_4}
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${accounting_remarks_visa_cost_line_5}\\$    True
+    Run Keyword And Continue On Failure    Verify Specific Line Is Not Written In The PNR    ${accounting_remarks_last_line}
+    Verify Other Services Credit Card Fees Accounting Remarks Are Not Written

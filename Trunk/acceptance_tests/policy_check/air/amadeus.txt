@@ -1,0 +1,122 @@
+*** Settings ***
+Force Tags        amadeus    emea
+Resource          ../policy_check_verification.txt
+
+*** Test Cases ***
+[NB] Verify That Policy Advise Is Shown For Policy Name Air Cabin And Tour Code Written In PNR
+    [Tags]    us4629    fr    us2156    us6430
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    fr-FR    AutomationFR    FR AUTO AMADEUS
+    Select GDS    amadeus
+    Set Client And Traveler    FR Amadeus 1 - SyEx ¦ 1A FR Car Panel Testing    Smith    Walden
+    Click New Booking
+    Click Panel    Client Info
+    Manually Set Value In Form Of Payment    VI    4444333322221111    1221
+    Book Flight X Months From Now    MNLTPE/ABR    SS1J1    FXP    8
+    Click Read Booking
+    Click Panel    Policy Check
+    Verify Policy Advice Is Displayed    Air Cabin    Business Class hors politique voyage    Permitted over 1200 miles (one way)    True
+    Select Policy Status    Business Class hors politique voyage    AA - En attente de validation
+    Populate All Panels (Except Given Panels If Any)    Air Fare
+    Populate Fare Tab With Default Values    Fare 1
+    Select Class Code Value    YA - Economy Tarif Public
+    Click Panel    Delivery
+    Populate Delivery Panel Without On Hold Reason
+    Click Panel    Recap
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus    ${current_pnr}
+    Verify Tour Codes Remark    1A12337654    S2    BR
+
+[QA] Verify That Policy Advise Is Shown For Policy Name Air Cabin
+    [Tags]    us4629    fr
+    Retrieve PNR    ${current_pnr}
+    Click Quick Amend
+    Click Panel    Policy Check
+    Verify Policy Advice Is Displayed    Air Cabin    Business Class hors politique voyage    Permitted over 1200 miles (one way)    True
+    Populate Delivery Panel Without On Hold Reason
+    Click Panel    Policy Check
+    Select Policy Status    Business Class hors politique voyage    TA - Voyageur/Booker avisé
+    Click Panel    Recap
+    Populate Recap Panel With Default Values
+    Click Finish PNR    Quick Amend
+
+[AB] Verify That Policy Advise Is Shown For Policy Name Air Cabin
+    [Tags]    us4629    fr
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Book Flight X Months From Now    FRALHR/AAF    SS1J1    FXP/S2    8    5
+    Click Read Booking
+    Click Panel    Policy Check
+    Verify Policy Advice Is Displayed    Air Cabin    Business Class hors politique voyage    Permitted over 1200 miles (one way)    True
+    Verify Out of Policy Is Shown    Air Cabin    Business Class hors politique voyage
+    Populate All Panels (Except Given Panels If Any)
+    Click Panel    Recap
+    Click Finish PNR
+    Execute Simultaneous Change Handling    Amend Booking
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB UK] Verify That Tour Code Remark Is Written In PNR
+    [Tags]    uk    us6430
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    en-GB    AutomationUK    UK AUTO AMADEUS
+    Select GDS    amadeus
+    Set Client And Traveler    UK Amadeus 1 - SyEx ¦ UK - Amadeus Sub1    AmadeusTest    Lucienne
+    Click New Booking
+    Update PNR for EN or GB
+    Book Flight X Months From Now    MANAMS/AKL    SS1Y1    FXP    6
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus    ${current_pnr}    MB
+    Verify Tour Codes Remark    1A12337654    S2    KL
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB DE] Verify That Tour Code Remark Is Written In PNR
+    [Tags]    us6430    de
+    Open Power Express And Retrieve Profile    ${version}    Test    U003WXR    de-DE    AutomationDE    DE AUTO AMADEUS
+    Select GDS    amadeus
+    Set Client And Traveler    DE Amadeus 1 - SyEx ¦ DE - Amadeus Sub1    allam    swet
+    Select Client Account Value    717171 ¦ Client Account Name Change ¦ DE - Amadeus Sub1
+    Click New Booking
+    Book Flight X Months From Now    LHRFRA/AKL    SS1Y1    FXP    5
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)
+    Click Finish PNR
+    Retrieve PNR Details From Amadeus    ${current_pnr}    MB
+    Verify Tour Codes Remark    1A12334567    S2    KL
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Quick Amend
+    Retrieve PNR    ${current_pnr}
+    Click Quick Amend
+    Click Panel    Policy Check
+    Verify Policy Advice Is Displayed    Air Cabin    Business Class hors politique voyage    Permitted over 1200 miles (one way)    True
+    Populate Delivery Panel Without On Hold Reason
+    Click Panel    Policy Check
+    Select Policy Status    Business Class hors politique voyage    TA - Voyageur/Booker avisé
+    Click Panel    Recap
+    Populate Recap Panel With Default Values
+    Click Finish PNR    Quick Amend
+
+Amend Booking
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Book Flight X Months From Now    FRALHR/AAF    SS1J1    FXP/S2    8    5
+    Click Read Booking
+    Click Panel    Policy Check
+    Verify Policy Advice Is Displayed    Air Cabin    Business Class hors politique voyage    Permitted over 1200 miles (one way)    True
+    Verify Out of Policy Is Shown    Air Cabin    Business Class hors politique voyage
+    Populate All Panels (Except Given Panels If Any)
+    Click Panel    Recap
+    Click Finish PNR    Amend Booking
+
+Get Number Of Segments
+    ${clip}    Get Clipboard Data Amadeus    RTA
+    ${clip_lines}    Get Lines Using Regexp    ${clip}    \\s?\\d\\s.*
+    ${number_of_segments}    Get Line Count    ${clip_lines}
+    Set Test Variable    ${number_of_segments}
+    [Return]    ${number_of_segments}
+
+Verify Tour Codes Remark
+    [Arguments]    ${deal_code_type}    ${segment_number}    ${airline}
+    Verify Specific Line Is Written In The PNR    FT PAX ${deal_code_type}/${segment_number}
+    Verify Specific Line Is Written In The PNR    FV PAX ${airline}/${segment_number}

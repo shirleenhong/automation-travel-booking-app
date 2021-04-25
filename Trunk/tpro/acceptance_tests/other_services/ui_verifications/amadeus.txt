@@ -1,0 +1,1349 @@
+*** Settings ***
+Force Tags        form_of_payment
+Resource          ../other_services_verification.txt
+Resource          ../../client_info/client_info_verification.txt
+Resource          ../../../../resources/panels/other_svcs.txt
+Resource          ../other_services.txt
+
+*** Test Cases ***
+[HK][NB][OS] Verify That FOP Details Are Pre-populated When FOP is DC (WITHOUT GST)
+    [Documentation]    Coverage:    #Other Service (Non GST)    #24 EMERGENCY SERVICE FEE    #CWT    #Other Service (Visa Processing)    #VISA PROCESSING    #CWT VISA    #Other Service (Insurance)    #INSURANCE    #CWT    #As per Jason's comment. This cannot be automated.    #fialing because of changes in Visual Queues.
+    ...
+    ...    US875 FoP_Pre-population_when_CC_are_manually_entered_in_Client_Info_panel
+    ...
+    ...    US902 [SG] Display correct credit card vendors in exchange order FOP drop down list
+    ...
+    ...    Comment Verify Amend Button Status Enabled 1
+    ...    Comment Verify Pdf Button Status Enabled 1
+    ...    Comment Verify Email Button Status Enabled 1
+    ...    Comment Verify Raise Cheque Button Status Enabled 1
+    ...
+    ...    Verify Raise Cheque Changes EO Status 1
+    [Tags]    us875    hk    us902    us1322    us1456    us1620
+    Open Power Express And Retrieve Profile    ${version}    Test    uexr493    en-GB    erepolidoru    APAC QA
+    ...    Amadeus
+    Create PNR Using Credit Card As FOP    HK    True    False    False    BTA DC/DC**********2207/D0823/CVV***
+    Click Panel    Other Svcs
+    Select Product And Vendor    24 EMERGENCY SERVICE FEE    CWT
+    Populate Service Info Cost Details    CWT    50.00    75.00
+    Verify Form Of Payment Details Are Correct    BTA DC/DC**********2207/D0823/CVV***
+    Verify FOP Details Are Visible and Mandatory
+    Click Mask Icon
+    Verify Form Of Payment Details Are Correct    BTA DC/DC30569101582207/D0823/CVV***
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CX)    ${EMPTY}
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    24 EMERGENCY SERVICE FEE
+    #Back To List Verification
+    ${expected_eo_grid}    Get All Fields From Eo Grid
+    Click Amend In Eo Grid    1
+    Click Back To List In Other Svcs
+    Verify EO Grid Screen Is Displayed
+    Verify EO Grid Is Updated After EO Add/Remove    Add    ${expected_eo_grid}
+    #Remove Verification
+    ${expected_eo_grid}    Get Row Data From Eo Grid    1
+    Click Amend In Eo Grid    1
+    Click Remove From List In Other Svcs
+    Verify Confirmation Message Is Displayed On Clicking Remove Eo
+    Verify EO Grid Is Updated After EO Add/Remove    Remove    ${expected_eo_grid}
+    Select Product And Vendor    24 EMERGENCY SERVICE FEE    CWT
+    Populate Service Info Cost Details    9999999    500.00    655.00
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CX)    BTA VI/VI***********0235/D0623/CVV***
+    Click Add Button In EO Panel    Service Info
+    #Verify Update Button
+    Click Amend In Eo Grid    1
+    Populate Service Info Cost Details    22222222    600.00    655.00
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CX)    BTA VI/VI***********0235/D0623/CVV***
+    Populate Vendor Info Tab    cwtservice@cwt.com
+    Click Update Button In EO Panel    Service Info
+    #Verify Values are updated
+    Click Finish PNR
+    Click Panel    Other Svcs
+    #Verify EO number is generated
+    Verify EO Product Added On EO Grid    24 EMERGENCY SERVICE FEE
+    Verify EO Number Is Generated    HK
+
+[HK][AB][OS] Verify That FOP Details Are Pre-populated When FOP is TP (VISA PROCESSING)
+    [Documentation]    Coverage:    #Other Service (Non GST)    #24 EMERGENCY SERVICE FEE    #CWT    #Other Service (Visa Processing)    #VISA PROCESSING    #CWT VISA    #Other Service (Insurance)    #INSURANCE    #CWT
+    ...
+    ...    US875 FoP_Pre-population_when_CC_are_manually_entered_in_Client_Info_panel
+    ...
+    ...    US902 [SG] Display correct credit card vendors in exchange order FOP drop down list
+    [Tags]    us875    hk    us902    us1322    us1462    us1620
+    ...    de486
+    Retrieve PNR And Populate Amend Workflow    HK    fop_dropdown_value=BTA TP CARD/TP***********4198/D0825/CVV***
+    Click Panel    Client Info
+    Select Form Of Payment    BTA TP CARD/TP***********4198/D0825/CVV***
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Click Panel    Other Svcs
+    Select Product And Vendor    VISA PROCESSING    CWT VISA
+    Populate Visa Processing Panel Details    VISA VENDOR    VISA COUNTRY    Other    Single    Days    15
+    ...    Express    15    ${EMPTY}
+    Verify Form Of Payment Details Are Correct    BTA TP CARD/TP***********4198/D0825/CVV***    Credit Card (CX)
+    Click Add Button In EO Panel    Visa Info
+    Verify EO Product Added On EO Grid    VISA PROCESSING
+    Click Finish PNR    Amend Verify That FOP Details Are Pre-populated When FOP is TP (VISA PROCESSING)
+    Execute Simultaneous Change Handling    Amend Verify That FOP Details Are Pre-populated When FOP is TP (VISA PROCESSING)
+    Click Panel    Other Svcs
+    #Verify EO number is generated
+    Verify EO Product Added On EO Grid    VISA PROCESSING
+    #Verify Clicking on buttons for in memory/Complete
+    Comment    Click Raise Cheque In Eo Grid    1
+    Comment    Verify Confirmation Message Is Displayed On Clicking Raise Cheque    #Horton is not handling the changes in code.
+
+[HK][AB][OS][1st] Verify That FOP Details Are Pre-populated When FOP is AX (INSURANCE)
+    [Documentation]    Coverage:    #Other Service (Non GST)    #24 EMERGENCY SERVICE FEE    #CWT    #Other Service (Visa Processing)    #VISA PROCESSING    #CWT VISA    #Other Service (Insurance)    #INSURANCE    #CWT
+    ...
+    ...    US875 FoP_Pre-population_when_CC_are_manually_entered_in_Client_Info_panel
+    ...
+    ...    US902 [SG] Display correct credit card vendors in exchange order FOP drop down list
+    [Tags]    us875    hk    us902    us1322    us1462    us1620
+    Retrieve PNR And Populate Amend Workflow    HK    fop_dropdown_value=TEST CARD/AX***********0009/D0822/CVV****
+    Click Panel    Client Info
+    Select Form Of Payment    TEST CARD/AX***********0009/D0822/CVV****
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Click Panel    Other Svcs
+    Select Product And Vendor    INSURANCE    FEDERAL INSURANCE COMPANY
+    Verify Form Of Payment Details Are Correct    TEST CARD/AX***********0009/D0822/CVV****
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CX)    ${EMPTY}    #1620
+    Click Tab In Other Services Panel    Insurance
+    Select Plan Selected    Family Budget Plan
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Verify That FOP Details Are Pre-populated When FOP is AX (INSURANCE)
+    Execute Simultaneous Change Handling    Amend Verify That FOP Details Are Pre-populated When FOP is AX (INSURANCE)
+    Click Panel    Other Svcs
+    #Verify EO number is generated
+    Verify EO Product Added On EO Grid    INSURANCE
+    #Verify Clicking on buttons for in memory/Complete
+    Comment    Click Raise Cheque In Eo Grid    1
+    Comment    Verify Confirmation Message Is Displayed On Clicking Raise Cheque
+
+[HK][OS][2nd] Verify That FOP Details Are Pre-populated When FOP is AX (WITHOUT GST)
+    [Documentation]    Coverage:    #Other Service (Non GST)    #24 EMERGENCY SERVICE FEE    #CWT    #Other Service (Visa Processing)    #VISA PROCESSING    #CWT VISA    #Other Service (Insurance)    #INSURANCE    #CWT
+    ...
+    ...    US875 FoP_Pre-population_when_CC_are_manually_entered_in_Client_Info_panel
+    ...
+    ...    US902 [SG] Display correct credit card vendors in exchange order FOP drop down list
+    [Tags]    us875    hk    us902    us1322    us1462    us1620
+    Retrieve PNR And Populate Amend Workflow    HK    fop_dropdown_value=TEST CARD/AX***********0009/D0822/CVV****
+    Click Panel    Client Info
+    Select Form Of Payment    TEST CARD/AX***********0009/D0822/CVV****
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Click Panel    Other Svcs
+    Select Product And Vendor    24 EMERGENCY SERVICE FEE    CWT
+    Verify Form Of Payment Details Are Correct    TEST CARD/AX***********0009/D0822/CVV****
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CX)    ${EMPTY}
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Verify That FOP Details Are Pre-populated When FOP is AX (WITHOUT GST)
+    Execute Simultaneous Change Handling    Amend Verify That FOP Details Are Pre-populated When FOP is AX (WITHOUT GST)
+    Click Panel    Other Svcs
+    #Verify EO number is generated
+    Get Exchange Order Number
+    Verify EO Product Added On EO Grid    24 EMERGENCY SERVICE FEE
+    #Verify Clicking on buttons for in memory/Complete
+    Comment    Click Raise Cheque In Eo Grid    1
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[SG][NB][OS] Verify That FOP Details Are Pre-populated When FOP Is VI (GST)
+    [Documentation]    Coverage:    #GST    Despatch Charge    DESPATCH DEPARTMENT    #W/O GST    Air Penalty Fee    CARLSON WAGONLIT TRAVEL    #VISA COST    Visa Cost    VISA DEPARTMENT    #VISA HANDLING    Visa Handling Fee    Carlson Wagonlit GST
+    ...
+    ...    US875 FoP_Pre-population_when_CC_are_manually_entered_in_Client_Info_panel
+    ...
+    ...    US902 [SG] Display correct credit card vendors in exchange order FOP drop down list
+    [Tags]    us875    sg    us902    us1322    us1456    us1620
+    Create PNR Using Credit Card As FOP    SG    True    False    False    BTA VI/VI***********0235/D0623/CVV***
+    Click Panel    Other Svcs
+    Select Product And Vendor    Despatch Charge    DESPATCH DEPARTMENT
+    Populate Service Info Cost Details    CWT    85.00    95.00
+    Verify Form Of Payment Details Are Correct    BTA VI/VI***********0235/D0623/CVV***
+    Verify FOP Details Are Visible and Mandatory
+    Click Mask Icon
+    Verify Form Of Payment Details Are Correct    BTA VI/VI448488674100235/D0623/CVV***
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CX)    BTA VI/VI448488674100235/D0623/CVV***
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    Despatch Charge
+    Verify Amend Button Status    Enabled    1
+    Verify Pdf Button Status    Enabled    1
+    Verify Email Button Status    Enabled    1
+    Verify Raise Cheque Button Status    Enabled    1    #tobe updated once UI is done
+    #Back To List Verification
+    ${expected_eo_grid}    Get All Fields From Eo Grid
+    Click Amend In Eo Grid    1
+    Click Back To List In Other Svcs
+    Verify EO Grid Screen Is Displayed
+    Verify EO Grid Is Updated After EO Add/Remove    Add    ${expected_eo_grid}
+    #Remove Verification
+    ${expected_eo_grid}    Get Row Data From Eo Grid    1
+    Click Amend In Eo Grid    1
+    Click Remove From List In Other Svcs
+    Verify Confirmation Message Is Displayed On Clicking Remove Eo
+    Verify EO Grid Is Updated After EO Add/Remove    Remove    ${expected_eo_grid}
+    Select Product And Vendor    Despatch Charge    FEDERAL EXPRESS (S) PTE LTD
+    Populate Service Info Cost Details    9999999    500.00    655.00
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CX)    BTA VI/VI***********0235/D0623/CVV***
+    Click Add Button In EO Panel    Service Info
+    #Verify Update Button
+    Click Amend In Eo Grid    1
+    Populate Service Info Cost Details    22222222    600.00    655.00
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CX)    BTA VI/VI***********0235/D0623/CVV***
+    Populate Vendor Info Tab    cwtservice@cwt.com
+    Click Update Button In EO Panel    Service Info
+    #Verify Values are updated
+    Click Finish PNR
+    Comment    Click Go To Other Services Button In Complete Panel
+    Click Panel    Other Svcs
+    Verify EO Status For Third Party Vendor    New    1
+    #Verify EO number is generated
+    Verify EO Product Added On EO Grid    Despatch Charge
+    Verify EO Number Is Generated    SG
+    #Verify Clicking on buttons for in memory/Complete
+    Verify Amend Button Status    Enabled    1
+    Verify Pdf Button Status    Enabled    1
+    Verify Email Button Status    Enabled    1
+    Verify Raise Cheque Button Status    Enabled    1
+    Verify Pdf Button Opens The Pdf    1
+    Verify Email Button Triggers Email To Vendor    1
+    Click Raise Cheque In Eo Grid    1
+    Verify Confirmation Message Is Displayed On Clicking Raise Cheque
+    Verify Raise Cheque Changes EO Status    1
+
+[SG][OS]Verify That Merchant Fee Is Not Applied To Specific Products
+    [Tags]    us1357    us1322    us1462
+    Retrieve PNR And Populate Amend Workflow    SG    fop_dropdown_value=Cash
+    Click Panel    Other Svcs
+    Verify That Merchant Fee Is Not Applied To Specific Products
+    Click Clear All
+
+[SG][AB][OS] Verify That FOP Details Are Pre-populated When FOP is CA (WITHOUT GST)
+    [Documentation]    Coverage:    #GST    Despatch Charge    DESPATCH DEPARTMENT    #W/O GST    Air Penalty Fee    CARLSON WAGONLIT TRAVEL    #VISA COST    Visa Cost    VISA DEPARTMENT    #VISA HANDLING    Visa Handling Fee    Carlson Wagonlit GST
+    ...
+    ...    US875 FoP_Pre-population_when_CC_are_manually_entered_in_Client_Info_panel
+    ...
+    ...    US902 [SG] Display correct credit card vendors in exchange order FOP drop down list
+    [Tags]    us875    sg    us902    us1322    us1462    us1620
+    Retrieve PNR And Populate Amend Workflow    SG    fop_dropdown_value=BTA CARD/CA************1114/D0828/CVV****
+    Click Panel    Client Info
+    Select Form Of Payment    BTA CARD/CA************1114/D0828/CVV****
+    Populate All Panels (Except Given Panels If Any)
+    Click Panel    Other Svcs
+    Select Product And Vendor    Airline Penalty Fee    CARLSON WAGONLIT TRAVEL
+    Verify Form Of Payment Details Are Correct    BTA CARD/CA************1114/D0828/CVV****
+    Select FOP Type    Credit Card (CX)
+    Click Mask Icon
+    Verify Form Of Payment Details Are Correct    BTA CARD/CA2222420000001114/D0828/CVV****    Credit Card (CX)
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    Airline Penalty Fee
+    Verify Amend Button Status    Enabled    1
+    Verify Pdf Button Status    Enabled    1
+    Verify Email Button Status    Enabled    1
+    Verify Raise Cheque Button Status    Enabled    1
+    #Back To List Verification
+    ${expected_eo_grid}    Get All Fields From Eo Grid
+    Click Amend In Eo Grid    1
+    Click Back To List In Other Svcs
+    Verify EO Grid Screen Is Displayed
+    Verify EO Grid Is Updated After EO Add/Remove    Add    ${expected_eo_grid}
+    #Remove Verification
+    ${expected_eo_grid}    Get Row Data From Eo Grid    1
+    Click Amend In Eo Grid    1
+    Click Remove From List In Other Svcs
+    Verify Confirmation Message Is Displayed On Clicking Remove Eo
+    Verify EO Grid Is Updated After EO Add/Remove    Remove    ${expected_eo_grid}
+    Select Product And Vendor    Airline Penalty Fee    CARLSON WAGONLIT TRAVEL
+    Populate Service Info Cost Details    9999999    500.00    655.00
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CC)    BTA CARD/CA************1114/D0828/CVV****
+    Click Add Button In EO Panel    Service Info
+    #Verify Update Button
+    Click Amend In Eo Grid    1
+    Populate Service Info Cost Details    22222222    600.00    655.00
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CC)    BTA CARD/CA************1114/D0828/CVV****
+    Populate Vendor Info Tab    cwtservice@cwt.com
+    Click Update Button In EO Panel    Service Info
+    #Verify Values are updated
+    Click Finish PNR    Amend Verify That FOP Details Are Pre-populated When FOP is CA (WITHOUT GST)
+    Execute Simultaneous Change Handling    Amend Verify That FOP Details Are Pre-populated When FOP is CA (WITHOUT GST)
+    Click Panel    Other Svcs
+    Verify EO Status For Third Party Vendor    Completed    1
+    #Verify EO number is generated
+    Verify EO Product Added On EO Grid    Airline Penalty Fee
+    Verify EO Number Is Generated    SG
+    #Verify Clicking on buttons for in memory/Complete
+    Verify Amend Button Status    Enabled    1
+    Verify Pdf Button Status    Enabled    1
+    Verify Email Button Status    Enabled    1
+    Verify Raise Cheque Button Status    Enabled    1
+
+[SG][AB][OS][1st] Verify That FOP Details Are Pre-populated When FOP is AX (VISA COST)
+    [Documentation]    Coverage:    #GST    Despatch Charge    DESPATCH DEPARTMENT    #W/O GST    Air Penalty Fee    CARLSON WAGONLIT TRAVEL    #VISA COST    Visa Cost    VISA DEPARTMENT    #VISA HANDLING    Visa Handling Fee    Carlson Wagonlit GST
+    ...
+    ...    US875 FoP_Pre-population_when_CC_are_manually_entered_in_Client_Info_panel
+    ...
+    ...    US902 [SG] Display correct credit card vendors in exchange order FOP drop down list
+    [Tags]    us875    sg    us902    us1322    us1462    us1620
+    ...    de486
+    Retrieve PNR And Populate Amend Workflow    SG
+    Click Panel    Client Info
+    Select Form Of Payment    TEST CARD/AX***********0009/D0822/CVV****
+    Populate All Panels (Except Given Panels If Any)
+    Click Panel    Other Svcs
+    Select Product And Vendor    Visa Cost    VISA DEPARTMENT
+    Verify Form Of Payment Details Are Correct    TEST CARD/AX***********0009/D0822/CVV****    Credit Card (CX)
+    Click Mask Icon
+    Verify Form Of Payment Details Are Correct    TEST CARD/AX375000000000009/D0822/CVV****    Credit Card (CX)
+    Populate Visa Processing Panel Details    VISA VENDOR    VISA COUNTRY    Other    Single    Day(s)    15
+    ...    Express    15    ${EMPTY}
+    Click Add Button In EO Panel    Visa Info
+    Click Finish PNR    Amend Verify That FOP Details Are Pre-populated When FOP is AX (VISA COST)
+    Execute Simultaneous Change Handling    Amend Verify That FOP Details Are Pre-populated When FOP is AX (VISA COST)
+    Click Panel    Other Svcs
+    #Verify EO number is generated
+    Verify EO Product Added On EO Grid    Visa Cost
+    Verify EO Number Is Generated    SG
+    #Verify Clicking on buttons for in memory/Complete
+    Verify Amend Button Status    Enabled    1
+    Verify Pdf Button Status    Enabled    1
+    Verify Email Button Status    Enabled    1
+    Verify Raise Cheque Button Status    Enabled    1
+
+[SG][OS][2nd] Verify That FOP Details Are Pre-populated When FOP Is AX (VISA HANDLING)
+    [Documentation]    Coverage:    #GST    Despatch Charge    DESPATCH DEPARTMENT    #W/O GST    Air Penalty Fee    CARLSON WAGONLIT TRAVEL    #VISA COST    Visa Cost    VISA DEPARTMENT    #VISA HANDLING    Visa Handling Fee    Carlson Wagonlit GST
+    ...
+    ...    US875 FoP_Pre-population_when_CC_are_manually_entered_in_Client_Info_panel
+    ...
+    ...    US902 [SG] Display correct credit card vendors in exchange order FOP drop down list
+    [Tags]    us875    sg    us902    us1322    us1462    us1620
+    ...    de486
+    Retrieve PNR And Populate Amend Workflow    SG
+    Click Panel    Client Info
+    Select Form Of Payment    TEST CARD/AX***********0009/D0822/CVV****
+    Populate All Panels (Except Given Panels If Any)
+    Click Panel    Other Svcs
+    Select Product And Vendor    Visa Handling Fee    Carlson Wagonlit GST
+    Verify Form Of Payment Details Are Correct    TEST CARD/AX***********0009/D0822/CVV****    Credit Card (CX)
+    Click Mask Icon
+    Verify Form Of Payment Details Are Correct    TEST CARD/AX375000000000009/D0822/CVV****    Credit Card (CX)
+    Populate Visa Processing Panel Details    VISA VENDOR    VISA COUNTRY    Other    Single    Day(s)    15
+    ...    Express    15    ${EMPTY}
+    Click Add Button In EO Panel    Visa Info
+    Click Finish PNR    Amend Verify That FOP Details Are Pre-populated When FOP Is AX (VISA HANDLING)
+    Execute Simultaneous Change Handling    Amend Verify That FOP Details Are Pre-populated When FOP Is AX (VISA HANDLING)
+    Click Panel    Other Svcs
+    Verify EO Status For Third Party Vendor    Completed    1
+    #Verify EO number is generated
+    Verify EO Product Added On EO Grid    Visa Handling Fee
+    Verify EO Number Is Generated    SG
+    #Verify Clicking on buttons for in memory/Complete
+    Verify Amend Button Status    Enabled    1
+    Verify Pdf Button Status    Enabled    1
+    Verify Email Button Status    Enabled    1
+    Verify Raise Cheque Button Status    Enabled    1
+    [Teardown]    Run Keyword And Ignore Error    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[SG][NB][OS] Verify MCO/MPD Tab Behaves Correctly For AA Segment Booking Fee
+    [Tags]    sg    horton    us512    us1127    us1322    us1456
+    ...    us1620
+    Open Power Express And Retrieve Profile    ${version}    Test    uexr493    en-GB    erepolidoru    APAC QA
+    ...    Amadeus
+    Create PNR Using Cash As FOP    SG    True    False    False
+    Click Panel    Other Svcs
+    Select Product And Vendor    AA SEGMENT BOOKING FEE    BANK SETTLEMENT PLAN
+    Click Tab In Other Services Panel    MCO/MPD
+    Tick Request MCO Checkbox
+    Populate Required MCO Info Fields    jkfhjkwergwe    afsaggwerwer    erqwrsdafasf    Cash    1000    USD
+    ...    44    3
+    Populate MCO Free Text Remark    Remarks
+    Populate Optional MCO Info Fields    Populating Issue In Exchange    a    b    c
+    Click Tab In Other Services Panel    Ticket Info
+    Populate Airline Code And Ticket Number    123    2222222222
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Cash
+    Set Issue In Exchange For In Request Tab When Products Are Air BSp Or Air Domestic    4444444444
+    Tick Select All Segments
+    Click Tab In Other Services Panel    MI
+    Populate MI Fields    4444    4444    abc    bb
+    Select MI Realised Saving Code    RF - RESTRICTED FARE ACCEPTED
+    Select MI Missed Saving Code    I - PASSENGER BOOKED TOO LATE
+    Select MI Class Of Service    FC - First Class Corporate Fare
+    Click Tab In Other Services Panel    MCO/MPD
+    Click Tab In Other Services Panel    Ticket Info
+    Populate Ticket Info Fees    SG    4800
+    Click Add Button In EO Panel    Ticket Info
+    Click Finish PNR
+    Comment    Click Go To Other Services Button In Complete Panel
+    Click Panel    Other Svcs
+    Verify EO Status For Third Party Vendor    Completed    1
+    #Verify EO number is generated
+    Verify EO Product Added On EO Grid    AA SEGMENT BOOKING FEE
+    Verify EO Number Is Generated    SG
+    #Verify Clicking on buttons for in memory/Complete
+    Comment    Verify Amend Button Status    Enabled    1
+    Comment    Verify Pdf Button Status    Enabled    1
+    Comment    Verify Email Button Status    Enabled    1
+    Comment    Verify Raise Cheque Button Status    Enabled    1
+    Comment    Verify Pdf Button Opens The Pdf    1
+    Comment    Verify Email Button Triggers Email To Vendor    1
+    Comment    Click Raise Cheque In Eo Grid    1    #commented as the product and vendor will trigger auto complete (US1378)
+    Comment    Verify Confirmation Message Is Displayed On Clicking Raise Cheque    \    #commented as the product and vendor will trigger auto complete (US1378)
+    Comment    Verify Raise Cheque Changes EO Status    1    #commented as the product and vendor will trigger auto complete (US1378)
+    Get Exchange Order Number    eo1
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Other Services General Notepad Remarks    AA SEGMENT BOOKING FEE
+
+[SG][AOS] Verify MCO/MPD Tab Retrieves All Values During Amend Process
+    [Tags]    sg    horton    us512    us1127    us1322    us1462
+    ...    us1620
+    Retrieve PNR And Populate Amend Workflow    SG    fop_dropdown_value=Invoice
+    Click Panel    Other Svcs
+    Click Amend EO    ${eo_number_eo1}
+    Click Tab In Other Services Panel    MCO/MPD
+    Verify MCO Info Field Values    jkfhjkwergwe    afsaggwerwer    erqwrsdafasf    Cash    1000.00    USD
+    ...    44.00    3.00    Populating Issue In Exchange    a    b    c
+    Verify Remarks in MCO/MPD tab    Remarks
+    UnTick Request MCO Checkbox
+    Tick Request MCO Checkbox
+    Verify MCO Info Field Values    jkfhjkwergwe    afsaggwerwer    erqwrsdafasf    Cash    1000.00    USD
+    ...    44.00    3.00    Populating Issue In Exchange    a    b    c
+    Verify Remarks in MCO/MPD tab    Remarks
+    Get MCO Info Values
+    UnTick Request MCO Checkbox
+    Click Tab In Other Services Panel    Ticket Info
+    Populate Airline Code And Ticket Number    123    2222222222
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Invoice
+    Set Issue In Exchange For In Request Tab When Products Are Air BSp Or Air Domestic    4444444444
+    Tick Select All Segments
+    Click Tab In Other Services Panel    MI
+    Populate MI Fields    4900    4444    abc    bb
+    Select MI Realised Saving Code    RF - RESTRICTED FARE ACCEPTED
+    Select MI Missed Saving Code    I - PASSENGER BOOKED TOO LATE
+    Select MI Class Of Service    FC - First Class Corporate Fare
+    Click Update Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    AA SEGMENT BOOKING FEE
+    Click Finish PNR    Amend Verify MCO/MPD Tab Retrieves All Values During Amend Process
+    Execute Simultaneous Change Handling    Amend Verify MCO/MPD Tab Retrieves All Values During Amend Process
+    Click Panel    Other Svcs
+    #Verify EO number is generated
+    Verify EO Number Is Generated    SG
+    #Verify Clicking on buttons for in memory/Complete
+    Verify Amend Button Status    Enabled    1
+    Verify Pdf Button Status    Enabled    1
+    Verify Email Button Status    Enabled    1
+    Verify Raise Cheque Button Status    Enabled    1
+    Comment    Verify Pdf Button Opens The Pdf    1
+    Comment    Verify Email Button Triggers Email To Vendor    1
+    Comment    Click Raise Cheque In Eo Grid    1    #commented as the product and vendor will trigger auto complete (US1378)
+    Comment    Verify Confirmation Message Is Displayed On Clicking Raise Cheque    \    #commented as the product and vendor will trigger auto complete (US1378)
+    Comment    Verify Raise Cheque Changes EO Status    1    #commented as the product and vendor will trigger auto complete (US1378)
+    Get Exchange Order Number
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Other Services General Notepad Remarks    AA SEGMENT BOOKING FEE
+
+[SG][OS] Verify MCO/MPD Tab Behaves Correctly For BSP Ticket And MPD
+    [Tags]    sg    horton    us512    us1127    us1322    us1462
+    ...    us1620
+    Retrieve PNR And Populate Amend Workflow    SG    fop_dropdown_value=Cash
+    Click Panel    Other Svcs
+    Select Product And Vendor    BSP Ticket And MPD    BANK SETTLEMENT PLAN
+    Click Tab In Other Services Panel    MCO/MPD
+    Tick Request MCO Checkbox
+    Populate Required MCO Info Fields    jkfhjkwergwe    afsaggwerwer    erqwrsdafasf    Cash    1000    USD
+    ...    44    3
+    Populate MCO Free Text Remark    BSP Ticket And MPD
+    Verify Remarks in MCO/MPD tab    BSP Ticket And MPD
+    Get MCO Info Values
+    Populate Optional MCO Info Fields    Populating Issue In Exchange    a    b    c
+    Click Tab In Other Services Panel    Ticket Info
+    Populate Ticket Info Fees    SG    4800
+    Populate Airline Code And Ticket Number    123    2222222222
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Invoice
+    Set Issue In Exchange For In Request Tab When Products Are Air BSp Or Air Domestic    4444444444
+    Tick Select All Segments
+    Click Tab In Other Services Panel    MI
+    Populate MI Fields    4800    4444    abc    bb
+    Select MI Realised Saving Code    RF - RESTRICTED FARE ACCEPTED
+    Select MI Missed Saving Code    I - PASSENGER BOOKED TOO LATE
+    Select MI Class Of Service    FC - First Class Corporate Fare
+    Click Add Button In EO Panel    Ticket Info
+    Click Finish PNR    Amend Verify MCO/MPD Tab Behaves Correctly For BSP Ticket And MPD
+    Execute Simultaneous Change Handling    Amend Verify MCO/MPD Tab Behaves Correctly For BSP Ticket And MPD
+    Comment    Click Go To Other Services Button In Complete Panel
+    Click Panel    Other Svcs
+    Verify EO Status For Third Party Vendor    Completed    1
+    #Verify EO number is generated
+    Verify EO Number Is Generated    SG
+    Get Exchange Order Number
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Other Services General Notepad Remarks    BSP Ticket And MPD
+    Click Clear All
+    #Amend 2
+    Retrieve PNR And Populate Amend Workflow    SG    fop_dropdown_value=Cash
+    Click Panel    Other Svcs
+    Click Amend Eo    ${eo_number}
+    Click Tab In Other Services Panel    MCO/MPD
+    Verify MCO Info Field Values    jkfhjkwergwe    afsaggwerwer    erqwrsdafasf    Cash    1000.00    USD
+    ...    44.00    3.00    Populating Issue In Exchange    a    b    c
+    Verify Remarks in MCO/MPD tab    BSP Ticket And MPD
+    UnTick Request MCO Checkbox
+    Click Tab In Other Services Panel    Ticket Info
+    Populate Airline Code And Ticket Number    123    2222222222
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Cash
+    Set Issue In Exchange For In Request Tab When Products Are Air BSp Or Air Domestic    4444444444
+    Tick Select All Segments
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    BSP Ticket And MPD
+    Click Finish PNR    Amend 2 Verify MCO/MPD Tab Behaves Correctly For BSP Ticket And MPD
+    Execute Simultaneous Change Handling    Amend 2 Verify MCO/MPD Tab Behaves Correctly For BSP Ticket And MPD
+    Comment    Click Go To Other Services Button In Complete Panel
+    Click Panel    Other Svcs
+    Verify EO Status For Third Party Vendor    Completed    1
+    #Verify EO number is generated
+    Verify EO Number Is Generated    SG
+    Get Exchange Order Number
+    Click Clear All
+    #Amend 3
+    Retrieve PNR And Populate Amend Workflow    HK    fop_dropdown_value=Cash
+    Click Panel    Other Svcs
+    Click Amend Eo    ${eo_number}
+    Click Tab In Other Services Panel    MCO/MPD
+    Verify MCO Info Field Values    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    [Teardown]    Run Keyword And Ignore Error    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[HK][NB][OS] Verify MCO/MPD Tab Behaves Correctly For BSP Air Ticket
+    [Tags]    hk    horton    us512    us1127    us1322    US1456
+    ...    us1620
+    Open Power Express And Retrieve Profile    ${version}    Test    uexr493    en-GB    erepolidoru    APAC QA
+    ...    Amadeus
+    Create PNR Using Cash As FOP    HK    True    False    False
+    Click Panel    Other Svcs
+    Select Product And Vendor    BSP AIR TICKET    NORTHWEST AIRLINES
+    Click Tab In Other Services Panel    MCO/MPD
+    Tick Request MCO Checkbox
+    Populate Required MCO Info Fields    jkfhjkwergwe    afsaggwerwer    erqwrsdafasf    Cash    1000    USD
+    ...    44    3
+    Populate MCO Free Text Remark    Free Text Remarks
+    Verify Remarks in MCO/MPD tab    Free Text Remarks
+    Populate Optional MCO Info Fields    d    a    b    c
+    Get MCO Info Values
+    Click Tab In Other Services Panel    Ticket Info
+    Populate Airline Code And Ticket Number    123    2222222222
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Cash
+    Set Issue In Exchange For In Request Tab When Products Are Air BSp Or Air Domestic    4444444444
+    Tick Select All Segments
+    Click Tab In Other Services Panel    MI
+    Populate MI Fields    4444    4444    abc    bb
+    Select MI Realised Saving Code    RF - RESTRICTED FARE ACCEPTED
+    Select MI Missed Saving Code    I - PASSENGER BOOKED TOO LATE
+    Select MI Class Of Service    FC - First Class Corporate Fare
+    Click Tab In Other Services Panel    Ticket Info
+    Populate Ticket Info Fees    HK    4800
+    Click Add Button In EO Panel    Ticket Info
+    Click Finish PNR
+    # Working till here
+    Click Panel    Other Svcs
+    #Verify EO number is generated
+    Verify EO Product Added On EO Grid    BSP AIR TICKET
+    Verify EO Number Is Generated    HK
+    #Verify Clicking on buttons for in memory/Complete
+    Comment    Verify Amend Button Status    Enabled    1
+    Comment    Verify Pdf Button Status    Enabled    1
+    Comment    Verify Email Button Status    Enabled    1
+    Comment    Verify Raise Cheque Button Status    Enabled    1
+    Comment    Click Raise Cheque In Eo Grid    1
+    Comment    Verify Confirmation Message Is Displayed On Clicking Raise Cheque
+    Comment    Verify Raise Cheque Changes EO Status    1
+    Get Exchange Order Number    eo1
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Other Services General Notepad Remarks    BSP AIR TICKET
+
+[HK][AOS] Verify MCO/MPD Tab Retrieves All Values During Amend Process
+    [Tags]    hk    horton    us512    us1127    us1322    us1462
+    ...    us1620
+    Retrieve PNR And Populate Amend Workflow    HK    fop_dropdown_value=Invoice
+    Click Panel    Other Svcs
+    Click Amend EO    ${eo_number_eo1}
+    Click Tab In Other Services Panel    MCO/MPD
+    Verify MCO Info Field Values    jkfhjkwergwe    afsaggwerwer    erqwrsdafasf    Cash    1000    USD
+    ...    44    3    d    a    b    c
+    Verify Remarks in MCO/MPD tab    Free Text Remarks
+    UnTick Request MCO Checkbox
+    Tick Request MCO Checkbox
+    Verify MCO Info Field Values    jkfhjkwergwe    afsaggwerwer    erqwrsdafasf    Cash    1000    USD
+    ...    44    3    d    a    b    c
+    Verify Remarks in MCO/MPD tab    Free Text Remarks
+    Get MCO Info Values
+    Click Tab In Other Services Panel    Ticket Info
+    Populate Airline Code And Ticket Number    123    2222222222
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Invoice
+    Set Issue In Exchange For In Request Tab When Products Are Air BSp Or Air Domestic    4444444444
+    Tick Select All Segments
+    Click Tab In Other Services Panel    MI
+    Populate MI Fields    4900    4444    abc    bb
+    Select MI Realised Saving Code    RF - RESTRICTED FARE ACCEPTED
+    Select MI Missed Saving Code    I - PASSENGER BOOKED TOO LATE
+    Select MI Class Of Service    FC - First Class Corporate Fare
+    Click Update Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    BSP AIR TICKET
+    Click Finish PNR    Amend HK Verify MCO/MPD Tab Retrieves All Values During Amend Process
+    Execute Simultaneous Change Handling    Amend HK Verify MCO/MPD Tab Retrieves All Values During Amend Process
+    Click Panel    Other Svcs
+    #Verify EO number is generated
+    Verify EO Number Is Generated    HK
+    #Verify Clicking on buttons for in memory/Complete
+    Comment    Verify Amend Button Status    Enabled    1
+    Comment    Verify Pdf Button Status    Enabled    1
+    Comment    Verify Email Button Status    Enabled    1
+    Comment    Verify Raise Cheque Button Status    Enabled    1
+    Comment    Click Raise Cheque In Eo Grid    1
+    Comment    Verify Confirmation Message Is Displayed On Clicking Raise Cheque
+    Comment    Verify Raise Cheque Changes EO Status    1
+    Get Exchange Order Number
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Previous Accounting Remarks Are Not Written Twice When MCO/MPD Tab is Present
+    Verify Other Services General Notepad Remarks    BSP AIR TICKET
+
+[HK][OS] Verify MCO/MPD Tab Behaves Correctly For Additional BSP Air
+    [Tags]    hk    horton    us512    us1127    us1322    us1462
+    ...    us1620
+    #Amend 1
+    Retrieve PNR And Populate Amend Workflow    HK    fop_dropdown_value=Cash
+    Click Panel    Other Svcs
+    Select Product And Vendor    ADDITIONAL BSP AIR    CONTINENTAL AIRLINES
+    Click Tab In Other Services Panel    MCO/MPD
+    Tick Request MCO Checkbox
+    Populate Required MCO Info Fields    jkfhjkwergwe    afsaggwerwer    erqwrsdafasf    Cash    1000    USD
+    ...    44    3
+    Populate MCO Free Text Remark    Remarks_50
+    Verify Remarks in MCO/MPD tab    Remarks_50
+    Get MCO Info Values
+    Populate Optional MCO Info Fields    Test    a    b    c
+    Click Tab In Other Services Panel    Ticket Info
+    Populate Ticket Info Fees    HK    4800
+    Populate Airline Code And Ticket Number    123    2222222222
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Cash
+    Set Issue In Exchange For In Request Tab When Products Are Air BSp Or Air Domestic    4444444444
+    Tick Select All Segments
+    Click Tab In Other Services Panel    MI
+    Populate MI Fields    4800    4444    abc    bb
+    Select MI Realised Saving Code    RF - RESTRICTED FARE ACCEPTED
+    Select MI Missed Saving Code    I - PASSENGER BOOKED TOO LATE
+    Select MI Class Of Service    FC - First Class Corporate Fare
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    ADDITIONAL BSP AIR
+    Click Finish PNR    Amend Verify MCO/MPD Tab Behaves Correctly For Additional BSP Air
+    Execute Simultaneous Change Handling    Amend Verify MCO/MPD Tab Behaves Correctly For Additional BSP Air
+    Click Panel    Other Svcs
+    #Verify EO number is generated
+    Verify EO Number Is Generated    HK
+    Get Exchange Order Number
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Other Services General Notepad Remarks    ADDITIONAL BSP AIR
+    Click Clear All
+    #Amend 2
+    Retrieve PNR And Populate Amend Workflow    HK    fop_dropdown_value=Cash
+    Click Panel    Other Svcs
+    Click Amend Eo    ${eo_number}
+    Click Tab In Other Services Panel    MCO/MPD
+    Verify MCO Info Field Values    jkfhjkwergwe    afsaggwerwer    erqwrsdafasf    Cash    1000    USD
+    ...    44    3    Test    a    b    c
+    Verify Remarks in MCO/MPD tab    Remarks_50
+    UnTick Request MCO Checkbox
+    Click Tab In Other Services Panel    Ticket Info
+    Populate Airline Code And Ticket Number    123    2222222222
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Cash
+    Set Issue In Exchange For In Request Tab When Products Are Air BSp Or Air Domestic    4444444444
+    Tick Select All Segments
+    Click Tab In Other Services Panel    MI
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    ADDITIONAL BSP AIR
+    Click Finish PNR    Amend 2 Verify MCO/MPD Tab Behaves Correctly For Additional BSP Air
+    Execute Simultaneous Change Handling    Amend 2 Verify MCO/MPD Tab Behaves Correctly For Additional BSP Air
+    Click Panel    Other Svcs
+    #Verify EO number is generated
+    Verify EO Number Is Generated    HK
+    Get Exchange Order Number
+    Click Clear All
+    #Amend 3
+    Retrieve PNR And Populate Amend Workflow    HK    fop_dropdown_value=Cash
+    Click Panel    Other Svcs
+    Click Amend Eo    ${eo_number}
+    Click Tab In Other Services Panel    MCO/MPD
+    Verify MCO Info Field Values    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    Click Clear All
+    [Teardown]    Run Keyword And Ignore Error    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[HK][NB] Verify That The Added EO is Not Automatically Updated to Completed and Correct messages Are Displayed Upon Finish PNR When the EO Requires 3rd Party Vendor Payment
+    [Tags]    us1378    us1756    hk    team_horton    us1797
+    Create PNR Using Credit Card As FOP    HK    True
+    Click Panel    Other Svcs
+    Select Product And Vendor    BSP AIR TICKET    HONG KONG DRAGON AIRLINES LTD
+    Click Tab In Other Services Panel    Ticket Info
+    Select Bill Fare    Published Fare
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Set Tranx/Service Fee Value    500
+    Set Fuel Surcharge Fee    30
+    Set Commission Value    20
+    Set Discount Value    25
+    Tick Select All Segments    TICK
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    DC    378282246310005    12    2026    #Changed
+    Set Issue In Exchange For    1234567890
+    Populate Airline Code And Ticket Number    111    6505554448
+    Set Conjunction Number    33
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    QF
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    F - PASSENGER REQUESTED SPECIFIC CLASS
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Click Add Button In EO Panel    Ticket Info
+    ##Car EO number2
+    Select Product And Vendor    Car Rental Prepaid    FIRST MARKETING
+    Click Tab In Other Services Panel    Departure From
+    Select Location Value    Airport
+    Comment    Select Flight Value    ${EMPTY}
+    Click Tab In Other Services Panel    Arrival From
+    Tick Date & Time Checkbox
+    Click Tab In Other Services Panel    Departure To
+    Select Flight Value    ${EMPTY}
+    Click Tab In Other Services Panel    Arrival To
+    Click Service Info Tab
+    Set Vendor Contact    TestAutomation1
+    Set Nett Cost    200
+    Set Selling Price    250
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    VI    4444333322221111    12    2020
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR
+    Get Exchange Order Number    identifier=thirdparty
+    Verify Warning Message For EO Invoicing Is Displayed    True
+    Click Panel    Other Svcs
+    Verify EO Status For Third Party Vendor    New    1
+    Verify EO Status For Third Party Vendor    New    2
+    Verify EO Action Status Message on Mouse Hover    ${eo_number_1}    View PDF    Send email to vendor
+    Verify EO Action Status Message on Mouse Hover    ${eo_number_2}    View PDF    Send email to vendor
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[HK][NB] Verify That Visual Cues and Messages Are Correctly Displayed Upon Finish PNR When the EO does not Require 3rd Party Vendor Payment
+    [Tags]    us1378    us1756    hk    team_horton    us1797
+    Create PNR Using Credit Card As FOP    HK    True
+    Click Panel    Other Svcs
+    Select Product And Vendor    BSP AIR TICKET    BSP
+    Click Tab In Other Services Panel    Ticket Info
+    Select Bill Fare    Published Fare
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Set Tranx/Service Fee Value    500
+    Set Fuel Surcharge Fee    30
+    Set Commission Value    20
+    Set Discount Value    25
+    Tick Select All Segments    TICK
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    DC    378282246310005    12    2026    #Changed
+    Set Issue In Exchange For    1234567890
+    Populate Airline Code And Ticket Number    111    6505554448
+    Set Conjunction Number    33
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    QF
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    F - PASSENGER REQUESTED SPECIFIC CLASS
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    BSP AIR TICKET
+    Click Finish PNR
+    Verify PNR Is Successfully Created    False    Exchange Order(s) Transaction Successfully Saved!
+    Get Exchange Order Number    identifier=neweo
+    Verify Warning Message For EO Invoicing Is Displayed    False
+    Click Panel    Other Svcs
+    Verify EO Status For Third Party Vendor    New    1
+    Verify Amend Button Status    Enabled    1
+    Verify Pdf Button Status    Enabled    1
+    Verify Email Button Status    Enabled    1
+    Verify Raise Cheque Button Status    Enabled    1
+    Verify EO Action Status Message on Mouse Hover    ${eo_number_1}    View PDF    Send email to vendor
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[HK][NB][AB] Verify That Visual Cues and Messages Are Correctly Displayed Upon Finish PNR If there Are Changes In Segments
+    [Tags]    us1378    hk    team_horton    us1797
+    Open Power Express And Retrieve Profile    ${version}    Test    u003axo    en-GB    aobsumsg    APAC QA
+    Select GDS    Amadeus
+    Activate Power Express Window
+    Set Client And Traveler    APAC SYN CORP ¦ APAC HK OS AUTOMATION    BEAR    HKOTHERS
+    Click New Booking
+    Click Panel    Client Info
+    Select Form Of Payment    Cash
+    Update PNR for EN or GB
+    Book Flight X Months From Now    SINMNL/ASQ    SS1Y1    FXP/S2    6    3
+    Book Flight X Months From Now    MNLSIN/ASQ    SS1Y1    FXP/S3    6    5
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Other Svcs
+    Click Panel    Other Svcs
+    Select Product And Vendor    BSP AIR TICKET    HONG KONG DRAGON AIRLINES LTD
+    Click Tab In Other Services Panel    Ticket Info
+    Select Bill Fare    Published Fare
+    Populate Ticket Info Fees    HK    1000    10    HK    20    SQ
+    Set Tranx/Service Fee Value    500
+    Set Fuel Surcharge Fee    30
+    Set Commission Value    20
+    Set Discount Value    25
+    Tick Select All Segments    TICK
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    DC    378282246310005    12    2026    #Changed
+    Set Issue In Exchange For    1234567890
+    Populate Airline Code And Ticket Number    111    6505554448
+    Set Conjunction Number    33
+    Get Ticket Info Fee Values    HK
+    Get Other Services Form Of Payment Details
+    Get Selected Air Segment From Air Segment Grid
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    QF
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    F - PASSENGER REQUESTED SPECIFIC CLASS
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    BSP AIR TICKET
+    Click Finish PNR
+    Verify PNR Is Successfully Created    False    Exchange Order(s) Transaction Successfully Saved!
+    Get Exchange Order Number    identifier=neweo
+    Verify Warning Message For EO Invoicing Is Displayed    False
+    Click Panel    Other Svcs
+    Verify EO Status For Third Party Vendor    New    1
+    Verify Amend Button Status    Enabled    1
+    Verify Pdf Button Status    Enabled    1
+    Verify Email Button Status    Enabled    1
+    Verify Raise Cheque Button Status    Enabled    1
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Enter GDS Command    XE3
+    Book Flight X Months From Now    MNLSIN/ASQ    SS1Y1    FXP/S3    6    10
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)
+    Click Panel    Other Svcs
+    #Adding New EO
+    Select Product And Vendor    CONSOLIDATOR TICKET    AIR FRANCE
+    Click Tab In Other Services Panel    Ticket Info
+    Get Other Services Default Form Of Payment
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    AX    378282246310005    12    2026
+    Populate Ticket Info Fees    SG    1000    10    TX    20    XT
+    Tick Select All Segments    Tick
+    Populate Airline Code And Ticket Number    111    1234567890
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Set MI Reference Fare    1030
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    QF
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    B - PASSENGER REQUESTED SPECIFIC AIRLINE
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    CONSOLIDATOR TICKET
+    Select Product And Vendor    Car Rental Prepaid    FAR EAST RENT A CAR LTD
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    VI    4444333322221111    12    2026    #us1322
+    Click Tab In Other Services Panel    Arrival From
+    Tick Date & Time Checkbox
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    Car Rental Prepaid
+    Click Finish PNR
+    Verify Warning Message For EO Invoicing Is Displayed    True
+    Click Panel    Other Svcs
+    Get Exchange Order Number
+    Verify EO Status For Third Party Vendor    New    1
+    Verify EO Status For Third Party Vendor    New    2
+    Verify EO Status For Third Party Vendor    New    3
+    Verify EO Action Status Message on Mouse Hover    ${eo_number_1}    View PDF    Send email to vendor
+    Verify EO Action Status Message on Mouse Hover    ${eo_number_2}    View PDF    Send email to vendor
+    Verify EO Action Status Message on Mouse Hover    ${eo_number_3}    View PDF    Send email to vendor
+    [Teardown]    Run Keyword And Ignore Error    Cancel PNR Thru GDS Native    ${current_pnr}
+
+Run Check
+    [Documentation]    [SG][NB] Verify That The Added EO is Automatically Updated to Completed and Correct messages Are Displayed Upon Finish PNR When the EO does not Require 3rd Party Vendor Payment
+    [Tags]    us1378    sg    team_horton    us1756    us1797
+    Create PNR Using Cash As FOP    SG
+    Click Panel    Other Svcs
+    Select Product And Vendor    Airline Penalty Fee    CARLSON WAGONLIT TRAVEL
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Cash
+    Set Date    9/2/2019
+    Set BTA Description    Desc 1
+    Click Add Button In EO Panel    Service Info
+    ###Second Product
+    Select Product And Vendor    Visa Handling Fee    Carlson Wagonlit GST
+    Populate Service Info Cost Details    Vendor Contact    800.00    1000.00
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Cash
+    Populate Visa Processing Country Details    Singapore    Other    Single    Month(s)    Normal    0137563466343
+    Set Validity Number    1
+    Set Processing Days    12
+    Set Passenger ID Value    99
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Tab In Other Services Panel    Visa Info
+    Click Add Button In EO Panel    Visa Info
+    Click Finish PNR
+    Get Exchange Order Number    identifier=cwt
+    Verify Warning Message For EO Invoicing Is Displayed    False
+    Click Panel    Other Svcs
+    Verify EO Status For Third Party Vendor    Completed    1
+    Verify EO Status For Third Party Vendor    Completed    2
+    Verify EO Action Status Message on Mouse Hover    ${eo_number_1}    EO document is not required for this EO    Sending vendor email is not required for this EO
+    Verify EO Action Status Message on Mouse Hover    ${eo_number_2}    EO document is not required for this EO    Sending vendor email is not required for this EO
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[SG][NB][AB] Verify That Visual Cues and Messages Are Correctly Displayed Upon Finish PNR If there Are Changes In Segments
+    [Tags]    us1378    sg    team_horton    us1756    us1797
+    Open Power Express And Retrieve Profile    ${version}    Test    uexr493    en-GB    erepolidoru    APAC QA
+    ...    Amadeus
+    Select GDS    Amadeus
+    Set Client And Traveler    APAC SYN CORP ¦ APAC SG OS AUTOMATION    BEAR    SGOTHERS
+    Click New Booking
+    Click Panel    Client Info
+    Select Form Of Payment    Cash
+    Update PNR for EN or GB
+    Book Flight X Months From Now    SINMNL/ASQ    SS1Y1    FXP/S2    6    5
+    Book Flight X Months From Now    MNLSIN/ASQ    SS1Y1    FXP/S3    6    6
+    #Add car
+    #Add Hotel
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Other Svcs
+    Click Panel    Other Svcs
+    Select Product And Vendor    Visa Handling Fee    Carlson Wagonlit GST
+    Populate Service Info Cost Details    Vendor Contact    800.00    1000.00
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    DC    378282246310005    12    2026    #Changed
+    Populate Visa Processing Country Details    Singapore    Other    Single    Month(s)    Normal    0137563466343
+    Set Validity Number    1
+    Set Processing Days    12
+    Set Passenger ID Value    99
+    Click Vendor Info Tab
+    Populate Vendor Info Tab    automationtest@cwt.com    1111    automationtest@cwt.com
+    Click Tab In Other Services Panel    Visa Info
+    Click Add Button In EO Panel    Visa Info
+    Select Product And Vendor    BSP Ticket And MPD    BANK SETTLEMENT PLAN
+    Click Tab In Other Services Panel    Ticket Info
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    DC    378282246310005    12    2026
+    Populate Airline Code And Ticket Number    111    6505554448
+    Set Conjunction Number    333
+    Tick Select All Segments    Tick
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    QF
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    B - PASSENGER REQUESTED SPECIFIC AIRLINE
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Get MI Fields Values
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    BSP Ticket And MPD
+    Click Finish PNR
+    Get Exchange Order Number    identifier=cwt
+    Click Panel    Other Svcs
+    Verify Warning Message For EO Invoicing Is Displayed    False
+    Verify EO Status For Third Party Vendor    Completed    1
+    Verify EO Status For Third Party Vendor    Completed    2
+    Verify EO Action Status Message on Mouse Hover    ${eo_number_1}    EO document is not required for this EO    Sending vendor email is not required for this EO
+    Verify EO Action Status Message on Mouse Hover    ${eo_number_2}    EO document is not required for this EO    Sending vendor email is not required for this EO
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Enter GDS Command    XE3
+    Book Flight X Months From Now    MNLSIN/ASQ    SS1Y1    FXP/S3    6    10
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)
+    Click Panel    Other Svcs
+    #Adding New EO
+    Select Product And Vendor    Consolidator Ticket    BUDGET
+    Get Other Services Default Form Of Payment
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    AX    378282246310005    12    2026
+    Populate Ticket Info Fees    SG    1000    10    TX    20    XT
+    Tick Select All Segments    Tick
+    Populate Airline Code And Ticket Number    111    1234567890
+    # MI Info Section
+    Click Tab In Other Services Panel    MI
+    Select MI Filed Fare Number    1
+    Set MI Reference Fare    1234
+    Set MI Final Destination    SIN
+    Set MI Low Fare Carrier    QF
+    Select MI Type Of Ticket    PT
+    Select MI Realised Saving Code    XX - NO SAVING
+    Select MI Missed Saving Code    B - PASSENGER REQUESTED SPECIFIC AIRLINE
+    Select MI Class Of Service    YF - Economy Class Full Fare
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    Consolidator Ticket
+    Select Product And Vendor    Car Transfer    BUDGET
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    VI    4444333322221111    12    2026    #us1322
+    Click Tab In Other Services Panel    Arrival From
+    Tick Date & Time Checkbox
+    Click Tab In Other Services Panel    Arrival To
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    Car Transfer
+    Click Finish PNR
+    Get Exchange Order Number    identifier=cwt
+    Verify Warning Message For EO Invoicing Is Displayed    True
+    Click Panel    Other Svcs
+    Verify EO Status For Third Party Vendor    New    1
+    Verify EO Status For Third Party Vendor    New    2
+    Verify EO Status For Third Party Vendor    Completed    3
+    Verify EO Status For Third Party Vendor    Completed    4
+    Verify EO Action Status Message on Mouse Hover    ${eo_number_3}    EO document is not required for this EO    Sending vendor email is not required for this EO
+    Verify EO Action Status Message on Mouse Hover    ${eo_number_4}    EO document is not required for this EO    Sending vendor email is not required for this EO
+
+[SG][2nd AB] Verify That Visual Cues and Messages Are Correctly Displayed Upon Finish PNR If there Are No Change In Segments
+    [Tags]    us1378    sg    team_horton    us1756    us1797    de436
+    Retrieve PNR And Populate Amend Workflow    SG    fop_dropdown_value=Cash
+    Click Panel    Other Svcs
+    #First EO
+    Get Exchange Order Number Using Product    BSP Ticket And MPD
+    Click Amend EO    ${eo_number}
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    DC    378282246310005    12    2026
+    Tick Select All Segments    TICK
+    Click Update Button In EO Panel    Ticket Info
+    #Second EO
+    Get Exchange Order Number Using Product    Visa Handling Fee
+    Click Amend EO    ${eo_number}
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    DC    378282246310005    12    2026
+    Click Update Button In EO Panel    Visa Info
+    #Third EO
+    Get Exchange Order Number Using Product    Car Transfer
+    Click Amend EO    ${eo_number}
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    DC    378282246310005    12    2026
+    Click Tab In Other Services Panel    Departure To
+    Tick Date & Time Checkbox
+    Click Update Button In EO Panel    Service Info
+    #Fourth EO
+    Get Exchange Order Number Using Product    Consolidator Ticket
+    Click Amend EO    ${eo_number}
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    DC    378282246310005    12    2026
+    Tick Select All Segments    TICK
+    Click Update Button In EO Panel    Ticket Info
+    Click Finish PNR
+    Get Exchange Order Number    identifier=cwt
+    Verify Warning Message For EO Invoicing Is Displayed    True
+    Click Go To Other Services Button In Complete Panel
+    Verify EO Status For Third Party Vendor    New    1
+    Verify EO Status For Third Party Vendor    New    2
+    Verify EO Status For Third Party Vendor    Completed    3
+    Verify EO Status For Third Party Vendor    Completed    4
+    Verify EO Action Status Message on Mouse Hover    ${eo_number_3}    EO document is not required for this EO    Sending vendor email is not required for this EO
+    Verify EO Action Status Message on Mouse Hover    ${eo_number_4}    EO document is not required for this EO    Sending vendor email is not required for this EO
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Verify Merchant Fee Field Is Disabled
+    Verify Control Object Is Visible    [NAME:MerchantFeeTextBox]
+    Verify Control Object Is Visible    [NAME:MerchantFeeTextBox]
+
+Verify CWT Absorb For Merchant Fee Is Disabled
+    Verify Control Object Is Disabled    [NAME:MerchantFeeAbsorbCheckBox]
+    Verify Control Object Is Disabled    [NAME:MerchantFeeAbsorbCheckBox]
+
+Create List Of Product And Vendor Where Merchant Fee Is Not Applicable
+    ${products_vendors_nomf}=    Create Dictionary
+    Set To Dictionary    ${products_vendors_nomf}    24 Hours Emergency Svcs    Carlson Wagonlit GST
+    Set To Dictionary    ${products_vendors_nomf}    Hotel - Overseas Booking Fee    CARLSON WAGONLIT TRAVEL
+    Set To Dictionary    ${products_vendors_nomf}    Hotel - Local Booking Fee    Carlson Wagonlit GST
+    Set To Dictionary    ${products_vendors_nomf}    Car - Overseas Booking Fee    CARLSON WAGONLIT TRAVEL
+    Set To Dictionary    ${products_vendors_nomf}    Car - Local Booking Fee    Carlson Wagonlit GST
+    Set To Dictionary    ${products_vendors_nomf}    Visa Handling Fee    Carlson Wagonlit GST
+    Set To Dictionary    ${products_vendors_nomf}    MISC - Overseas Booking Fee    CARLSON WAGONLIT TRAVEL
+    Set To Dictionary    ${products_vendors_nomf}    MISC - Local Booking Fee    Carlson Wagonlit GST
+    Set Test Variable    ${products_vendors_nomf}
+
+Amend Verify That FOP Details Are Pre-populated When FOP is CA (WITHOUT GST)
+    Retrieve PNR And Populate Amend Workflow    SG    fop_dropdown_value=BTA CARD/CA************1114/D0828/CVV****
+    Click Panel    Other Svcs
+    Select Product And Vendor    Airline Penalty Fee    CARLSON WAGONLIT TRAVEL
+    Verify Form Of Payment Details Are Correct    BTA CARD/CA************1114/D0828/CVV****
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CC)    ${EMPTY}
+    Click Mask Icon
+    Verify Form Of Payment Details Are Correct    BTA CARD/CA2222420000001114/D0828/CVV****    Credit Card (CC)
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    Airline Penalty Fee
+    Verify Amend Button Status    Enabled    1
+    Verify Pdf Button Status    Enabled    1
+    Verify Email Button Status    Enabled    1
+    Verify Raise Cheque Button Status    Enabled    1
+    #Back To List Verification
+    ${expected_eo_grid}    Get All Fields From Eo Grid
+    Click Amend In Eo Grid    1
+    Click Back To List In Other Svcs
+    Verify EO Grid Screen Is Displayed
+    Verify EO Grid Is Updated After EO Add/Remove    Add    ${expected_eo_grid}
+    #Remove Verification
+    ${expected_eo_grid}    Get Row Data From Eo Grid    1
+    Click Amend In Eo Grid    1
+    Click Remove From List In Other Svcs
+    Verify Confirmation Message Is Displayed On Clicking Remove Eo
+    Verify EO Grid Is Updated After EO Add/Remove    Remove    ${expected_eo_grid}
+    Select Product And Vendor    Airline Penalty Fee    CARLSON WAGONLIT TRAVEL
+    Populate Service Info Cost Details    9999999    500.00    655.00
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CC)    BTA CARD/CA************1114/D0828/CVV****
+    Click Add Button In EO Panel    Service Info
+    #Verify Update Button
+    Click Amend In Eo Grid    1
+    Populate Service Info Cost Details    22222222    600.00    655.00
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CC)    BTA CARD/CA************1114/D0828/CVV****
+    Populate Vendor Info Tab    cwtservice@cwt.com
+    Click Update Button In EO Panel    Service Info
+    #Verify Values are updated
+    Click Finish PNR
+
+Amend Verify That FOP Details Are Pre-populated When FOP is AX (VISA COST)
+    Retrieve PNR And Populate Amend Workflow    SG    fop_dropdown_value=TEST CARD/AX***********0009/D0822/CVV****
+    Click Panel    Other Svcs
+    Select Product And Vendor    Visa Cost    VISA DEPARTMENT
+    Verify Form Of Payment Details Are Correct    TEST CARD/AX***********0009/D0822/CVV****    Credit Card (CX)
+    Click Mask Icon
+    Verify Form Of Payment Details Are Correct    TEST CARD/AX375000000000009/D0822/CVV****    Credit Card (CX)
+    Populate Visa Processing Panel Details    VISA VENDOR    VISA COUNTRY    Other    Single    Day(s)    15
+    ...    Express    15    ${EMPTY}
+    Click Add Button In EO Panel    Visa Info
+    Click Finish PNR
+
+Amend Verify That FOP Details Are Pre-populated When FOP Is AX (VISA HANDLING)
+    Retrieve PNR And Populate Amend Workflow    SG    fop_dropdown_value=TEST CARD/AX***********0009/D0822/CVV****
+    Click Panel    Other Svcs
+    Select Product And Vendor    Visa Handling Fee    Carlson Wagonlit GST
+    Verify Form Of Payment Details Are Correct    TEST CARD/AX***********0009/D0822/CVV****    Credit Card (CX)
+    Click Mask Icon
+    Verify Form Of Payment Details Are Correct    TEST CARD/AX375000000000009/D0822/CVV****    Credit Card (CX)
+    Populate Visa Processing Panel Details    VISA VENDOR    VISA COUNTRY    Other    Single    Day(s)    15
+    ...    Express    15    ${EMPTY}
+    Click Add Button In EO Panel    Visa Info
+    Click Finish PNR
+
+Amend Verify MCO/MPD Tab Retrieves All Values During Amend Process
+    Retrieve PNR And Populate Amend Workflow    SG    fop_dropdown_value=Cash
+    Click Panel    Other Svcs
+    Click Amend EO    ${eo_number_eo1}
+    Click Tab In Other Services Panel    MCO/MPD
+    Verify MCO Info Field Values    jkfhjkwergwe    afsaggwerwer    erqwrsdafasf    Cash    1000.00    USD
+    ...    44.00    3.00    Populating Issue In Exchange    a    b    c
+    Verify Remarks in MCO/MPD tab    Remarks
+    UnTick Request MCO Checkbox
+    Tick Request MCO Checkbox
+    Verify MCO Info Field Values    jkfhjkwergwe    afsaggwerwer    erqwrsdafasf    Cash    1000.00    USD
+    ...    44.00    3.00    Populating Issue In Exchange    a    b    c
+    Verify Remarks in MCO/MPD tab    Remarks
+    Get MCO Info Values
+    UnTick Request MCO Checkbox
+    Click Tab In Other Services Panel    Ticket Info
+    Populate Airline Code And Ticket Number    123    2222222222
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Cash
+    Set Issue In Exchange For In Request Tab When Products Are Air BSp Or Air Domestic    4444444444
+    Tick Select All Segments
+    Click Tab In Other Services Panel    MI
+    Populate MI Fields    4900    4444    abc    bb
+    Select MI Realised Saving Code    RF - RESTRICTED FARE ACCEPTED
+    Select MI Missed Saving Code    I - PASSENGER BOOKED TOO LATE
+    Select MI Class Of Service    FC - First Class Corporate Fare
+    Click Update Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    AA SEGMENT BOOKING FEE
+    Click Finish PNR
+
+Amend Verify MCO/MPD Tab Behaves Correctly For BSP Ticket And MPD
+    Retrieve PNR And Populate Amend Workflow    SG    fop_dropdown_value=Cash
+    Click Panel    Other Svcs
+    Select Product And Vendor    BSP Ticket And MPD    BANK SETTLEMENT PLAN
+    Click Tab In Other Services Panel    MCO/MPD
+    Tick Request MCO Checkbox
+    Populate Required MCO Info Fields    jkfhjkwergwe    afsaggwerwer    erqwrsdafasf    Cash    1000    USD
+    ...    44    3
+    Populate MCO Free Text Remark    BSP Ticket And MPD
+    Verify Remarks in MCO/MPD tab    BSP Ticket And MPD
+    Get MCO Info Values
+    Populate Optional MCO Info Fields    Populating Issue In Exchange    a    b    c
+    Click Tab In Other Services Panel    Ticket Info
+    Populate Ticket Info Fees    SG    4800
+    Populate Airline Code And Ticket Number    123    2222222222
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Invoice
+    Set Issue In Exchange For In Request Tab When Products Are Air BSp Or Air Domestic    4444444444
+    Tick Select All Segments
+    Click Tab In Other Services Panel    MI
+    Populate MI Fields    4800    4444    abc    bb
+    Select MI Realised Saving Code    RF - RESTRICTED FARE ACCEPTED
+    Select MI Missed Saving Code    I - PASSENGER BOOKED TOO LATE
+    Select MI Class Of Service    FC - First Class Corporate Fare
+    Click Add Button In EO Panel    Ticket Info
+    Click Finish PNR
+
+Amend 2 Verify MCO/MPD Tab Behaves Correctly For BSP Ticket And MPD
+    Retrieve PNR And Populate Amend Workflow    SG    fop_dropdown_value=Cash
+    Click Panel    Other Svcs
+    Click Amend Eo    ${eo_number}
+    Click Tab In Other Services Panel    MCO/MPD
+    Verify MCO Info Field Values    jkfhjkwergwe    afsaggwerwer    erqwrsdafasf    Cash    1000.00    USD
+    ...    44.00    3.00    Populating Issue In Exchange    a    b    c
+    Verify Remarks in MCO/MPD tab    BSP Ticket And MPD
+    UnTick Request MCO Checkbox
+    Click Tab In Other Services Panel    Ticket Info
+    Populate Airline Code And Ticket Number    123    2222222222
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Cash
+    Set Issue In Exchange For In Request Tab When Products Are Air BSp Or Air Domestic    4444444444
+    Tick Select All Segments
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    BSP Ticket And MPD
+    Click Finish PNR
+
+Amend Verify That FOP Details Are Pre-populated When FOP is TP (VISA PROCESSING)
+    Retrieve PNR And Populate Amend Workflow    HK    fop_dropdown_value=BTA TP CARD/TP***********4198/D0825/CVV***
+    Click Panel    Client Info
+    Select Form Of Payment    BTA TP CARD/TP***********4198/D0825/CVV***
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Click Panel    Other Svcs
+    Select Product And Vendor    VISA PROCESSING    CWT VISA
+    Populate Visa Processing Panel Details    VISA VENDOR    VISA COUNTRY    Other    Single    Days    15
+    ...    Express    15    ${EMPTY}
+    Verify Form Of Payment Details Are Correct    BTA TP CARD/TP***********4198/D0825/CVV***    Credit Card (CX)
+    Click Add Button In EO Panel    Visa Info
+    Verify EO Product Added On EO Grid    VISA PROCESSING
+    Click Finish PNR    Amend Verify That FOP Details Are Pre-populated When FOP is TP (VISA PROCESSING)
+
+Amend Verify That FOP Details Are Pre-populated When FOP is AX (INSURANCE)
+    Retrieve PNR And Populate Amend Workflow    HK    fop_dropdown_value=TEST CARD/AX***********0009/D0822/CVV****
+    Click Panel    Client Info
+    Select Form Of Payment    TEST CARD/AX***********0009/D0822/CVV****
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Click Panel    Other Svcs
+    Select Product And Vendor    INSURANCE    FEDERAL INSURANCE COMPANY
+    Verify Form Of Payment Details Are Correct    TEST CARD/AX***********0009/D0822/CVV****
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CX)    ${EMPTY}    #1620
+    Click Tab In Other Services Panel    Insurance
+    Select Plan Selected    Family Budget Plan
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Verify That FOP Details Are Pre-populated When FOP is AX (INSURANCE)
+
+Amend Verify That FOP Details Are Pre-populated When FOP is AX (WITHOUT GST)
+    Retrieve PNR And Populate Amend Workflow    HK    fop_dropdown_value=TEST CARD/AX***********0009/D0822/CVV****
+    Click Panel    Client Info
+    Select Form Of Payment    TEST CARD/AX***********0009/D0822/CVV****
+    Click Panel    Air Fare
+    Populate Fare Details And Fees Tab With Default Values
+    Click Panel    Other Svcs
+    Select Product And Vendor    24 EMERGENCY SERVICE FEE    CWT
+    Verify Form Of Payment Details Are Correct    TEST CARD/AX***********0009/D0822/CVV****
+    Select Form Of Payment (FOP) In Other Services    Credit Card (CX)    ${EMPTY}
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Verify That FOP Details Are Pre-populated When FOP is AX (WITHOUT GST)
+
+Amend HK Verify MCO/MPD Tab Retrieves All Values During Amend Process
+    Retrieve PNR And Populate Amend Workflow    HK    fop_dropdown_value=Invoice
+    Click Panel    Other Svcs
+    Click Amend In Eo Grid    1
+    Click Tab In Other Services Panel    MCO/MPD
+    Verify MCO Info Field Values    jkfhjkwergwe    afsaggwerwer    erqwrsdafasf    Cash    1000    USD
+    ...    44    3    d    a    b    c
+    Verify Remarks in MCO/MPD tab    Free Text Remarks
+    UnTick Request MCO Checkbox
+    Tick Request MCO Checkbox
+    Verify MCO Info Field Values    jkfhjkwergwe    afsaggwerwer    erqwrsdafasf    Cash    1000    USD
+    ...    44    3    d    a    b    c
+    Verify Remarks in MCO/MPD tab    Free Text Remarks
+    Get MCO Info Values
+    Click Tab In Other Services Panel    Ticket Info
+    Populate Airline Code And Ticket Number    123    2222222222
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Invoice
+    Set Issue In Exchange For In Request Tab When Products Are Air BSp Or Air Domestic    4444444444
+    Tick Select All Segments
+    Click Tab In Other Services Panel    MI
+    Populate MI Fields    4900    4444    abc    bb
+    Select MI Realised Saving Code    RF - RESTRICTED FARE ACCEPTED
+    Select MI Missed Saving Code    I - PASSENGER BOOKED TOO LATE
+    Select MI Class Of Service    FC - First Class Corporate Fare
+    Click Update Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    BSP AIR TICKET
+    Click Finish PNR    Amend HK Verify MCO/MPD Tab Retrieves All Values During Amend Process
+
+Amend Verify MCO/MPD Tab Behaves Correctly For Additional BSP Air
+    #Amend 1
+    Retrieve PNR And Populate Amend Workflow    HK    fop_dropdown_value=Cash
+    Click Panel    Other Svcs
+    Select Product And Vendor    ADDITIONAL BSP AIR    CONTINENTAL AIRLINES
+    Click Tab In Other Services Panel    MCO/MPD
+    Tick Request MCO Checkbox
+    Populate Required MCO Info Fields    jkfhjkwergwe    afsaggwerwer    erqwrsdafasf    Cash    1000    USD
+    ...    44    3
+    Populate MCO Free Text Remark    Remarks_50
+    Verify Remarks in MCO/MPD tab    Remarks_50
+    Get MCO Info Values
+    Populate Optional MCO Info Fields    Test    a    b    c
+    Click Tab In Other Services Panel    Ticket Info
+    Populate Ticket Info Fees    HK    4800
+    Populate Airline Code And Ticket Number    123    2222222222
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Cash
+    Set Issue In Exchange For In Request Tab When Products Are Air BSp Or Air Domestic    4444444444
+    Tick Select All Segments
+    Click Tab In Other Services Panel    MI
+    Populate MI Fields    4800    4444    abc    bb
+    Select MI Realised Saving Code    RF - RESTRICTED FARE ACCEPTED
+    Select MI Missed Saving Code    I - PASSENGER BOOKED TOO LATE
+    Select MI Class Of Service    FC - First Class Corporate Fare
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    ADDITIONAL BSP AIR
+    Click Finish PNR    Amend Verify MCO/MPD Tab Behaves Correctly For Additional BSP Air
+
+Amend 2 Verify MCO/MPD Tab Behaves Correctly For Additional BSP Air
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Other Services General Notepad Remarks    ADDITIONAL BSP AIR
+    Click Clear All
+    #Amend 2
+    Retrieve PNR And Populate Amend Workflow    HK    fop_dropdown_value=Cash
+    Click Panel    Other Svcs
+    Click Amend Eo    ${eo_number}
+    Click Tab In Other Services Panel    MCO/MPD
+    Verify MCO Info Field Values    jkfhjkwergwe    afsaggwerwer    erqwrsdafasf    Cash    1000    USD
+    ...    44    3    Test    a    b    c
+    Verify Remarks in MCO/MPD tab    Remarks_50
+    UnTick Request MCO Checkbox
+    Click Tab In Other Services Panel    Ticket Info
+    Populate Airline Code And Ticket Number    123    2222222222
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Cash
+    Set Issue In Exchange For In Request Tab When Products Are Air BSp Or Air Domestic    4444444444
+    Tick Select All Segments
+    Click Tab In Other Services Panel    MI
+    Click Add Button In EO Panel    Ticket Info
+    Verify EO Product Added On EO Grid    ADDITIONAL BSP AIR
+    Click Finish PNR    Amend 2 Verify MCO/MPD Tab Behaves Correctly For Additional BSP Air
+
+Verify EO Action Status Message on Mouse Hover
+    [Arguments]    ${eo_num}    ${pdf_msg}    ${sendemail_msg}
+    ${text}    Get Tooltip Text In Eo Grid    ${eo_num}    3
+    Verify Actual Value Matches Expected Value    ${text}    ${pdf_msg}
+    ${text}    Get Tooltip Text In Eo Grid    ${eonum}    4
+    Verify Actual Value Matches Expected Value    ${text}    ${sendemail_msg}
+
+Verify That Merchant Fee Is Not Applied To Specific Products
+    ${products_vendors_nomf}=    Create Dictionary
+    Set To Dictionary    ${products_vendors_nomf}    24 Hours Emergency Svcs    Carlson Wagonlit GST
+    Set To Dictionary    ${products_vendors_nomf}    Visa Handling Fee    Carlson Wagonlit GST
+    Set To Dictionary    ${products_vendors_nomf}    Hotel - Overseas Booking Fee    CARLSON WAGONLIT TRAVEL
+    Set To Dictionary    ${products_vendors_nomf}    Hotel - Local Booking Fee    Carlson Wagonlit GST
+    Set To Dictionary    ${products_vendors_nomf}    Car - Overseas Booking Fee    CARLSON WAGONLIT TRAVEL
+    Set To Dictionary    ${products_vendors_nomf}    Car - Local Booking Fee    Carlson Wagonlit GST
+    Set To Dictionary    ${products_vendors_nomf}    MISC - Overseas Booking Fee    CARLSON WAGONLIT TRAVEL
+    Set To Dictionary    ${products_vendors_nomf}    MISC - Local Booking Fee    Carlson Wagonlit GST
+    Set Test Variable    ${products_vendors_nomf}
+    ${row_count}=    Get Length    ${products_vendors_nomf}
+    ${products_nomf} =    Get Dictionary Keys    ${products_vendors_nomf}
+    : FOR    ${each_product}    IN RANGE    ${row_count}
+    \    ${vendor_nomf}=    Get From Dictionary    ${products_vendors_nomf}    @{products_nomf}[${each_product}]
+    \    Log    @{products_nomf}[${each_product}] product and ${vendor_nomf} vendor
+    \    Select Product And Vendor    @{products_nomf}[${each_product}]    ${vendor_nomf}
+    \    Populate Service Info Cost Details    Vendor Contact    222    323
+    \    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    DC    30569309025904    12    2026
+    \    Verify Merchant Fee Value Is Correct    0.00
+    \    Verify CWT Absorb For Merchant Fee Is Disabled
+    \    Click Back To List In Other Svcs

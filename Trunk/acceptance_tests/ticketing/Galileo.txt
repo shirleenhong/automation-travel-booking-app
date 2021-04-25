@@ -1,0 +1,463 @@
+*** Settings ***
+Resource          ../../resources/common/global_resources.txt
+
+*** Test Cases ***
+1 Verify That NPHF BF Value Matches Filed Fare Value For Amended PNR Containing Unissued Exchange Ticket
+    [Documentation]    Expected Result:
+    ...    NPHF High/Low Code and High/Low Fare lines are present after completion of amendment process
+    Set Suite Variable    ${gds_switch}    galileo
+    Set Suite Variable    ${locale}    en-GB
+    Comment    Set Suite Variable    ${current_pnr}    B44VKG
+    Comment    Open Power Express And Retrieve Profile    ${version}    ${syex_env}    U003WXR    en-GB    AutomationUK
+    ...    UK Head Office Test Team
+    Select GDS    Galileo
+    Set Client And Traveler    UK STAFF TEST ¦ AUTO UK-STAFF TEST    Automason    Ara
+    Select PCC/CompanyProfile/TravellerProfile    1G/YW9/STAFF/AUTOMASON AR131270264
+    Set Client And Traveler    UK STAFF TEST ¦ AUTO UK-STAFF TEST    Automason    Yuri
+    Select PCC/CompanyProfile/TravellerProfile    1G/YW9/STAFF/AUTOMASON YU131270257
+    Click Tab In Contact Details    Contact
+    Select Client Account Value    208154 ¦ CWT BUSINESS STAFF ACCOUNT ¦ AUTO UK-STAFF TEST
+    Click New Booking
+    Click Panel    Cust Refs
+    Populate Cust Refs Panel With Default Values
+    Click Panel    Client Info
+    Select Form Of Payment    NonRef
+    Click Update PNR
+    Book Flight X Months From Now    LHRMRS/BA    01N1    \    4    3
+    Book Flight X Months From Now    MRSLHR/BA    01N1    FQ    4    4
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Client Info    Delivery    Client Fees    Air Fare
+    Populate Fare Tab With Default Values    Fare 1
+    Click Panel    Client Fees
+    Select Fee From Dropdown    Bookingcom hotel fee    No Bookingcom hotel booked
+    Select Fee From Dropdown    UK Virtual Card Payment Fee    No Virtual Card Payment
+    Click Panel    Pspt and Visa
+    Populate Pspt and Visa Panel With Default Values
+    Click Panel    Recap
+    Click Finish PNR
+    Issue Ticket For Galileo
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Change Booked Air Class Of Specified Segment Via Travelport    ALL    K
+    Click Travelport Menu Item    Tools    Rapid Reprice
+    Wait Until Rapid Reprice Window Title Is    Rapid Reprice Exchange
+    Select Item From Rapid Reprice Combobox    Change &Fee Collection Method    Other    Rapid Reprice Exchange
+    Select Rapid Reprice Option    Price as booked    Rapid Reprice Exchange    Continue
+    Enter Text In Rapid Reprice Received From    CWTPTEST    Rapid Reprice Results All Passengers    Continue
+    Click Rapid Reprice Button    ISSUE LATER    Rapid Reprice Results All Passengers
+    Click Rapid Reprice Button    Continue    Additional Collection
+    Click Rapid Reprice Button    OK    Additional Collection
+    Comment
+    Comment    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Client Fees    Air Fare
+    Click Panel    Air Fare
+    Populate Fare Tab With Default Values    Fare 1
+    Click Panel    Client Fees
+    Select Fee From Dropdown    Bookingcom hotel fee    No Bookingcom hotel booked
+    Select Fee From Dropdown    UK Virtual Card Payment Fee    No Virtual Card Payment
+    Click Finish PNR
+    Get Filed Fare    1
+    Verify NPHF Lines Are Correct    YW9    0104    2020
+    Comment
+    Comment    Comment    Comment    Comment    Win Wait    Rapid Reprice Exchange    ${EMPTY}
+    ...    10
+    Comment    Comment    Comment    Comment    Win Activate    Rapid Reprice Exchange
+    Comment    Comment    Comment    Comment    Win Wait Active    Rapid Reprice Exchange    ${EMPTY}
+    ...    10
+    Comment    Comment    Comment    Comment    Control Click    Rapid Reprice Exchange    ${EMPTY}
+    ...    [CLASS:Button; INSTANCE:12]
+    Comment    Comment    Comment    Comment    Click Rapid Price Button    Continue
+    Comment    Comment    Comment    Comment    Win Wait    Rapid Reprice Results    ${EMPTY}
+    ...    60
+    Comment    Comment    Comment    Comment    Win Activate    Rapid Reprice Results
+    Comment    Comment    Comment    Comment    Win Wait Active    Rapid Reprice Results
+    Comment    Comment    Comment    Comment    Control Set Text    Rapid Reprice Results    ${EMPTY}
+    ...    [CLASS:Edit; INSTANCE:1]    cwtptest
+    Comment    Comment    Comment    Comment    Click Rapid Price Button    Continue
+    Comment    Comment    Comment    Comment    Comment    Control Click    Rapid Reprice Results
+    ...    ${EMPTY}    [CLASS:Button; INSTANCE:1]
+    Comment    Comment    Comment    Comment    Comment    Click Rapid Price Button    Continue
+    Comment    Comment    Comment    Comment    Comment    Comment    Click Rapid Price Button
+    ...    Cancel
+    Comment    Comment    Comment    Comment    Comment    Comment    Comment
+    ...    Populate All Panels (Except Given Panels If Any)    Client Info    Air Fare    APIS/SFPD    Recap    Client Fees
+    Comment    Comment    Comment    Comment    Comment    Comment    Comment
+    ...    Click Panel    Client Fees
+    Comment    Comment    Comment    Comment    Comment    Comment    Comment
+    ...    Select Fee From Dropdown    UK Virtual Card Payment Fee    No Virtual Card Payment
+    Comment    Comment    Comment    Comment    Comment    Comment    Comment
+    ...    Select Fee From Dropdown    Oceaneering product type    UK Requisition number AIR ONLY
+    Comment    Comment    Comment    Comment    Comment    Comment    Comment
+    ...    Click Finish PNR
+    [Teardown]
+
+2 Verify That NPHF High/Low Code and High/Low Fare lines are present after completion of amendment process
+    [Documentation]    Expected Result:
+    ...    NPHF High/Low Code and High/Low Fare lines are present after completion of amendment process
+    Set Suite Variable    ${gds_switch}    galileo
+    Set Suite Variable    ${locale}    en-GB
+    Comment    Open Power Express And Retrieve Profile    ${version}    ${syex_env}    U003WXR    en-GB    AutomationUK
+    ...    UK Head Office Test Team
+    Comment    Select GDS    Galileo
+    Set Client And Traveler    UK STAFF TEST ¦ AUTO UK-STAFF TEST    Automason    Ara
+    Select PCC/CompanyProfile/TravellerProfile    1G/YW9/STAFF/AUTOMASON AR131270264
+    Set Client And Traveler    UK STAFF TEST ¦ AUTO UK-STAFF TEST    Automason    Yuri
+    Select PCC/CompanyProfile/TravellerProfile    1G/YW9/STAFF/AUTOMASON YU131270257
+    Click Tab In Contact Details    Contact
+    Select Client Account Value    208154 ¦ CWT BUSINESS STAFF ACCOUNT ¦ AUTO UK-STAFF TEST
+    Click New Booking
+    Click Panel    Cust Refs
+    Populate Cust Refs Panel With Default Values
+    Click Panel    Client Info
+    Select Form Of Payment    NonRef
+    Click Update PNR
+    Book Flight X Months From Now    CDGLHR/BA    01Y1    \    4    10
+    Book Flight X Months From Now    LHRCDG/BA    01Y1    FQ    4    11
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Client Info    Delivery    Client Fees    Air Fare
+    Populate Fare Tab With Default Values    Fare 1
+    Click Panel    Client Fees
+    Select Fee From Dropdown    Bookingcom hotel fee    No Bookingcom hotel booked
+    Select Fee From Dropdown    UK Virtual Card Payment Fee    No Virtual Card Payment
+    Click Panel    Pspt and Visa
+    Populate Pspt and Visa Panel With Default Values
+    Click Panel    Recap
+    Click Finish PNR
+    Issue Ticket For Galileo
+    Comment    Retrieve PNR    ${current_pnr}
+    Comment    Click Amend Booking
+    Comment    Change Booked Air Class Of Specified Segment Via Travelport    ALL    J
+    Comment    Comment    Click Travelport Menu Item    Tools    Rapid Reprice
+    Comment    Comment    Comment    Wait Until Rapid Reprice Window Title Is    Rapid Reprice Exchange
+    Comment    Comment    Select Rapid Reprice Option    Price as booked    Rapid Reprice Exchange    Continue
+    Comment    Comment    Comment    Click Rapid Reprice Button    Continue
+    Comment    Comment    Comment    Wait Until Rapid Reprice Window Title Is    Rapid Reprice Results All Passengers
+    Comment    Comment    Enter Text In Rapid Reprice Received From    CWTPTEST    Rapid Reprice Results All Passengers    Continue
+    Comment    Comment    Comment    Click Rapid Reprice Button    Continue
+    Comment    Comment    Comment    Wait Until Rapid Reprice Dialog Box Exist    Exchange Issue Confirmation
+    Comment    Comment    Click Rapid Reprice Button    ISSUE LATER    Rapid Reprice Results All Passengers
+    Comment    Comment    Click Rapid Reprice Button    Issue Later
+    Comment    Comment    Wait Until Rapid Reprice Window Title Is    Additional Collection
+    Comment    Comment    Click Rapid Reprice Button    Continue
+    Comment    Comment    Control Click    Additional Collection    ${EMPTY}    [CLASS:Button; INSTANCE:1]
+    Comment    Comment    Wait Until Rapid Reprice Dialog Box Exist    Rapid Reprice
+    Comment    Comment    Control Click    Rapid Reprice    ${EMPTY}    [CLASS:Button; INSTANCE:1]
+    Comment    Comment    Wait Until Rapid Reprice Window Title Is    Rapid Reprice Results All Passengers
+    Comment    Comment    Click Rapid Reprice Button    Ok
+    Comment    Comment    Wait Until Rapid Reprice Window Title Is    Rapid Reprice
+    Comment    Comment    Click Rapid Reprice Button    Ok
+    Comment
+    Comment
+    Comment    Click Read Booking
+    Comment    Populate All Panels (Except Given Panels If Any)    Client Fees    Air Fare
+    Comment    Click Panel    Air Fare
+    Comment    Populate Fare Tab With Default Values    Fare 1
+    Comment    Click Panel    Client Fees
+    Comment    Select Fee From Dropdown    Bookingcom hotel fee    No Bookingcom hotel booked
+    Comment    Select Fee From Dropdown    UK Virtual Card Payment Fee    No Virtual Card Payment
+    Comment    Click Finish PNR
+    Comment    Get Filed Fare    1
+    Comment    Verify NPHF Lines Are Correct    YW9    0104    2020
+    Comment
+    Comment    Comment    Comment    Comment    Win Wait    Rapid Reprice Exchange    ${EMPTY}
+    ...    10
+    Comment    Comment    Comment    Comment    Win Activate    Rapid Reprice Exchange
+    Comment    Comment    Comment    Comment    Win Wait Active    Rapid Reprice Exchange    ${EMPTY}
+    ...    10
+    Comment    Comment    Comment    Comment    Control Click    Rapid Reprice Exchange    ${EMPTY}
+    ...    [CLASS:Button; INSTANCE:12]
+    Comment    Comment    Comment    Comment    Click Rapid Price Button    Continue
+    Comment    Comment    Comment    Comment    Win Wait    Rapid Reprice Results    ${EMPTY}
+    ...    60
+    Comment    Comment    Comment    Comment    Win Activate    Rapid Reprice Results
+    Comment    Comment    Comment    Comment    Win Wait Active    Rapid Reprice Results
+    Comment    Comment    Comment    Comment    Control Set Text    Rapid Reprice Results    ${EMPTY}
+    ...    [CLASS:Edit; INSTANCE:1]    cwtptest
+    Comment    Comment    Comment    Comment    Click Rapid Price Button    Continue
+    Comment    Comment    Comment    Comment    Comment    Control Click    Rapid Reprice Results
+    ...    ${EMPTY}    [CLASS:Button; INSTANCE:1]
+    Comment    Comment    Comment    Comment    Comment    Click Rapid Price Button    Continue
+    Comment    Comment    Comment    Comment    Comment    Comment    Click Rapid Price Button
+    ...    Cancel
+    Comment    Comment    Comment    Comment    Comment    Comment    Comment
+    ...    Populate All Panels (Except Given Panels If Any)    Client Info    Air Fare    APIS/SFPD    Recap    Client Fees
+    Comment    Comment    Comment    Comment    Comment    Comment    Comment
+    ...    Click Panel    Client Fees
+    Comment    Comment    Comment    Comment    Comment    Comment    Comment
+    ...    Select Fee From Dropdown    UK Virtual Card Payment Fee    No Virtual Card Payment
+    Comment    Comment    Comment    Comment    Comment    Comment    Comment
+    ...    Select Fee From Dropdown    Oceaneering product type    UK Requisition number AIR ONLY
+    Comment    Comment    Comment    Comment    Comment    Comment    Comment
+    ...    Click Finish PNR
+
+3 Verify That OPC Amount Is Not Added In Air Fare And In NPHF Values
+    [Documentation]    Expected Result:
+    ...    Air Fare = Fees field does not include OPC amount
+    ...    Complete = NPHF High, Charged, Low and Sales values do not include OPC amount
+    Set Suite Variable    ${gds_switch}    galileo
+    Set Suite Variable    ${locale}    en-GB
+    Comment    Set Suite Variable    ${current_pnr}    C44WG8
+    Comment    Set Suite Variable    ${ticket_number}    1255942429326
+    Comment    Open Power Express And Retrieve Profile    ${version}    ${syex_env}    U003WXR    en-GB    AutomationUK
+    ...    UK Head Office Test Team
+    Comment    Select GDS    Galileo
+    Set Client And Traveler    UK STAFF TEST ¦ AUTO UK-STAFF TEST    Automason    Ara
+    Select PCC/CompanyProfile/TravellerProfile    1G/YW9/STAFF/AUTOMASON AR131270264
+    Set Client And Traveler    UK STAFF TEST ¦ AUTO UK-STAFF TEST    Automason    Yuri
+    Select PCC/CompanyProfile/TravellerProfile    1G/YW9/STAFF/AUTOMASON YU131270257
+    Click Tab In Contact Details    Contact
+    Select Client Account Value    208154 ¦ CWT BUSINESS STAFF ACCOUNT ¦ AUTO UK-STAFF TEST
+    Click New Booking
+    Click Panel    Cust Refs
+    Populate Cust Refs Panel With Default Values
+    Click Panel    Client Info
+    Manually Set Value In Form Of Payment    VI    4715111111111111    1225
+    Click Update PNR
+    Book Flight X Months From Now    LHRAMS/BA    01Q1    \    4    4
+    Book Flight X Months From Now    AMSLHR/BA    01Q1    FQ    4    11
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Client Info    Delivery    Client Fees    Air Fare
+    Populate Fare Tab With Default Values    Fare 1
+    Get High, Charged And Low Fare In Fare Tab
+    Set Fees Field    2.00
+    Click Panel    Client Fees
+    Select Fee From Dropdown    Bookingcom hotel fee    No Bookingcom hotel booked
+    Select Fee From Dropdown    UK Virtual Card Payment Fee    No Virtual Card Payment
+    Click Panel    Recap
+    Click Finish PNR
+    Note NPHF Lines
+    Retrieve PNR Details From Travelport    ${current_pnr}    *FF1
+    Retrieve PNR Details From Travelport    ${current_pnr}    FO1
+    Issue Ticket For Galileo
+    Retrieve PNR    ${current_pnr}
+    Click GDS Screen Tab
+    Get Ticket Number For Galileo
+    Retrieve PNR Details From Travelport    ${current_pnr}
+    Change Booked Air Class Of Specified Segment Via Travelport    2    J
+    Change Flight Segment Date Via Travelport    2    4    10
+    Update Ticket Modifiers Via Travelport    ${ticket_number}
+    Retrieve PNR Details From Travelport    ${current_pnr}    *NPHF
+    Retrieve PNR Details From Travelport    ${current_pnr}    *FF1
+    Retrieve PNR Details From Travelport    ${current_pnr}    FO1
+    Click Amend Booking
+    Click Read Booking
+    Verify NPHF Lines Is Not Changed
+
+4 Verify DI Lines Still Exist After Ticketed PNR Is Voided And Cancelled
+    [Setup]    Initialize variable
+    Comment    Open Power Express And Retrieve Profile    ${version}    ${syex_env}    U003WXR    en-GB    AutomationUK
+    ...    UK Head Office Test Team
+    Comment    Select GDS    Galileo
+    Set Client And Traveler    UK STAFF TEST ¦ AUTO UK-STAFF TEST    Automason    Yuri
+    Select PCC/CompanyProfile/TravellerProfile    1G/YW9/STAFF/AUTOMASON YU131270257
+    Select Client Account Value    208154 ¦ CWT BUSINESS STAFF ACCOUNT ¦ AUTO UK-STAFF TEST
+    Click New Booking
+    Book Flight X Months From Now    LHRCDG/BA    01Y1    \    4    3
+    Book Flight X Months From Now    CDGLHR/BA    01Y1    FQ    4    4
+    Click Panel    Cust Refs
+    Populate Cust Refs Panel With Default Values
+    Click Panel    Client Info
+    Select Form Of Payment    NonRef
+    Click Update PNR
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Client Info    Delivery    Pspt and Visa    Pspt and Visa
+    Click Panel    Pspt and Visa
+    Confirm Valid Travel Documents    1
+    Select Visa Requirements
+    Click Panel    Client Fees
+    Select Fee From Dropdown    UK Virtual Card Payment Fee    No Virtual Card Payment
+    Click Finish PNR
+    Retrieve PNR Details From Travelport    ${current_pnr}    *DI
+    Verify 0106 Line Is Written In The PNR
+    Retrieve PNR    ${current_pnr}
+    Comment    Issue Ticket
+    Issue Ticket For Galileo
+    Void Ticket Number For Galileo    ${current_pnr}
+    Comment    Get Ticket Information    Ticket Number    \    ${current_pnr}
+    Comment    Void A Ticket Number    ${ticket_info}
+    Comment    Get Ticket Information    Status    ${ticket_info}    ${current_pnr}
+    Retrieve PNR    ${current_pnr}
+    Click Cancel Booking
+    Click Finish PNR
+    Retrieve PNR Details From Travelport    ${current_pnr}    *DI
+    Verify 0106 Line Is Written In The PNR
+    [Teardown]    Comment    Cancel Galileo PNR    ${current_pnr}    \    \    True
+
+*** Keywords ***
+Get Ticket Number
+    Get Data From GDS Screen    *HTE    True
+    Should Not Contain    ${gds_screen_data}    TICKETING RECORD NOT FOUND    UNABLE TO PROCESS ELECTRONIC TICKET DISPLAY
+    ${raw_ticket_number}=    Get String Between Strings    ${gds_screen_data}    TKT:    NAME:
+    ${raw_ticket_number}=    Replace String    ${raw_ticket_number}    ${SPACE}    ${EMPTY}
+    ${ticket_number}=    Set Variable    ${raw_ticket_number}
+    Set Test Variable    ${ticket_number}
+    Log    ${ticket_number}
+    [Return]    ${ticket_number}
+
+Issue Ticket
+    [Documentation]    LINKAGE/OPTIONS CHANGED - UPDATE SDPT
+    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Select GDS    Galileo
+    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Enter GDS Command    R.CWTPTEST
+    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Enter GDS Command    TKPDTDAD
+    ${screen_data}=    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Get Data From GDS Screen    \    True
+    ${error_msg_line}=    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Get Lines Containing String    ${screen_data}    ERROR 3088 - REQUESTED FILED FARE EXPIRED
+    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Should Not Be Equal    ${error_msg_line}    ERROR 3088 - REQUESTED FILED FARE EXPIRED    msg=Unable to issue ticket. Filed fare is not valid anymore.
+    ${error_msg_line}=    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Get Lines Containing String    ${screen_data}    ERROR 4366 - FORM OF PAYMENT REQUIRED
+    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Should Not Be Equal    ${error_msg_line}    ERROR 4366 - FORM OF PAYMENT REQUIRED    msg=Unable to issue ticket. FoP is required.
+    ${error_msg_line}=    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Get Lines Containing String    ${screen_data}    LINKAGE/OPTIONS CHANGED - UPDATE SDPT
+    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Should Not Be Equal    ${error_msg_line}    LINKAGE/OPTIONS CHANGED - UPDATE SDPT    msg=Unable to issue ticket. FoP is required.
+
+Get Ticket Information
+    [Arguments]    ${info_to_get}    ${ticket_number}=${EMPTY}    ${pnr}=${EMPTY}
+    Run Keyword If    '${pnr}' != "${EMPTY}"    Run Keywords    Retrieve PNR    ${pnr}
+    ...    AND    Select GDS    Galileo
+    Comment    KWs when Status is needed
+    Run Keyword If    '${info_to_get.lower()}'=='status'    Should Not Be True    '${ticket_number}'=='${EMPTY}'    msg=Ticket number is required when Status info is needed
+    ${screen_data}=    Run Keyword If    '${info_to_get.lower()}'=='status'    Get Data From GDS Screen    *HTI    True
+    ${return_value}=    Run Keyword If    '${info_to_get.lower()}'=='status'    Get Lines Containing String    ${screen_data}    ${ticket_number}
+    ${return_value}=    Run Keyword If    '${info_to_get.lower()}'=='status'    Fetch From Right    ${return_value}    /
+    ${return_value}=    Run Keyword If    '${info_to_get.lower()}'=='status'    Set Variable If    '${return_value}'!='VOID'    Active    Voided
+    Run Keyword If    '${info_to_get.lower()}'=='status'    Set Suite Variable    ${ticket_info}    ${return_value}
+    Comment    KWs when Ticket Number is needed
+    ${return_value}=    Run Keyword If    '${info_to_get.lower()}'=='ticket number'    Get Ticket Number
+    Run Keyword If    '${info_to_get.lower()}'=='ticket number'    Set Suite Variable    ${ticket_info}    ${return_value}
+    Comment    '${info_to_get.lower()}'=='ticket number' OR '${info_to_get.lower()}'=='ticket' OR '${info_to_get.lower()}'=='number'
+    Log    ${ticket_info}
+    [Return]    ${ticket_info}
+
+Void A Ticket Number
+    [Arguments]    ${ticket_number}
+    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Select GDS    Galileo
+    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Enter GDS Command    R.CWTPTEST
+    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Enter GDS Command    TRV/${ticket_number}
+    ${screen_data}=    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Get Data From GDS Screen    \    True
+    ${confirmation_line}=    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Get Lines Containing String    ${screen_data}    TICKET NO.${ticket_number}CHANGED TO VOID STATUS
+    ${ticket_voided}=    Run Keyword If    '${gds_switch.lower()}'=='galileo'    Run Keyword And Return Status    Should Be Equal    ${confirmation_line}    TICKET NO.${ticket_number}CHANGED TO VOID STATUS
+    ...    msg=Ticket ${ticket_number} of ${current_pnr} has been voided.
+    Log    ${ticket_voided}
+    [Return]    ${ticket_voided}
+
+Confirm Valid Travel Documents
+    [Arguments]    ${use_travel_doc_index}=1
+    Select Is Doc Valid    Yes    0
+    Tick Use Document    1
+
+Select Visa Requirements
+    Select Visa Requirement    Not Required    0
+    Select Visa Requirement    Not Required    1
+
+Change Booked Air Class Of Specified Segment Via Travelport
+    [Arguments]    ${target_segment}    ${new_class}
+    Activate Travelport Window
+    Run Keyword If    '${target_segment.lower()}'=='all'    Set Test Variable    ${target_segment}    A
+    Send Travelport Command    @${target_segment}/${new_class}
+    Get Clipboard Data
+    Take Screenshot
+
+Verify 0106 Line Is Written In The PNR
+    ${line_to_search}=    Evaluate    'FREE TEXT-*0106*%07d' % ${client_account_number}
+    Verify Specific Line Is Written In The PNR    ${line_to_search}
+
+Initialize Variable
+    Set Suite Variable    ${gds_switch}    galileo
+    Set Suite Variable    ${locale}    en-GB
+
+Get Filed Fare
+    [Arguments]    ${segment_number}    ${current_pnr}=${EMPTY}    ${fare_tab}=Fare 1
+    ${fare_tab_index}    Fetch From Right    ${fare_tab}    ${SPACE}
+    Retrieve PNR Details From Travelport    \    *FF${segment_number}    \    \    False
+    ${filed_fare_line} =    Get Lines Containing String    ${pnr_details}    FARE${SPACE}
+    ${filed_fare_raw} =    Get String Using Marker    ${filed_fare_line}    FARE${SPACE}    ${SPACE}
+    ${filed_fare} =    Remove All Non-Integer (retain period)    ${filed_fare_raw}
+    Set Suite Variable    ${filed_fare}
+    Set Suite Variable    ${filed_fare_${fare_tab_index}}    ${filed_fare}
+    Set Suite Variable    ${currency_and_filed_fare_${fare_tab_index}}    ${filed_fare_raw}
+    Log Variables
+    [Return]    ${filed_fare}
+
+Verify NPHF Lines Are Correct
+    [Arguments]    ${backoffice_id}    ${external_system_parameter_value}    ${consultant_id}    ${fare_tab}=Fare 1
+    ${fare_tab_index}    Fetch From Right    ${fare_tab}    ${SPACE}
+    Retrieve PNR Details From Travelport    ${current_pnr}    *NPHF
+    Verify Specific Line Is Written In The PNR    HF*BF-${currency_and_filed_fare_${fare_tab_index}}:PCC-${backoffice_id} AG-${consultant_id}
+    Verify Specific Line Is Written In The PNR    HF*BF-${currency_and_filed_fare_${fare_tab_index}}:${external_system_parameter_value}-${backoffice_id}/0107-${consultant_id}
+
+Amend Booking For Verify That OPC Amount Is Not Added In Air Fare And In NPHF Values
+    Comment    Retrieve PNR Details From Travelport    ${current_pnr}
+    Retrieve PNR    ${current_pnr}
+    Click Amend Booking
+    Enter GDS Command    FXALL
+    Change Itinerary Flight Date    2    4    4    False
+    Change Booked Air Class Of Specified Segment Via Travelport    2    J
+    Enter GDS Command    FQ
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Client Info    Delivery    Client Fees    Air Fare
+    Populate Fare Tab With Default Values    Fare 1
+    Set Fees Field    0.00
+    Click Panel    Client Fees
+    Select Fee From Dropdown    Bookingcom hotel fee    No Bookingcom hotel booked
+    Select Fee From Dropdown    UK Virtual Card Payment Fee    No Virtual Card Payment
+    Click Panel    Recap
+    Click Finish PNR    Amend Booking For Verify That OPC Amount Is Not Added In Air Fare And In NPHF Values
+
+Change Flight Segment Date Via Travelport
+    [Arguments]    ${segment_number}    ${number_of_months}    ${number_of_days}
+    Activate Travelport Window
+    ${new_date}    Set Departure Date X Months From Now In Gds Format    ${number_of_months}    ${number_of_days}
+    ${base_date}    Evaluate    ${number_of_days}-1
+    ${ticketing_date}    Set Departure Date X Months From Now In Gds Format    ${number_of_months}    ${base_date}
+    Send Travelport Command    @${segment_number}/${ticketing_date}
+    Get Clipboard Data
+    Take Screenshot
+
+Update Ticket Modifiers Via Travelport
+    [Arguments]    ${ticket_number}
+    Send Travelport Command    R.CWTPTEST
+    Send Travelport Command    FQ
+    Verify Travelport Response If Contains Expected Message    GRAND TOTAL INCLUDING TAXES
+    Send    ^w
+    Send Travelport Command    ER
+    Verify Travelport Response If Contains Expected Message    ITIN CHANGE - FILED FARES CANCELLED
+    Send Travelport Command    ER
+    Send Travelport Command    *FB1
+    Send Travelport Command    FBUTAX4/
+    Verify Travelport Response If Contains Expected Message    DATA ACCEPTED
+    Send Travelport Command    FBUTAX3/
+    Verify Travelport Response If Contains Expected Message    DATA ACCEPTED
+    Send Travelport Command    FBUTAX2/
+    Verify Travelport Response If Contains Expected Message    DATA ACCEPTED
+    Send Travelport Command    FBUTAX1/
+    Verify Travelport Response If Contains Expected Message    DATA ACCEPTED
+    Send Travelport Command    FBUTTL/
+    Send Travelport Command    FBFALL
+    Verify Travelport Response If Contains Expected Message    FILED FOR ALL PASSENGERS
+    Send Travelport Command    R.CWTPTEST
+    Send Travelport Command    ER
+    Send Travelport Command    TMU1FEX${ticket_number}
+    Sleep    1
+    Send    +{TAB}
+    Send    {ENTER}
+    Sleep    1
+    Send    +{TAB}
+    Send    {ENTER}
+    Sleep    1
+    Send    {TAB}{END}{ENTER}
+    Verify Travelport Response If Contains Expected Message    TICKET MODIFIERS UPDATED
+    Send Travelport Command    R.CWTPTEST
+    Send Travelport Command    ER
+    Send Travelport Command    *FF1
+    Verify Travelport Response If Contains Expected Message    /FEX${ticket_number}/
+
+Verify Travelport Response If Contains Expected Message
+    [Arguments]    ${expected_text}
+    Sleep    1    Allow sometime for the response to appear
+    ${response_data}=    Get Clipboard Data Travelport
+    Should Contain    ${response_data}    ${expected_text}
+
+Note NPHF Lines
+    ${nphf_lines_orignal}=    Retrieve PNR Details From Travelport    ${current_pnr}    *NPHF
+    Set Suite Variable    ${nphf_lines_orignal}
+
+Verify NPHF Lines Is Not Changed
+    ${nphf_lines_new}=    Retrieve PNR Details From Travelport    ${current_pnr}    *NPHF
+    Should Be Equal    ${nphf_lines_orignal}    ${nphf_lines_new}

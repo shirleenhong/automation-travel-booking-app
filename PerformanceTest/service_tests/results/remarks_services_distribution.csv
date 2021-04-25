@@ -1,0 +1,7 @@
+"Name","# requests","50%","66%","75%","80%","90%","95%","98%","99%","100%"
+"POST /api/v1/OtherServices/build/?clientId=PowerExpress",109,270,320,360,430,550,1300,2200,2200,2900
+"POST /api/v1/OtherServices/parse/?clientId=PowerExpress",87,260,290,340,380,500,860,1700,1900,1900
+"POST /api/v1/Remarks/build/?clientId=PowerExpress",104,430,540,650,770,1100,1700,2400,2600,2600
+"POST /api/v1/Remarks/parse/?clientId=PowerExpress",105,380,440,550,610,1300,1400,1900,2300,2800
+"POST /connect/token?clientId=PowerExpress",412,270,330,400,450,850,970,1200,1600,8000
+"Total",817,320,400,440,490,880,1200,1800,2200,8000

@@ -1,0 +1,92 @@
+*** Settings ***
+Suite Setup
+Force Tags        hotel
+Resource          ../../other_services.txt
+
+*** Test Cases ***
+Verify That Hotel Prepaid Accounting Remarks Are Written
+    [Tags]    us1122    not_ready
+    Set Suite Variable    ${gds_switch}    amadeus
+    Set Suite Variable    ${locale}    en-GB
+    Comment    Set Suite Variable    ${current_pnr}    KGHHMS
+    Create New Booking For Other Services - India    1026100093 ¦ SIEMENS PLM SOFTWARE UGS -(K.PARK)-CC ¦ APAC IN OS AUTOMATION    fop=VI    active_air=2    passive_car=1    active_hotel=1    passive_hotel=1
+    Click Clear All
+    Retrieve PNR    ${current_pnr}
+    Click Other Services
+    Select Product And Vendor    Hotel pre paid- INTL    Royal Orchid Bangalore
+    Click Tab In Other Services Panel    Request
+    Get Air Segment Dropdown Values    1
+    Get Hotel Segment Dropdown Values    0
+    Select Hotel Segment In Request    ${specific_hotel_segment}
+    Populate Request When Product Is Hotel Prepaid-Intl Or Hotel Prepaid-Dom    ${specific_hotel_segment}    01/05/2020    10/05/2020    HKD \ \ \ Hong Kong Dollar    5500    ${specific_air_segment}
+    ...    Deluxe    2    Credit Card    1234567890    HKG    Marco Polo Hotel HKG1747.94, 3rd Canton Rd, Tsim Sha Tsui, Hong Kong +852 2113 0088
+    ...    3rd Canton Rd, Tsim Sha Tsui, Hong Kong    true    371449635398431    CORP    AX    12
+    ...    2028    HKG    1234    Hong Kong    85221130088    Internal Remarks
+    ...    Cancel By    2    Days
+    Get Request Field Values    Hotel Prepaid-Intl    new
+    Get Air Segment
+    Get Cancel By
+    Click Tab In Other Services Panel    Charges
+    Populate Charges Fields Details    546    34    45    Hotel pre paid- INTL    gsa    ChargesPO1
+    Get Charges Field Values    R1
+    Calculate Merchant Fee In Charges For Remarks
+    Calculate VAT In Charges For Remarks
+    Calculate VAT For Merchant Fee In Charges For Remarks
+    Generate Remarks Data For Specific Charges Row For CC    R1
+    Click Tab In Other Services Panel    Associated Charges
+    Populate Associated Charges Fields    Despatch    DILIP JADHAV    889.989    12.56    8.456    Despatch
+    ...    Vendor Reference No    Other Reference No
+    Get Associated Charges Field Values    R2
+    Calculate Merchant Fee In Associated Charges For Remarks
+    Calculate VAT In Associated Charges For Remarks
+    Generate Remarks Data For Specific Associated Charge Row For CC    R2
+    Click Save In Associated Charges
+    Click Finish PNR    panel=Other Svcs
+    Get Exchange Order Number
+    Retrieve PNR Details From Amadeus    command=RTY
+    Comment    Verify Charges Accounting Lines For BTC Are Written In The PNR
+    Comment    Verify Associated Charges Accounting Lines For BTC Are Written In The PNR
+    Comment    Verify Associated Charges Accounting Lines For BTC Are Written In The PNR
+    Verify Other Services Accounting Remarks    Charges
+    Verify Other Services Accounting Remarks    Assoc Charges
+    Comment    Run Keyword And Continue On Failure    Verify Specific Remark Is Written In The PNR    RM *MSX/FF99-${gst}P${remarks_gst_value}*${ot1}P${remarks_ff99_ot1_value}*${ot2}P${remarks_ff99_ot2_value}/FF34-AB/FF35-OTH
+    Comment    Run Keyword And Continue On Failure    Verify Specific Remark Is Written In The PNR    RM *MSX/FF36-M/FF47-#CWT
+
+*** Keywords ***
+Verify Other Services Accounting Remarks
+    [Arguments]    ${tab_name}=charges
+    [Documentation]    charges, assoc charges
+    #encapsulate the set variables
+    ${gross_sell}    Set Variable If    "${tab_name.lower()}" == "charges"    ${charges_gross_sell}    "${tab_name.lower()}" == "assoc charges"    ${assoc_charges_gross_sell}    ${EMPTY}
+    ${commission}    Set Variable If    "${tab_name.lower()}" == "charges"    ${charges_commission}    "${tab_name.lower()}" == "assoc charges"    ${assoc_charges_commission}    ${EMPTY}
+    ${remarks_gst_value}    Set Variable If    "${tab_name.lower()}" == "charges"    ${charges_remarks_gst_value}    "${tab_name.lower()}" == "assoc charges"    ${assoc_charges_remarks_gst_value}    ${EMPTY}
+    ${vatgst_amount}    Set Variable If    "${tab_name.lower()}" == "charges"    ${charges_remarks_gst_value}    "${tab_name.lower()}" == "assoc charges"    ${assoc_charges_remarks_gst_value}    ${EMPTY}
+    ${ff99_ot1_value}    Set Variable If    "${tab_name.lower()}" == "charges"    ${charges_remarks_ff99_ot1_value}    "${tab_name.lower()}" == "assoc charges"    ${assoc_charges_remarks_ff99_ot1_value}    ${EMPTY}
+    ${ff99_ot2_value}    Set Variable If    "${tab_name.lower()}" == "charges"    ${charges_remarks_ff99_ot2_value}    "${tab_name.lower()}" == "assoc charges"    ${assoc_charges_remarks_ff99_ot2_value}    ${EMPTY}
+    ${cc_type}    Set Variable If    "${tab_name.lower()}" == "charges"    ${charges_cc_type}    "${tab_name.lower()}" == "assoc charges"    ${assoc_charges_cc_type}    ${EMPTY}
+    ${card_number}    Set Variable If    "${tab_name.lower()}" == "charges"    ${charges_card_number}    "${tab_name.lower()}" == "assoc charges"    ${assoc_charges_card_number}    ${EMPTY}
+    ${expiry_month}    Set Variable If    "${tab_name.lower()}" == "charges"    ${charges_expiry_month}    "${tab_name.lower()}" == "assoc charges"    ${assoc_charges_expiry_month}    ${EMPTY}
+    ${split_year}    Set Variable If    "${tab_name.lower()}" == "charges"    ${charges_split_year}    "${tab_name.lower()}" == "assoc charges"    ${assoc_charges_split_year}    ${EMPTY}
+    Run Keyword And Continue On Failure    Verify Specific Remark Is Written In The PNR    RM *MS/PC${product_code}/V${current_vendor_code}/TK${eo_number}/PX1
+    Run Keyword And Continue On Failure    Verify Specific Remark For Charges PO and GSA Is Written In The PNR
+    Run Keyword And Continue On Failure    Verify Specific Remark Is Written In The PNR    RM *MSX/S${gross_sell}/SF${gross_sell}/C${commission}/FCX4
+    Run Keyword And Continue On Failure    Verify Specific Remark Is Not Written In The PNR    RM \\*MSX\\/CCN${cc_type}([A-Z0-9]+)${card_number}EXP${expiry_month}${split_year}\\/D${charges_gross_sell}    true
+    #Run Keyword And Continue On Failure    Verify Non-Air Product FF Lines In Accounting Remarks
+    Run Keyword And Continue On Failure    Verify Specific Remark Is Written In The PNR    RM *MSX/FF ${product_name.upper()}
+
+Verify FF Lines In Accounting Remarks
+    [Arguments]    ${tab_name}
+    Comment    ${vatgst_amount}    Set Variable If    "${tab_name.lower()}" == "charges"    ${charges_vatgst_amount}    "${tab_name.lower()}" == "assoc charges"    ${assoc_charges_vatgst_amount}
+    ...    ${EMPTY}
+    ${ff99}    Set Variable    ${True}
+    Run Keyword If    ${ff99}    Verify FF99 and FF36 Accounting Remarks
+    ...    ELSE    Verify FF34 Accounting Remarks
+
+Verify FF99 and FF36 Accounting Remarks
+    #set variable if
+    Verify Specific Remark Is Written In The PNR    RM *MSX/FF99-${gst}P${charges_remarks_gst_value}*${ot1}P${charges_remarks_ff99_ot1_value}*${ot2}P${charges_remarks_ff99_ot2_value}/FF34-AB/FF35-OTH
+    Verify Specific Remark Is Written In The PNR    RM *MSX/FF36-M/FF47-#CWT
+
+Verify FF34 Accounting Remarks
+    #set variable if
+    Verify Specific Remark Is Written In The PNR    RM *MSX/FF34-AB/FF35-OTH/FF36-M/FF47-#CWT

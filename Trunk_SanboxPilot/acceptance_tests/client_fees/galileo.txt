@@ -1,0 +1,45 @@
+*** Settings ***
+Force Tags        galileo    emea
+Resource          client_fees_verification.txt
+
+*** Test Cases ***
+[NB UK] Verify That Client Fees Tab Is Not Displayed For Client With No Configured Fee
+    [Tags]    uat    emea    uk
+    Open Power Express And Retrieve Profile    ${version}    ${syex_env}    U003WXR    en-GB    AutomationUK    UK Team 1
+    Select GDS    Galileo
+    Set Client And Traveler    IHS ¦ GB-IHSP    Automason    Yuri
+    Click New Booking
+    Update PNR for EN or GB
+    Book Flight X Months From Now    CDGLHR/AF    01Y1    FQ    6
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Client Fees
+    Click Panel    Client Fees
+    Select Fee From Dropdown    Test    Apply Bundled Fee
+    Click Panel    Recap
+    Click Finish PNR
+    Click Clear All
+    Select GDS    Galileo
+    Set Client And Traveler    IHS ¦ AUTO-IHS TEST    Automason    William
+    Click New Booking
+    Update PNR for EN or GB
+    Book Flight X Months From Now    CDGLHR/AF    01Y1    FQ:NR    6    5
+    Click Read Booking
+    Verify Actual Panel Does Not Contain Expected Panel    Client Fees
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB UK] Verify That Client Fees Shows Dropdown Content Contains Correct Fees Item
+    [Tags]    emea    uk    uat    pilot
+    Open Power Express And Retrieve Profile    ${version}    ${syex_env}    U003WXR    en-GB    AutomationUK    UK Team 1
+    Select GDS    Galileo
+    Set Client And Traveler    IHS ¦ GB-IHSP    Automason    Yuri
+    Click New Booking
+    Update PNR for EN or GB
+    Book Flight X Months From Now    CDGLHR/AF    01Y1    FQ    6
+    Click Read Booking
+    Populate All Panels (Except Given Panels If Any)    Client Fees
+    Click Panel    Client Fees
+    Verify Client Fee Dropdown Contains Correct Items    Test    Apply Bundled Fee    No Bundled Fee
+    [Teardown]    Run Keywords    Click Clear All
+    ...    AND    Emulate PCC    46T
+
+*** Keywords ***

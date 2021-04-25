@@ -1,0 +1,694 @@
+*** Settings ***
+Force Tags        insurance
+Resource          ../other_services.txt
+
+*** Test Cases ***
+[NB OS SG] Verify That Service Info Fields Of Insurance Behave Correctly And Written In The PNR When FOP Is CC
+    [Tags]    US462    US1162    us1322    us1456    us1620    de373
+    Create PNR Using Credit Card As FOP    SG    air_segment=True    fop_dropdown_value=BTA VI/VI***********0235/D0623/CVV***
+    Click Panel    Other Svcs
+    Select Product And Vendor    Insurance    AXA INSURANCE
+    Select Plan    Single Trip Plan
+    Set Selling Price    500.00
+    Verify Form Of Payment Details Are Correct    BTA VI/VI***********0235/D0623/CVV***
+    Select FOP Type    Credit Card (CC)
+    Set Date    10/29/2018
+    Verify Error Icon Is Displayed For Additional Information Date
+    Set Date    10/30/2019
+    Verify No Error Icon Is Displayed For Additional Information Date
+    Get Selling Price
+    Get Other Services Form Of Payment Details    #us1322
+    Compute Nett Cost Value    35
+    Verify Nett Cost Value Is Correct
+    Compute Other Services Fees    0    2
+    Verify Commission Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Tick CWT Absorb Checkbox For Merchant Fee
+    Compute Nett Cost Value    35
+    Verify Nett Cost Value Is Correct
+    Compute Other Services Fees    0    2    false    true
+    Verify Commission Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Get Other Services Cost Details
+    Get Other Services Additional Information Details
+    Click Tab In Other Services Panel    Insurance
+    Select Geographical Area    Worldwide exc US/CAN
+    Set Number Of Days    50
+    Select Plan Selected    Family Budget Plan
+    Set Name    HAROLD CUELLAR
+    Set Relationship    ME
+    Set Premium Amount    20000.0999
+    Set Address Of First Name Insured Person    CWT PHILIPPINES1
+    Click Add
+    Click Remarks Tab
+    Select Itinerary Remarks    AATEST REMARK
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    Insurance
+    Click Finish PNR
+    Click Go To Other Services Button In Complete Panel
+    Get Exchange Order Number    identifier=insurance
+    Comment    Verify Pdf Button Opens The Pdf    1
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Other Services Insurance Accounting General Remarks    Insurance    AXA INSURANCE    Credit Card (CC)    SG
+    Verify Other Services Credit Card Fees Accounting Remarks Are Written    448488674100235    VI    06    2023    Credit Card (CC)    SG
+    ...    #us1322
+    Verify Specific Remark Is Written In The PNR    RIR AATEST REMARK
+    Verify Insurance Remarks Are Written When FOP Is Credit Card In The PNR    Insurance    9    025006
+    Verify BA And TA Remarks    ${uid}
+
+[AB][CEO][SG] Verify That Accounting Lines For Insurance Product Is Not Written When Cancelled
+    [Tags]    US1570
+    Retrieve PNR And Populate Amend Workflow    SG
+    Click Panel    Other Svcs
+    Cancel EO    ${eo_number_insurance}    Service Info    SG
+    Click Finish PNR    Verify That Accounting Lines For Insurance Product Is Not Written When Cancelled [CEO][SG]
+    Execute Simultaneous Change Handling    Verify That Accounting Lines For Insurance Product Is Not Written When Cancelled [CEO][SG]
+    Click Panel    Other Svcs
+    Verify Exchange Order Is Cancelled In EO Grid    ${eo_number_insurance}
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Insurance Remarks Are Not Written When FOP Is Credit Card In The PNR
+    Verify Other Services Credit Card Fees Accounting Remarks Are Not Written
+    Verify Other Services Insurance Accounting General Remarks Are Not Written
+
+[AB OS SG] Verify That Service Info Fields Of Insurance Behave Correctly And Written In The PNR When FOP Is CX
+    [Tags]    US462    us1322    us1462    us1620    de358    de373
+    Retrieve PNR And Populate Amend Workflow    SG    fop_dropdown_value=BTA VI/VI***********0235/D0623/CVV***
+    Click Panel    Other Svcs
+    Select Product And Vendor    Insurance    AXA INSURANCE
+    Select Plan    Single Trip Plan
+    Set Selling Price    1000.00
+    Verify Form Of Payment Details Are Correct    BTA VI/VI***********0235/D0623/CVV***
+    Select FOP Type    Credit Card (CX)
+    Get Other Services Form Of Payment Details
+    Get Selling Price
+    Compute Nett Cost Value    35
+    Verify Nett Cost Value Is Correct
+    Compute Other Services Fees    0    2
+    ##Issue
+    Verify Commission Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Select Plan    Annual Plan
+    Compute Nett Cost Value    20
+    Verify Nett Cost Value Is Correct
+    Compute Other Services Fees    0    2
+    Verify Commission Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Get Other Services Additional Information Details
+    Click Tab In Other Services Panel    Insurance
+    Select Geographical Area    Worldwide exc US/CAN
+    Set Number Of Days    50
+    Select Plan Selected    Family Budget Plan
+    Set Name    HAROLD CUELLAR
+    Set Relationship    ME
+    Set Premium Amount    20000.0999
+    Set Address Of First Name Insured Person    CWT PHILIPPINES1
+    Click Add
+    Click Remarks Tab
+    Select Itinerary Remarks    AATEST REMARK
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    Insurance
+    Click Finish PNR    Amend To Verify That Service Info Fields Of Insurance Behave Correctly And Written In The PNR When FOP Is CX
+    Execute Simultaneous Change Handling    Amend To Verify That Service Info Fields Of Insurance Behave Correctly And Written In The PNR When FOP Is CX
+    Click Go To Other Services Button In Complete Panel
+    Get Exchange Order Number    identifier=insurance
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Other Services Insurance Accounting General Remarks    Insurance    AXA INSURANCE    Credit Card (CX)    SG
+    Verify Other Services Credit Card Fees Accounting Remarks Are Written    448488674100235    VI    06    2023    Credit Card (CX)    SG
+    Verify Specific Remark Is Written In The PNR    RIR AATEST REMARK
+
+[OS SG] Verify That Service Info Fields Of Insurance Behave Correctly And Written In The PNR When FOP Is Cash or Invoice
+    [Tags]    US462    us1322    us1462    us1620    de358    de373
+    Retrieve PNR And Populate Amend Workflow    SG    fop_dropdown_value=Invoice
+    Click Panel    Client Info
+    Select Form Of Payment    Invoice
+    Click Panel    Other Svcs
+    Select Product And Vendor    Insurance    AXA INSURANCE
+    Select Plan    Single Trip Plan
+    Set Selling Price    800
+    Verify Form Of Payment Details Are Correct    Invoice
+    Get Selling Price
+    Get Other Services Form Of Payment Details    #us1322
+    Compute Nett Cost Value    35
+    Verify Nett Cost Value Is Correct
+    Compute Other Services Fees    0    2
+    Verify Commission Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Invoice    #us1322
+    Compute Nett Cost Value    35
+    Verify Nett Cost Value Is Correct
+    Compute Other Services Fees    0    2
+    Verify Commission Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Select Plan    Annual Plan
+    Compute Nett Cost Value    20
+    Get Other Services Cost Details
+    Verify Nett Cost Value Is Correct
+    Compute Other Services Fees    0    2
+    Verify Commission Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details    #us1322
+    Get Other Services Additional Information Details
+    Click Tab In Other Services Panel    Insurance
+    Select Geographical Area    Worldwide exc US/CAN
+    Set Number Of Days    50
+    Select Plan Selected    Family Budget Plan
+    Set Name    HAROLD CUELLAR
+    Set Relationship    ME
+    Set Premium Amount    20000.0999
+    Set Address Of First Name Insured Person    CWT PHILIPPINES1
+    Click Add
+    Click Remarks Tab
+    Select Itinerary Remarks    AATEST REMARK
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    Insurance
+    Click Finish PNR    Amend Verify That Service Info Fields Of Insurance Behave Correctly And Written In The PNR When FOP Is Cash or Invoice
+    Execute Simultaneous Change Handling    Amend Verify That Service Info Fields Of Insurance Behave Correctly And Written In The PNR When FOP Is Cash or Invoice
+    Click Go To Other Services Button In Complete Panel
+    Get Exchange Order Number    identifier=insurance
+    Retrieve PNR Details from Amadeus    ${current_pnr}
+    Verify Other Services Insurance Accounting General Remarks    Insurance    AXA INSURANCE    Invoice    SG    #us1322
+    Verify Other Services Cash Or Invoice Fees Accounting Remarks Are Written    SG    #us1322
+    Verify Specific Remark Is Written In The PNR    RIR AATEST REMARK
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+[NB OS SG]Verify That Insurance Information Are Displayed Correctly In Insurance Tab
+    [Tags]    US575    us1322    us1456    us1620
+    Create PNR Using Credit Card As FOP    SG    air_segment=True    fop_dropdown_value=BTA VI/VI***********0235/D0623/CVV***
+    Click Panel    Other Svcs
+    Select Product And Vendor    Insurance    AIG
+    Click Tab In Other Services Panel    Insurance
+    Verify Default Value In Number Of Days    0
+    Verify Default Value In Name    SGOTHERS BEAR
+    Set Number Of Days    ${EMPTY}
+    Verify Geographical Area Is Required
+    Verify Number Of Days Is Required
+    Verify Plan Selected Is Required
+    Verify Address Of First Name Insured Person Is Required
+    Verify Geographical Area Values Are Correct    Asean    Asia/AU/NZ    Worldwide exc US/CAN    Worldwide inc US/CAN    China/Macau (Non Air)    Global
+    ...    Cruise
+    Verify Selected Plan Values Are Correct    Individual Plan - Single Trip    Individual Plan - Annual    Family Budget Plan
+    Select Geographical Area    Worldwide exc US/CAN
+    Set Number Of Days    50
+    Select Plan Selected    Family Budget Plan
+    Set Name    HAROLD CUELLAR
+    Set Relationship    ME
+    Set Premium Amount    20000.0999
+    Set Address Of First Name Insured Person    CWT PHILIPPINES1
+    Click Add
+    Set Name    BEAR DOS
+    Set Relationship    ME1
+    Set Premium Amount    20000.21
+    Set Address Of First Name Insured Person    CWT PHILIPPINES2
+    Click Add
+    Set Name    BEAR TRES
+    Set Relationship    ME2
+    Set Premium Amount    20000.22
+    Set Address Of First Name Insured Person    CWT PHILIPPINES3
+    Click Add
+    Set Name    BEAR KWATRO
+    Set Relationship    ME3
+    Set Premium Amount    20000.23
+    Set Address Of First Name Insured Person    CWT PHILIPPINES4
+    Click Add
+    Set Name    BEAR SINGKO
+    Set Relationship    ME4
+    Set Premium Amount    20000.24
+    Set Address Of First Name Insured Person    CWT PHILIPPINES5
+    Click Add
+    Set Name    BEAR DELETED
+    Set Relationship    ME5
+    Set Premium Amount    22.24
+    Set Address Of First Name Insured Person    CWT PHILIPPINES5
+    Click Add
+    Get All Record In Insured Grid
+    Verify Insured Person Record Is Displayed In The Insured Grid    HAROLD CUELLAR    ME    20000.0999
+    Verify Insured Person Record Is Displayed In The Insured Grid    BEAR DOS    ME1    20000.21
+    Verify Insured Person Record Is Displayed In The Insured Grid    BEAR TRES    ME2    20000.22
+    Verify Insured Person Record Is Displayed In The Insured Grid    BEAR KWATRO    ME3    20000.23
+    Verify Insured Person Record Is Displayed In The Insured Grid    BEAR SINGKO    ME4    20000.24
+    Verify Insured Person Record Is Displayed In The Insured Grid    BEAR DELETED    ME5    22.24
+    Remove Insured Person In The Insured Grid    6    BEAR DELETED
+    Get All Record In Insured Grid
+    Verify Insured Person Record Is Not Displayed In The Insured Grid    BEAR DELETED    ME5    22.24
+    Click Tab In Other Services Panel    Service Info
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    VI    4111111111111111    12    2026    #us1322
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    Insurance
+    Click Finish PNR    Complete All Panels If Simultaneous Exists
+    Click Go To Other Services Button In Complete Panel
+    Get Exchange Order Number
+    Verify PNR Is Successfully Created    false    Exchange Order(s) Transaction Successfully Saved!
+    Retrieve PNR Details From Amadeus
+    Verify BA And TA Remarks    ${uid}
+    [Teardown]
+
+[AB OS SG]Verify That Insurance Information Are Displayed Correctly In Insurance Tab
+    [Tags]    US575    us1322    us1462    us1620
+    Retrieve PNR And Populate Amend Workflow    SG    fop_dropdown_value=BTA VI/VI***********0235/D0623/CVV***
+    Click Panel    Other Svcs
+    Select Product And Vendor    Insurance    ACE INSURANCE LIMITED
+    Click Tab In Other Services Panel    Service Info
+    Set Date    14/20/2022
+    Click Tab In Other Services Panel    Insurance
+    Verify Default Value In Number Of Days    0
+    Verify Default Value In Name    SGOTHERS BEAR
+    Set Number Of Days    ${EMPTY}
+    Verify Geographical Area Is Required
+    Verify Number Of Days Is Required
+    Verify Plan Selected Is Required
+    Verify Address Of First Name Insured Person Is Required
+    Verify Geographical Area Values Are Correct    Asean    Asia/AU/NZ    Worldwide exc US/CAN    Worldwide inc US/CAN    China/Macau (Non Air)    Global
+    ...    Cruise
+    Verify Selected Plan Values Are Correct    Individual Plan - Single Trip    Individual Plan - Annual    Family Budget Plan
+    Select Geographical Area    Worldwide exc US/CAN
+    Set Number Of Days    50
+    Select Plan Selected    Family Budget Plan
+    Set Name    HAROLD CUELLAR
+    Set Relationship    ME
+    Set Premium Amount    20000.0999
+    Set Address Of First Name Insured Person    CWT PHILIPPINES1
+    Click Add
+    Set Name    BEAR DOS
+    Set Relationship    ME1
+    Set Premium Amount    20000.21
+    Set Address Of First Name Insured Person    CWT PHILIPPINES2
+    Click Add
+    Set Name    BEAR TRES
+    Set Relationship    ME2
+    Set Premium Amount    20000.22
+    Set Address Of First Name Insured Person    CWT PHILIPPINES3
+    Click Add
+    Set Name    BEAR KWATRO
+    Set Relationship    ME3
+    Set Premium Amount    20000.23
+    Set Address Of First Name Insured Person    CWT PHILIPPINES4
+    Click Add
+    Set Name    BEAR SINGKO
+    Set Relationship    ME4
+    Set Premium Amount    20000.24
+    Set Address Of First Name Insured Person    CWT PHILIPPINES5
+    Click Add
+    Get All Record In Insured Grid
+    Verify Insured Person Record Is Displayed In The Insured Grid    HAROLD CUELLAR    ME    20000.0999
+    Verify Insured Person Record Is Displayed In The Insured Grid    BEAR DOS    ME1    20000.21
+    Verify Insured Person Record Is Displayed In The Insured Grid    BEAR TRES    ME2    20000.22
+    Verify Insured Person Record Is Displayed In The Insured Grid    BEAR KWATRO    ME3    20000.23
+    Verify Insured Person Record Is Displayed In The Insured Grid    BEAR SINGKO    ME4    20000.24
+    Click Tab In Other Services Panel    Service Info
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    AX    371449635398431    12    2022
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    Insurance
+    Click Finish PNR    Amend To Verify That Insurance Information Are Displayed Correctly In Insurance Tab [AB OS SG]
+    Execute Simultaneous Change Handling    Amend To Verify That Insurance Information Are Displayed Correctly In Insurance Tab [AB OS SG]
+    Verify PNR Is Successfully Created    False    Exchange Order(s) Transaction Successfully Saved!
+    Click Go To Other Services Button In Complete Panel
+    Get Exchange Order Number
+
+[OS SG]Verify That Insurance Information Are Displayed Correctly In Insurance Tab
+    [Tags]    US575    us1322    us1462    us1620
+    Retrieve PNR And Populate Amend Workflow    SG    fop_dropdown_value=BTA VI/VI***********0235/D0623/CVV***
+    Click Panel    Other Svcs
+    Select Product And Vendor    Insurance    UNITED OVERSEAS INSURANCE LTD
+    Click Tab In Other Services Panel    Insurance
+    Verify Default Value In Number Of Days    0
+    Verify Default Value In Name    SGOTHERS BEAR
+    Set Number Of Days    ${EMPTY}
+    Verify Geographical Area Is Required
+    Verify Number Of Days Is Required
+    Verify Plan Selected Is Required
+    Verify Address Of First Name Insured Person Is Required
+    Verify Geographical Area Values Are Correct    Asean    Asia/AU/NZ    Worldwide exc US/CAN    Worldwide inc US/CAN    China/Macau (Non Air)    Global
+    ...    Cruise
+    Verify Selected Plan Values Are Correct    Individual Plan - Single Trip    Individual Plan - Annual    Family Budget Plan
+    Select Geographical Area    Worldwide exc US/CAN
+    Set Number Of Days    50
+    Select Plan Selected    Family Budget Plan
+    Set Name    HAROLD CUELLAR
+    Set Relationship    ME
+    Set Premium Amount    20000.0999
+    Set Address Of First Name Insured Person    CWT PHILIPPINES1
+    Click Add
+    Set Name    BEAR DOS
+    Set Relationship    ME1
+    Set Premium Amount    20000.21
+    Set Address Of First Name Insured Person    CWT PHILIPPINES2
+    Click Add
+    Set Name    BEAR TRES
+    Set Relationship    ME2
+    Set Premium Amount    20000.22
+    Set Address Of First Name Insured Person    CWT PHILIPPINES3
+    Click Add
+    Set Name    BEAR KWATRO
+    Set Relationship    ME3
+    Set Premium Amount    20000.23
+    Set Address Of First Name Insured Person    CWT PHILIPPINES4
+    Click Add
+    Set Name    BEAR SINGKO
+    Set Relationship    ME4
+    Set Premium Amount    20000.24
+    Set Address Of First Name Insured Person    CWT PHILIPPINES5
+    Click Add
+    Get All Record In Insured Grid
+    Verify Insured Person Record Is Displayed In The Insured Grid    HAROLD CUELLAR    ME    20000.0999
+    Verify Insured Person Record Is Displayed In The Insured Grid    BEAR DOS    ME1    20000.21
+    Verify Insured Person Record Is Displayed In The Insured Grid    BEAR TRES    ME2    20000.22
+    Verify Insured Person Record Is Displayed In The Insured Grid    BEAR KWATRO    ME3    20000.23
+    Verify Insured Person Record Is Displayed In The Insured Grid    BEAR SINGKO    ME4    20000.24
+    Click Tab In Other Services Panel    Service Info
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    AX    371449635398431    12    2026
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Verify That Insurance Information Are Displayed Correctly In Insurance Tab [OS SG]
+    Execute Simultaneous Change Handling    Amend Verify That Insurance Information Are Displayed Correctly In Insurance Tab [OS SG]
+
+[OS 2nd SG] Verify That Insurance Information Are Displayed Correctly In Insurance Tab
+    [Tags]    US575    us1322    us1462    us1620
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Other Svcs
+    Select Product And Vendor    Insurance    AIG
+    Click Tab In Other Services Panel    Insurance
+    Verify Default Value In Number Of Days    0
+    Verify Default Value In Name    SGOTHERS BEAR
+    Set Number Of Days    ${EMPTY}
+    Verify Geographical Area Is Required
+    Verify Number Of Days Is Required
+    Verify Plan Selected Is Required
+    Verify Address Of First Name Insured Person Is Required
+    Verify Geographical Area Values Are Correct    Asean    Asia/AU/NZ    Worldwide exc US/CAN    Worldwide inc US/CAN    China/Macau (Non Air)    Global
+    ...    Cruise
+    Verify Selected Plan Values Are Correct    Individual Plan - Single Trip    Individual Plan - Annual    Family Budget Plan
+    Select Geographical Area    Worldwide exc US/CAN
+    Set Number Of Days    50
+    Select Plan Selected    Family Budget Plan
+    Set Name    HAROLD CUELLAR
+    Set Relationship    ME
+    Set Premium Amount    20000.0999
+    Set Address Of First Name Insured Person    CWT PHILIPPINES1
+    Click Add
+    Set Name    BEAR DOS
+    Set Relationship    ME1
+    Set Premium Amount    20000.21
+    Set Address Of First Name Insured Person    CWT PHILIPPINES2
+    Click Add
+    Set Name    BEAR TRES
+    Set Relationship    ME2
+    Set Premium Amount    20000.22
+    Set Address Of First Name Insured Person    CWT PHILIPPINES3
+    Click Add
+    Set Name    BEAR KWATRO
+    Set Relationship    ME3
+    Set Premium Amount    20000.23
+    Set Address Of First Name Insured Person    CWT PHILIPPINES4
+    Click Add
+    Set Name    BEAR SINGKO
+    Set Relationship    ME4
+    Set Premium Amount    20000.24
+    Set Address Of First Name Insured Person    CWT PHILIPPINES5
+    Click Add
+    Get All Record In Insured Grid
+    Verify Insured Person Record Is Displayed In The Insured Grid    HAROLD CUELLAR    ME    20000.0999
+    Verify Insured Person Record Is Displayed In The Insured Grid    BEAR DOS    ME1    20000.21
+    Verify Insured Person Record Is Displayed In The Insured Grid    BEAR TRES    ME2    20000.22
+    Verify Insured Person Record Is Displayed In The Insured Grid    BEAR KWATRO    ME3    20000.23
+    Verify Insured Person Record Is Displayed In The Insured Grid    BEAR SINGKO    ME4    20000.24
+    Click Tab In Other Services Panel    Service Info
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    AX    371449635398431    12    2026
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Verify That Insurance Information Are Displayed Correctly In Insurance Tab 2nd
+    Execute Simultaneous Change Handling    Amend Verify That Insurance Information Are Displayed Correctly In Insurance Tab 2nd
+    [Teardown]    Cancel PNR Thru GDS Native    ${current_pnr}
+
+*** Keywords ***
+Amend To Verify That Service Info Fields Of Insurance Behave Correctly And Written In The PNR When FOP Is CX
+    Retrieve PNR And Populate Amend Workflow    SG    fop_dropdown_value=BTA VI/VI***********0235/D0623/CVV***
+    Click Panel    Other Svcs
+    Select Product And Vendor    Insurance    AXA INSURANCE
+    Select Plan    Single Trip Plan
+    Set Selling Price    1000.00
+    Verify Form Of Payment Details Are Correct    BTA VI/VI***********0235/D0623/CVV***
+    Select FOP Type    Credit Card (CX)
+    Get Other Services Form Of Payment Details
+    Get Selling Price
+    Compute Nett Cost Value    35
+    Verify Nett Cost Value Is Correct
+    Compute Other Services Fees    0    2
+    ##Issue
+    Verify Commission Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Select Plan    Annual Plan
+    Compute Nett Cost Value    20
+    Verify Nett Cost Value Is Correct
+    Compute Other Services Fees    0    2
+    Verify Commission Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details
+    Get Other Services Additional Information Details
+    Click Tab In Other Services Panel    Insurance
+    Select Geographical Area    Worldwide exc US/CAN
+    Set Number Of Days    50
+    Select Plan Selected    Family Budget Plan
+    Set Name    HAROLD CUELLAR
+    Set Relationship    ME
+    Set Premium Amount    20000.0999
+    Set Address Of First Name Insured Person    CWT PHILIPPINES1
+    Click Add
+    Click Remarks Tab
+    Select Itinerary Remarks    AATEST REMARK
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    Insurance
+    Click Finish PNR    Amend To Verify That Service Info Fields Of Insurance Behave Correctly And Written In The PNR When FOP Is CX
+
+Amend To Verify That Insurance Information Are Displayed Correctly In Insurance Tab [AB OS SG]
+    Retrieve PNR And Populate Amend Workflow    SG    fop_dropdown_value=BTA VI/VI***********0235/D0623/CVV***
+    Click Panel    Other Svcs
+    Select Product And Vendor    Insurance    ACE INSURANCE LIMITED
+    Click Tab In Other Services Panel    Service Info
+    Set Date    14/20/2022
+    Click Tab In Other Services Panel    Insurance
+    Verify Default Value In Number Of Days    0
+    Verify Default Value In Name    SGOTHERS BEAR
+    Set Number Of Days    ${EMPTY}
+    Verify Geographical Area Is Required
+    Verify Number Of Days Is Required
+    Verify Plan Selected Is Required
+    Verify Address Of First Name Insured Person Is Required
+    Verify Geographical Area Values Are Correct    Asean    Asia/AU/NZ    Worldwide exc US/CAN    Worldwide inc US/CAN    China/Macau (Non Air)    Global
+    ...    Cruise
+    Verify Selected Plan Values Are Correct    Individual Plan - Single Trip    Individual Plan - Annual    Family Budget Plan
+    Select Geographical Area    Worldwide exc US/CAN
+    Set Number Of Days    50
+    Select Plan Selected    Family Budget Plan
+    Set Name    HAROLD CUELLAR
+    Set Relationship    ME
+    Set Premium Amount    20000.0999
+    Set Address Of First Name Insured Person    CWT PHILIPPINES1
+    Click Add
+    Set Name    BEAR DOS
+    Set Relationship    ME1
+    Set Premium Amount    20000.21
+    Set Address Of First Name Insured Person    CWT PHILIPPINES2
+    Click Add
+    Set Name    BEAR TRES
+    Set Relationship    ME2
+    Set Premium Amount    20000.22
+    Set Address Of First Name Insured Person    CWT PHILIPPINES3
+    Click Add
+    Set Name    BEAR KWATRO
+    Set Relationship    ME3
+    Set Premium Amount    20000.23
+    Set Address Of First Name Insured Person    CWT PHILIPPINES4
+    Click Add
+    Set Name    BEAR SINGKO
+    Set Relationship    ME4
+    Set Premium Amount    20000.24
+    Set Address Of First Name Insured Person    CWT PHILIPPINES5
+    Click Add
+    Get All Record In Insured Grid
+    Verify Insured Person Record Is Displayed In The Insured Grid    HAROLD CUELLAR    ME    20000.0999
+    Verify Insured Person Record Is Displayed In The Insured Grid    BEAR DOS    ME1    20000.21
+    Verify Insured Person Record Is Displayed In The Insured Grid    BEAR TRES    ME2    20000.22
+    Verify Insured Person Record Is Displayed In The Insured Grid    BEAR KWATRO    ME3    20000.23
+    Verify Insured Person Record Is Displayed In The Insured Grid    BEAR SINGKO    ME4    20000.24
+    Click Tab In Other Services Panel    Service Info
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    AX    371449635398431    12    2022
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    Insurance
+    Click Finish PNR    Amend To Verify That Insurance Information Are Displayed Correctly In Insurance Tab
+
+Amend Verify That Service Info Fields Of Insurance Behave Correctly And Written In The PNR When FOP Is Cash or Invoice
+    Retrieve PNR And Populate Amend Workflow    SG    fop_dropdown_value=Invoice
+    Click Panel    Client Info
+    Select Form Of Payment    Invoice
+    Click Panel    Other Svcs
+    Select Product And Vendor    Insurance    AXA INSURANCE
+    Select Plan    Single Trip Plan
+    Set Selling Price    800
+    Verify Form Of Payment Details Are Correct    Invoice
+    Get Selling Price
+    Get Other Services Form Of Payment Details    #us1322
+    Compute Nett Cost Value    35
+    Verify Nett Cost Value Is Correct
+    Compute Other Services Fees    0    2
+    Verify Commission Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Select Form Of Payment (FOP) In Other Services    ${EMPTY}    Invoice    #us1322
+    Compute Nett Cost Value    35
+    Verify Nett Cost Value Is Correct
+    Compute Other Services Fees    0    2
+    Verify Commission Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Select Plan    Annual Plan
+    Compute Nett Cost Value    20
+    Get Other Services Cost Details
+    Verify Nett Cost Value Is Correct
+    Compute Other Services Fees    0    2
+    Verify Commission Fee Value Is Correct
+    Verify Merchant Fee Value Is Correct
+    Verify Total Selling Price Value Is Correct
+    Get Other Services Cost Details
+    Get Other Services Form Of Payment Details    #us1322
+    Get Other Services Additional Information Details
+    Click Tab In Other Services Panel    Insurance
+    Select Geographical Area    Worldwide exc US/CAN
+    Set Number Of Days    50
+    Select Plan Selected    Family Budget Plan
+    Set Name    HAROLD CUELLAR
+    Set Relationship    ME
+    Set Premium Amount    20000.0999
+    Set Address Of First Name Insured Person    CWT PHILIPPINES1
+    Click Add
+    Click Remarks Tab
+    Select Itinerary Remarks    AATEST REMARK
+    Click Add Button In EO Panel    Service Info
+    Verify EO Product Added On EO Grid    Insurance
+    Click Finish PNR    Amend Verify That Service Info Fields Of Insurance Behave Correctly And Written In The PNR When FOP Is Cash or Invoice
+
+Amend Verify That Insurance Information Are Displayed Correctly In Insurance Tab [OS SG]
+    Retrieve PNR And Populate Amend Workflow    SG    fop_dropdown_value=BTA VI/VI***********0235/D0623/CVV***
+    Click Panel    Other Svcs
+    Select Product And Vendor    Insurance    UNITED OVERSEAS INSURANCE LTD
+    Click Tab In Other Services Panel    Insurance
+    Verify Default Value In Number Of Days    0
+    Verify Default Value In Name    SGOTHERS BEAR
+    Set Number Of Days    ${EMPTY}
+    Verify Geographical Area Is Required
+    Verify Number Of Days Is Required
+    Verify Plan Selected Is Required
+    Verify Address Of First Name Insured Person Is Required
+    Verify Geographical Area Values Are Correct    Asean    Asia/AU/NZ    Worldwide exc US/CAN    Worldwide inc US/CAN    China/Macau (Non Air)    Global
+    ...    Cruise
+    Verify Selected Plan Values Are Correct    Individual Plan - Single Trip    Individual Plan - Annual    Family Budget Plan
+    Select Geographical Area    Worldwide exc US/CAN
+    Set Number Of Days    50
+    Select Plan Selected    Family Budget Plan
+    Set Name    HAROLD CUELLAR
+    Set Relationship    ME
+    Set Premium Amount    20000.0999
+    Set Address Of First Name Insured Person    CWT PHILIPPINES1
+    Click Add
+    Set Name    BEAR DOS
+    Set Relationship    ME1
+    Set Premium Amount    20000.21
+    Set Address Of First Name Insured Person    CWT PHILIPPINES2
+    Click Add
+    Set Name    BEAR TRES
+    Set Relationship    ME2
+    Set Premium Amount    20000.22
+    Set Address Of First Name Insured Person    CWT PHILIPPINES3
+    Click Add
+    Set Name    BEAR KWATRO
+    Set Relationship    ME3
+    Set Premium Amount    20000.23
+    Set Address Of First Name Insured Person    CWT PHILIPPINES4
+    Click Add
+    Set Name    BEAR SINGKO
+    Set Relationship    ME4
+    Set Premium Amount    20000.24
+    Set Address Of First Name Insured Person    CWT PHILIPPINES5
+    Click Add
+    Get All Record In Insured Grid
+    Verify Insured Person Record Is Displayed In The Insured Grid    HAROLD CUELLAR    ME    20000.0999
+    Verify Insured Person Record Is Displayed In The Insured Grid    BEAR DOS    ME1    20000.21
+    Verify Insured Person Record Is Displayed In The Insured Grid    BEAR TRES    ME2    20000.22
+    Verify Insured Person Record Is Displayed In The Insured Grid    BEAR KWATRO    ME3    20000.23
+    Verify Insured Person Record Is Displayed In The Insured Grid    BEAR SINGKO    ME4    20000.24
+    Click Tab In Other Services Panel    Service Info
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    AX    371449635398431    12    2026
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Verify That Insurance Information Are Displayed Correctly In Insurance Tab
+
+Amend Verify That Insurance Information Are Displayed Correctly In Insurance Tab 2nd
+    Retrieve PNR And Populate Amend Workflow
+    Click Panel    Other Svcs
+    Select Product And Vendor    Insurance    AIG
+    Click Tab In Other Services Panel    Insurance
+    Verify Default Value In Number Of Days    0
+    Verify Default Value In Name    SGOTHERS BEAR
+    Set Number Of Days    ${EMPTY}
+    Verify Geographical Area Is Required
+    Verify Number Of Days Is Required
+    Verify Plan Selected Is Required
+    Verify Address Of First Name Insured Person Is Required
+    Verify Geographical Area Values Are Correct    Asean    Asia/AU/NZ    Worldwide exc US/CAN    Worldwide inc US/CAN    China/Macau (Non Air)    Global
+    ...    Cruise
+    Verify Selected Plan Values Are Correct    Individual Plan - Single Trip    Individual Plan - Annual    Family Budget Plan
+    Select Geographical Area    Worldwide exc US/CAN
+    Set Number Of Days    50
+    Select Plan Selected    Family Budget Plan
+    Set Name    HAROLD CUELLAR
+    Set Relationship    ME
+    Set Premium Amount    20000.0999
+    Set Address Of First Name Insured Person    CWT PHILIPPINES1
+    Click Add
+    Set Name    BEAR DOS
+    Set Relationship    ME1
+    Set Premium Amount    20000.21
+    Set Address Of First Name Insured Person    CWT PHILIPPINES2
+    Click Add
+    Set Name    BEAR TRES
+    Set Relationship    ME2
+    Set Premium Amount    20000.22
+    Set Address Of First Name Insured Person    CWT PHILIPPINES3
+    Click Add
+    Set Name    BEAR KWATRO
+    Set Relationship    ME3
+    Set Premium Amount    20000.23
+    Set Address Of First Name Insured Person    CWT PHILIPPINES4
+    Click Add
+    Set Name    BEAR SINGKO
+    Set Relationship    ME4
+    Set Premium Amount    20000.24
+    Set Address Of First Name Insured Person    CWT PHILIPPINES5
+    Click Add
+    Get All Record In Insured Grid
+    Verify Insured Person Record Is Displayed In The Insured Grid    HAROLD CUELLAR    ME    20000.0999
+    Verify Insured Person Record Is Displayed In The Insured Grid    BEAR DOS    ME1    20000.21
+    Verify Insured Person Record Is Displayed In The Insured Grid    BEAR TRES    ME2    20000.22
+    Verify Insured Person Record Is Displayed In The Insured Grid    BEAR KWATRO    ME3    20000.23
+    Verify Insured Person Record Is Displayed In The Insured Grid    BEAR SINGKO    ME4    20000.24
+    Click Tab In Other Services Panel    Service Info
+    Comment    Unmask Credit Card Number
+    Comment    Set Credit Card Value    371449635398431
+    Manually Add Form Of Payment (FOP) In Other Services    Credit Card (CX)    AX    371449635398431    12    2026
+    Click Add Button In EO Panel    Service Info
+    Click Finish PNR    Amend Verify That Insurance Information Are Displayed Correctly In Insurance Tab [OS SG]
+
+Verify That Accounting Lines For Insurance Product Is Not Written When Cancelled [CEO][SG]
+    Retrieve PNR And Populate Amend Workflow    SG
+    Click Panel    Other Svcs
+    Cancel EO    ${eo_number_insurance}    Service Info    SG
+    Click Finish PNR    Verify That Accounting Lines For Insurance Product Is Not Written When Cancelled [CEO][SG]
