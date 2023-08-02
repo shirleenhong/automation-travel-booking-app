@@ -609,8 +609,8 @@ Subtract Month From Current Date
     ${adjusted_date}    Evaluate    datetime.datetime(${date.year}, ${date.month} - ${number_of_month_to_subtract}, ${date.day})    datetime
     [Return]    ${adjusted_date}
 
-Take Screenshot
-    Take A Screenshot
+Take A Screenshot
+    Take Screenshot
 
 Tick Checkbox
     [Arguments]    ${obj_chkbox_or_label}    ${checkbox_method}=${EMPTY}

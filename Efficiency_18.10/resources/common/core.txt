@@ -8,7 +8,7 @@ Click Amend Booking
     Wait Until Progress Info is Completed
     Wait Until Progress Info is Completed
     Set Test Variable    ${bln_CoordsKnown}    False
-    [Teardown]    Take Screenshot
+    [Teardown]    Take A Screenshot
 
 Click Cancel Booking
     Wait Until Control Object Is Enabled    [NAME:btnCancelPNR]    ${title_power_express}
@@ -26,7 +26,7 @@ Click Clear All
     Wait Until Progress Info is Completed
     Wait Until Keyword Succeeds    120    2    Verify Progress Info Window is Not Active
     Wait Until Control Object Is Visible    [NAME:grpPortraitProfileInformation]    ${title_power_express}    true
-    [Teardown]    Take Screenshot
+    [Teardown]    Take A Screenshot
 
 Click Clear All With Timestamp
     Activate Power Express Window
@@ -56,7 +56,7 @@ Click New Booking
     Comment    Wait Until Control Object Is Not Visible    ${btn_newBooking}    ${title_power_express}    true
     Set Test Variable    ${bln_CoordsKnown}    False
     Set Test Variable    ${is_new_booking_worflow}    ${True}
-    [Teardown]    Take Screenshot
+    [Teardown]    Take A Screenshot
 
 Click New Booking With Timestamp
     Activate Power Express Window
@@ -65,7 +65,7 @@ Click New Booking With Timestamp
     Set Test Variable    ${exp_overalltransaction_start_time}
     Wait Until Progress Info is Completed
     Set Test Variable    ${bln_CoordsKnown}    False
-    [Teardown]    Take Screenshot
+    [Teardown]    Take A Screenshot
 
 Click Panel
     [Arguments]    ${panel_name}
@@ -75,7 +75,7 @@ Click Panel
     Select Panel    ${panel_name}
     Wait Until Keyword Succeeds    1    30    Verify Panel Is Selected    ${panel_name}    True
     Run Keyword If    "${locale}" == "fr-FR"    Translate Panel's Name To English    ${panel_name}
-    [Teardown]    Take Screenshot
+    [Teardown]    Take A Screenshot
 
 Click Price Tracking
     Wait Until Control Object Is Enabled    [NAME:btnPriceTracking]    ${title_power_express}    true
@@ -83,14 +83,14 @@ Click Price Tracking
     Wait Until Progress Info is Completed
     Wait Until Progress Info is Completed
     Set Test Variable    ${bln_CoordsKnown}    False
-    [Teardown]    Take Screenshot
+    [Teardown]    Take A Screenshot
 
 Click Quick Amend
     Click Control Button    [NAME:btnQuickAmend]    ${title_power_express}
     Set Test Variable    ${bln_CoordsKnown}    False
     Wait Until Progress Info is Completed
     Wait Until Control Object Is Visible    [NAME:btnLoadPNR]    ${title_power_express}
-    [Teardown]    Take Screenshot
+    [Teardown]    Take A Screenshot
 
 Click Quick Amend With Timestamp
     Click Control Button    [NAME:btnQuickAmend]    ${title_power_express}
@@ -99,7 +99,7 @@ Click Quick Amend With Timestamp
     Set Test Variable    ${exp_OverallTransactionStartTime}    ${time}
     Wait Until Progress Info is Completed
     Wait Until Control Object Is Visible    [NAME:btnLoadPNR]    ${title_power_express}
-    [Teardown]    Take Screenshot
+    [Teardown]    Take A Screenshot
 
 Click Read Booking
     [Arguments]    ${ignore_progress_info_popup}=False
@@ -120,7 +120,7 @@ Click Read Booking
     Set Test Variable    ${bln_done_fare_tab_id}    False
     Set Test Variable    ${bln_CoordsKnown}    False
     Set Test Variable    ${fare_coords_known}    False
-    [Teardown]    Take Screenshot
+    [Teardown]    Take A Screenshot
 
 Click Read Booking With Timestamp
     Activate Power Express Window
@@ -131,7 +131,7 @@ Click Read Booking With Timestamp
     Set Test Variable    ${bln_done_fare_tab_id}    False
     Set Test Variable    ${bln_CoordsKnown}    False
     Set Test Variable    ${fare_coords_known}    False
-    [Teardown]    Take Screenshot
+    [Teardown]    Take A Screenshot
 
 Click Send Itinerary
     Wait Until Control Object Is Enabled    [NAME:btnSendItinerary]    ${title_power_express}
@@ -148,7 +148,7 @@ Click Update PNR
     Comment    Wait Until Window Exists    [REGEXPTITLE:Progress Information|Information sur l'avancement]
     Wait Until Progress Info is Completed
     Wait Until Progress Info is Completed
-    [Teardown]    Take Screenshot
+    [Teardown]    Take A Screenshot
 
 Click Tab In Top Left
     [Arguments]    ${tab_name}
@@ -282,7 +282,7 @@ Create Shell PNR Via Keyboard Shortcut
     Sleep    1
     Send    {ALTDOWN}E{ALTUP}
     Wait Until Progress Info is Completed
-    [Teardown]    Take Screenshot
+    [Teardown]    Take A Screenshot
 
 Create Shell PNR Without Retention Line
     [Arguments]    ${client}    ${surname}    ${firstname}    ${client_account}=${EMPTY}    ${trip_type}=${EMPTY}    @{exclude_panels}
@@ -447,7 +447,7 @@ Open Power Express And Retrieve Profile
     Set Suite Variable    ${uid}    ${username}
     Comment    Run Keyword If    "${amadeus_env}" == "sellco"    Switch Office Id    ${locale}
     Run Keyword If    "${gds}" != "${EMPTY}"    Select GDS    ${gds}
-    [Teardown]    Take Screenshot
+    [Teardown]    Take A Screenshot
 
 Populate All Panels (Except Given Panels If Any)
     [Arguments]    @{exclude_panels}
@@ -456,7 +456,7 @@ Populate All Panels (Except Given Panels If Any)
     Determine Current Panels
     Populate Panels with Red Mark Except The Given Panel(s)    @{exclude_panels}
     Comment    Verify All Panels Are Green    @{exclude_panels}
-    [Teardown]    Take Screenshot
+    [Teardown]    Take A Screenshot
 
 Populate Panels with Red Mark Except The Given Panel(s)
     [Arguments]    @{exclude_panels}
@@ -477,7 +477,7 @@ Populate Panels with Red Mark Except The Given Panel(s)
     Run Keyword If    ${is_delivery_panel_not_excluded} == True and ${is_delivery_panel_already_populated} != True and ${is_delivery_panel_found} == True    Run Keywords    Click Panel    Delivery
     ...    AND    Populate Delivery Panel With Default Values
     Click Panel    ${last_panel}
-    [Teardown]    Take Screenshot
+    [Teardown]    Take A Screenshot
 
 Re-Execute ${workflow} If Simultaneous Change Error Is Displayed
     : FOR    ${INDEX}    IN RANGE    51
@@ -499,7 +499,7 @@ Retrieve PNR
     Control Click    ${title_power_express}    ${EMPTY}    [NAME:ctxtBookingLocator]
     Control Set Text    ${title_power_express}    ${EMPTY}    [NAME:ctxtBookingLocator]    ${pnr}
     Sleep    2
-    Take Screenshot
+    Take A Screenshot
     Send    {TAB}
     Control Focus    ${title_power_express}    ${EMPTY}    [NAME:btnSearchLocator]
     Control Click    ${title_power_express}    ${EMPTY}    [NAME:btnSearchLocator]
@@ -508,7 +508,7 @@ Retrieve PNR
     Wait Until Keyword Succeeds    180    3    Verify Control Object Is Visible    [NAME:UGridBookings]    handle_popups=true
     ${apply_delay}    Set Variable If    "${apply_delay}" == "${EMPTY}"    1    ${apply_delay}
     Sleep    ${apply_delay}
-    [Teardown]    Take Screenshot
+    [Teardown]    Take A Screenshot
 
 Retrieve PNR via Existing Bookings Tab
     [Arguments]    ${client}    ${last_name}    ${first_name}    ${pnr}    ${apply_delay}=1
@@ -525,14 +525,14 @@ Retrieve PNR via Existing Bookings Tab
     Control Click    ${title_power_express}    ${EMPTY}    [NAME:btnSearchPNR]
     Wait Until Control Object Is Visible    [NAME:UGridBookings]    ${title_power_express}
     Sleep    ${apply_delay}
-    [Teardown]    Take Screenshot
+    [Teardown]    Take A Screenshot
 
 Retrieve PNR with Timestamp
     [Arguments]    ${client}    ${surname}    ${firstname}    ${pnr}
     Retrieve PNR    ${pnr}
     ${exp_overalltransaction_start_time}    Get Time
     Set Test Variable    ${exp_overalltransaction_start_time}
-    [Teardown]    Take Screenshot
+    [Teardown]    Take A Screenshot
 
 Search Round Trip Flights
     [Arguments]    ${client}    ${surname}    ${firstname}    ${city_pair1}    ${seat_select1}    ${num_months1}
@@ -561,7 +561,7 @@ Select GDS
     Wait Until Mouse Cursor Wait Is Completed
     Click GDS Screen Tab
     Run Keyword If    '${gds}' == 'amadeus'    Enter GDS Command    IG
-    [Teardown]    Take Screenshot
+    [Teardown]    Take A Screenshot
 
 Select Team
     [Arguments]    @{team_selection}
@@ -575,11 +575,13 @@ Select Team
     Wait Until Progress Info is Completed
     Handle Generic Window Popup
     Set Suite Variable    ${selected_team}    ${team}
-    [Teardown]    Take Screenshot
+    [Teardown]    Take A Screenshot
 
 Set User Settings
     [Arguments]    ${locale}
+    Log    testing
     Win Wait    ${title_settings}    ${EMPTY}    60
+    Log    testing..
     Win Activate    ${title_settings}    ${EMPTY}
     Control Click    ${user_selection_window}    ${EMPTY}    ${EMPTY}
     Set Control Text Value    ${cbo_locale}    ${locale}    ${title_settings}
@@ -610,13 +612,13 @@ Verify Actual Panel Contains Expected Panel
     [Arguments]    ${expected_panel_value}
     Run Keyword If    "${bln_CoordsKnown}" == "False"    Determine Current Panels
     List Should Contain Value    ${panel_coordinates}    ${expected_panel_value.upper()}
-    [Teardown]    Take Screenshot
+    [Teardown]    Take A Screenshot
 
 Verify Actual Panel Does Not Contain Expected Panel
     [Arguments]    ${expected_panel_value}
     Run Keyword If    "${bln_CoordsKnown}" == "False"    Determine Current Panels
     List Should Not Contain Value    ${panel_coordinates}    ${expected_panel_value.upper()}
-    [Teardown]    Take Screenshot
+    [Teardown]    Take A Screenshot
 
 Verify Actual Panel Equals To Expected Panel
     [Arguments]    @{expected_panel_value}
@@ -633,7 +635,7 @@ Verify All Panels Are Green
     \    ${y}    Get From Dictionary    ${panel_coordinates}    ${panel.upper()}
     \    ${panel_status}    Get Panel Status    13    ${y}
     \    Should Be True    "${panel_status}" == "GREEN"    ${panel} should be green
-    [Teardown]    Take Screenshot
+    [Teardown]    Take A Screenshot
 
 Verify Control Object Text Contains Expected Value
     [Arguments]    ${control_object}    ${expected_value}
@@ -648,7 +650,7 @@ Verify Panel Is Green
     \    ${y}    Get From Dictionary    ${panel_coordinates}    ${each_panel.upper()}
     \    ${panel_status} =    Get Panel Status    13    ${y}
     \    Should Be True    "${panel_status}" == "GREEN"    ${each_panel.upper()} panel should be Green
-    [Teardown]    Take Screenshot
+    [Teardown]    Take A Screenshot
 
 Verify Panel Is Red
     [Arguments]    @{panel}
@@ -658,7 +660,7 @@ Verify Panel Is Red
     \    ${y}    Get From Dictionary    ${panel_coordinates}    ${each_panel.upper()}
     \    ${panel_status} =    Get Panel Status    13    ${y}
     \    Should Be True    "${panel_status}" == "RED"    ${each_panel.upper()} panel should be RED
-    [Teardown]    Take Screenshot
+    [Teardown]    Take A Screenshot
 
 Verify Progress Info Window is Not Active
     [Arguments]    ${error_message}=${EMPTY}
@@ -683,7 +685,7 @@ Wait Until Progress Info is Completed
     Wait Until Mouse Cursor Wait Is Completed
     Wait Until Keyword Succeeds    300    5    Verify Progress Info Window is Not Active    ${error_message}
     Activate Power Express Window
-    [Teardown]    Take Screenshot
+    [Teardown]    Take A Screenshot
 
 Wait Until Team Selection Window is Active
     ${team_selection_window}    Set Variable If    '${locale}' == 'de-DE'    Teamauswahl    '${locale}' == 'fr-FR'    Sélection de l'équipe    Team Selection
@@ -709,7 +711,7 @@ Click New Booking Via Shortcut Key
     Wait Until Keyword Succeeds    60    2    Verify Progress Info Window is Not Active
     Set Test Variable    ${bln_CoordsKnown}    False
     Set Test Variable    ${is_new_booking_worflow}    ${True}
-    [Teardown]    Take Screenshot
+    [Teardown]    Take A Screenshot
 
 Click Read Booking Via Shortcut Key
     [Arguments]    ${ignore_progress_info_popup}=False
@@ -729,7 +731,7 @@ Click Read Booking Via Shortcut Key
     Set Test Variable    ${bln_done_fare_tab_id}    False
     Set Test Variable    ${bln_CoordsKnown}    False
     Set Test Variable    ${fare_coords_known}    False
-    [Teardown]    Take Screenshot
+    [Teardown]    Take A Screenshot
 
 Click Update PNR Via Shortcut Key
     Activate Power Express Window
@@ -759,7 +761,7 @@ Click Finish PNR Via Shortcut Key
     Run Keyword If    '${gds_switch}' == 'amadeus'    Run Keywords    Activate Amadeus Selling Platform    False
     ...    AND    Activate Power Express Window
     Log    ${current_pnr}
-    [Teardown]    Take Screenshot
+    [Teardown]    Take A Screenshot
 
 Click Quick Amend Via Shortcut Key
     Activate Power Express Window
@@ -789,7 +791,7 @@ Verify Panel Is Selected
     ${is_selected}    Is Panel Selected    ${expected_selected_panel}
     Run Keyword If    ${is_selected} == False and ${click_panel_forcefully} == True    Click Panel    ${expected_selected_panel}
     Comment    Should Be True    ${is_selected} == True
-    [Teardown]    Take Screenshot
+    [Teardown]    Take A Screenshot
 
 Click Price Tracking Via Shortcut Key
     Activate Power Express Window
@@ -800,7 +802,7 @@ Click Price Tracking Via Shortcut Key
     Wait Until Keyword Succeeds    60    2    Verify Progress Info Window is Not Active
     Set Test Variable    ${bln_CoordsKnown}    False
     Set Test Variable    ${is_new_booking_worflow}    ${True}
-    [Teardown]    Take Screenshot
+    [Teardown]    Take A Screenshot
 
 Change Locale, Profile, Team
     [Arguments]    ${locale}    ${profile}    ${team}    ${user_id}=${EMPTY}

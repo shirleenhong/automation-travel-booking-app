@@ -22,11 +22,12 @@ import autoit
 import time
 import pymssql
 import uialibrary
+import importlib
 from openpyxl import load_workbook
 from decimal import Decimal, ROUND_HALF_UP, ROUND_HALF_DOWN, ROUND_DOWN, ROUND_UP
 # from ImageHorizonLibrary import ImageHorizonLibrary
-reload(sys)
-sys.setdefaultencoding('Cp1252')
+importlib.reload(sys)
+#sys.setdefaultencoding('Cp1252')
 
 class SyexCustomLibrary:
 
@@ -54,15 +55,15 @@ class SyexCustomLibrary:
         express_exec = 'PowerExpress.exe' + ' ENV:' + syex_env +' testuser:' + username + use_mock_env +''
         os.chdir(express_path)
         try:
-            autoit.run(express_exec)
+            autoit.run(express_exec, "", 5)
         except Exception as e:
             self.builtin.fail(str(e) + '. Check if PowerExpress is installed correctly')         
         autoit.process_wait('PowerExpress.exe')
-        self.builtin.set_test_variable('${username}', username)
+        self.builtin.set_suite_variable('${username}', username)
         self.builtin.set_suite_variable('${syex_env}', syex_env)
 
     def get_power_express_path(self, version):
-        express_basedir = "C:\\Program Files (x86)\\Carlson Wagonlit Travel\\Power Express "
+        express_basedir = "C:\\Program Files (x86)\\CWT\\Power Express "
         express_path = "{}{}".format(express_basedir, version)
         if os.path.exists(express_path):
             return express_path
@@ -83,14 +84,14 @@ class SyexCustomLibrary:
         try:
             hpath = os.path.expanduser('~')
             return hpath
-        except ValueError, err:
+        except:
             raise AssertionError(err)
 
     def get_UserName(self):
         try:
             strUserName = os.environ['USERNAME']   
             return strUserName
-        except ValueError, err:
+        except:
             raise AssertionError(err)
 
     def get_local_username(self):
@@ -489,7 +490,7 @@ class SyexCustomLibrary:
             flattened_string = [line.strip() for line in string_to_flatten.splitlines()]
         else:
             flattened_string = [line.rstrip() for line in string_to_flatten.splitlines()]
-        print "".join(flattened_string)
+        print ("".join(flattened_string))
         return "".join(flattened_string)
 
     def verify_list_values_are_identical(self, list_):
@@ -649,7 +650,7 @@ class SyexCustomLibrary:
                     return "Empty"
             finally:
                 win32clipboard.CloseClipboard()
-        except ValueError, err:
+        except:
             raise AssertionError(err)
         
     def clear_data_from_clipboard(self):
@@ -657,7 +658,7 @@ class SyexCustomLibrary:
             win32clipboard.OpenClipboard()
             win32clipboard.EmptyClipboard()
             win32clipboard.CloseClipboard()
-        except ValueError, err:
+        except:
             raise AssertionError(err)
 
     def convert_list_to_lines(self, list_):
@@ -680,12 +681,12 @@ class SyexCustomLibrary:
                     start_index = i
                     break
             latest_response =  gds_data[start_index:]
-            print latest_response
+            print (latest_response)
             return self.convert_list_to_lines(latest_response)
         else:
             if gds == 'galileo':
                 index_list = [i for i, line in enumerate(gds_data) if line.startswith(">") or line.startswith(')>')]
-                print index_list
+                print (index_list)
             else:
                 reg_exp = re.compile(r">.*PAGE.*\d\/.*\d")
                 index_list = [i for i, line in enumerate(gds_data) if line.startswith(">") and not line.startswith(">>")\
@@ -711,7 +712,7 @@ class SyexCustomLibrary:
         for line in pnr_log:
             if pnr_log[line] > 1:
                 if gds.lower() == 'amadeus' and line != 'rir *' and line.startswith("rm"):
-                    print 'duplicate remarks found: ' + line
+                    print ('duplicate remarks found: ' + line)
                     remarks_list.append(line)
         return True if len(remarks_list) > 0 else False
 
@@ -750,7 +751,7 @@ class SyexCustomLibrary:
         duplicate_remark_list_length = len(duplicate_remark_list)
         if duplicate_remark_list_length > 1:
             for elem in duplicate_remark_list:
-                print elem
+                print (elem)
         self.builtin.should_not_be_true(duplicate_remark_list_length > 1)
 
     def round_apac(self, number, country):

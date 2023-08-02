@@ -149,10 +149,10 @@ class SyexDateTimeLibrary:
             return self._set_syex_date_format(subtracted_date)
 
     def _set_gds_date_format(self, date, is_year_needed='false'):
-		if is_year_needed.lower() == 'true':
-			return str('{dt:%d}{dt:%b}{dt:%y}'.format(dt=date).upper())
-		else:
-			return str('{dt:%d}{dt:%b}'.format(dt=date).upper()) 
+        if is_year_needed.lower() == 'true':
+            return str('{dt:%d}{dt:%b}{dt:%y}'.format(dt=date).upper())
+        else:
+            return str('{dt:%d}{dt:%b}'.format(dt=date).upper()) 
 		
     def _set_syex_date_format(self, date):
         return str('{dt.month}/{dt.day}/{dt.year}'.format(dt=date))
@@ -162,15 +162,15 @@ class SyexDateTimeLibrary:
 
     def _adjust_weekend_to_weekday(self, adjusted_date, operation='subtract'):
         if str(adjusted_date.weekday()) == '5':
-			if operation != 'subtract':
-				return adjusted_date + datetime.timedelta(days=int(2))
-			else:
-				return adjusted_date - datetime.timedelta(days=int(1))
+	        if operation != 'subtract':
+		        return adjusted_date + datetime.timedelta(days=int(2))
+	        else:
+		        return adjusted_date - datetime.timedelta(days=int(1))
         elif str(adjusted_date.weekday()) == '6':
-			if operation != 'subtract':
-				return adjusted_date + datetime.timedelta(days=int(1))
-			else:
-				return adjusted_date - datetime.timedelta(days=int(2))
+	        if operation != 'subtract':
+		        return adjusted_date + datetime.timedelta(days=int(1))
+	        else:
+		        return adjusted_date - datetime.timedelta(days=int(2))
         else:
             return adjusted_date
 
