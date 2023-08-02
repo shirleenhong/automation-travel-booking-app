@@ -49,6 +49,21 @@ class SyexUiaLibrary:
 		except LookupError:
 			self.builtin.fail("Cannot Find Power Express. '{}' is not visible".format('frmMain'))
 
+	def connect_to_turbo_via_uia(self, auto_id=None):
+		uia = self.connect_to_uia(auto_id="Power Turbo")
+		uia.wait('ready', 60, 1)
+		uia.set_focus()
+		return uia
+
+	def create_power_turbo_handle(self):
+		autoit.win_activate('Power Turbo')
+		try:
+			syexuia = uialibrary.WindowControl(AutomationId='Power Turbo')
+			syexuia.SetActive()
+			return  syexuia
+		except LookupError:
+			self.builtin.fail("Cannot Find Power Turbo. '{}' is not visible".format('Power Turbo'))
+
 	def _convert_control_id_to_uia_format(self, control_id):
 		return re.sub(r"(\[.*:)|(\])", "", control_id)
 
@@ -685,4 +700,4 @@ class SyexUiaLibrary:
 
 if __name__ == '__main__':
 	syex = SyexUiaLibrary()
-	print syex.get_status_strip_text()
+	#print syex.get_status_strip_text()

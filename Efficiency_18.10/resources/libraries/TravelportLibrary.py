@@ -110,14 +110,14 @@ class TravelportLibrary:
         return rapid_reprice_app
 
     def select_rapid_reprice_option(self, pricing_option, window_title, final_action="Continue"):  
-        print "Wait until window title is '{}'".format(window_title)
+        print ("Wait until window title is '{}'".format(window_title))
         app = Desktop(backend='uia')
         # rapid_reprice_app = app.window(title=str_title, class_name="RAPID_REPRICE_APP")
         rapid_reprice_app = app.window(title=window_title)
         rapid_reprice_app.wait('visible', 60, 1)
         rapid_reprice_app.set_focus()
 
-        print "Select '{}' radio button".format(pricing_option)
+        print ("Select '{}' radio button".format(pricing_option))
         pricing_option_dict = {
             "price as best buy in same cabin"   : "1000", 
             "price as booked"                   : "1001", 
@@ -137,7 +137,7 @@ class TravelportLibrary:
         rad_price_option.click_input()
 
         if final_action == "Continue":
-            print "Final action is '{}' hence this button will be clicked".format(final_action)
+            print ("Final action is '{}' hence this button will be clicked".format(final_action))
             final_action = final_action.upper()           
 
             try:
@@ -149,13 +149,13 @@ class TravelportLibrary:
             button.click()
             
     def click_rapid_reprice_button(self, button_label, window_title):
-        print "Wait until window title is '{}'".format(window_title)
+        print ("Wait until window title is '{}'".format(window_title))
         app = Desktop(backend='uia')        
         rapid_reprice_app = app.window(title=window_title)
         rapid_reprice_app.wait('visible', 60, 1)
         rapid_reprice_app.set_focus()     
 
-        print "Click '{}' button".format(button_label)        
+        print ("Click '{}' button".format(button_label))        
         try:
             button = rapid_reprice_app.child_window(title=button_label, control_type="Button")
         except pywinauto.findwindows.ElementNotFoundError:
@@ -165,7 +165,7 @@ class TravelportLibrary:
         button.click()
 
     def wait_until_rapid_reprice_window_title_is(self, str_title):
-        print "Wait until window title is '{}'".format(str_title)
+        print ("Wait until window title is '{}'".format(str_title))
         app = Desktop(backend='uia')
         # rapid_reprice_app = app.window(title=str_title, class_name="RAPID_REPRICE_APP")
         rapid_reprice_app = app.window(title=str_title)
@@ -174,14 +174,14 @@ class TravelportLibrary:
         # return rapid_reprice_app
 
     def enter_text_in_rapid_reprice_received_from(self, str_value, window_title, final_action="Continue"):
-        print "Wait until window title is '{}'".format(window_title)
+        print ("Wait until window title is '{}'".format(window_title))
         app = Desktop(backend='uia')
         # rapid_reprice_app = app.window(title=str_title, class_name="RAPID_REPRICE_APP")
         rapid_reprice_app = app.window(title=window_title)
         rapid_reprice_app.wait('visible', 60, 1)
         rapid_reprice_app.set_focus()
 
-        print "Enter '{}' in Recieved From field".format(str_value)
+        print ("Enter '{}' in Recieved From field".format(str_value))
         rapid_reprice_window = rapid_reprice_app
         rapid_reprice_window.set_focus()
         txt_target_text_box = rapid_reprice_window.child_window(auto_id="1161", control_type="Edit")
@@ -190,7 +190,7 @@ class TravelportLibrary:
         txt_target_text_box.type_keys(str_value)
 
         if final_action == "Continue":
-            print "Final action is '{}' hence this button will be clicked".format(final_action)
+            print ("Final action is '{}' hence this button will be clicked".format(final_action))
             final_action = final_action.upper()           
 
             try:
@@ -202,7 +202,7 @@ class TravelportLibrary:
             button.click()
 
     def click_travelport_menu_item(self, menu_item, menu_sub_item):
-        print "Accessing Travelport menu"
+        print ("Accessing Travelport menu")
         main_menu_dict = {
             "application"   : "Application", 
             "terminal"      : "Terminal", 
@@ -244,12 +244,12 @@ class TravelportLibrary:
         return rapid_reprice_dlg        
 
     def wait_until_rapid_reprice_dialog_box_exist(self, str_title):
-        print "Wait until '{}' dialog box exist".format(str_title)
+        print ("Wait until '{}' dialog box exist".format(str_title))
         dialog = self._is_rapid_reprice_dlg_exist(str_title)
         dialog.wait('visible', 60, 1)
 
     def select_item_from_rapid_reprice_combobox(self, combobox_label, item_value, window_title):
-        print "Select '{}' item from {} combobox.".format(item_value, combobox_label)
+        print ("Select '{}' item from {} combobox.".format(item_value, combobox_label))
         app = Desktop(backend='uia')
         rapid_reprice_instance = Application().Connect(path='RapidReprice1G.exe')
         rapid_reprice_app = rapid_reprice_instance.window(title_re=window_title) 

@@ -1,21 +1,18 @@
 *** Settings ***
-Library           AutoItLibrary    ${OUTPUTDIR}    15
+Library           AutoItLibrary    15    OutputDir=${OUTPUTDIR}
 Library           Screenshot
 Library           Collections
 Library           OperatingSystem
 Library           String
 Library           XML
-Library           DatabaseLibrary
-Library           DateTime
-Library           ImageHorizonLibrary    ${CURDIR}/../sikuli    ${OUTPUTDIR}    #Library    ../libraries/RSALibrary.py
-Library           ../libraries/SyexUiaLibrary.py
+Library           DateTime    #Library    DatabaseLibrary
+Library           ../libraries/SyexUiaLibrary.py    #Library    ImageHorizonLibrary    ${CURDIR}/../sikuli    ${OUTPUTDIR}    #Library    ../libraries/RSALibrary.py
 Library           ../libraries/SyexCustomLibrary.py
 Library           ../libraries/SyexDateTimeLibrary.py
 Library           ../libraries/TravelportLibrary.py
 Library           ../libraries/OtherServicesFormula.py
-Library           ExtendedSelenium2Library
-Library           ExcelLibrary
-Library           Remote    http://localhost:${port}    # Sikuli
+Library           Screenshot    #Library    ExcelLibrary    #Library    Remote    http://localhost:${port}    # Sikuli
+#Library           Selenium2Library
 
 *** Variables ***
 ${port}           8270
