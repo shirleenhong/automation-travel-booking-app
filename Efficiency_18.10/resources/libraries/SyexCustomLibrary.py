@@ -628,6 +628,7 @@ class SyexCustomLibrary:
     def select_gds_value(self, gds):
         logger.info("Selecting '{}' from gds toolstrip".format(gds))
         syex = SyexUiaLibrary().create_power_express_handle()
+        print (syex)
         toolstrip_button = uialibrary\
             .ButtonControl(searchFromControl=syex, RegexName='ToolStripSplitButton1|Bandeau de partage du bandeau outil1')
         toolstrip_button.SetFocus()

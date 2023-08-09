@@ -550,8 +550,9 @@ Search Round Trip Flights
 Select GDS
     [Arguments]    ${gds}
     Activate Power Express Window
+    Take A Screenshot
     Handle Generic Window Popup
-    Click GDS Screen Tab
+    #Click GDS Screen Tab
     ${gds} =    Set Variable    ${gds.lower()}
     ${db_gds}    Set Variable If    '${gds}' == 'sabre'    1S    '${gds}' == 'apollo'    1V    '${gds}' == 'galileo'
     ...    1G    '${gds}' == 'amadeus'    1A
@@ -559,7 +560,7 @@ Select GDS
     Set Suite Variable    ${GDS_switch}    ${gds}
     Select GDS Value    ${gds}
     Wait Until Mouse Cursor Wait Is Completed
-    Click GDS Screen Tab
+    #Click GDS Screen Tab
     Run Keyword If    '${gds}' == 'amadeus'    Enter GDS Command    IG
     [Teardown]    Take A Screenshot
 
@@ -579,9 +580,7 @@ Select Team
 
 Set User Settings
     [Arguments]    ${locale}
-    Log    testing
     Win Wait    ${title_settings}    ${EMPTY}    60
-    Log    testing..
     Win Activate    ${title_settings}    ${EMPTY}
     Control Click    ${user_selection_window}    ${EMPTY}    ${EMPTY}
     Set Control Text Value    ${cbo_locale}    ${locale}    ${title_settings}
